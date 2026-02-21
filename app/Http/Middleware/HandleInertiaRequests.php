@@ -9,6 +9,7 @@ use Inertia\Middleware;
 use  \App\Models\Navigation;
 use App\Models\Footer;
 use App\Models\Review;
+use App\Models\Practice;
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -124,7 +125,16 @@ class HandleInertiaRequests extends Middleware
         'image' => $section->contactImageUrl(),
     ] : null;
 },
+'practiceSection' => function () {
 
+    $section = Practice::first();
+
+    return $section ? [
+        'header_big'   => $section->header_big,
+        'header_small' => $section->header_small,
+        'content'      => $section->content ?? [],
+    ] : null;
+},
         ];
 
 

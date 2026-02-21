@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HomeAboutSection;
 use App\Models\HomeHero;
-use App\Models\Shop;
+use App\Models\Practice;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +14,6 @@ class HomeController extends Controller
     {
         $hero = HomeHero::where('is_active', true)->first();
         $about = HomeAboutSection::where('is_active', true)->first();
-$shop = Shop::where('is_active', true)->first();
         return Inertia::render('Home', [
             'hero' => $hero ? [
                 ...$hero->toArray(),
@@ -26,7 +25,6 @@ $shop = Shop::where('is_active', true)->first();
                 'about_image_url' => $about->aboutImageUrl(),
             ] : null,
 
-            'shop' => $shop ? $shop->toArray() : null, // ან უბრალოდ $shop
         ]);
     }
 

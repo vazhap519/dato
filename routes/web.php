@@ -11,3 +11,4 @@ Route::fallback(function () {
         ->setStatusCode(404);
 });
 
+// Route::get('practice',[])

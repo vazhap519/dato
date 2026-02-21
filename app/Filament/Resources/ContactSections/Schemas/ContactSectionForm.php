@@ -1,29 +1,16 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ContactSections\Schemas;
 
-use App\Models\ContactSection;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Schemas\Schema;
 
-class ContactSectionResource extends Resource
+class ContactSectionForm
 {
-    protected static ?string $model = ContactSection::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-
-    public static function form(Form $form): Form
+    public static function configure(Schema $schema): Schema
     {
-        return $form->schema([
-
-            TextInput::make('title')
+        return $schema
+            ->components([
+             TextInput::make('title')
                 ->required(),
 
             Textarea::make('description')
@@ -48,12 +35,6 @@ class ContactSectionResource extends Resource
                 ->responsiveImages(),
 
         ]);
-    }
-
-
-    // 🔥 Singleton — მხოლოდ 1 ჩანაწერი
-    public static function canCreate(): bool
-    {
-        return ContactSection::count() === 0;
+            
     }
 }

@@ -82,8 +82,8 @@ import HomeEnd from "@/components/HomePageComponents/HomeEnd.jsx";
 import { usePage } from "@inertiajs/react";
 
 export default function Home() {
-    const { navigation = [], hero, about, shop } = usePage().props;
-
+    const { navigation = [], hero, about, practiceSection  } = usePage().props;
+console.log(practiceSection)
     const anchors = navigation.map((item) =>
         String(item.href || "").trim().replace(/^#/, "")
     );
@@ -97,7 +97,7 @@ export default function Home() {
                 </section>
 
                 <section id={anchors[1] || "products"} className="scroll-mt-24">
-                    <HomeProducts shop={shop} />
+<HomeProducts practiceSection={practiceSection} />
                 </section>
 
                 <section id={anchors[2] || "about"} className="scroll-mt-24">
