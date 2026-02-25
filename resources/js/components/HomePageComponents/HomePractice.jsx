@@ -1,6 +1,14 @@
-export default function HomeProducts({ shop }) {
+export default function HomePractice({ practiceSection }) {
+console.log(practiceSection)
 
-    if (!shop) return null;
+    if (!practiceSection) return null;
+
+    const {
+        header_big,
+        header_small,
+        content = []
+    } = practiceSection;
+
 
     return (
         <section className="py-24 bg-background-light dark:bg-background-dark">
@@ -10,11 +18,11 @@ export default function HomeProducts({ shop }) {
                 <div className="flex justify-between items-end mb-16">
                     <div className="max-w-xl">
                         <h2 className="text-primary text-sm font-bold tracking-widest uppercase mb-4">
-                            {shop?.kicker ?? "Предложения"}
+                            {header_small ?? "Предложения"}
                         </h2>
 
                         <h3 className="text-4xl font-bold">
-                            {shop?.title ?? "Продукты и услуги"}
+                            {header_big ?? "Продукты и услуги"}
                         </h3>
                     </div>
                 </div>
@@ -22,7 +30,7 @@ export default function HomeProducts({ shop }) {
                 {/* PRODUCT GRID — MAP */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-                    {shop.items?.map((item, index) => (
+                    {content.map((item, index) => (
 
                         <div
                             key={index}
@@ -30,12 +38,16 @@ export default function HomeProducts({ shop }) {
                         >
 
                             {/* IMAGE */}
-                            {item.image && (
+                            {item.image ? (
                                 <div className="aspect-square w-full overflow-hidden">
                                     <div
                                         className="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105"
                                         style={{ backgroundImage: `url(${item.image})` }}
                                     />
+                                </div>
+                            ) : (
+                                <div className="aspect-square w-full bg-gray-200 flex items-center justify-center">
+                                    No image
                                 </div>
                             )}
 

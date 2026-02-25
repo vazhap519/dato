@@ -1,9 +1,9 @@
 import { usePage, Link } from "@inertiajs/react";
 
-export default function HomeEnd() {
-    const { contactSection } = usePage().props;
+export default function HomeEnd({contact}) {
 
-    if (!contactSection) return null;
+
+    if (!contact) return null;
 
     return (
         <section className="py-24 bg-background-light dark:bg-background-dark">
@@ -11,12 +11,12 @@ export default function HomeEnd() {
                 <div className="relative overflow-hidden bg-warm-charcoal rounded-4xl inner-soft-shadow">
 
                     {/* Background Image */}
-                    {contactSection.image && (
+                    {contact .image && (
                         <div className="absolute inset-0 z-0">
                             <img
                                 alt="Background"
                                 className="w-full h-full object-cover opacity-10 grayscale"
-                                src={contactSection.image}
+                                src={contact .image}
                             />
                             <div className="absolute inset-0 bg-gradient-to-r from-warm-charcoal via-warm-charcoal/80 to-transparent"></div>
                         </div>
@@ -27,11 +27,11 @@ export default function HomeEnd() {
                         {/* Left */}
                         <div className="space-y-8">
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                                {contactSection.title}
+                                {contact .title}
                             </h2>
 
                             <ul className="space-y-4">
-                                {contactSection.questions?.map((q, i) => (
+                                {contact.questions?.map((q, i) => (
                                     <li key={i} className="flex items-center gap-4 text-lg sm:text-xl font-light text-slate-300">
                                         <span className="size-2 rounded-full bg-primary shadow-[0_0_8px_rgba(250,198,56,0.6)]"></span>
                                         {typeof q === "string" ? q : q.question}
@@ -43,15 +43,15 @@ export default function HomeEnd() {
                         {/* Right */}
                         <div className="space-y-10 lg:pl-12">
                             <p className="text-base sm:text-lg lg:text-xl text-slate-400 font-light leading-relaxed">
-                                {contactSection.description}
+                                {contact .description}
                             </p>
 
-                            {contactSection.button_url && (
+                            {contact .button_url && (
                                 <Link
-                                    href={contactSection.button_url}
+                                    href={contact .button_url}
                                     className="gold-glow group flex items-center gap-4 bg-primary text-background-dark px-8 py-4 rounded-2xl text-lg sm:text-xl font-bold transition-all hover:scale-[1.02] active:scale-95"
                                 >
-                                    {contactSection.button_text}
+                                    {contact .button_text}
                                     <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">
                                         arrow_forward
                                     </span>

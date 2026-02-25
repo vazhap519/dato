@@ -24,9 +24,10 @@ class LandingPageForm
                         ->required()
                         ->options([
                             'home' => 'Home',
-                            'shop' => 'Shop (List in blocks)',
-                            'joint-path' => 'Joint path (Telegram group)',
-                            'consultation' => 'Individual consultation',
+                            'personal' => 'Personal',
+                            'practice' => 'Practice',
+                            'legal' => 'Legal',
+                            'editoria'  => 'Editoria',
                         ])
                         ->unique(ignoreRecord: true),
 

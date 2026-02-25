@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('header_big');
             $table->string('header_small')->nullable();
 
-            $table->json('content')->nullable();
             $table->timestamps();
         });
     }

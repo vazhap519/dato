@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="dark scroll-behavior: smooth" lang="{{ str_replace('_', '-', app()->getLocale()) }}" >
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,8 +8,7 @@
     <title>{{ config('app.name', 'Website') }}</title>
 
     {{-- favicon/manifest (რეკომენდაცია) --}}
-    <link rel="icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     <link rel="manifest" href="/site.webmanifest">
 
     @viteReactRefresh

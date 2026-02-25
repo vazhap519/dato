@@ -18,19 +18,6 @@ console.log(hero.hero_image_url)
                         {hero.title_line_1} <br/>
                         <span className="font-extrabold text-primary"> {hero.title_highlight}</span>
                     </h1>
-                    {/*<p className="text-xl md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">*/}
-                    {/*    Путь к осознанности, который меняет восприятие реальности и открывает истинное Я.*/}
-                    {/*</p>*/}
-                    {/*<div className="flex flex-col sm:flex-row gap-4 pt-4">*/}
-                    {/*    <button*/}
-                    {/*        className="bg-primary text-background-dark px-10 py-4 rounded-xl text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all">*/}
-                    {/*        Продукты и услуги*/}
-                    {/*    </button>*/}
-                    {/*    <button*/}
-                    {/*        className="border border-white/10 hover:bg-white/5 px-10 py-4 rounded-xl text-lg font-medium transition-all">*/}
-                    {/*        Узнать больше*/}
-                    {/*    </button>*/}
-
 
                     <p className="text-xl md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
                         {hero.subtitle}

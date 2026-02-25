@@ -8,4 +8,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateContactSection extends CreateRecord
 {
     protected static string $resource = ContactSectionResource::class;
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 }

@@ -27,8 +27,8 @@ class HomeAboutSectionsTable
                         /** @var \App\Models\HomeAboutSection $record */
                         return $record->aboutImageUrl();
                     })
-                    ->circular()
-                    ->size(48),
+                    ->circular(),
+
 
                 TextColumn::make('kicker')
                     ->label('Kicker')

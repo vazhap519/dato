@@ -17,27 +17,26 @@ class PractiseForm
 
                TextInput::make('header_big'),
 TextInput::make('header_small'),
-Repeater::make('content')
+                Repeater::make('contents')
+                    ->relationship()
                     ->schema([
-                        TextInput::make('title')
-                            ->required(),
-                            Textarea::make('description')
-                            ->required(),
+                        TextInput::make('title')->required(),
+
+                        Textarea::make('description')->required(),
+
                         TextInput::make('price'),
 
                         TextInput::make('telegram_url'),
 
-                        SpatieMediaLibraryFileUpload::make('practise_image')
-                            ->collection('practise_image')
+                        SpatieMediaLibraryFileUpload::make('image')
+                            ->collection('practice_images')
                             ->image()
                             ->imageEditor()
                             ->conversion('webp')
                             ->responsiveImages(),
 
-        Toggle::make('is_active')
-            ->label('Active')
-            ->default(true),
-
+                        Toggle::make('is_active')
+                            ->default(true),
                     ])
                     ->columns(2)
                     ->reorderable()

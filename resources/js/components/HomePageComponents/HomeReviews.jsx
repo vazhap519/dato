@@ -3,8 +3,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import {Autoplay } from "swiper/modules";
 
 import "swiper/css";
-export default function HomeReviews() {
-    const { review } = usePage().props;
+export default function HomeReviews({review}) {
+
 
     if (!review) return null;
 

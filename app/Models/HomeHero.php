@@ -29,7 +29,7 @@ class HomeHero extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('u_image')->singleFile();
+        $this->addMediaCollection('hero_image_url')->singleFile();
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -41,15 +41,14 @@ class HomeHero extends Model implements HasMedia
             ->nonQueued();
     }
 
-    public function UImageUrl(): ?string
+    public function heroImageUrl(): ?string
     {
-        $media = $this->getFirstMedia('u_image');
+        $media = $this->getFirstMedia('hero_image');
 
         if (! $media) {
             return null;
         }
 
-        // ✅ conversion თუ არსებობს — webp, თუ არა — original
         return $media->hasGeneratedConversion('webp')
             ? $media->getUrl('webp')
             : $media->getUrl();

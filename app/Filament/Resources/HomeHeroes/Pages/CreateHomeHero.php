@@ -8,4 +8,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateHomeHero extends CreateRecord
 {
     protected static string $resource = HomeHeroResource::class;
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 }
