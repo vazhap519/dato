@@ -102,7 +102,9 @@ export default function HomeReviews({review}) {
                 <div className="flex items-center gap-4 pt-4 border-t border-white/5">
                     <div className="size-12 rounded-full bg-slate-700 overflow-hidden">
                         {item.u_image && (
-                            <img
+                            <img   loading="eager"
+                                   fetchpriority="high"
+                                   decoding="async"
                                 src={`/storage/${item.u_image}`}
                                 alt={item.name}
                                 className="w-full h-full object-cover"

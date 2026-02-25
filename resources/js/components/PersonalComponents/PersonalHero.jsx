@@ -32,7 +32,9 @@ export default function PersonalHero({personal}){
 <div className="order-1 lg:order-2 relative group">
 <div className="absolute inset-0 bg-primary/20 blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
 <div className="relative rounded-2xl overflow-hidden border border-white/10 aspect-[4/5] bg-surface-dark">
-<img   src={personal.hero_image}
+<img    loading="eager"
+        fetchpriority="high"
+        decoding="async"  src={personal.hero_image}
        alt={personal.hero_author_name ?? "Personal image"}
      className="w-full h-full object-cover transition-all duration-700"
      data-alt={personal.hero_author_name ?? "Personal image"} />

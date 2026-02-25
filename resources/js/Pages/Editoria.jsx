@@ -67,7 +67,9 @@ export default function Editoria() {
 
                                 {editoria.hero_image_url && (
                                     <div className="order-1 lg:order-2">
-                                        <img
+                                        <img   loading="eager"
+                                               fetchpriority="high"
+                                               decoding="async"
                                             src={editoria.hero_image_url}
                                             className="w-full max-w-[450px] mx-auto rounded-lg shadow-2xl"
                                         />
@@ -169,7 +171,9 @@ export default function Editoria() {
                                 </div>
 
                                 {editoria.for_whom_image_url && (
-                                    <img
+                                    <img   loading="eager"
+                                           fetchpriority="high"
+                                           decoding="async"
                                         src={editoria.for_whom_image_url}
                                         className="rounded-xl shadow-2xl"
                                     />
@@ -184,7 +188,9 @@ export default function Editoria() {
                         >
                             <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                                 {editoria.author_image_url && (
-                                    <img
+                                    <img   loading="eager"
+                                           fetchpriority="high"
+                                           decoding="async"
                                         src={editoria.author_image_url}
                                         className="rounded-xl shadow-2xl"
                                     />

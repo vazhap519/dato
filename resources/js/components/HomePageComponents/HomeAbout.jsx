@@ -10,7 +10,7 @@ export default function HomeAbout({ about }) {
                 <div className="lg:col-span-5 flex justify-center lg:justify-end">
                     <div className="relative group">
                         <div className="size-64 md:size-80 lg:size-96 rounded-full p-1 border border-primary/20 portrait-glow transition-all duration-700 group-hover:border-primary/40 overflow-hidden">
-                            <img
+                            <img loading="lazy"
                                 alt={about.image_alt || about.kicker || "About image"}
                                 className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-1000 transform scale-105 group-hover:scale-100"
                                 src={about.about_image_url || ""}

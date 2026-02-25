@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Editoria;
+
+use App\Models\Editorial;
 use Inertia\Inertia;
 
-class EditoriaController extends Controller
+class EditorialController extends Controller
 {
     public function index()
     {
-        $editoria = Editoria::first();
+        $editoria = Editorial::first();
 
         return Inertia::render('Editoria', [
             'editoria' => $editoria ? [

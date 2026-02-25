@@ -13,7 +13,7 @@ export default function HomeEnd({contact}) {
                     {/* Background Image */}
                     {contact .image && (
                         <div className="absolute inset-0 z-0">
-                            <img
+                            <img loading="lazy"
                                 alt="Background"
                                 className="w-full h-full object-cover opacity-10 grayscale"
                                 src={contact .image}
