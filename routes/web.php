@@ -19,7 +19,7 @@ Route::get('/personal', [PersonalController::class, 'index'])
     ->name('personal');
 Route::get('/legal', [LegalController::class, 'index'])
     ->name('legal');
-Route::get('/practice',[PracticeController::class,'index'])->name('practice');
+Route::get('/shop',[PracticeController::class,'index'])->name('practice');
 Route::get('/editoria', [\App\Http\Controllers\EditorialController::class, 'index'])
     ->name('editoria');
 
