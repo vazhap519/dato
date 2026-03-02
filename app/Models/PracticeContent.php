@@ -16,8 +16,9 @@ class PracticeContent extends Model implements HasMedia
         'title',
         'description',
         'price',
-        'telegram_url',
+        'slug',
         'is_active',
+        'closed_group_id'
     ];
 
     public function practice()
@@ -37,5 +38,8 @@ class PracticeContent extends Model implements HasMedia
             ->format('webp')
             ->quality(85)
             ->nonQueued();
-    }
+    }public function closedGroup()
+{
+    return $this->belongsTo(\App\Models\ClosedGroup::class);
+}
 }

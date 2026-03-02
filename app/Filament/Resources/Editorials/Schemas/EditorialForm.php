@@ -90,6 +90,8 @@ class EditorialForm
                             ->reorderable()
                             ->collapsible()
                             ->columnSpanFull(),
+                        TextInput::make('program_button_text')
+                            ->label('Program CTA Button Text'),
                     ]),
 
                 /*
@@ -109,6 +111,9 @@ class EditorialForm
                             ])
                             ->reorderable()
                             ->collapsible(),
+
+                        TextInput::make('for_whom_button_text')
+                            ->label('For Whom Small Button Text'),
 
                         SpatieMediaLibraryFileUpload::make('for_whom_image')
                             ->collection('for_whom_image')

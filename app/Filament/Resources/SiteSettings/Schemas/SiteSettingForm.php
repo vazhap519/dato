@@ -57,6 +57,15 @@ class SiteSettingForm
                             ->helperText('Recommended: 1200x630 (Open Graph default image)')
                             ->columnSpanFull(),
 
+                        SpatieMediaLibraryFileUpload::make('logo_default')
+                            ->collection('logo_default')
+                            ->image()
+                            ->imageEditor()
+                            ->conversion('webp')
+                            ->responsiveImages()
+                            ->disk('public')
+                            ->columnSpanFull(),
+
                     ])
                     ->columns(1),
 

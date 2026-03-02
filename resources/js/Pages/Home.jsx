@@ -8,7 +8,7 @@ import HomeEnd from "@/components/HomePageComponents/HomeEnd.jsx";
 import HomePractice from "@/components/HomePageComponents/HomePractice.jsx";
 import { usePage,Head } from "@inertiajs/react";
 import Seo from "@/components/Seo.jsx";
-
+import { router } from "@inertiajs/react";
 
 export default function Home() {
     const { navigation = [], hero, about, practiceSection, review ,contact  } = usePage().props;

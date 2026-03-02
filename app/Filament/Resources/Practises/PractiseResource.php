@@ -13,12 +13,14 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use App\Models\Practice;
-
+use UnitEnum;
 class PractiseResource extends Resource
 {
     protected static ?string $model = Practice::class;
-
+protected static ?string $navigationLabel = 'Shop';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string | UnitEnum | null $navigationGroup = 'Home';
+
 
     public static function form(Schema $schema): Schema
     {

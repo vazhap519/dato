@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClosedGroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PracticeController;
@@ -66,3 +67,5 @@ Route::get('/site.webmanifest', function () {
     ]);
 
 })->name('manifest');
+Route::get('/closed-group/{slug}', [ClosedGroupController::class, 'show'])
+    ->name('closed-group.show');

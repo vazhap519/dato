@@ -25,10 +25,12 @@ class Editorial extends Model implements HasMedia
 
         'info_blocks',
         'program_days',
+        'program_button_text',
 
         'for_whom_title',
         'for_whom_description',
         'for_whom_list',
+        'for_whom_button_text',
 
         'why_title',
         'why_description',

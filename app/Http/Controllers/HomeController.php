@@ -18,13 +18,14 @@ class HomeController extends Controller
         $about = HomeAboutSection::where('is_active', true)->first();
         $practice = Practice::with([
             'contents' => function ($query) {
-                $query->where('is_active', true);
+                $query->where('is_active', true)->limit(2);
             },
-            'contents.media' // eager load media
+            'contents.media', // eager load media
+            'contents.closedGroup'
         ])->first();
         $review = Review::first();
         $homeContact=ContactSection::first();
-        $practice->getMedia('practice_images');
+        // $practice->getMedia('practice_images');
         return Inertia::render('Home', [
             'hero' => $hero ? [
                 ...$hero->toArray(),
@@ -45,9 +46,8 @@ class HomeController extends Controller
                         'title'        => $item->title,
                         'description'  => $item->description,
                         'price'        => $item->price,
-                        'telegram_url' => $item->telegram_url,
                         'is_premium'   => false, // თუ გინდა დაამატე ველი DB-ში
-
+                        'slug' => optional($item->closedGroup)->slug,
                         'image' => $item->getFirstMediaUrl('practice_images', 'webp')
                             ?: $item->getFirstMediaUrl('practice_images'),
                     ];

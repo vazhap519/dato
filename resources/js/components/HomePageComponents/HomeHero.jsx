@@ -40,15 +40,23 @@ console.log(hero.hero_image_url)
                     </div>
                 </div>
 
-                <div className="relative lg:h-[80vh] flex justify-center items-end">
+                {/* <div className="relative lg:h-[80vh] flex justify-center items-end bg-transparent">
                     <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
                     <img   loading="eager"
                            fetchpriority="high"
-                           decoding="async"  alt="David Arutyunov" className="h-full w-full object-cover object-top rounded-t-[100px]   transition-all duration-1000"
+                           decoding="async"  alt="David Arutyunov" className="h-full w-full object-cover object-top rounded-t-[100px] bg-transparent"
 
 
                          src={hero?.hero_image_url ?? "/images/placeholder.webp"}/>
-                </div>
+                </div> */}
+
+
+
+<div class="relative lg:h-[80vh] flex justify-center items-end">
+<img alt="Давид Арутюнов" class="h-full w-auto object-contain object-bottom pointer-events-none" 
+src={hero?.hero_image_url ?? "/images/placeholder.webp"}/>
+</div>
+
             </div>
         </section>
     )

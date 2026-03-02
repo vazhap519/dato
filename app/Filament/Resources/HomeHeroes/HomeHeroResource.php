@@ -13,14 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
+use UnitEnum;
 
 class HomeHeroResource extends Resource
 {
     protected static ?string $model = HomeHero::class;
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
+    protected static string | UnitEnum | null $navigationGroup = 'Home';
     public static function form(Schema $schema): Schema
     {
         return HomeHeroForm::configure($schema);

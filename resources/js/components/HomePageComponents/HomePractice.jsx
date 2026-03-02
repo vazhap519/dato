@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 export default function HomePractice({ practiceSection }) {
 console.log(practiceSection)
 
@@ -9,7 +10,7 @@ console.log(practiceSection)
         content = []
     } = practiceSection;
 
-
+    console.log(content);
     return (
         <section className="py-24 bg-background-light dark:bg-background-dark">
             <div className="max-w-7xl mx-auto px-6">
@@ -28,72 +29,62 @@ console.log(practiceSection)
                 </div>
 
                 {/* PRODUCT GRID — MAP */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+           {/* PRODUCTS — 2 ITEMS DESIGN */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    {content.slice(0, 2).map((item, index) => (
+        <div
+            key={index}
+            className="group bg-card-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all flex flex-col"
+        >
 
-                    {content.map((item, index) => (
+            {/* IMAGE */}
+            <div className="aspect-video relative overflow-hidden">
+                {item.image ? (
+                    <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        No image
+                    </div>
+                )}
 
-                        <div
-                            key={index}
-                            className="flex flex-col bg-slate-100/50 dark:bg-primary/5 rounded-xl overflow-hidden border border-transparent dark:border-primary/10 transition-all hover:border-primary/30 group"
-                        >
+                {item.is_premium && (
+                    <div className="absolute top-4 left-4 bg-primary text-background-dark text-xs font-black px-3 py-1 rounded uppercase">
+                        Premium
+                    </div>
+                )}
+            </div>
 
-                            {/* IMAGE */}
-                            {item.image ? (
-                                <div className="aspect-square w-full overflow-hidden">
-                                    <div
-                                        className="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105"
-                                        style={{ backgroundImage: `url(${item.image})` }}
-                                    />
-                                </div>
-                            ) : (
-                                <div className="aspect-square w-full bg-gray-200 flex items-center justify-center">
-                                    No image
-                                </div>
-                            )}
+            {/* CONTENT */}
+            <div className="p-8 flex-1 flex flex-col justify-between">
+                <div>
+                    <h4 className="text-2xl font-bold mb-3">
+                        {item.title}
+                    </h4>
 
-                            {/* CONTENT */}
-                            <div className="flex flex-col flex-1 p-6">
-
-                                <div className="flex justify-between items-start mb-2">
-                                    <h3 className="text-xl font-bold dark:text-slate-100">
-                                        {item.title}
-                                    </h3>
-
-                                    {item.is_premium && (
-                                        <span className="text-[10px] uppercase tracking-widest bg-primary text-background-dark px-2 py-0.5 rounded font-bold">
-                                            Premium
-                                        </span>
-                                    )}
-                                </div>
-
-                                <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 flex-1">
-                                    {item.description}
-                                </p>
-
-                                <div className="flex flex-col gap-4 mt-auto">
-
-                                    <span className="text-xl font-bold text-primary italic">
-                                        {item.price} ₽
-                                    </span>
-
-                                    {item.telegram_url && (
-                                        <a
-                                            href={item.telegram_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-full h-12 flex items-center justify-center bg-primary text-background-dark font-bold rounded-lg transition-transform active:scale-95 hover:brightness-110"
-                                        >
-                                            Выбрать
-                                        </a>
-                                    )}
-
-                                </div>
-                            </div>
-                        </div>
-
-                    ))}
-
+                    <p className="text-slate-400 mb-6 font-light leading-relaxed">
+                        {item.description}
+                    </p>
                 </div>
+
+                <button
+                    onClick={() => {
+                        if (item.slug) {
+                            router.visit(`/closed-group/${item.slug}`);
+                        }
+                    }}
+                    className="w-full btn-primary-unified text-center"
+                >
+                    Подробнее
+                </button>
+            </div>
+
+        </div>
+    ))}
+</div>
 
             </div>
         </section>

@@ -130,9 +130,11 @@ class HandleInertiaRequests extends Middleware
                         'favicon' => $settings->favicon_url,
                         'apple_icon' => $settings->apple_icon_url,
                         'og_default' => $settings->og_default_url,
+                        'logo' => $settings->logo_url,
                     ];
                 });
             },
+'not_found'=>NotFound::first()
         ];
     }
 }

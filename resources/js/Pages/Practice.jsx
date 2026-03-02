@@ -3,6 +3,7 @@ import { useState } from "react";
 import Seo from "@/components/Seo.jsx";
 import Header from "@/components/Header.jsx";
 import Footer from "@/components/Footer.jsx";
+import { router } from "@inertiajs/react";
 
 export default function Practice() {
     const { practiceSection, navigation = [] } = usePage().props;
@@ -103,15 +104,13 @@ export default function Practice() {
                                                     </span>
                                                 )}
 
-                                                {item.telegram_url && (
-                                                    <a
-                                                        href={item.telegram_url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
+                                                {item.slug && (
+                                                    <button
+                                                        onClick={() => router.visit(`/closed-group/${item.slug}`)}
                                                         className="w-full h-12 flex items-center justify-center bg-primary text-background-dark font-bold rounded-lg transition-transform active:scale-95 hover:brightness-110"
                                                     >
                                                         Подробнее
-                                                    </a>
+                                                    </button>
                                                 )}
                                             </div>
                                         </div>
@@ -119,17 +118,17 @@ export default function Practice() {
                                 ))}
                             </div>
 
-                            {/* LOAD MORE BUTTON */}
-                            {visibleCount < items.length && (
-                                <div className="mt-12">
-                                    <button
-                                        onClick={loadMore}
-                                        className="px-8 py-3 bg-primary text-background-dark font-bold rounded-lg transition hover:brightness-110 active:scale-95"
-                                    >
-                                        Загрузить больше
-                                    </button>
-                                </div>
-                            )}
+                            {/*/!* LOAD MORE BUTTON *!/*/}
+                            {/*{visibleCount < items.length && (*/}
+                            {/*    <div className="mt-12">*/}
+                            {/*        <button*/}
+                            {/*            onClick={loadMore}*/}
+                            {/*            className="px-8 py-3 bg-primary text-background-dark font-bold rounded-lg transition hover:brightness-110 active:scale-95"*/}
+                            {/*        >*/}
+                            {/*            Загрузить больше*/}
+                            {/*        </button>*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                         </section>
                     </>
                 )}
