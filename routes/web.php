@@ -26,22 +26,21 @@ Route::get('/editoria', [\App\Http\Controllers\EditorialController::class, 'inde
 
 
 
-Route::get('/sitemap.xml', function () {
-
-    return SitemapGenerator::create(config('app.url'))
-        ->getSitemap()
-        ->toResponse(request());
-
-})->name('sitemap');
+//Route::get('/sitemap.xml', function () {
+//
+//    return SitemapGenerator::create(config('app.url'))
+//        ->getSitemap()
+//        ->toResponse(request());
+//
+//})->name('sitemap');
 Route::get('/robots.txt', function () {
 
     $content = "User-agent: *\n";
     $content .= "Allow: /\n";
-    $content .= "Sitemap: " . route('sitemap');
+    $content .= "Sitemap: " . url('/sitemap.xml');
 
     return response($content, 200)
         ->header('Content-Type', 'text/plain');
-
 });
 
 

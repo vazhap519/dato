@@ -4,8 +4,6 @@ namespace App\Filament\Resources\Seos\Schemas;
 
 
 
-namespace App\Filament\Resources\Seos\Schemas;
-
     use Filament\Forms\Components\Select;
     use Filament\Forms\Components\TextInput;
     use Filament\Forms\Components\Textarea;

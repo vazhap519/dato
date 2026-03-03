@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/react";
-import Seo from "@/components/Seo";
+// import Seo from "@/components/Seo";
 import Header from "@/components/Header.jsx";
 import ClosedGroupHero from "@/components/ClosedGroupComponents/ClosedgroupHero.jsx";
 import Conditions from "@/components/ClosedGroupComponents/Сonditions.jsx";
@@ -14,12 +14,16 @@ import Footer from "@/components/footer.jsx";
 export default function ClosedGroup() {
 
     const { group, navigation = [] } = usePage().props;
-
+    const anchors = navigation.map((item) =>
+        String(item?.href || "")
+            .trim()
+            .replace(/^#/, "")
+    );
     if (!group) return null;
 
     return (
         <>
-            <Seo/>
+            {/*<Seo/>*/}
             <Header/>
 
             <main className="pt-20">
