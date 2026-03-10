@@ -25,7 +25,6 @@ class PractisesTable
                     ->limit(40),
 
                 TextColumn::make('contents_count')
-                    ->counts('contents')
                     ->label('Practise Items'),
 
                 TextColumn::make('updated_at')

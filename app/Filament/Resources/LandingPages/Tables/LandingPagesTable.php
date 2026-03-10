@@ -27,7 +27,6 @@ class LandingPagesTable
 
                 TextColumn::make('navigation_items_count')
                     ->label('Nav items')
-                    ->counts('navigationItems')
                     ->sortable(),
 
                 TextColumn::make('updated_at')
