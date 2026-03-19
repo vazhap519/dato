@@ -30,35 +30,57 @@ class HandleInertiaRequests extends Middleware
             | Navigation
             |--------------------------------------------------------------------------
             */
+            // 'navigation' => function () use ($request) {
+
+            //     $routeName = $request->route()?->getName();
+
+            //     $pageKey = match ($routeName) {
+            //         'home'      => 'home',
+            //         'personal'  => 'personal',
+            //         'practice'  => 'practice',
+            //         'legal'     => 'legal',
+            //         'editoria'  => 'editoria',
+            //         default     => 'home',
+            //     };
+
+            //     $page = \App\Models\LandingPage::where('key', $pageKey)
+            //         ->with(['navigationItems' => function ($q) {
+            //             $q->where('is_active', true)
+            //                 ->orderBy('sort');
+            //         }])
+            //         ->first();
+
+            //     return $page
+            //         ? $page->navigationItems->map(fn ($i) => [
+            //             'id'    => $i->id,
+            //             'label' => $i->label,
+            //             'href'  => ltrim($i->href, '#'),
+            //         ])->values()
+            //         : [];
+            // },
+
+
+
+
             'navigation' => function () use ($request) {
 
-                $routeName = $request->route()?->getName();
+    $routeName = $request->route()?->getName();
 
-                $pageKey = match ($routeName) {
-                    'home'      => 'home',
-                    'personal'  => 'personal',
-                    'practice'  => 'practice',
-                    'legal'     => 'legal',
-                    'editoria'  => 'editoria',
-                    default     => 'home',
-                };
+    $page = \App\Models\LandingPage::where('key', $routeName)
+        ->with(['navigationItems' => function ($q) {
+            $q->where('is_active', true)
+              ->orderBy('sort');
+        }])
+        ->first();
 
-                $page = \App\Models\LandingPage::where('key', $pageKey)
-                    ->with(['navigationItems' => function ($q) {
-                        $q->where('is_active', true)
-                            ->orderBy('sort');
-                    }])
-                    ->first();
-
-                return $page
-                    ? $page->navigationItems->map(fn ($i) => [
-                        'id'    => $i->id,
-                        'label' => $i->label,
-                        'href'  => ltrim($i->href, '#'),
-                    ])->values()
-                    : [];
-            },
-
+    return $page
+        ? $page->navigationItems->map(fn ($i) => [
+            'id'    => $i->id,
+            'label' => $i->label,
+            'href'  => ltrim($i->href, '#'),
+        ])->values()
+        : [];
+},
             /*
             |--------------------------------------------------------------------------
             | Footer

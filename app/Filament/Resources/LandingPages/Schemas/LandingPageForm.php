@@ -9,7 +9,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-
+use App\Support\FrontendRoutes;
 class LandingPageForm
 {
     public static function configure(Schema $schema): Schema
@@ -19,17 +19,12 @@ class LandingPageForm
             Section::make('Landing Page')
                 ->schema([
 
-                    Select::make('key')
-                        ->label('Select Page')
-                        ->required()
-                        ->options([
-                            'home' => 'Home',
-                            'personal' => 'Personal',
-                            'practice' => 'Practice',
-                            'legal' => 'Legal',
-                            'editoria'  => 'Editoria',
-                        ])
-                        ->unique(ignoreRecord: true),
+                   Select::make('key')
+    ->label('Select Page')
+    ->required()
+    ->options(FrontendRoutes::get())
+    ->searchable()
+    ->unique(ignoreRecord: true),
 
                 ]),
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Support\FrontendRoutes;
 
 class LandingPage extends Model
 {
@@ -16,15 +17,11 @@ class LandingPage extends Model
         return $this->hasMany(NavigationItem::class)->orderBy('sort');
     }
 
-    // UI helper (არ ინახება DB-ში)
+    /**
+     * UI label (დინამიურად მოდის routes-დან)
+     */
     public function getLabelAttribute(): string
     {
-        return match ($this->key) {
-            'home' => 'Home',
-            'shop' => 'Shop (List in blocks)',
-            'joint-path' => 'Joint path (Telegram group)',
-            'consultation' => 'Individual consultation',
-            default => $this->key,
-        };
+        return FrontendRoutes::get()[$this->key] ?? ucfirst($this->key);
     }
 }
