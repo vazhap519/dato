@@ -21,27 +21,27 @@ class ContactSectionsTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('description')
+                TextColumn::make('description')->label('Описание')
                     ->limit(50)
                     ->label('Описание'),
 
                 TextColumn::make('questions')
-                    ->label('Questions Count')
+                    ->label('Вопросы')
                     ->formatStateUsing(fn ($state) => is_array($state) ? count($state) : 0),
 
                 TextColumn::make('button_text')
-                    ->label('Button Text'),
+                    ->label('Текст кнопки'),
 
                 TextColumn::make('button_url')
                     ->label('Ссылка кнопки')
                     ->limit(30),
 
                 ImageColumn::make('contact_image')
-                    ->label('Image')
+                    ->label('Изображение блока контактов')
                     ->circular(),
 
                 TextColumn::make('updated_at')
-                    ->label('Last Updated')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable(),
 
