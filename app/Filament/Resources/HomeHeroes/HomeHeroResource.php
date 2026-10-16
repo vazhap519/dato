@@ -18,8 +18,11 @@ use UnitEnum;
 class HomeHeroResource extends Resource
 {
     protected static ?string $model = HomeHero::class;
+    protected static ?string $modelLabel = 'первый экран';
+    protected static ?string $pluralModelLabel = 'первые экраны';
+    protected static ?string $navigationLabel = 'Первый экран главной';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Home';
+    protected static string | UnitEnum | null $navigationGroup = 'Главная';
     public static function form(Schema $schema): Schema
     {
         return HomeHeroForm::configure($schema);
