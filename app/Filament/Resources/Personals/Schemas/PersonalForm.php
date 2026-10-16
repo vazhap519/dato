@@ -24,7 +24,7 @@ class PersonalForm
                 | HERO SECTION
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Hero Section')
+                Section::make('Первый экран')
                     ->schema([
 
                         Grid::make(2)->schema([
