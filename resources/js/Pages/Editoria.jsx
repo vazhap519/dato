@@ -17,7 +17,7 @@
 //                 <Seo />
 //                 <Header />
 //                 <div className="py-40 text-center text-white">
-//                     Editoria content not added yet
+//                     Содержимое страницы пока не опубликовано
 //                 </div>
 //                 <Footer />
 //             </>
@@ -82,9 +82,9 @@
 //                             </h2>
 
 //                             {editoria.quote_button_text && (
-//                                 <button className="bg-primary/10 border border-primary text-primary px-10 py-3 rounded-full hover:bg-primary hover:text-background-dark transition">
+//                                 <a href="https://t.me/praynwin" className="inline-block bg-primary/10 border border-primary text-primary px-10 py-3 rounded-full hover:bg-primary hover:text-background-dark transition">
 //                                     {editoria.quote_button_text}
-//                                 </button>
+//                                 </a>
 //                             )}
 //                         </div>
 //                     </section>
@@ -131,9 +131,9 @@
 
 //                         {editoria.program_button_text && (
 //                             <div className="mt-16 text-center">
-//                                 <button className="bg-primary text-background-dark px-12 py-4 rounded-lg font-bold text-lg hover:bg-white transition">
+//                                 <a href="https://t.me/praynwin" className="inline-block bg-primary text-background-dark px-12 py-4 rounded-lg font-bold text-lg hover:bg-white transition">
 //                                     {editoria.program_button_text}
-//                                 </button>
+//                                 </a>
 //                             </div>
 //                         )}
 //                     </section>
@@ -161,9 +161,9 @@
 //                             </ul>
 
 //                             {editoria.for_whom_button_text && (
-//                                 <button className="mt-6 text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition">
+//                                 <a href="https://t.me/praynwin" className="inline-block mt-6 text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition">
 //                                     {editoria.for_whom_button_text}
-//                                 </button>
+//                                 </a>
 //                             )}
 //                         </div>
 
@@ -189,9 +189,9 @@
 //                         </p>
 
 //                         {editoria.why_button_text && (
-//                             <button className="text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition-all">
+//                             <a href="https://t.me/praynwin" className="inline-block text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition-all">
 //                                 {editoria.why_button_text}
-//                             </button>
+//                             </a>
 //                         )}
 //                     </section>
 //                 )}
@@ -224,9 +224,9 @@
 //                             ))}
 
 //                             {editoria.author_button_text && (
-//                                 <button className="mt-6 bg-primary text-background-dark px-10 py-4 rounded-lg font-bold">
+//                                 <a href="/personal" className="inline-block mt-6 bg-primary text-background-dark px-10 py-4 rounded-lg font-bold">
 //                                     {editoria.author_button_text}
-//                                 </button>
+//                                 </a>
 //                             )}
 //                         </div>
 //                     </div>
@@ -245,9 +245,9 @@
 //                             </p>
 
 //                             {editoria.cta_button_text && (
-//                                 <button className="bg-primary text-background-dark text-xl font-bold py-6 px-12 rounded-xl">
+//                                 <a href="https://t.me/praynwin" className="inline-block bg-primary text-background-dark text-xl font-bold py-6 px-12 rounded-xl">
 //                                     {editoria.cta_button_text}
-//                                 </button>
+//                                 </a>
 //                             )}
 //                         </div>
 //                     </section>
@@ -346,7 +346,7 @@ export default function Editoria() {
                             {editoria.quote_button_text && (
                                 <button className="bg-primary/10 border border-primary text-primary px-10 py-3 rounded-full hover:bg-primary hover:text-background-dark transition">
                                     {editoria.quote_button_text}
-                                </button>
+                                </a>
                             )}
                         </div>
                     </section>
@@ -387,7 +387,7 @@ export default function Editoria() {
                             <div className="mt-16 text-center">
                                 <button className="bg-primary text-background-dark px-12 py-4 rounded-lg font-bold text-lg hover:bg-white transition">
                                     {editoria.program_button_text}
-                                </button>
+                                </a>
                             </div>
                         )}
                     </section>
@@ -410,7 +410,7 @@ export default function Editoria() {
                             {editoria.for_whom_button_text && (
                                 <button className="mt-6 text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition">
                                     {editoria.for_whom_button_text}
-                                </button>
+                                </a>
                             )}
                         </div>
 
@@ -429,7 +429,7 @@ export default function Editoria() {
                         {editoria.why_button_text && (
                             <button className="text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition-all">
                                 {editoria.why_button_text}
-                            </button>
+                            </a>
                         )}
                     </section>
                 )}
@@ -457,7 +457,7 @@ export default function Editoria() {
                             {editoria.author_button_text && (
                                 <button className="mt-6 bg-primary text-background-dark px-10 py-4 rounded-lg font-bold">
                                     {editoria.author_button_text}
-                                </button>
+                                </a>
                             )}
                         </div>
                     </div>
@@ -478,7 +478,7 @@ export default function Editoria() {
                             {editoria.cta_button_text && (
                                 <button className="bg-primary text-background-dark text-xl font-bold py-6 px-12 rounded-xl">
                                     {editoria.cta_button_text}
-                                </button>
+                                </a>
                             )}
                         </div>
                     </section>
