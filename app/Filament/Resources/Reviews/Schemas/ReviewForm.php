@@ -18,25 +18,25 @@ class ReviewForm
             ->components([
 
                 TextInput::make('review_sm_header')
-                    ->label('Small Header'),
+                    ->label('Небольшой заголовок раздела отзывов'),
 
                 TextInput::make('review_xl_header')
-                    ->label('Main Header'),
+                    ->label('Основной заголовок раздела отзывов'),
 
-                Repeater::make('content')
+                Repeater::make('content')->label('Отзывы')
     ->default([]) // 🔥 აუცილებელია
     ->schema([
-        Textarea::make('description')
+        Textarea::make('description')->label('Текст отзыва')
             ->required()
             ->columnSpanFull(),
 
-        TextInput::make('name'),
+        TextInput::make('name')->label('Имя'),
 
-        TextInput::make('lastname'),
+        TextInput::make('lastname')->label('Фамилия'),
 
-        TextInput::make('position'),
+        TextInput::make('position')->label('Должность или статус'),
 
-        SpatieMediaLibraryFileUpload::make('u_image')
+        SpatieMediaLibraryFileUpload::make('u_image')->label('Фотография автора отзыва')
             ->collection('u_image')
             ->disk('public')
             ->image()
