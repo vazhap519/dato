@@ -25,26 +25,26 @@ class ClosedGroupForm
                 Section::make('Первый экран')
                     ->schema([
                         TextInput::make('hero_badge')
-                            ->label('Бейдж'),
+                            ->label('Бейдж первого экрана'),
 
                         TextInput::make('hero_title')
-                            ->label('Заголовок')
+                            ->label('Заголовок первого экрана')
                             ->live(onBlur: true)
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('slug', Str::slug($state));
                             }),
 
-                        TextInput::make('slug')
+                        TextInput::make('slug')->label('Адрес страницы (slug)')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->disabled()
                             ->dehydrated()->reactive(),
 
                         TextInput::make('hero_title_highlight')
-                            ->label('Выделение заголовка'),
+                            ->label('Выделенная часть заголовка'),
 
                         Textarea::make('hero_description')
-                            ->label('Описание')
+                            ->label('Описание первого экрана')
                             ->rows(4),
 
                         TextInput::make('hero_button_primary')
@@ -53,7 +53,7 @@ class ClosedGroupForm
                         TextInput::make('hero_button_secondary')
                             ->label('Текст дополнительной кнопки'),
 
-                        SpatieMediaLibraryFileUpload::make('hero_image')
+                        SpatieMediaLibraryFileUpload::make('hero_image')->label('Изображение первого экрана')
                             ->collection('hero_image')
                             ->image()
                             ->label('Изображение первого экрана'),
@@ -65,12 +65,12 @@ class ClosedGroupForm
                  * =============================== */
                 Section::make('Условия')
                     ->schema([
-                        Repeater::make('conditions')
+                        Repeater::make('conditions')->label('Условия')
                             ->schema([
-                                TextInput::make('label')
+                                TextInput::make('label')->label('Название')
                                     ->required(),
 
-                                TextInput::make('value')
+                                TextInput::make('value')->label('Значение')
                                     ->required(),
                             ])
                             ->defaultItems(3)
@@ -84,14 +84,14 @@ class ClosedGroupForm
                 Section::make('Промовидео')
                     ->schema([
                         TextInput::make('promo_title')
-                            ->label('Заголовок видео'),
+                            ->label('Заголовок промовидео'),
 
-                        SpatieMediaLibraryFileUpload::make('promo_image')
+                        SpatieMediaLibraryFileUpload::make('promo_image')->label('Обложка промовидео')
                             ->collection('promo_image')
                             ->image()
                             ->label('Превью видео'),
 
-                        SpatieMediaLibraryFileUpload::make('promo_video')
+                        SpatieMediaLibraryFileUpload::make('promo_video')->label('Промовидео')
                             ->collection('promo_video')
                             ->acceptedFileTypes(['video/mp4'])
                             ->maxSize(102400) // 100MB
@@ -106,9 +106,9 @@ class ClosedGroupForm
                 Section::make('Описание')
                     ->schema([
                         TextInput::make('description_title')
-                            ->label('Заголовок'),
+                            ->label('Заголовок описания'),
 
-                        Textarea::make('description_content')
+                        Textarea::make('description_content')->label('Текст описания')
                             ->rows(5)
                             ->label('Содержание'),
                     ]),
@@ -121,12 +121,12 @@ class ClosedGroupForm
                         TextInput::make('program_title')
                             ->label('Заголовок программы'),
 
-                        Repeater::make('program')
+                        Repeater::make('program')->label('Программа')
                             ->schema([
-                                TextInput::make('title')
+                                TextInput::make('title')->label('Заголовок')
                                     ->required(),
 
-                                Textarea::make('content')
+                                Textarea::make('content')->label('Содержание')
                                     ->rows(4)
                                     ->required(),
                             ])
@@ -139,17 +139,17 @@ class ClosedGroupForm
                  * =============================== */
                 Section::make('Автор')
                     ->schema([
-                        TextInput::make('author_name'),
+                        TextInput::make('author_name')->label('Имя автора'),
 
-                        TextInput::make('author_subtitle'),
+                        TextInput::make('author_subtitle')->label('Подзаголовок об авторе'),
 
-                        Textarea::make('author_bio_1')
+                        Textarea::make('author_bio_1')->label('Биография автора — абзац 1')
                             ->rows(4),
 
-                        Textarea::make('author_bio_2')
+                        Textarea::make('author_bio_2')->label('Биография автора — абзац 2')
                             ->rows(4),
 
-                        SpatieMediaLibraryFileUpload::make('author_image')
+                        SpatieMediaLibraryFileUpload::make('author_image')->label('Фотография автора')
                             ->collection('author_image')
                             ->image(),
                     ])
@@ -160,14 +160,14 @@ class ClosedGroupForm
                  * =============================== */
                 Section::make('Частые вопросы')
                     ->schema([
-                        TextInput::make('faq_title'),
+                        TextInput::make('faq_title')->label('Заголовок раздела вопросов'),
 
-                        Repeater::make('faq')
+                        Repeater::make('faq')->label('Вопросы и ответы')
                             ->schema([
-                                TextInput::make('question')
+                                TextInput::make('question')->label('Вопрос')
                                     ->required(),
 
-                                Textarea::make('answer')
+                                Textarea::make('answer')->label('Ответ')
                                     ->required()
                                     ->rows(4),
                             ])
@@ -178,18 +178,18 @@ class ClosedGroupForm
                 /* ===============================
                  * PRICING
                  * =============================== */
-                Section::make('Цены')
+                Section::make('Стоимость')
                     ->schema([
-                        TextInput::make('pricing_badge'),
-                        TextInput::make('pricing_title'),
-                        TextInput::make('pricing_old_price'),
-                        TextInput::make('pricing_current_price'),
-                        TextInput::make('pricing_button_text'),
-                        TextInput::make('pricing_note'),
+                        TextInput::make('pricing_badge')->label('Бейдж блока стоимости'),
+                        TextInput::make('pricing_title')->label('Заголовок блока стоимости'),
+                        TextInput::make('pricing_old_price')->label('Прежняя стоимость'),
+                        TextInput::make('pricing_current_price')->label('Текущая стоимость'),
+                        TextInput::make('pricing_button_text')->label('Текст кнопки оплаты'),
+                        TextInput::make('pricing_note')->label('Примечание о стоимости'),
 
-                        Repeater::make('pricing_features')
+                        Repeater::make('pricing_features')->label('Преимущества предложения')
                             ->schema([
-                                TextInput::make('feature')
+                                TextInput::make('feature')->label('Преимущество')
                                     ->required(),
                             ])
                             ->reorderable()
