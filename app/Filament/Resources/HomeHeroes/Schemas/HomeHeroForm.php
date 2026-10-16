@@ -36,7 +36,7 @@ class HomeHeroForm
                 ])
                 ->columns(2),
 
-            Section::make('Hero Image')
+            Section::make('Изображение первого экрана')
                 ->schema([
                     SpatieMediaLibraryFileUpload::make('hero_image')
                         ->collection('hero_image')
