@@ -22,28 +22,34 @@ class Editorial extends Model implements HasMedia
 
         'quote_text',
         'quote_button_text',
+        'quote_button_url',
 
         'info_blocks',
         'program_days',
         'program_button_text',
+        'program_button_url',
 
         'for_whom_title',
         'for_whom_description',
         'for_whom_list',
         'for_whom_button_text',
+        'for_whom_button_url',
 
         'why_title',
         'why_description',
         'why_button_text',
+        'why_button_url',
 
         'author_name',
         'author_quote',
         'author_points',
         'author_button_text',
+        'author_button_url',
 
         'cta_title',
         'cta_description',
         'cta_button_text',
+        'cta_button_url',
     ];
 
     protected $casts = [
