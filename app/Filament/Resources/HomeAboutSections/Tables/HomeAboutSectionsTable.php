@@ -22,7 +22,7 @@ class HomeAboutSectionsTable
 
                 // ✅ Spatie Media preview (if available)
                 ImageColumn::make('about_image')
-                    ->label('Image')
+                    ->label('Изображение раздела «О нас»')
                     ->state(function ($record) {
                         /** @var \App\Models\HomeAboutSection $record */
                         return $record->aboutImageUrl();
@@ -31,7 +31,7 @@ class HomeAboutSectionsTable
 
 
                 TextColumn::make('kicker')
-                    ->label('Kicker')
+                    ->label('Надзаголовок')
                     ->searchable()
                     ->sortable()
                     ->limit(30),
@@ -47,7 +47,7 @@ class HomeAboutSectionsTable
                     ->sortable(),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('Дата обновления')
                     ->dateTime('Y-m-d H:i')
                     ->sortable(),
 
