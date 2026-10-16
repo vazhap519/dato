@@ -17,7 +17,10 @@ use UnitEnum;
 class SeoResource extends Resource
 {
     protected static ?string $model = Seo::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Full Site';
+    protected static ?string $modelLabel = 'SEO-настройка';
+    protected static ?string $pluralModelLabel = 'SEO-настройки';
+    protected static ?string $navigationLabel = 'SEO';
+    protected static string | UnitEnum | null $navigationGroup = 'Основные настройки';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
