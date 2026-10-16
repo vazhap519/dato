@@ -29,16 +29,16 @@ class EditorialForm
                             ->label('Бейдж первого экрана'),
 
                         TextInput::make('hero_title')
-                            ->label('Hero Title')
+                            ->label('Заголовок первого экрана')
                             ->required(),
 
-                        Textarea::make('hero_description')
+                        Textarea::make('hero_description')->label('Описание первого экрана')
                             ->rows(3),
 
-                        TextInput::make('hero_button_text'),
-                        TextInput::make('hero_button_url'),
+                        TextInput::make('hero_button_text')->label('Текст кнопки первого экрана'),
+                        TextInput::make('hero_button_url')->label('Ссылка кнопки первого экрана'),
 
-                        SpatieMediaLibraryFileUpload::make('hero_image')
+                        SpatieMediaLibraryFileUpload::make('hero_image')->label('Изображение первого экрана')
                             ->collection('hero_image')
                             ->image()
                             ->disk('public')
@@ -51,10 +51,10 @@ class EditorialForm
                 | QUOTE
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Блок с цитатой')
+                Section::make('Цитата')
                     ->schema([
-                        Textarea::make('quote_text')->rows(3),
-                        TextInput::make('quote_button_text'),
+                        Textarea::make('quote_text')->label('Текст цитаты')->rows(3),
+                        TextInput::make('quote_button_text')->label('Текст кнопки под цитатой'),
                     ]),
 
                 /*
@@ -64,10 +64,10 @@ class EditorialForm
                 */
                 Section::make('Информационные блоки')
                     ->schema([
-                        Repeater::make('info_blocks')
+                        Repeater::make('info_blocks')->label('Информационные блоки')
                             ->schema([
-                                TextInput::make('title')->required(),
-                                TextInput::make('description')->required(),
+                                TextInput::make('title')->label('Заголовок')->required(),
+                                TextInput::make('description')->label('Описание')->required(),
                             ])
                             ->reorderable()
                             ->collapsible()
@@ -81,11 +81,11 @@ class EditorialForm
                 */
                 Section::make('Дни программы')
                     ->schema([
-                        Repeater::make('program_days')
+                        Repeater::make('program_days')->label('Дни программы')
                             ->schema([
                                 TextInput::make('day_label')->label('Название дня'),
-                                TextInput::make('title')->required(),
-                                Textarea::make('description')->rows(3),
+                                TextInput::make('title')->label('Заголовок')->required(),
+                                Textarea::make('description')->label('Описание')->rows(3),
                             ])
                             ->reorderable()
                             ->collapsible()
@@ -102,20 +102,20 @@ class EditorialForm
                 Section::make('Для кого')
                     ->schema([
 
-                        TextInput::make('for_whom_title'),
-                        Textarea::make('for_whom_description')->rows(3),
+                        TextInput::make('for_whom_title')->label('Заголовок блока «Для кого»'),
+                        Textarea::make('for_whom_description')->label('Описание блока «Для кого»')->rows(3),
 
-                        Repeater::make('for_whom_list')
+                        Repeater::make('for_whom_list')->label('Пункты блока «Для кого»')
                             ->schema([
-                                TextInput::make('text')->required(),
+                                TextInput::make('text')->label('Текст')->required(),
                             ])
                             ->reorderable()
                             ->collapsible(),
 
                         TextInput::make('for_whom_button_text')
-                            ->label('Текст дополнительной кнопки блока «Для кого»'),
+                            ->label('Текст кнопки блока «Для кого»'),
 
-                        SpatieMediaLibraryFileUpload::make('for_whom_image')
+                        SpatieMediaLibraryFileUpload::make('for_whom_image')->label('Изображение блока «Для кого»')
                             ->collection('for_whom_image')
                             ->image()
                             ->disk('public')
@@ -130,9 +130,9 @@ class EditorialForm
                 */
                 Section::make('Почему')
                     ->schema([
-                        TextInput::make('why_title'),
-                        Textarea::make('why_description')->rows(3),
-                        TextInput::make('why_button_text'),
+                        TextInput::make('why_title')->label('Заголовок блока «Почему»'),
+                        Textarea::make('why_description')->label('Описание блока «Почему»')->rows(3),
+                        TextInput::make('why_button_text')->label('Текст кнопки блока «Почему»'),
                     ]),
 
                 /*
@@ -143,19 +143,19 @@ class EditorialForm
                 Section::make('Об авторе')
                     ->schema([
 
-                        TextInput::make('author_name'),
-                        Textarea::make('author_quote')->rows(3),
+                        TextInput::make('author_name')->label('Имя автора'),
+                        Textarea::make('author_quote')->label('Цитата автора')->rows(3),
 
-                        Repeater::make('author_points')
+                        Repeater::make('author_points')->label('Пункты об авторе')
                             ->schema([
-                                TextInput::make('text')->required(),
+                                TextInput::make('text')->label('Текст')->required(),
                             ])
                             ->reorderable()
                             ->collapsible(),
 
-                        TextInput::make('author_button_text'),
+                        TextInput::make('author_button_text')->label('Текст кнопки об авторе'),
 
-                        SpatieMediaLibraryFileUpload::make('author_image')
+                        SpatieMediaLibraryFileUpload::make('author_image')->label('Фотография автора')
                             ->collection('author_image')
                             ->image()
                             ->disk('public')
@@ -168,11 +168,11 @@ class EditorialForm
                 | FINAL CTA
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Финальный призыв')
+                Section::make('Заключительный блок')
                     ->schema([
-                        TextInput::make('cta_title'),
-                        Textarea::make('cta_description')->rows(3),
-                        TextInput::make('cta_button_text'),
+                        TextInput::make('cta_title')->label('Заголовок заключительного блока'),
+                        Textarea::make('cta_description')->label('Описание заключительного блока')->rows(3),
+                        TextInput::make('cta_button_text')->label('Текст заключительной кнопки'),
                     ]),
             ]);
     }
