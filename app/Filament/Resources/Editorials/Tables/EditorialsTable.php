@@ -21,10 +21,10 @@ class EditorialsTable
                     ->sortable(),
 
                 TextColumn::make('author_name')
-                    ->label('Автор')
+                    ->label('Имя автора')
                     ->sortable(),
 
-                TextColumn::make('updated_at')
+                TextColumn::make('updated_at')->label('Дата обновления')
                     ->dateTime()
                     ->sortable(),
             ])
