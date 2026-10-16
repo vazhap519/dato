@@ -14,19 +14,19 @@ class LegalForm
     {
         return $schema->components([
 
-            Section::make('Header')
+            Section::make('Заголовок страницы')
                 ->schema([
-                    TextInput::make('title')->required(),
-                    Textarea::make('subtitle')->rows(3),
-                    TextInput::make('download_button_text'),
+                    TextInput::make('title')->label('Заголовок')->required(),
+                    Textarea::make('subtitle')->label('Подзаголовок')->rows(3),
+                    TextInput::make('download_button_text')->label('Текст кнопки скачивания'),
                 ]),
 
-            Section::make('Sidebar Navigation')
+            Section::make('Боковая навигация')
                 ->schema([
-                    Repeater::make('sections_nav')
+                    Repeater::make('sections_nav')->label('Разделы боковой навигации')
                         ->schema([
-                            TextInput::make('label')->required(),
-                            TextInput::make('anchor')->required(),
+                            TextInput::make('label')->label('Название')->required(),
+                            TextInput::make('anchor')->label('Якорь раздела')->required(),
                         ])
                         ->reorderable()
                         ->collapsible(),
@@ -34,46 +34,46 @@ class LegalForm
 
             Section::make('Политика конфиденциальности')
                 ->schema([
-                    TextInput::make('privacy_title'),
-                    Textarea::make('privacy_content')
+                    TextInput::make('privacy_title')->label('Заголовок политики конфиденциальности'),
+                    Textarea::make('privacy_content')->label('Текст политики конфиденциальности')
                         ->rows(10)
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('User Agreement')
+            Section::make('Пользовательское соглашение')
                 ->schema([
-                    TextInput::make('agreement_title'),
-                    Textarea::make('agreement_content')
+                    TextInput::make('agreement_title')->label('Заголовок пользовательского соглашения'),
+                    Textarea::make('agreement_content')->label('Текст пользовательского соглашения')
                         ->rows(10)
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('Public Offer')
+            Section::make('Публичная оферта')
                 ->schema([
-                    TextInput::make('offer_title'),
-                    Textarea::make('offer_content')
+                    TextInput::make('offer_title')->label('Заголовок публичной оферты'),
+                    Textarea::make('offer_content')->label('Текст публичной оферты')
                         ->rows(10)
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('Company Details')
+            Section::make('Реквизиты организации')
                 ->schema([
-                    TextInput::make('details_title'),
+                    TextInput::make('details_title')->label('Заголовок реквизитов'),
 
-                    Repeater::make('company_details')
+                    Repeater::make('company_details')->label('Реквизиты организации')
                         ->schema([
-                            TextInput::make('label')->required(),
-                            TextInput::make('value')->required(),
+                            TextInput::make('label')->label('Название')->required(),
+                            TextInput::make('value')->label('Значение')->required(),
                         ])
                         ->reorderable()
                         ->collapsible(),
                 ]),
 
-            Section::make('CTA Block')
+            Section::make('Заключительный блок')
                 ->schema([
-                    TextInput::make('cta_title'),
-                    Textarea::make('cta_description'),
-                    TextInput::make('cta_button_text'),
+                    TextInput::make('cta_title')->label('Заголовок заключительного блока'),
+                    Textarea::make('cta_description')->label('Описание заключительного блока'),
+                    TextInput::make('cta_button_text')->label('Текст заключительной кнопки'),
                 ]),
         ]);
     }
