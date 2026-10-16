@@ -17,7 +17,10 @@ use UnitEnum;
 class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Home';
+    protected static ?string $modelLabel = 'отзыв';
+    protected static ?string $pluralModelLabel = 'отзывы';
+    protected static ?string $navigationLabel = 'Отзывы';
+    protected static string | UnitEnum | null $navigationGroup = 'Главная';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
