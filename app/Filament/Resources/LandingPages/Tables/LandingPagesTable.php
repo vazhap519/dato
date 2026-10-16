@@ -15,22 +15,22 @@ class LandingPagesTable
         return $table
             ->columns([
                 TextColumn::make('label')
-                    ->label('Page')
+                    ->label('Название ссылки')
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('key')
-                    ->label('Key')
+                    ->label('Идентификатор страницы')
                     ->badge()
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('navigation_items_count')
-                    ->label('Nav items')
+                    ->label('Количество ссылок навигации')
                     ->sortable(),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('Дата обновления')
                     ->dateTime('Y-m-d H:i')
                     ->sortable(),
             ])
