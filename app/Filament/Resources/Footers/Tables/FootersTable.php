@@ -14,22 +14,22 @@ class FootersTable
     {
         return $table
             ->columns([
-                TextColumn::make('brand_name'),
-                TextColumn::make('description'),
-                TextColumn::make('nav_title'),
+                TextColumn::make('brand_name')->label('Название бренда'),
+                TextColumn::make('description')->label('Описание'),
+                TextColumn::make('nav_title')->label('Заголовок навигации'),
 
-                TextColumn::make('support_title'),
-                TextColumn::make('support_faq'),
-                TextColumn::make('support_payment'),
-                TextColumn::make('support_privacy'),
-                TextColumn::make('support_offer'),
-                TextColumn::make('Contact_title'),
-                TextColumn::make('email'),
-                TextColumn::make('location'),
-                TextColumn::make('copyright'),
-                TextColumn::make('youtube'),
-                TextColumn::make('telegram'),
-                TextColumn::make('tiktok'),
+                TextColumn::make('support_title')->label('Заголовок раздела помощи'),
+                TextColumn::make('support_faq')->label('Ссылка на вопросы и ответы'),
+                TextColumn::make('support_payment')->label('Ссылка на оплату'),
+                TextColumn::make('support_privacy')->label('Ссылка на политику конфиденциальности'),
+                TextColumn::make('support_offer')->label('Ссылка на оферту'),
+                TextColumn::make('Contact_title')->label('Заголовок контактов'),
+                TextColumn::make('email')->label('Электронная почта'),
+                TextColumn::make('location')->label('Местоположение'),
+                TextColumn::make('copyright')->label('Текст об авторских правах'),
+                TextColumn::make('youtube')->label('Ссылка на YouTube'),
+                TextColumn::make('telegram')->label('Ссылка на Telegram'),
+                TextColumn::make('tiktok')->label('Ссылка на TikTok'),
             ])
             ->filters([
                 //
