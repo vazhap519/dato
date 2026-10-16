@@ -18,30 +18,30 @@ class HomeHeroesTable
             ->columns([
 
                 ImageColumn::make('hero_image')
-                    ->label('Image')
+                    ->label('Изображение первого экрана')
                     ->circular(),
 
                 TextColumn::make('badge_text')
-                    ->label('Бейдж')
+                    ->label('Текст бейджа')
                     ->searchable(),
 
                 TextColumn::make('title_line_1')
-                    ->label('Заголовок')
+                    ->label('Первая строка заголовка')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('title_highlight')
-                    ->label('Highlight'),
+                    ->label('Выделенная часть заголовка'),
 
                 TextColumn::make('primary_button_text')
-                    ->label('Primary Button'),
+                    ->label('Текст основной кнопки'),
 
                 IconColumn::make('is_active')
                     ->label('Активно')
                     ->boolean(),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable(),
 
