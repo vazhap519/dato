@@ -17,40 +17,40 @@ class LegalsTable
             ->columns([
 
                 TextColumn::make('title')
-                    ->label('Page Title')
+                    ->label('Заголовок')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('privacy_title')
-                    ->label('Privacy')
+                    ->label('Заголовок политики конфиденциальности')
                     ->limit(30),
 
                 TextColumn::make('agreement_title')
-                    ->label('Agreement')
+                    ->label('Заголовок пользовательского соглашения')
                     ->limit(30),
 
                 TextColumn::make('offer_title')
-                    ->label('Offer')
+                    ->label('Заголовок публичной оферты')
                     ->limit(30),
 
                 TextColumn::make('details_title')
-                    ->label('Details')
+                    ->label('Заголовок реквизитов')
                     ->limit(30),
 
                 TextColumn::make('cta_title')
-                    ->label('CTA')
+                    ->label('Заголовок заключительного блока')
                     ->limit(30),
 
                 TextColumn::make('sections_nav')
-                    ->label('Nav Sections')
+                    ->label('Разделы боковой навигации')
                     ->formatStateUsing(fn ($state) => is_array($state) ? count($state) : 0),
 
                 TextColumn::make('company_details')
-                    ->label('Company Fields')
+                    ->label('Реквизиты организации')
                     ->formatStateUsing(fn ($state) => is_array($state) ? count($state) : 0),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable(),
 
