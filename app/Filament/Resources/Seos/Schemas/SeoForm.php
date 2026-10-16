@@ -44,13 +44,13 @@ class SeoForm
                 Section::make('SEO Meta Data')
                     ->schema([
                         TextInput::make('title')
-                            ->label('Meta Title')
+                            ->label('Мета-заголовок')
                             ->required()
                             ->maxLength(60)
                             ->helperText('Recommended: 50–60 characters'),
 
                         Textarea::make('description')
-                            ->label('Meta Description')
+                            ->label('Мета-описание')
                             ->rows(3)
                             ->maxLength(160)
                             ->helperText('Recommended: 140–160 characters')
