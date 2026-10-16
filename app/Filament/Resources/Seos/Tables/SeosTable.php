@@ -14,13 +14,13 @@ class SeosTable
     {
         return $table
             ->columns([
-                TextColumn::make('page')
+                TextColumn::make('page')->label('Страница')
                     ->searchable(),
-                TextColumn::make('title')
+                TextColumn::make('title')->label('Мета-заголовок')
                     ->searchable(),
-                TextColumn::make('keywords')
+                TextColumn::make('keywords')->label('Ключевые слова')
                     ->searchable(),
-                TextColumn::make('canonical')
+                TextColumn::make('canonical')->label('Канонический URL')
                     ->searchable(),
             ])
             ->filters([
