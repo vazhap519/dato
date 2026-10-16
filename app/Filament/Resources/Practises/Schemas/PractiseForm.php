@@ -35,7 +35,7 @@ class PractiseForm
                             }),
 
                         // SLUG
-                        TextInput::make('slug')->label('Адрес страницы (slug)')
+                        TextInput::make('slug')->label('Часть адреса страницы')
                             ->required()
                             ->disabled()
                             ->dehydrated() ->reactive(),
