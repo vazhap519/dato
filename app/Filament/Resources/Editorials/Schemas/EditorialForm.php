@@ -22,11 +22,11 @@ class EditorialForm
                 | HERO SECTION
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Hero Section')
+                Section::make('Первый экран')
                     ->schema([
 
                         TextInput::make('hero_badge')
-                            ->label('Hero Badge'),
+                            ->label('Бейдж первого экрана'),
 
                         TextInput::make('hero_title')
                             ->label('Hero Title')
@@ -51,7 +51,7 @@ class EditorialForm
                 | QUOTE
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Quote Section')
+                Section::make('Блок с цитатой')
                     ->schema([
                         Textarea::make('quote_text')->rows(3),
                         TextInput::make('quote_button_text'),
@@ -62,7 +62,7 @@ class EditorialForm
                 | INFO BLOCKS
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Info Blocks')
+                Section::make('Информационные блоки')
                     ->schema([
                         Repeater::make('info_blocks')
                             ->schema([
@@ -79,11 +79,11 @@ class EditorialForm
                 | PROGRAM DAYS
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Program Days')
+                Section::make('Дни программы')
                     ->schema([
                         Repeater::make('program_days')
                             ->schema([
-                                TextInput::make('day_label')->label('Day Label'),
+                                TextInput::make('day_label')->label('Название дня'),
                                 TextInput::make('title')->required(),
                                 Textarea::make('description')->rows(3),
                             ])
@@ -91,7 +91,7 @@ class EditorialForm
                             ->collapsible()
                             ->columnSpanFull(),
                         TextInput::make('program_button_text')
-                            ->label('Program CTA Button Text'),
+                            ->label('Текст кнопки программы'),
                     ]),
 
                 /*
@@ -99,7 +99,7 @@ class EditorialForm
                 | FOR WHOM
                 |--------------------------------------------------------------------------
                 */
-                Section::make('For Whom Section')
+                Section::make('Для кого')
                     ->schema([
 
                         TextInput::make('for_whom_title'),
@@ -113,7 +113,7 @@ class EditorialForm
                             ->collapsible(),
 
                         TextInput::make('for_whom_button_text')
-                            ->label('For Whom Small Button Text'),
+                            ->label('Текст дополнительной кнопки блока «Для кого»'),
 
                         SpatieMediaLibraryFileUpload::make('for_whom_image')
                             ->collection('for_whom_image')
@@ -128,7 +128,7 @@ class EditorialForm
                 | WHY SECTION
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Why Section')
+                Section::make('Почему')
                     ->schema([
                         TextInput::make('why_title'),
                         Textarea::make('why_description')->rows(3),
@@ -140,7 +140,7 @@ class EditorialForm
                 | AUTHOR SECTION
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Author Section')
+                Section::make('Об авторе')
                     ->schema([
 
                         TextInput::make('author_name'),
@@ -168,7 +168,7 @@ class EditorialForm
                 | FINAL CTA
                 |--------------------------------------------------------------------------
                 */
-                Section::make('Final CTA')
+                Section::make('Финальный призыв')
                     ->schema([
                         TextInput::make('cta_title'),
                         Textarea::make('cta_description')->rows(3),
