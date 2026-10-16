@@ -17,6 +17,9 @@ use Filament\Tables\Table;
 class ClosedGroupResource extends Resource
 {
     protected static ?string $model = ClosedGroup::class;
+    protected static ?string $modelLabel = 'закрытая группа';
+    protected static ?string $pluralModelLabel = 'закрытые группы';
+    protected static ?string $navigationLabel = 'Закрытые группы';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
