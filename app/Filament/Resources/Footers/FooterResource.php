@@ -17,7 +17,10 @@ use UnitEnum;
 class FooterResource extends Resource
 {
     protected static ?string $model = Footer::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Full Site';
+    protected static ?string $modelLabel = 'подвал сайта';
+    protected static ?string $pluralModelLabel = 'подвалы сайта';
+    protected static ?string $navigationLabel = 'Подвал сайта';
+    protected static string | UnitEnum | null $navigationGroup = 'Основные настройки';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
