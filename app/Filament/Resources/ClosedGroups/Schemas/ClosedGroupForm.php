@@ -22,13 +22,13 @@ class ClosedGroupForm
                 /* ===============================
                  * HERO SECTION
                  * =============================== */
-                Section::make('Hero Section')
+                Section::make('Первый экран')
                     ->schema([
                         TextInput::make('hero_badge')
-                            ->label('Badge'),
+                            ->label('Бейдж'),
 
                         TextInput::make('hero_title')
-                            ->label('Title')
+                            ->label('Заголовок')
                             ->live(onBlur: true)
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('slug', Str::slug($state));
@@ -41,29 +41,29 @@ class ClosedGroupForm
                             ->dehydrated()->reactive(),
 
                         TextInput::make('hero_title_highlight')
-                            ->label('Title Highlight'),
+                            ->label('Выделение заголовка'),
 
                         Textarea::make('hero_description')
-                            ->label('Description')
+                            ->label('Описание')
                             ->rows(4),
 
                         TextInput::make('hero_button_primary')
-                            ->label('Primary Button Text'),
+                            ->label('Текст основной кнопки'),
 
                         TextInput::make('hero_button_secondary')
-                            ->label('Secondary Button Text'),
+                            ->label('Текст дополнительной кнопки'),
 
                         SpatieMediaLibraryFileUpload::make('hero_image')
                             ->collection('hero_image')
                             ->image()
-                            ->label('Hero Image'),
+                            ->label('Изображение первого экрана'),
                     ])
                     ->columns(2),
 
                 /* ===============================
                  * CONDITIONS
                  * =============================== */
-                Section::make('Conditions')
+                Section::make('Условия')
                     ->schema([
                         Repeater::make('conditions')
                             ->schema([
@@ -81,45 +81,45 @@ class ClosedGroupForm
                 /* ===============================
                  * PROMO VIDEO
                  * =============================== */
-                Section::make('Promo Video')
+                Section::make('Промовидео')
                     ->schema([
                         TextInput::make('promo_title')
-                            ->label('Promo Title'),
+                            ->label('Заголовок видео'),
 
                         SpatieMediaLibraryFileUpload::make('promo_image')
                             ->collection('promo_image')
                             ->image()
-                            ->label('Promo Preview Image'),
+                            ->label('Превью видео'),
 
                         SpatieMediaLibraryFileUpload::make('promo_video')
                             ->collection('promo_video')
                             ->acceptedFileTypes(['video/mp4'])
                             ->maxSize(102400) // 100MB
                             ->disk('public')
-                            ->label('Promo Video File'),
+                            ->label('Видеофайл'),
                     ])
                     ->columns(2),
 
                 /* ===============================
                  * DESCRIPTION
                  * =============================== */
-                Section::make('Description')
+                Section::make('Описание')
                     ->schema([
                         TextInput::make('description_title')
-                            ->label('Title'),
+                            ->label('Заголовок'),
 
                         Textarea::make('description_content')
                             ->rows(5)
-                            ->label('Content'),
+                            ->label('Содержание'),
                     ]),
 
                 /* ===============================
                  * PROGRAM
                  * =============================== */
-                Section::make('Program')
+                Section::make('Программа')
                     ->schema([
                         TextInput::make('program_title')
-                            ->label('Program Title'),
+                            ->label('Заголовок программы'),
 
                         Repeater::make('program')
                             ->schema([
@@ -137,7 +137,7 @@ class ClosedGroupForm
                 /* ===============================
                  * AUTHOR
                  * =============================== */
-                Section::make('Author')
+                Section::make('Автор')
                     ->schema([
                         TextInput::make('author_name'),
 
@@ -158,7 +158,7 @@ class ClosedGroupForm
                 /* ===============================
                  * FAQ
                  * =============================== */
-                Section::make('FAQ')
+                Section::make('Частые вопросы')
                     ->schema([
                         TextInput::make('faq_title'),
 
@@ -178,7 +178,7 @@ class ClosedGroupForm
                 /* ===============================
                  * PRICING
                  * =============================== */
-                Section::make('Pricing')
+                Section::make('Цены')
                     ->schema([
                         TextInput::make('pricing_badge'),
                         TextInput::make('pricing_title'),
