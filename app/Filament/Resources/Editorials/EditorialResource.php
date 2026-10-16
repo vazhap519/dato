@@ -17,6 +17,9 @@ use Filament\Tables\Table;
 class EditorialResource extends Resource
 {
     protected static ?string $model = Editorial::class;
+    protected static ?string $modelLabel = 'статья';
+    protected static ?string $pluralModelLabel = 'статьи';
+    protected static ?string $navigationLabel = 'Статьи';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
