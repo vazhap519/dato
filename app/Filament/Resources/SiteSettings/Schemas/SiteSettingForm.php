@@ -19,7 +19,7 @@ class SiteSettingForm
                     ->schema([
 
                         TextInput::make('site_name')
-                            ->label('Site Name')
+                            ->label('Название сайта')
                             ->required()
                             ->maxLength(100),
 
