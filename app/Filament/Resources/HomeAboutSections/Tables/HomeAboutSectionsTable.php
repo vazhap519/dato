@@ -37,12 +37,12 @@ class HomeAboutSectionsTable
                     ->limit(30),
 
                 TextColumn::make('title')
-                    ->label('Title')
+                    ->label('Заголовок')
                     ->searchable()
                     ->limit(50),
 
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Активно')
                     ->boolean()
                     ->sortable(),
 
@@ -55,7 +55,7 @@ class HomeAboutSectionsTable
             ->filters([
 
                 TernaryFilter::make('is_active')
-                    ->label('Active')
+                    ->label('Активно')
                     ->trueLabel('Active only')
                     ->falseLabel('Inactive only')
 
