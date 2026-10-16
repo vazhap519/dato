@@ -17,7 +17,10 @@ use UnitEnum;
 class SiteSettingResource extends Resource
 {
     protected static ?string $model = SiteSetting::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Full Site';
+    protected static ?string $modelLabel = 'настройка сайта';
+    protected static ?string $pluralModelLabel = 'настройки сайта';
+    protected static ?string $navigationLabel = 'Настройки сайта';
+    protected static string | UnitEnum | null $navigationGroup = 'Основные настройки';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
