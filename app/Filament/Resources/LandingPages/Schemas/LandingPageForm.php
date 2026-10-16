@@ -43,7 +43,7 @@ class LandingPageForm
 
                             TextInput::make('href')
                                 ->label('Ссылка-якорь')
-                                ->helperText('Например: товары, о нас, отзывы (без символа #)')
+                                ->helperText('Например: products, about, reviews — укажите существующий идентификатор раздела без символа #')
                                 ->required()
                                 ->dehydrateStateUsing(fn ($state) => ltrim(trim($state), '#')),
 
