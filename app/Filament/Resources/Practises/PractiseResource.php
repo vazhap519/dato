@@ -17,9 +17,11 @@ use UnitEnum;
 class PractiseResource extends Resource
 {
     protected static ?string $model = Practice::class;
-protected static ?string $navigationLabel = 'Shop';
+    protected static ?string $modelLabel = 'практика';
+    protected static ?string $pluralModelLabel = 'практики';
+protected static ?string $navigationLabel = 'Практики';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Home';
+    protected static string | UnitEnum | null $navigationGroup = 'Главная';
 
 
     public static function form(Schema $schema): Schema
