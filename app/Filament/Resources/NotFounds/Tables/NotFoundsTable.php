@@ -14,9 +14,9 @@ class NotFoundsTable
     {
         return $table
             ->columns([
-                TextColumn::make('not_found_title')->searchable(),
-                TextColumn::make('not_found_button_text')->searchable(),
-                TextColumn::make('not_found_content')
+                TextColumn::make('not_found_title')->label('Заголовок страницы 404')->searchable(),
+                TextColumn::make('not_found_button_text')->label('Текст кнопки возврата')->searchable(),
+                TextColumn::make('not_found_content')->label('Текст страницы 404')
                 ->searchable()
                 ->sortable(),
 
