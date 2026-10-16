@@ -14,31 +14,31 @@ class HomeHeroForm
     public static function configure(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Hero Content')
+            Section::make('Содержание первого экрана')
                 ->schema([
-                    TextInput::make('badge_text')->required(),
+                    TextInput::make('badge_text')->label('Текст бейджа')->required(),
 
-                    TextInput::make('title_line_1')->required(),
+                    TextInput::make('title_line_1')->label('Первая строка заголовка')->required(),
 
-                    TextInput::make('title_highlight')->required(),
+                    TextInput::make('title_highlight')->label('Выделенная часть заголовка')->required(),
 
-                    Textarea::make('subtitle')
+                    Textarea::make('subtitle')->label('Подзаголовок')
                         ->rows(3)
                         ->required(),
 
-                    TextInput::make('primary_button_text')->required(),
-                    TextInput::make('primary_button_href'),
+                    TextInput::make('primary_button_text')->label('Текст основной кнопки')->required(),
+                    TextInput::make('primary_button_href')->label('Ссылка основной кнопки'),
 
-                    TextInput::make('secondary_button_text'),
-                    TextInput::make('secondary_button_href'),
+                    TextInput::make('secondary_button_text')->label('Текст дополнительной кнопки'),
+                    TextInput::make('secondary_button_href')->label('Ссылка дополнительной кнопки'),
 
-                    Toggle::make('is_active')->default(true),
+                    Toggle::make('is_active')->label('Активно')->default(true),
                 ])
                 ->columns(2),
 
             Section::make('Изображение первого экрана')
                 ->schema([
-                    SpatieMediaLibraryFileUpload::make('hero_image')
+                    SpatieMediaLibraryFileUpload::make('hero_image')->label('Изображение первого экрана')
                         ->collection('hero_image')
                         ->disk('public')
                         ->image()
