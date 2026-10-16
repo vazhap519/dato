@@ -17,7 +17,10 @@ use UnitEnum;
 class ContactSectionResource extends Resource
 {
     protected static ?string $model = ContactSection::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Home';
+    protected static ?string $modelLabel = 'контактный раздел';
+    protected static ?string $pluralModelLabel = 'контактные разделы';
+    protected static ?string $navigationLabel = 'Контактные разделы';
+    protected static string | UnitEnum | null $navigationGroup = 'Главная';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
