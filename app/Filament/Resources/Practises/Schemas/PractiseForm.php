@@ -18,16 +18,16 @@ class PractiseForm
         return $schema
             ->components([
 
-                TextInput::make('header_big'),
+                TextInput::make('header_big')->label('Основной заголовок'),
 
-                TextInput::make('header_small'),
+                TextInput::make('header_small')->label('Подзаголовок'),
 
-                Repeater::make('contents')
+                Repeater::make('contents')->label('Практики')
                     ->relationship()
                     ->schema([
 
                         // TITLE
-                        TextInput::make('title')
+                        TextInput::make('title')->label('Заголовок')
                             ->required()
                             ->live(onBlur: true)
                             ->afterStateUpdated(function ($state, callable $set) {
@@ -35,23 +35,23 @@ class PractiseForm
                             }),
 
                         // SLUG
-                        TextInput::make('slug')
+                        TextInput::make('slug')->label('Адрес страницы (slug)')
                             ->required()
                             ->disabled()
                             ->dehydrated() ->reactive(),
 
                         // ✅ აქ გადავიტანეთ
-                        Select::make('closed_group_id')
+                        Select::make('closed_group_id')->label('Связанная закрытая группа')
                             ->relationship('closedGroup', 'hero_title')
                             ->searchable()
                             ->preload()
                             ->required(),
 
-                        Textarea::make('description')->required(),
+                        Textarea::make('description')->label('Описание')->required(),
 
-                        TextInput::make('price'),
+                        TextInput::make('price')->label('Цена'),
 
-                        SpatieMediaLibraryFileUpload::make('practice_images') // ⚠️ აქ არის შეცდომა შენთან
+                        SpatieMediaLibraryFileUpload::make('practice_images')->label('Изображения практики') // ⚠️ აქ არის შეცდომა შენთან
                         ->collection('practice_images')
                             ->image()
                             ->imageEditor()
@@ -61,7 +61,7 @@ class PractiseForm
                             ->visibility('public'),
 
 
-                        Toggle::make('is_active')
+                        Toggle::make('is_active')->label('Активно')
                             ->default(true),
                     ])
                     ->columns(2)
