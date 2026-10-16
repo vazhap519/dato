@@ -1,4 +1,4 @@
-// import { usePage } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 // import Header from "@/components/Header.jsx";
 // import Footer from "@/components/Footer.jsx";
 // import Seo from "@/components/Seo.jsx";
@@ -279,7 +279,7 @@ export default function Editoria() {
                 <Seo />
                 <Header />
                 <div className="py-40 text-center text-white">
-                    Editoria content not added yet
+                    Содержимое страницы пока не опубликовано
                 </div>
                 <Footer />
             </>
