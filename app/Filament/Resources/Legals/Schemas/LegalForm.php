@@ -32,7 +32,7 @@ class LegalForm
                         ->collapsible(),
                 ]),
 
-            Section::make('Privacy Policy')
+            Section::make('Политика конфиденциальности')
                 ->schema([
                     TextInput::make('privacy_title'),
                     Textarea::make('privacy_content')
