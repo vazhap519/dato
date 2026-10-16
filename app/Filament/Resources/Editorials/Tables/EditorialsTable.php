@@ -16,12 +16,12 @@ class EditorialsTable
             ->columns([
 
                 TextColumn::make('hero_title')
-                    ->label('Hero Title')
+                    ->label('Заголовок первого экрана')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('author_name')
-                    ->label('Author')
+                    ->label('Автор')
                     ->sortable(),
 
                 TextColumn::make('updated_at')
