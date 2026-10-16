@@ -34,7 +34,7 @@ class ClosedGroupForm
                                 $set('slug', Str::slug($state));
                             }),
 
-                        TextInput::make('slug')->label('Адрес страницы (slug)')
+                        TextInput::make('slug')->label('Часть адреса страницы')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->disabled()
