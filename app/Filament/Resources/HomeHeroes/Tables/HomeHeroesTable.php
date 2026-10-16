@@ -22,11 +22,11 @@ class HomeHeroesTable
                     ->circular(),
 
                 TextColumn::make('badge_text')
-                    ->label('Badge')
+                    ->label('Бейдж')
                     ->searchable(),
 
                 TextColumn::make('title_line_1')
-                    ->label('Title')
+                    ->label('Заголовок')
                     ->searchable()
                     ->sortable(),
 
@@ -37,7 +37,7 @@ class HomeHeroesTable
                     ->label('Primary Button'),
 
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Активно')
                     ->boolean(),
 
                 TextColumn::make('updated_at')
