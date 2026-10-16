@@ -17,13 +17,13 @@ class ContactSectionsTable
             ->columns([
 
                 TextColumn::make('title')
-                    ->label('Title')
+                    ->label('Заголовок')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('description')
                     ->limit(50)
-                    ->label('Description'),
+                    ->label('Описание'),
 
                 TextColumn::make('questions')
                     ->label('Questions Count')
@@ -33,7 +33,7 @@ class ContactSectionsTable
                     ->label('Button Text'),
 
                 TextColumn::make('button_url')
-                    ->label('Button Link')
+                    ->label('Ссылка кнопки')
                     ->limit(30),
 
                 ImageColumn::make('contact_image')
