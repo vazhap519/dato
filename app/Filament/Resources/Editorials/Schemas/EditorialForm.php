@@ -175,5 +175,29 @@ class EditorialForm
                         TextInput::make('cta_button_text')->label('Текст заключительной кнопки'),
                     ]),
             ]);
+                        TextInput::make('cta_button_url')
+                            ->label('Ссылка кнопки заключительной кнопки')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
+                        TextInput::make('author_button_url')
+                            ->label('Ссылка кнопки об авторе')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
+                        TextInput::make('why_button_url')
+                            ->label('Ссылка кнопки блока «Почему»')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
+                        TextInput::make('for_whom_button_url')
+                            ->label('Ссылка кнопки блока «Для кого»')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
+                        TextInput::make('program_button_url')
+                            ->label('Ссылка кнопки программы')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
+                        TextInput::make('quote_button_url')
+                            ->label('Ссылка кнопки цитатой')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
     }
 }
