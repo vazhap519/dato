@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -16,6 +17,18 @@ return new class extends Migration
             $table->string('author_button_url')->nullable();
             $table->string('cta_button_url')->nullable();
         });
+
+        // Set sensible destinations for existing records without altering their text.
+        foreach ([
+            'quote_button_url' => 'https://t.me/praynwin',
+            'program_button_url' => 'https://t.me/praynwin',
+            'for_whom_button_url' => 'https://t.me/praynwin',
+            'why_button_url' => 'https://t.me/praynwin',
+            'author_button_url' => '/personal',
+            'cta_button_url' => 'https://t.me/praynwin',
+        ] as $column => $url) {
+            DB::table('editorias')->whereNull($column)->update([$column => $url]);
+        }
     }
 
     public function down(): void
