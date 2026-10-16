@@ -16,19 +16,19 @@ class PractisesTable
             ->columns([
 
                 TextColumn::make('header_big')
-                    ->label('Main Header')
+                    ->label('Основной заголовок')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('header_small')
-                    ->label('Sub Header')
+                    ->label('Подзаголовок')
                     ->limit(40),
 
                 TextColumn::make('contents_count')
-                    ->label('Practise Items'),
+                    ->label('Количество практик'),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable(),
 
