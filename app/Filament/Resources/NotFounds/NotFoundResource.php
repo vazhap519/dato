@@ -18,6 +18,9 @@ use Filament\Tables\Table;
 class NotFoundResource extends Resource
 {
     protected static ?string $model = NotFound::class;
+    protected static ?string $modelLabel = 'страница 404';
+    protected static ?string $pluralModelLabel = 'страницы 404';
+    protected static ?string $navigationLabel = 'Страницы 404';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
