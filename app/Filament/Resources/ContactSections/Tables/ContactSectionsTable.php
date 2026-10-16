@@ -21,9 +21,9 @@ class ContactSectionsTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('description')->label('Описание')
-                    ->limit(50)
-                    ->label('Описание'),
+                TextColumn::make('description')
+                    ->label('Описание')
+                    ->limit(50),
 
                 TextColumn::make('questions')
                     ->label('Вопросы')
