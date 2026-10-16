@@ -16,11 +16,11 @@ class LandingPageForm
     {
         return $schema->components([
 
-            Section::make('Landing Page')
+            Section::make('Страница сайта')
                 ->schema([
 
                    Select::make('key')
-    ->label('Select Page')
+    ->label('Идентификатор страницы')
     ->required()
     ->options(FrontendRoutes::get())
     ->searchable()
@@ -28,26 +28,26 @@ class LandingPageForm
 
                 ]),
 
-            Section::make('Navigation (Scroll links)')
+            Section::make('Навигация по разделам')
                 ->schema([
 
-                    Repeater::make('navigationItems')
+                    Repeater::make('navigationItems')->label('Ссылки навигации')
                         ->relationship('navigationItems')
                         ->orderColumn('sort')
                         ->reorderable()
                         ->schema([
 
                             TextInput::make('label')
-                                ->label('Link Label')
+                                ->label('Название ссылки')
                                 ->required(),
 
                             TextInput::make('href')
-                                ->label('Anchor Link')
-                                ->helperText('Example: products, about, reviews')
+                                ->label('Ссылка-якорь')
+                                ->helperText('Например: products, about, reviews (без символа #)')
                                 ->required()
                                 ->dehydrateStateUsing(fn ($state) => ltrim(trim($state), '#')),
 
-                            Toggle::make('is_active')
+                            Toggle::make('is_active')->label('Активно')
                                 ->default(true),
 
                         ])
