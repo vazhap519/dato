@@ -17,7 +17,7 @@ class HomeAboutSectionForm
     {
         return $schema->components([
 
-            Section::make('Content')
+            Section::make('Содержание')
                 ->schema([
 
                     TextInput::make('kicker')
