@@ -29,7 +29,7 @@ class ContactSectionForm
             TextInput::make('button_text'),
 
             TextInput::make('button_url')
-                ->label('Button Link'),
+                ->label('Ссылка кнопки'),
 
             SpatieMediaLibraryFileUpload::make('contact_image')
                 ->collection('contact_image')
