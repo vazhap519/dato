@@ -20,51 +20,51 @@ class SeoForm
         return $schema
             ->components([
 
-                Section::make('Page Settings')
+                Section::make('Настройки страницы')
                     ->schema([
-                        Select::make('page')
+                        Select::make('page')->label('Страница')
                             ->options([
-                                'home' => 'Home',
-                                'personal' => 'Personal',
-                                'practice' => 'Practice',
-                                'legal' => 'Legal',
-                                'editoria' => 'Editoria',
+                                'home' => 'Главная',
+                                'personal' => 'Персональные услуги',
+                                'practice' => 'Практики',
+                                'legal' => 'Юридическая информация',
+                                'editoria' => 'Редакционные материалы',
                             ])
                             ->required()
                             ->unique(ignoreRecord: true),
 
                         TextInput::make('canonical')
-                            ->label('Canonical URL')
+                            ->label('Канонический URL')
                             ->url()
                             ->placeholder('https://example.com/about')
                             ->maxLength(255),
                     ])
                     ->columns(2),
 
-                Section::make('SEO Meta Data')
+                Section::make('Метаданные SEO')
                     ->schema([
                         TextInput::make('title')
                             ->label('Мета-заголовок')
                             ->required()
                             ->maxLength(60)
-                            ->helperText('Recommended: 50–60 characters'),
+                            ->helperText('Рекомендуемая длина: 50–60 символов'),
 
                         Textarea::make('description')
-                            ->label('Мета-описание')
+                            ->label('Текст отзыва')
                             ->rows(3)
                             ->maxLength(160)
-                            ->helperText('Recommended: 140–160 characters')
+                            ->helperText('Рекомендуемая длина: 140–160 символов')
                             ->columnSpanFull(),
 
                         TagsInput::make('keywords')
-                            ->label('Meta Keywords')
-                            ->placeholder('Add keywords')
+                            ->label('Ключевые слова')
+                            ->placeholder('Добавьте ключевые слова')
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Open Graph Image')
+                Section::make('Изображение для социальных сетей (Open Graph)')
                     ->schema([
-                        SpatieMediaLibraryFileUpload::make('seo_image') // ✔ ემთხვევა მოდელს
+                        SpatieMediaLibraryFileUpload::make('seo_image')->label('Изображение Open Graph') // ✔ ემთხვევა მოდელს
                         ->collection('seo_image')                   // ✔ იგივე collection
                         ->disk('public')
                             ->image()
@@ -72,7 +72,7 @@ class SeoForm
                             ->conversion('webp')
                             ->responsiveImages()
                             ->maxSize(2048)
-                            ->helperText('Recommended size: 1200x630px')
+                            ->helperText('Рекомендуемый размер: 1200 × 630 пикселей')
                             ->columnSpanFull(),
                     ]),
             ]);
