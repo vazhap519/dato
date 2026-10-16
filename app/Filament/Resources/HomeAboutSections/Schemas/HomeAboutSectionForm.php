@@ -17,72 +17,72 @@ class HomeAboutSectionForm
     {
         return $schema->components([
 
-            Section::make('Содержание')
+            Section::make('Основное содержание')
                 ->schema([
 
                     TextInput::make('kicker')
-                        ->label('Kicker (small title)')
+                        ->label('Надзаголовок')
                         ->maxLength(255)
                         ->required(),
 
                     TextInput::make('title')
-                        ->label('Main Title')
+                        ->label('Заголовок')
                         ->maxLength(255)
                         ->required(),
 
                     Textarea::make('paragraph_1')
-                        ->label('Paragraph 1')
+                        ->label('Первый абзац')
                         ->rows(4)
                         ->required(),
 
                     Textarea::make('paragraph_2')
-                        ->label('Paragraph 2')
+                        ->label('Второй абзац')
                         ->rows(4)
                         ->required(),
 
                 ])
                 ->columns(2),
 
-            Section::make('Stats')
+            Section::make('Показатели')
                 ->schema([
 
                     TextInput::make('stat_1_value')
-                        ->label('Stat #1 Value')
+                        ->label('Показатель 1 — значение')
                         ->maxLength(50)
                         ->required(),
 
                     TextInput::make('stat_1_label')
-                        ->label('Stat #1 Label')
+                        ->label('Показатель 1 — подпись')
                         ->maxLength(100)
                         ->required(),
 
                     TextInput::make('stat_2_value')
-                        ->label('Stat #2 Value')
+                        ->label('Показатель 2 — значение')
                         ->maxLength(50)
                         ->required(),
 
                     TextInput::make('stat_2_label')
-                        ->label('Stat #2 Label')
+                        ->label('Показатель 2 — подпись')
                         ->maxLength(100)
                         ->required(),
 
                     TextInput::make('stat_3_value')
-                        ->label('Stat #3 Value')
+                        ->label('Показатель 3 — значение')
                         ->maxLength(50)
                         ->required(),
 
                     TextInput::make('stat_3_label')
-                        ->label('Stat #3 Label')
+                        ->label('Показатель 3 — подпись')
                         ->maxLength(100)
                         ->required(),
 
                 ])
                 ->columns(2),
 
-            Section::make('About Image')
+            Section::make('Изображение раздела «О нас»')
                 ->schema([
 
-                    SpatieMediaLibraryFileUpload::make('about_image')
+                    SpatieMediaLibraryFileUpload::make('about_image')->label('Изображение раздела «О нас»')
                         ->collection('about_image')
                         ->disk('public')
                         ->image()
@@ -94,11 +94,11 @@ class HomeAboutSectionForm
                 ])
                 ->columns(1),
 
-            Section::make('Status')
+            Section::make('Статус')
                 ->schema([
 
                     Toggle::make('is_active')
-                        ->label('Active')
+                        ->label('Активно')
                         ->default(true),
 
                 ])
