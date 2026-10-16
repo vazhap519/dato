@@ -15,7 +15,7 @@ class SiteSettingForm
         return $schema
             ->components([
 
-                Section::make('General Settings')
+                Section::make('Общие настройки')
                     ->schema([
 
                         TextInput::make('site_name')
@@ -26,38 +26,38 @@ class SiteSettingForm
                     ])
                     ->columns(2),
 
-                Section::make('Branding & Icons')
+                Section::make('Логотипы и иконки')
                     ->schema([
 
-                        SpatieMediaLibraryFileUpload::make('favicon')
+                        SpatieMediaLibraryFileUpload::make('favicon')->label('Иконка сайта (favicon)')
                             ->collection('favicon')
                             ->image()
                             ->imageEditor()
                             ->disk('public')
                             ->maxSize(1024)
-                            ->helperText('Recommended: 32x32 or 64x64 PNG')
+                            ->helperText('Рекомендуемый размер: 32 × 32 или 64 × 64 пикселя, PNG')
                             ->columnSpanFull(),
 
-                        SpatieMediaLibraryFileUpload::make('apple_icon')
+                        SpatieMediaLibraryFileUpload::make('apple_icon')->label('Иконка для устройств Apple')
                             ->collection('apple_icon')
                             ->image()
                             ->imageEditor()
                             ->disk('public')
                             ->maxSize(2048)
-                            ->helperText('Recommended: 180x180 PNG')
+                            ->helperText('Рекомендуемый размер: 180 × 180 пикселей, PNG')
                             ->columnSpanFull(),
 
-                        SpatieMediaLibraryFileUpload::make('og_default')
+                        SpatieMediaLibraryFileUpload::make('og_default')->label('Изображение Open Graph по умолчанию')
                             ->collection('og_default')
                             ->image()
                             ->imageEditor()
                             ->conversion('webp')
                             ->responsiveImages()
                             ->disk('public')
-                            ->helperText('Recommended: 1200x630 (Open Graph default image)')
+                            ->helperText('Рекомендуемый размер: 1200 × 630 пикселей (изображение Open Graph по умолчанию)')
                             ->columnSpanFull(),
 
-                        SpatieMediaLibraryFileUpload::make('logo_default')
+                        SpatieMediaLibraryFileUpload::make('logo_default')->label('Основной логотип')
                             ->collection('logo_default')
                             ->image()
                             ->imageEditor()
