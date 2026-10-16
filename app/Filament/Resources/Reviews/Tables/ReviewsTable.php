@@ -18,28 +18,28 @@ class ReviewsTable
             ->columns([
 
                 ImageColumn::make('avatar')
-                    ->label('Avatar')
+                    ->label('Аватар')
                     ->circular(),
 
                 TextColumn::make('name')
-                    ->label('Name')
+                    ->label('Имя')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('role')
-                    ->label('Role')
+                    ->label('Роль')
                     ->limit(30),
 
                 TextColumn::make('content')
-                    ->label('Review')
+                    ->label('Отзывы')
                     ->limit(60),
 
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Активно')
                     ->boolean(),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('Дата создания')
                     ->dateTime()
                     ->sortable(),
 
