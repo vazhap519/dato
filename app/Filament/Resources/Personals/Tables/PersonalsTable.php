@@ -18,25 +18,25 @@ class PersonalsTable
         return $table
             ->columns([
 
-                TextColumn::make('id')
+                TextColumn::make('id')->label('ID')
                     ->sortable(),
 
                 TextColumn::make('hero_title_line_1')
-                    ->label('Hero Title')
+                    ->label('Первая строка заголовка')
                     ->searchable()
                     ->limit(30),
 
                 TextColumn::make('pricing_amount')
-                    ->label('Price')
+                    ->label('Стоимость')
                     ->sortable(),
 ImageColumn::make('hero_image')
-    ->label('Hero Image')
+    ->label('Изображение первого экрана')
     ->circular(),
                 TextColumn::make('pricing_currency')
-                    ->label('Currency'),
+                    ->label('Валюта'),
 
                 TextColumn::make('updated_at')
-                    ->label('Last Updated')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable(),
             ])
