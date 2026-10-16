@@ -53,8 +53,7 @@ class ClosedGroupForm
                         TextInput::make('hero_button_secondary')
                             ->label('Текст дополнительной кнопки'),
 
-                        SpatieMediaLibraryFileUpload::make('hero_image')->label('Изображение первого экрана')
-                            ->collection('hero_image')
+                        SpatieMediaLibraryFileUpload::make('hero_image')->collection('hero_image')
                             ->image()
                             ->label('Изображение первого экрана'),
                     ])
@@ -86,13 +85,11 @@ class ClosedGroupForm
                         TextInput::make('promo_title')
                             ->label('Заголовок промовидео'),
 
-                        SpatieMediaLibraryFileUpload::make('promo_image')->label('Обложка промовидео')
-                            ->collection('promo_image')
+                        SpatieMediaLibraryFileUpload::make('promo_image')->collection('promo_image')
                             ->image()
-                            ->label('Превью видео'),
+                            ->label('Обложка промовидео'),
 
-                        SpatieMediaLibraryFileUpload::make('promo_video')->label('Промовидео')
-                            ->collection('promo_video')
+                        SpatieMediaLibraryFileUpload::make('promo_video')->collection('promo_video')
                             ->acceptedFileTypes(['video/mp4'])
                             ->maxSize(102400) // 100MB
                             ->disk('public')
@@ -108,9 +105,8 @@ class ClosedGroupForm
                         TextInput::make('description_title')
                             ->label('Заголовок описания'),
 
-                        Textarea::make('description_content')->label('Текст описания')
-                            ->rows(5)
-                            ->label('Содержание'),
+                        Textarea::make('description_content')->rows(5)
+                            ->label('Текст описания'),
                     ]),
 
                 /* ===============================
