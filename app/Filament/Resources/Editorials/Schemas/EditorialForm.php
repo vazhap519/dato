@@ -55,6 +55,10 @@ class EditorialForm
                     ->schema([
                         Textarea::make('quote_text')->label('Текст цитаты')->rows(3),
                         TextInput::make('quote_button_text')->label('Текст кнопки под цитатой'),
+                        TextInput::make('quote_button_url')
+                            ->label('Ссылка кнопки под цитатой')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
                     ]),
 
                 /*
@@ -92,6 +96,10 @@ class EditorialForm
                             ->columnSpanFull(),
                         TextInput::make('program_button_text')
                             ->label('Текст кнопки программы'),
+                        TextInput::make('program_button_url')
+                            ->label('Ссылка кнопки программы')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
                     ]),
 
                 /*
@@ -114,6 +122,10 @@ class EditorialForm
 
                         TextInput::make('for_whom_button_text')
                             ->label('Текст кнопки блока «Для кого»'),
+                        TextInput::make('for_whom_button_url')
+                            ->label('Ссылка кнопки блока «Для кого»')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
 
                         SpatieMediaLibraryFileUpload::make('for_whom_image')->label('Изображение блока «Для кого»')
                             ->collection('for_whom_image')
@@ -133,6 +145,10 @@ class EditorialForm
                         TextInput::make('why_title')->label('Заголовок блока «Почему»'),
                         Textarea::make('why_description')->label('Описание блока «Почему»')->rows(3),
                         TextInput::make('why_button_text')->label('Текст кнопки блока «Почему»'),
+                        TextInput::make('why_button_url')
+                            ->label('Ссылка кнопки блока «Почему»')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
                     ]),
 
                 /*
@@ -154,6 +170,10 @@ class EditorialForm
                             ->collapsible(),
 
                         TextInput::make('author_button_text')->label('Текст кнопки об авторе'),
+                        TextInput::make('author_button_url')
+                            ->label('Ссылка кнопки об авторе')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
 
                         SpatieMediaLibraryFileUpload::make('author_image')->label('Фотография автора')
                             ->collection('author_image')
@@ -173,31 +193,11 @@ class EditorialForm
                         TextInput::make('cta_title')->label('Заголовок заключительного блока'),
                         Textarea::make('cta_description')->label('Описание заключительного блока')->rows(3),
                         TextInput::make('cta_button_text')->label('Текст заключительной кнопки'),
+                        TextInput::make('cta_button_url')
+                            ->label('Ссылка кнопки заключительного блока')
+                            ->placeholder('https://example.com или /personal')
+                            ->maxLength(2048),
                     ]),
             ]);
-                        TextInput::make('cta_button_url')
-                            ->label('Ссылка кнопки заключительной кнопки')
-                            ->placeholder('https://example.com или /personal')
-                            ->maxLength(2048),
-                        TextInput::make('author_button_url')
-                            ->label('Ссылка кнопки об авторе')
-                            ->placeholder('https://example.com или /personal')
-                            ->maxLength(2048),
-                        TextInput::make('why_button_url')
-                            ->label('Ссылка кнопки блока «Почему»')
-                            ->placeholder('https://example.com или /personal')
-                            ->maxLength(2048),
-                        TextInput::make('for_whom_button_url')
-                            ->label('Ссылка кнопки блока «Для кого»')
-                            ->placeholder('https://example.com или /personal')
-                            ->maxLength(2048),
-                        TextInput::make('program_button_url')
-                            ->label('Ссылка кнопки программы')
-                            ->placeholder('https://example.com или /personal')
-                            ->maxLength(2048),
-                        TextInput::make('quote_button_url')
-                            ->label('Ссылка кнопки цитатой')
-                            ->placeholder('https://example.com или /personal')
-                            ->maxLength(2048),
     }
 }
