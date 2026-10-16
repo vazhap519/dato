@@ -17,9 +17,12 @@ use UnitEnum;
 class LandingPageResource extends Resource
 {
     protected static ?string $model = LandingPage::class;
+    protected static ?string $modelLabel = 'посадочная страница';
+    protected static ?string $pluralModelLabel = 'посадочные страницы';
+    protected static ?string $navigationLabel = 'Посадочные страницы';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Full Site';
+    protected static string | UnitEnum | null $navigationGroup = 'Основные настройки';
     public static function form(Schema $schema): Schema
     {
         return LandingPageForm::configure($schema);
