@@ -2,7 +2,7 @@ import { usePage } from "@inertiajs/react";
 import { useState } from "react";
 import Seo from "@/components/Seo.jsx";
 import Header from "@/components/Header.jsx";
-import Footer from "@/components/Footer.jsx";
+import Footer from "@/components/footer.jsx";
 import { router } from "@inertiajs/react";
 
 export default function Practice() {
