@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Practises\Schemas;
 
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Hidden;
+use App\Models\ClosedGroup;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
@@ -26,15 +28,8 @@ class PractiseForm
                     ->relationship()
                     ->schema([
 
-                        Select::make('product_type')
-                            ->label('Тип продукта')
-                            ->options([
-                                'closed_group' => 'Закрытая группа',
-                                'personal' => 'Личная консультация (/personal)',
-                            ])
-                            ->default('closed_group')
-                            ->required()
-                            ->live(),
+                        Hidden::make('product_type')->default('closed_group'),
+                        Hidden::make('closed_group_id'),
 
                         // TITLE
                         TextInput::make('title')->label('Заголовок')
@@ -50,13 +45,36 @@ class PractiseForm
                             ->disabled()
                             ->dehydrated() ->reactive(),
 
-                        // ✅ აქ გადავიტანეთ
-                        Select::make('closed_group_id')->label('Связанная закрытая группа')
-                            ->relationship('closedGroup', 'hero_title')
+                        // One selector for existing closed groups and personal consultation.
+                        Select::make('product_selection')
+                            ->label('Связанный продукт')
+                            ->options(fn () => ['personal' => 'Личная консультация'] +
+                                ClosedGroup::query()->orderBy('hero_title')->get()
+                                    ->mapWithKeys(fn ($group) => [
+                                        'group_' . $group->id => $group->hero_title ?: 'Закрытая группа #' . $group->id,
+                                    ])->all())
                             ->searchable()
-                            ->preload()
-                            ->required(fn ($get) => ($get('product_type') ?? 'closed_group') === 'closed_group')
-                            ->visible(fn ($get) => ($get('product_type') ?? 'closed_group') === 'closed_group'),
+                            ->required()
+                            ->live()
+                            ->dehydrated(false)
+                            ->afterStateHydrated(function ($component, $get) {
+                                $component->state(
+                                    $get('product_type') === 'personal'
+                                        ? 'personal'
+                                        : ($get('closed_group_id') ? 'group_' . $get('closed_group_id') : null)
+                                );
+                            })
+                            ->afterStateUpdated(function ($state, $set) {
+                                if ($state === 'personal') {
+                                    $set('product_type', 'personal');
+                                    $set('closed_group_id', null);
+                                } else {
+                                    $set('product_type', 'closed_group');
+                                    $set('closed_group_id', str_starts_with((string) $state, 'group_')
+                                        ? (int) substr($state, 6)
+                                        : null);
+                                }
+                            }),
 
                         Textarea::make('description')->label('Описание')->required(),
 
