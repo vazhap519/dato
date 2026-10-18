@@ -18,6 +18,7 @@ class PracticeContent extends Model implements HasMedia
         'price',
         'slug',
         'is_active',
+        'product_type',
         'closed_group_id'
     ];
 
