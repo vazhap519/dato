@@ -4,27 +4,20 @@ namespace Database\Seeders;
 
 use App\Models\ClosedGroup;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class ClosedGroupSeeder extends Seeder
 {
     /**
-     * Create the "Круг души" page once. Never overwrite existing admin edits.
+     * Fill the "Круг души" form, creating or updating the matching record.
      * Media files (photos and promo video) are managed separately in Filament.
      */
     public function run(): void
     {
         $slug = 'krug-dushi';
 
-        if (ClosedGroup::query()->where('slug', $slug)->exists()) {
-            $this->command?->info('Страница «Круг души» уже существует — данные сохранены без изменений.');
-            return;
-        }
-
-        ClosedGroup::query()->create([
-            'slug' => $slug,
+        ClosedGroup::query()->updateOrCreate(['slug' => $slug], [
             'hero_badge' => 'Закрытое сообщество',
-            'hero_title' => 'Круг души',
+            'hero_title' => 'Круг Души',
             'hero_title_highlight' => 'Пространство для себя',
             'hero_description' => 'Место для тех, кто хочет не только размышлять о самопознании, но и применять новые наблюдения в повседневной жизни. Без соревнования, громких обещаний и необходимости казаться кем-то другим.',
             'hero_button_primary' => 'Узнать об участии',
@@ -100,10 +93,10 @@ class ClosedGroupSeeder extends Seeder
 
             'pricing_badge' => 'Участие в сообществе',
             'pricing_title' => 'Присоединиться к «Кругу души»',
-            'pricing_old_price' => null,
-            'pricing_current_price' => null,
-            'pricing_button_text' => 'Уточнить условия участия',
-            'pricing_note' => 'Актуальная стоимость, срок доступа и способ оплаты указываются в приглашении на текущий поток практикума. Перед публикацией заполните эти данные в админ-панели.',
+            'pricing_old_price' => '19 €',
+            'pricing_current_price' => '15 €',
+            'pricing_button_text' => 'Присоединиться к сообществу',
+            'pricing_note' => 'Специальное предложение для участников текущего потока практикума: доступ навсегда за 15 €. Проверьте актуальность условий перед публикацией.',
             'pricing_features' => [
                 ['feature' => 'Доступ к 30-дневному курсу «Выход из сна»'],
                 ['feature' => 'Авторские медитации и материалы'],
@@ -113,6 +106,6 @@ class ClosedGroupSeeder extends Seeder
             ],
         ]);
 
-        $this->command?->info('Создана страница «Круг души» (/closed-group/' . $slug . ').');
+        $this->command?->info('Заполнена форма «Круг Души» (/closed-group/' . $slug . ').');
     }
 }
