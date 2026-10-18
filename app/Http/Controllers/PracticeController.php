@@ -60,6 +60,11 @@ class PracticeController extends Controller
 
                         // 🔥 აი ეს გვჭირდება
                         'slug' => optional($item->closedGroup)->slug,
+                        'url' => $item->product_type === 'personal'
+                            ? route('personal')
+                            : (optional($item->closedGroup)->slug
+                                ? route('closed-group.show', ['slug' => $item->closedGroup->slug])
+                                : null),
 
                         'image' => $item->getFirstMediaUrl('practice_images', 'webp')
                             ?: $item->getFirstMediaUrl('practice_images'),
