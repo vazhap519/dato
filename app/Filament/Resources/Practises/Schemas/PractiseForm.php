@@ -26,6 +26,16 @@ class PractiseForm
                     ->relationship()
                     ->schema([
 
+                        Select::make('product_type')
+                            ->label('Тип продукта')
+                            ->options([
+                                'closed_group' => 'Закрытая группа',
+                                'personal' => 'Личная консультация (/personal)',
+                            ])
+                            ->default('closed_group')
+                            ->required()
+                            ->live(),
+
                         // TITLE
                         TextInput::make('title')->label('Заголовок')
                             ->required()
@@ -45,7 +55,8 @@ class PractiseForm
                             ->relationship('closedGroup', 'hero_title')
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->required(fn ($get) => ($get('product_type') ?? 'closed_group') === 'closed_group')
+                            ->visible(fn ($get) => ($get('product_type') ?? 'closed_group') === 'closed_group'),
 
                         Textarea::make('description')->label('Описание')->required(),
 
