@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Footers\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -25,6 +26,11 @@ class FooterForm
                 TextInput::make( 'brand_name'),
  TextInput::make('description')->label('Описание'),
  TextInput::make('nav_title')->label('Заголовок навигации'),
+                Repeater::make('navigation_links')->label('Ссылки навигации')
+                    ->schema([
+                        TextInput::make('label')->label('Название')->required(),
+                        TextInput::make('href')->label('Адрес')->required()->placeholder('/editoria'),
+                    ])->reorderable()->collapsible(),
  TextInput::make('support_title')->label('Заголовок раздела помощи'),
  TextInput::make('support_faq')->label('Ссылка на вопросы и ответы'),
  TextInput::make('support_payment')->label('Ссылка на оплату'),
@@ -34,6 +40,7 @@ class FooterForm
  TextInput::make('email')->label('Электронная почта'),
  TextInput::make('location')->label('Местоположение'),
  TextInput::make('copyright')->label('Текст об авторских правах'),
+                TextInput::make('bottom_tagline')->label('Подпись внизу сайта'),
  TextInput::make('youtube')->label('Ссылка на YouTube'),
  TextInput::make('telegram')->label('Ссылка на Telegram'),
  TextInput::make('tiktok')->label('Ссылка на TikTok'),
