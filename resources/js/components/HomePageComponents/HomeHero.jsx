@@ -2,9 +2,9 @@ export default function HomeHero({hero}) {
     if (!hero) return null;
 
     return (
-        <section className="relative min-h-[90vh] flex items-center overflow-hidden hero-gradient">
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-                <div className="z-10 space-y-8 py-12">
+        <section className="relative min-h-0 lg:min-h-[90vh] flex items-center overflow-hidden hero-gradient">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-12 items-center w-full">
+                <div className="z-10 space-y-5 md:space-y-8 pt-8 pb-3 lg:py-12">
                     <div
                         className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
 <span className="relative flex h-2 w-2">
@@ -14,33 +14,33 @@ export default function HomeHero({hero}) {
                         {/*Внутреннее пробуждение*/}
                         {hero.badge_text}
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-light leading-tight">
+                    <h1 className="text-[clamp(2.8rem,12vw,4rem)] md:text-8xl font-light leading-tight">
                         {hero.title_line_1} <br/>
                         <span className="font-extrabold text-primary"> {hero.title_highlight}</span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
+                    <p className="text-base md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
                         Книги, практикумы и живые разговоры для тех, кто хочет лучше понять себя, выйти из привычных сценариев и начать жить осознаннее.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
                         <a
                             href="/editoria"
-                            className="bg-primary text-background-dark px-10 py-4 rounded-xl text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
+                            className="bg-primary text-background-dark px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
                         >
                             Начать с бесплатного практикума
                         </a>
 
                         <a
                             href="#about"
-                            className="border border-white/10 hover:bg-white/5 px-10 py-4 rounded-xl text-lg font-medium transition-all text-center"
+                            className="border border-white/10 hover:bg-white/5 px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-medium transition-all text-center"
                         >
                             Узнать обо мне
                         </a>
                     </div>
                 </div>
 
-                {/* <div className="relative lg:h-[80vh] flex justify-center items-end bg-transparent">
+                {/* <div className="relative h-[230px] sm:h-[330px] lg:h-[80vh] flex justify-center items-end bg-transparent">
                     <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
                     <img   loading="eager"
                            fetchpriority="high"
@@ -53,7 +53,7 @@ export default function HomeHero({hero}) {
 
 
 <div className="relative lg:h-[80vh] flex justify-center items-end">
-<img alt="Давид Арутюнов" className="h-full w-auto object-contain object-bottom pointer-events-none" 
+<img alt="Давид Арутюнов" className="h-full w-auto max-w-full object-contain object-bottom pointer-events-none" 
 src={hero?.hero_image_url ?? "/images/placeholder.webp"}/>
 </div>
 
