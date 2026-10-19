@@ -56,7 +56,7 @@ export default function ClosedGroup() {
                 </section>
 
                 <section id={getId(7, "pricing")} className="py-24 max-w-7xl mx-auto px-6 mb-24">
-                    <div id="pricing" className="scroll-mt-24"><GroupPricing group={group} /></div>
+                    <div id={getId(7, "pricing") === "pricing" ? undefined : "pricing"} className="scroll-mt-24"><GroupPricing group={group} /></div>
                 </section>
 
             </main>
