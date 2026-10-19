@@ -3,172 +3,132 @@ import Header from "@/components/Header.jsx";
 import Footer from "@/components/footer.jsx";
 import Seo from "@/components/Seo.jsx";
 
-export default function Legal() {
+const defaults = [
+    { label: "Политика конфиденциальности", anchor: "privacy" },
+    { label: "Пользовательское соглашение", anchor: "agreement" },
+    { label: "Публичная оферта", anchor: "offer" },
+    { label: "Реквизиты и контакты", anchor: "details" },
+];
 
-    const { legal, navigation = [] } = usePage().props;
-
-    const anchors = navigation.map((item) =>
-        String(item.href || "")
-            .trim()
-            .replace(/^#/, "")
+function LegalText({ html }) {
+    if (!html) return null;
+    return (
+        <div
+            className="legal-document text-muted-text dark:text-gray-300 leading-7"
+            dangerouslySetInnerHTML={{ __html: html }}
+        />
     );
+}
 
-    const getAnchor = (index, fallback) =>
-        anchors[index] && anchors[index] !== ""
-            ? anchors[index]
-            : fallback;
+export default function Legal() {
+    const { legal } = usePage().props;
+
+    const configured = Array.isArray(legal?.sections_nav) ? legal.sections_nav : [];
+    const sections = defaults.map((section, index) => ({
+        ...section,
+        label: configured[index]?.label || section.label,
+        anchor: String(configured[index]?.anchor || section.anchor).replace(/^#/, ""),
+    }));
+
+    const contact = legal?.company_details?.find((item) =>
+        /email|e-mail|электронн|почт/i.test(item.label || "") &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(item.value || "")
+    );
+    const contactHref = contact ? `mailto:${contact.value}` : "/#contacts";
 
     return (
         <>
             <Seo />
             <Header />
-
-            <main className="relative min-h-screen sacred-pattern py-12 px-6 lg:px-12">
+            <main className="relative min-h-screen sacred-pattern pt-32 pb-16 px-6 lg:px-12">
                 <div className="max-w-7xl mx-auto">
-
-                    {/* თუ legal საერთოდ არ არსებობს */}
-                    {!legal && (
+                    {!legal ? (
                         <div className="py-40 text-center">
-                            <h2 className="text-3xl font-bold mb-4">
-                                Legal content not added yet
-                            </h2>
-                            <p className="text-muted-text">
-                                Please add content from admin panel.
-                            </p>
+                            <h2 className="text-3xl font-bold mb-4">Документы пока не опубликованы</h2>
                         </div>
-                    )}
-
-                    {legal && (
+                    ) : (
                         <>
-                            {/* HEADER */}
-                            <div className="mb-16 max-w-2xl">
-                                <h1 className="text-5xl md:text-6xl font-black mb-6 leading-tight">
-                                    {legal.title}
-                                </h1>
-
+                            <div className="mb-14 max-w-3xl">
+                                <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">{legal.title}</h1>
                                 {legal.subtitle && (
-                                    <p className="text-xl text-muted-text dark:text-gray-400 leading-relaxed">
-                                        {legal.subtitle}
-                                    </p>
+                                    <p className="text-lg text-muted-text dark:text-gray-400 leading-relaxed">{legal.subtitle}</p>
+                                )}
+                                {legal.download_button_text && (
+                                    <button type="button" onClick={() => window.print()}
+                                        className="mt-6 btn-primary-unified print:hidden">
+                                        {legal.download_button_text}
+                                    </button>
                                 )}
                             </div>
 
                             <div className="flex flex-col lg:flex-row gap-12">
-
-                                {/* SIDEBAR */}
-                                <aside className="w-full lg:w-72">
-                                    <div className="sticky top-32 flex flex-col gap-2">
-                                        {navigation.map((item) => (
-                                            <a
-                                                key={item.id}
-                                                href={`#${item.href}`}
-                                                className="px-4 py-3 rounded-xl hover:bg-white dark:hover:bg-white/5 transition-all"
-                                            >
+                                <aside className="w-full lg:w-72 print:hidden">
+                                    <nav className="sticky top-32 flex flex-col gap-2" aria-label="Разделы документов">
+                                        {sections.map((item) => (
+                                            <a key={item.anchor} href={`#${item.anchor}`}
+                                                className="px-4 py-3 rounded-xl hover:bg-white dark:hover:bg-white/5 transition-all">
                                                 {item.label}
                                             </a>
                                         ))}
-                                    </div>
+                                    </nav>
                                 </aside>
 
-                                {/* CONTENT */}
-                                <div className="flex-1 space-y-16">
-
-                                    {/* SECTION 1 */}
-                                    <section
-                                        id={getAnchor(0, "privacy")}
-                                        className="scroll-mt-24"
-                                    >
-                                        {legal.privacy_title && (
-                                            <h2 className="text-3xl font-bold mb-6">
-                                                {legal.privacy_title}
-                                            </h2>
-                                        )}
-
-                                        {legal.privacy_content && (
-                                            <div
-                                                dangerouslySetInnerHTML={{
-                                                    __html: legal.privacy_content,
-                                                }}
-                                            />
-                                        )}
+                                <div className="flex-1 min-w-0 space-y-16">
+                                    <section id={sections[0].anchor} className="scroll-mt-28">
+                                        {legal.privacy_title && <h2 className="text-3xl font-bold mb-6">{legal.privacy_title}</h2>}
+                                        <LegalText html={legal.privacy_content} />
                                     </section>
-
-                                    {/* SECTION 2 */}
-                                    <section
-                                        id={getAnchor(1, "agreement")}
-                                        className="scroll-mt-24"
-                                    >
-                                        {legal.agreement_title && (
-                                            <h2 className="text-3xl font-bold mb-6">
-                                                {legal.agreement_title}
-                                            </h2>
-                                        )}
-
-                                        {legal.agreement_content && (
-                                            <div
-                                                dangerouslySetInnerHTML={{
-                                                    __html: legal.agreement_content,
-                                                }}
-                                            />
-                                        )}
+                                    <section id={sections[1].anchor} className="scroll-mt-28">
+                                        {legal.agreement_title && <h2 className="text-3xl font-bold mb-6">{legal.agreement_title}</h2>}
+                                        <LegalText html={legal.agreement_content} />
                                     </section>
-
-                                    {/* SECTION 3 */}
-                                    <section
-                                        id={getAnchor(2, "offer")}
-                                        className="scroll-mt-24"
-                                    >
-                                        {legal.offer_title && (
-                                            <h2 className="text-3xl font-bold mb-6">
-                                                {legal.offer_title}
-                                            </h2>
-                                        )}
-
-                                        {legal.offer_content && (
-                                            <div
-                                                dangerouslySetInnerHTML={{
-                                                    __html: legal.offer_content,
-                                                }}
-                                            />
-                                        )}
+                                    <section id={sections[2].anchor} className="scroll-mt-28">
+                                        {legal.offer_title && <h2 className="text-3xl font-bold mb-6">{legal.offer_title}</h2>}
+                                        <LegalText html={legal.offer_content} />
                                     </section>
-
-                                    {/* SECTION 4 */}
-                                    <section
-                                        id={getAnchor(3, "details")}
-                                        className="scroll-mt-24"
-                                    >
-                                        {legal.details_title && (
-                                            <h2 className="text-3xl font-bold mb-6">
-                                                {legal.details_title}
-                                            </h2>
-                                        )}
-
+                                    <section id={sections[3].anchor} className="scroll-mt-28">
+                                        {legal.details_title && <h2 className="text-3xl font-bold mb-6">{legal.details_title}</h2>}
                                         {legal.company_details?.length > 0 && (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 {legal.company_details.map((item, index) => (
                                                     <div key={index}>
-                                                        <p className="text-xs uppercase tracking-widest mb-1">
-                                                            {item.label}
-                                                        </p>
-                                                        <p className="text-lg font-bold">
-                                                            {item.value}
-                                                        </p>
+                                                        <p className="text-xs uppercase tracking-widest mb-1">{item.label}</p>
+                                                        <p className="text-lg font-bold break-words">{item.value}</p>
                                                     </div>
                                                 ))}
                                             </div>
                                         )}
                                     </section>
-
+                                    {(legal.cta_title || legal.cta_description || legal.cta_button_text) && (
+                                        <section className="border-t border-white/10 pt-12 print:hidden">
+                                            {legal.cta_title && <h2 className="text-3xl font-bold mb-4">{legal.cta_title}</h2>}
+                                            {legal.cta_description && <p className="text-muted-text dark:text-gray-400 leading-7 mb-6">{legal.cta_description}</p>}
+                                            {legal.cta_button_text && (
+                                                <a href={contactHref} className="inline-block btn-primary-unified">{legal.cta_button_text}</a>
+                                            )}
+                                        </section>
+                                    )}
                                 </div>
                             </div>
                         </>
                     )}
-
                 </div>
             </main>
-
             <Footer />
+            <style>{`
+                .legal-document h3 { font-size: 1.25rem; font-weight: 700; margin: 1.75rem 0 0.75rem; color: inherit; }
+                .legal-document p { margin-bottom: 1rem; }
+                .legal-document ul, .legal-document ol { padding-left: 1.5rem; margin: 0.75rem 0 1.25rem; }
+                .legal-document ul { list-style-type: disc; }
+                .legal-document ol { list-style-type: decimal; }
+                .legal-document li { margin-bottom: 0.5rem; }
+                .legal-document a { text-decoration: underline; }
+                @media print {
+                    header, footer { display: none !important; }
+                    main { padding: 0 !important; }
+                    .legal-document { color: #111 !important; }
+                }
+            `}</style>
         </>
     );
 }
