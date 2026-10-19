@@ -1,6 +1,6 @@
 export default function HomeHero({hero}) {
     if (!hero) return null;
-console.log(hero.hero_image_url)
+
     return (
         <section className="relative min-h-[90vh] flex items-center overflow-hidden hero-gradient">
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
@@ -20,22 +20,22 @@ console.log(hero.hero_image_url)
                     </h1>
 
                     <p className="text-xl md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
-                        {hero.subtitle}
+                        Книги, практикумы и живые разговоры для тех, кто хочет лучше понять себя, выйти из привычных сценариев и начать жить осознаннее.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
                         <a
-                            href={hero.primary_button_href || "#products"}
+                            href="/editoria"
                             className="bg-primary text-background-dark px-10 py-4 rounded-xl text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
                         >
-                            {hero.primary_button_text}
+                            Начать с бесплатного практикума
                         </a>
 
                         <a
-                            href={hero.secondary_button_href || "#about"}
+                            href="#about"
                             className="border border-white/10 hover:bg-white/5 px-10 py-4 rounded-xl text-lg font-medium transition-all text-center"
                         >
-                            {hero.secondary_button_text}
+                            Узнать обо мне
                         </a>
                     </div>
                 </div>
@@ -52,8 +52,8 @@ console.log(hero.hero_image_url)
 
 
 
-<div class="relative lg:h-[80vh] flex justify-center items-end">
-<img alt="Давид Арутюнов" class="h-full w-auto object-contain object-bottom pointer-events-none" 
+<div className="relative lg:h-[80vh] flex justify-center items-end">
+<img alt="Давид Арутюнов" className="h-full w-auto object-contain object-bottom pointer-events-none" 
 src={hero?.hero_image_url ?? "/images/placeholder.webp"}/>
 </div>
 
