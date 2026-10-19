@@ -8,7 +8,6 @@ export default function GroupAuthor({ group }) {
                 <div className="space-y-5 text-gray-300 leading-relaxed">
                     <p>{group.author_bio_1}</p><p>{group.author_bio_2}</p>
                 </div>
-                <a href="/#about" className="inline-flex mt-8 px-6 py-3 border border-primary/40 rounded-xl text-primary font-semibold hover:bg-primary/10 transition">Познакомиться с автором <span className="ml-2" aria-hidden="true">→</span></a>
             </div>
             <div className="order-1 md:order-2 flex justify-center">
                 {group.author_image_url && <div className="w-full max-w-[380px] aspect-[4/5] rounded-3xl overflow-hidden border border-white/10"><img src={group.author_image_url} alt={group.author_name} className="w-full h-full object-cover" /></div>}
