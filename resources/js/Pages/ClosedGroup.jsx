@@ -44,14 +44,18 @@ export default function ClosedGroup() {
                 </section>
 
                 <section id={getId(4, "program")} className="py-24 max-w-7xl mx-auto px-6">
-                    <GroupProgram group={group} />\n                    </div>
+                    <GroupProgram group={group} />
                 </section>
 
                 <section id={getId(5, "author")} className="py-24 bg-primary/[0.02]">
                     <GroupAuthor group={group} />
                 </section>
 
-                {review?.content?.length > 0 && <section className="py-20 bg-white/[0.02] border-y border-white/5">\n                    <GroupReviews review={review} />\n                </section>}\n\n                <section id={getId(6, "faq")} className="py-24 bg-background-dark">
+                {review?.content?.length > 0 && <section className="py-20 bg-white/[0.02] border-y border-white/5">
+                    <GroupReviews review={review} />
+                </section>}
+
+                <section id={getId(6, "faq")} className="py-24 bg-background-dark">
                     <GroupFaq group={group} />
                 </section>
 
