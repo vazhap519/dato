@@ -87,11 +87,19 @@ class HandleInertiaRequests extends Middleware
                 }])->orderBy('id')->get();
 
                 return $pages->flatMap(function ($page) {
-                    if (! in_array($page->key, ['home', 'personal', 'practice', 'legal', 'editoria'], true)) {
+                    if ($page->key === 'closed-group.show') {
+                        $slug = \App\Models\ClosedGroup::query()->whereNotNull('slug')->value('slug');
+
+                        if (! $slug) {
+                            return collect();
+                        }
+
+                        $path = route('closed-group.show', ['slug' => $slug], false);
+                    } elseif (in_array($page->key, ['home', 'personal', 'practice', 'legal', 'editoria'], true)) {
+                        $path = route($page->key, [], false);
+                    } else {
                         return collect();
                     }
-
-                    $path = route($page->key, [], false);
 
                     return $page->navigationItems->map(fn ($item) => [
                         'id' => $item->id,
