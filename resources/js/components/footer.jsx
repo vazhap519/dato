@@ -1,17 +1,82 @@
-import SelfImprovent from "@/components/FooterComponents/SelfImprovent.jsx";
-import {usePage} from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
+
+const primaryLinks = [
+    { label: "Главная страница", href: "/" },
+    { label: "Бесплатный практикум", href: "/editoria" },
+    { label: "Закрытое сообщество", href: "/#products" },
+    { label: "Личная консультация", href: "/personal" },
+];
 
 export default function Footer() {
-    const { footer, navigation } = usePage().props;
+    const { footer, settings } = usePage().props;
+    const year = new Date().getFullYear();
+    const email = footer?.email?.trim();
+    const location = footer?.location?.trim();
 
     return (
-        <footer className="bg-background-dark border-t border-white/5 pt-20 pb-10" id="contacts">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-                    <SelfImprovent footer={footer} navigation={navigation} />
-                </div>.
+        <footer id="contacts" className="relative overflow-hidden bg-background-dark border-t border-primary/10 text-white">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90vw,800px)] h-64 rounded-full bg-primary/[0.055] blur-[100px] pointer-events-none" aria-hidden="true" />
+            <div className="relative max-w-7xl mx-auto px-6 pt-14 md:pt-20 pb-8">
+                <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.09] via-white/[0.025] to-transparent px-6 py-10 sm:px-10 md:py-14 text-center mb-16">
+                    <span className="text-primary text-xs font-bold uppercase tracking-[0.22em]">Пространство для себя</span>
+                    <h2 className="text-3xl md:text-4xl font-bold mt-4 mb-4 leading-tight">Иногда один шаг меняет многое.</h2>
+                    <p className="text-white/65 max-w-xl mx-auto leading-relaxed mb-7">Начни с простого знакомства с собой — на бесплатном трёхдневном практикуме.</p>
+                    <a href="/editoria" className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-4 text-background-dark font-bold hover:brightness-110 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                        Познакомиться с практикумом
+                        <span className="material-symbols-outlined text-xl" aria-hidden="true">arrow_outward</span>
+                    </a>
+                </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] gap-x-10 gap-y-12 pb-14">
+                    <div className="max-w-sm">
+                        <a href="/" className="inline-flex items-center gap-3 mb-5 group" aria-label="На главную страницу">
+                            {settings?.logo ? (
+                                <img src={settings.logo} alt={settings?.site_name || "Arutyun"} className="h-12 max-w-36 w-auto object-contain" loading="lazy" />
+                            ) : (
+                                <span className="text-primary text-3xl italic font-semibold">Arutyun</span>
+                            )}
+                            {footer?.brand_name && <span className="text-sm font-bold uppercase tracking-wide text-white group-hover:text-primary transition">{footer.brand_name}</span>}
+                        </a>
+                        <p className="text-white/60 text-sm leading-relaxed">{footer?.description || "Пространство для людей, которые хотят лучше понять себя и исследовать свой внутренний мир."}</p>
+                    </div>
+
+                    <nav aria-label="Навигация в подвале">
+                        <h3 className="text-white font-bold text-xs uppercase tracking-[0.18em] mb-6">{footer?.nav_title || "Навигация"}</h3>
+                        <ul className="space-y-3.5">
+                            {primaryLinks.map(link => (
+                                <li key={link.href}><a href={link.href} className="text-white/65 text-sm hover:text-primary transition-colors">{link.label}</a></li>
+                            ))}
+                        </ul>
+                    </nav>
+
+                    <nav aria-label="Юридическая информация">
+                        <h3 className="text-white font-bold text-xs uppercase tracking-[0.18em] mb-6">{footer?.support_title || "Документы"}</h3>
+                        <ul className="space-y-3.5">
+                            <li><a href="/legal" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_faq || "Юридическая информация"}</a></li>
+                            <li><a href="/legal#offer" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_offer || "Публичная оферта"}</a></li>
+                            <li><a href="/legal#agreement" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_payment || "Условия использования"}</a></li>
+                            <li><a href="/legal#privacy" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_privacy || "Политика конфиденциальности"}</a></li>
+                        </ul>
+                    </nav>
+
+                    <div>
+                        <h3 className="text-white font-bold text-xs uppercase tracking-[0.18em] mb-6">{footer?.contact_title || "Контакты"}</h3>
+                        <ul className="space-y-4">
+                            {email && <li><a href={`mailto:${email}`} className="flex items-start gap-3 text-white/65 text-sm hover:text-primary transition-colors break-all">
+                                <span className="material-symbols-outlined text-primary text-xl shrink-0" aria-hidden="true">mail</span>{email}
+                            </a></li>}
+                            {location && <li className="flex items-start gap-3 text-white/65 text-sm">
+                                <span className="material-symbols-outlined text-primary text-xl shrink-0" aria-hidden="true">location_on</span>{location}
+                            </li>}
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row gap-3 justify-between items-center text-white/40 text-xs">
+                    <span>© {year} {footer?.brand_name || settings?.site_name || "Arutyun"}. Все права защищены.</span>
+                    <span>Мир проще, чем кажется.</span>
+                </div>
             </div>
         </footer>
-                )
-                }
+    );
+}
