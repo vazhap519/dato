@@ -90,21 +90,21 @@ export default function Home() {
                     <HomeAbout about={about} />
                 </section>
 
-                <section id="start" className="scroll-mt-24 py-16 md:py-24 px-6">
-                    <div className="max-w-5xl mx-auto rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/10 via-card-dark to-background-dark px-7 py-12 md:px-16 md:py-16 text-center">
+                <section id="start" className="scroll-mt-24 py-10 md:py-24 px-6">
+                    <div className="max-w-5xl mx-auto rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/10 via-card-dark to-background-dark px-5 py-8 md:px-16 md:py-16 text-center">
                         <p className="text-primary text-xs font-bold tracking-[0.2em] uppercase mb-4">Не знаешь, с чего начать?</p>
-                        <h2 className="text-3xl md:text-5xl font-bold mb-5">Начни с трёх дней для себя.</h2>
-                        <p className="text-slate-300 max-w-2xl mx-auto leading-relaxed mb-8">Бесплатный практикум «Познай себя» — возможность познакомиться с моим подходом через наблюдение, вопросы и простые задания.</p>
-                        <div className="grid grid-cols-3 gap-2 md:gap-4 max-w-xl mx-auto mb-8">
+                        <h2 className="text-2xl md:text-5xl font-bold mb-4 md:mb-5">Начни с трёх дней для себя.</h2>
+                        <p className="text-slate-300 max-w-2xl mx-auto leading-relaxed text-sm md:text-base mb-5 md:mb-8">Бесплатный практикум «Познай себя» — возможность познакомиться с моим подходом через наблюдение, вопросы и простые задания.</p>
+                        <div className="grid grid-cols-3 gap-1.5 md:gap-4 max-w-xl mx-auto mb-5 md:mb-8">
                             {["Замечать", "Понимать", "Выбирать"].map((word, i) => (
-                                <div key={word} className="rounded-xl bg-white/5 border border-white/10 px-2 py-4">
+                                <div key={word} className="rounded-xl bg-white/5 border border-white/10 px-1 py-3 md:px-2 md:py-4">
                                     <span className="text-primary text-xs block mb-2">0{i + 1}</span>
-                                    <span className="text-sm md:text-base font-semibold">{word}</span>
+                                    <span className="text-xs md:text-base font-semibold">{word}</span>
                                 </div>
                             ))}
                         </div>
                         <p className="text-slate-400 text-sm mb-6">3 дня · Бесплатно · Онлайн</p>
-                        <a href="/editoria" className="inline-flex items-center justify-center bg-primary text-background-dark px-8 py-4 rounded-xl font-bold hover:brightness-110 transition">Перейти к практикуму <span className="material-symbols-outlined ml-2" aria-hidden="true">arrow_outward</span></a>
+                        <a href="/editoria" className="inline-flex w-full sm:w-auto items-center justify-center bg-primary text-background-dark px-8 py-4 rounded-xl font-bold hover:brightness-110 transition">Перейти к практикуму <span className="material-symbols-outlined ml-2" aria-hidden="true">arrow_outward</span></a>
                     </div>
                 </section>
 
