@@ -14,9 +14,18 @@ export default function GroupPricing({ group }) {
             {features.length > 0 && <ul className="mt-9 pt-7 border-t border-white/10 space-y-4">
                 {features.map((feature, index) => <li key={index} className="flex items-start gap-3 text-gray-200"><span className="material-symbols-outlined text-primary shrink-0" aria-hidden="true">check_circle</span><span>{feature}</span></li>)}
             </ul>}
-            {checkoutUrl && <a href={checkoutUrl} className="mt-9 flex w-full items-center justify-center rounded-xl bg-primary text-background-dark px-6 py-4 text-center font-bold hover:brightness-110 transition">{group.pricing_button_text || "Вступить в сообщество"} <span className="ml-2" aria-hidden="true">→</span></a>}
+            <a
+                href={checkoutUrl || "#pricing"}
+                target={checkoutUrl ? "_blank" : undefined}
+                rel={checkoutUrl ? "noopener noreferrer" : undefined}
+                aria-label={group.pricing_button_text || "Вступить в сообщество"}
+                className="mt-9 flex w-full items-center justify-center rounded-xl bg-primary text-background-dark px-6 py-4 text-center font-bold hover:brightness-110 transition shadow-xl shadow-primary/20"
+            >
+                {group.pricing_button_text || "Вступить в сообщество"}
+                <span className="ml-2" aria-hidden="true">→</span>
+            </a>
             {group.pricing_note && <p className="text-gray-400 text-sm text-center mt-5">{group.pricing_note}</p>}
-            {!checkoutUrl && <p className="text-gray-500 text-xs text-center mt-5">Ссылка для вступления будет добавлена организатором.</p>}
+            {!checkoutUrl && <p className="text-gray-500 text-xs text-center mt-5">Для перехода к оплате укажи ссылку кнопки в админ-панели.</p>}
         </div>
     );
 }
