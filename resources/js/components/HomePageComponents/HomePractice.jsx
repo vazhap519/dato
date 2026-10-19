@@ -11,6 +11,15 @@ export default function HomePractice({ practiceSection }) {
     } = practiceSection;
 
     
+    const free = {
+        title: practiceSection.free_title || "Бесплатный практикум «Познай себя»",
+        description: practiceSection.free_description || "Три дня, чтобы лучше понять себя через наблюдение, вопросы и практические задания.",
+        url: practiceSection.free_button_url || "/editoria",
+        image: practiceSection.free_image,
+        button_text: practiceSection.free_button_text || "Начать бесплатно",
+        is_free: true,
+    };
+    const items = [...(practiceSection.free_enabled === false ? [] : [free]), ...content.slice(0, 2)];
     return (
         <section className="py-12 md:py-24 bg-background-light dark:bg-background-dark">
             <div className="max-w-7xl mx-auto px-6">
@@ -31,7 +40,7 @@ export default function HomePractice({ practiceSection }) {
                 {/* PRODUCT GRID — MAP */}
            {/* PRODUCTS — 2 ITEMS DESIGN */}
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-8">
-    {[{ title: "Бесплатный практикум «Познай себя»", description: "Три дня, чтобы лучше понять себя через наблюдение, вопросы и практические задания.", url: "/editoria", is_free: true }, ...content.slice(0, 2)].map((item, index) => (
+    {items.map((item, index) => (
         <div
             key={index}
             className="group bg-card-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all flex flex-row md:flex-col min-h-36 md:min-h-0"
@@ -78,7 +87,7 @@ export default function HomePractice({ practiceSection }) {
                     }}
                     className="w-full btn-primary-unified text-center text-xs md:text-base !py-2 md:!py-3"
                 >
-                    {item.is_free ? "Начать бесплатно" : "Подробнее"}
+                    {item.is_free ? item.button_text : "Подробнее"}
                 </button>
             </div>
 
