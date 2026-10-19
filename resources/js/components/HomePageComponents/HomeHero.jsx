@@ -20,22 +20,22 @@ export default function HomeHero({hero}) {
                     </h1>
 
                     <p className="text-base md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
-                        Книги, практикумы и живые разговоры для тех, кто хочет лучше понять себя, выйти из привычных сценариев и начать жить осознаннее.
+                        {hero.subtitle || "Книги, практикумы и живые разговоры для тех, кто хочет лучше понять себя, выйти из привычных сценариев и начать жить осознаннее."}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
                         <a
-                            href="/editoria"
+                            href={hero.primary_button_href || "/editoria"}
                             className="bg-primary text-background-dark px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
                         >
-                            Начать с бесплатного практикума
+                            {hero.primary_button_text || "Начать с бесплатного практикума"}
                         </a>
 
                         <a
-                            href="#about"
+                            href={hero.secondary_button_href || "#about"}
                             className="border border-white/10 hover:bg-white/5 px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-medium transition-all text-center"
                         >
-                            Узнать обо мне
+                            {hero.secondary_button_text || "Узнать обо мне"}
                         </a>
                     </div>
                 </div>
