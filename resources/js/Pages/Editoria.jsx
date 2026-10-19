@@ -1,233 +1,186 @@
 import { usePage } from "@inertiajs/react";
-import Header from "@/components/Header.jsx";
-import Footer from "@/components/footer.jsx";
+import { useState } from "react";
 import Seo from "@/components/Seo.jsx";
 
+const defaultQuestions = [
+    { question: "Практикум действительно бесплатный?", answer: "Да. Участие в трёхдневном практикуме бесплатное." },
+    { question: "Где проходит практикум?", answer: "Анонсы и информация о доступе публикуются в Telegram-канале практикума. Эфиры проходят онлайн." },
+    { question: "Нужна ли предварительная подготовка?", answer: "Нет. Достаточно интереса к самопознанию и готовности уделить себе немного времени." },
+    { question: "Что, если я пропущу эфир?", answer: "Информацию о доступных материалах и возможных записях уточняй в Telegram-канале практикума." },
+];
+
+const fallbackDays = [
+    { day_label: "День 1", title: "Энергия мира", description: "Замечаем свои чувства, внимание и то, что забирает или наполняет энергией." },
+    { day_label: "День 2", title: "Личина, эго и роли", description: "Исследуем привычные реакции, ожидания и роли, за которыми бывает трудно увидеть себя." },
+    { day_label: "День 3", title: "Выход из сна", description: "Учимся замечать автоматические сценарии и выбирать следующий шаг осознаннее." },
+];
+
+function JoinLink({ href, children, secondary = false, className = "" }) {
+    const base = "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 font-bold text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+    const colors = secondary ? "border border-primary/50 text-primary hover:bg-primary/10" : "bg-primary text-background-dark hover:brightness-110 shadow-lg shadow-primary/10";
+    return <a href={href || "#how-to-join"} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
+}
+
 export default function Editoria() {
-    const { editoria, navigation = [] } = usePage().props;
+    const { editoria, settings } = usePage().props;
+    const [openFaq, setOpenFaq] = useState(0);
 
-    // ✅ ერთი helper ყველა section-ისთვის
-    const getId = (index, fallback) =>
-        String(navigation[index]?.href || fallback)
-            .trim()
-            .replace(/^#/, "");
+    if (!editoria) return <><Seo /><main className="min-h-screen flex items-center justify-center px-6 text-white text-center">Содержимое страницы пока не опубликовано</main></>;
 
-    if (!editoria) {
-        return (
-            <>
-                <Seo />
-                <Header />
-                <div className="py-40 text-center text-white">
-                    Содержимое страницы пока не опубликовано
-                </div>
-                <Footer />
-            </>
-        );
-    }
+    const joinUrl = [
+        editoria.cta_button_url,
+        editoria.program_button_url,
+        editoria.hero_button_url,
+        editoria.for_whom_button_url,
+        editoria.why_button_url,
+        editoria.quote_button_url,
+    ].find(url => typeof url === "string" && url.trim() && url.trim() !== "#")?.trim() || "";
+
+    const days = Array.isArray(editoria.program_days) && editoria.program_days.length ? editoria.program_days : fallbackDays;
+    const items = Array.isArray(editoria.for_whom_list) && editoria.for_whom_list.length ? editoria.for_whom_list : [
+        "Чувствуешь, что живёшь на автомате.",
+        "Часто ставишь чужие ожидания выше своих.",
+        "Устал искать ответы, но продолжаешь сомневаться.",
+        "Хочешь лучше понимать свои чувства и реакции.",
+    ];
+    const info = Array.isArray(editoria.info_blocks) && editoria.info_blocks.length ? editoria.info_blocks : [
+        { title: "3 дня", description: "Три дня исследования себя" },
+        { title: "Бесплатно", description: "Без оплаты за участие" },
+        { title: "Живые эфиры", description: "Разговоры и практические задания" },
+    ];
 
     return (
         <>
             <Seo />
-            <Header />
+            <header className="relative z-20 border-b border-white/10 bg-background-dark">
+                <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
+                    <div className="flex items-center" aria-label={settings?.site_name || "Arutyun"}>
+                        {settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Arutyun"} className="h-10 w-auto max-w-36 object-contain" /> : <span className="text-primary font-display text-2xl italic">Arutyun</span>}
+                    </div>
+                    <a href="#how-to-join" className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
+                </div>
+            </header>
 
-            <main className="pt-20">
-
-                {/* HERO */}
-                <section id={getId(0, "hero")} className="scroll-mt-24 max-w-[1200px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-                        <div className="flex flex-col gap-8 order-2 lg:order-1">
-                            <div className="space-y-4">
-
-                                {editoria.hero_badge && (
-                                    <span className="text-primary text-xs uppercase tracking-[0.2em]">
-                                        {editoria.hero_badge}
-                                    </span>
-                                )}
-
-                                <h1 className="text-white text-5xl lg:text-7xl italic">
-                                    {editoria.hero_title}
-                                </h1>
-
-                                <p className="text-gray-400 text-lg max-w-lg">
-                                    {editoria.hero_description}
-                                </p>
-                            </div>
-
-                            {editoria.hero_button_text && (
-                                <a
-                                    href={editoria.hero_button_url || "#"}
-                                    className="group flex items-center gap-4 bg-primary text-background-dark px-8 py-4 rounded-lg font-bold text-lg transition hover:scale-[1.02]"
-                                >
-                                    {editoria.hero_button_text}
-                                </a>
-                            )}
+            <main>
+                <section className="max-w-6xl mx-auto px-6 py-12 md:py-20 lg:py-24 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                    <div className="order-2 lg:order-1">
+                        <p className="inline-flex rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase px-4 py-2 mb-6">{editoria.hero_badge || "Бесплатный трёхдневный практикум"}</p>
+                        <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight mb-6">Устал жить <span className="text-primary italic">на автомате?</span></h1>
+                        <p className="text-gray-300 text-lg leading-relaxed max-w-xl mb-7">{editoria.hero_description || "Три дня, чтобы остановиться, разобраться в привычных реакциях и начать лучше понимать себя."}</p>
+                        <div className="flex flex-wrap gap-4 text-sm text-gray-300 mb-7">
+                            <span>✦ 3 дня</span><span>✦ Бесплатно</span><span>✦ Онлайн</span>
                         </div>
-
-                        {editoria.hero_image_url && (
-                            <img
-                                src={editoria.hero_image_url}
-                                className="w-full max-w-[450px] mx-auto rounded-lg shadow-2xl order-1 lg:order-2"
-                                alt="Hero"
-                            />
-                        )}
+                        <JoinLink href={joinUrl} className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
+                        <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
+                    </div>
+                    <div className="order-1 lg:order-2">
+                        {editoria.hero_image_url && <img src={editoria.hero_image_url} alt="Трёхдневный практикум «Познай себя»" className="w-full max-w-md mx-auto aspect-square object-cover rounded-3xl border border-white/10" />}
                     </div>
                 </section>
 
-                {/* QUOTE */}
-                {editoria.quote_text && (
-                    <section id={getId(1, "quote")} className="scroll-mt-24 bg-background-dark py-32 border-y border-primary/10">
-                        <div className="max-w-[800px] mx-auto px-6 text-center space-y-8">
-                            <h2 className="text-white text-3xl lg:text-5xl italic">
-                                {editoria.quote_text}
-                            </h2>
+                <section className="bg-white/[0.025] border-y border-white/10 py-8 md:py-10">
+                    <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-3 gap-4">
+                        {info.slice(0, 3).map((item, i) => <div key={i} className="flex items-start gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-5">
+                            <span className="material-symbols-outlined text-primary text-3xl" aria-hidden="true">{["calendar_month", "redeem", "forum"][i]}</span>
+                            <div><h2 className="text-white font-bold text-lg">{item.title}</h2><p className="text-gray-400 text-sm leading-relaxed mt-1">{item.description}</p></div>
+                        </div>)}
+                    </div>
+                </section>
 
-                            {editoria.quote_button_text && (
-                                <a href={editoria.quote_button_url || undefined} className="bg-primary/10 border border-primary text-primary px-10 py-3 rounded-full hover:bg-primary hover:text-background-dark transition">
-                                    {editoria.quote_button_text}
-                                </a>
-                            )}
+                <section id="program" className="scroll-mt-8 max-w-6xl mx-auto px-6 py-16 md:py-20">
+                    <div className="text-center max-w-2xl mx-auto mb-10">
+                        <p className="text-primary text-xs uppercase tracking-widest font-bold mb-3">Программа практикума</p>
+                        <h2 className="text-white text-3xl md:text-4xl font-bold">Что ждёт тебя за три дня</h2>
+                        <p className="text-gray-400 mt-4">Каждый день — новая тема, наблюдения и практические задания.</p>
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-5">
+                        {days.map((day, i) => <article key={i} className="rounded-2xl border border-white/10 bg-white/[0.05] p-7 h-full">
+                            <span className="text-primary text-4xl font-bold block mb-5">{String(i + 1).padStart(2, "0")}</span>
+                            <p className="text-primary text-xs font-bold uppercase tracking-widest mb-2">{day.day_label || `День ${i + 1}`}</p>
+                            <h3 className="text-white text-xl font-bold mb-3">{day.title}</h3>
+                            <p className="text-gray-400 leading-relaxed">{day.description}</p>
+                        </article>)}
+                    </div>
+                    <div className="text-center mt-9"><JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink></div>
+                </section>
+
+                <section className="bg-white/[0.025] border-y border-white/10 py-16 md:py-20">
+                    <div className="max-w-6xl mx-auto px-6">
+                        <div className="max-w-2xl mb-9">
+                            <h2 className="text-white text-3xl md:text-4xl font-bold">{editoria.for_whom_title || "Для кого этот практикум"}</h2>
+                            <p className="text-gray-400 mt-4 leading-relaxed">{editoria.for_whom_description}</p>
                         </div>
-                    </section>
-                )}
-
-                {/* INFO */}
-                {Array.isArray(editoria.info_blocks) && (
-                    <section id={getId(2, "info")} className="scroll-mt-24 bg-graphite/50 border-b border-primary/10">
-                        <div className="max-w-[1200px] mx-auto px-6 py-12">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                                {editoria.info_blocks.map((block, i) => (
-                                    <div key={i}>
-                                        <p className="text-white font-bold text-lg">{block.title}</p>
-                                        <p className="text-gray-500 text-sm">{block.description}</p>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                            {items.map((item, i) => <div key={i} className="rounded-xl border border-white/10 bg-white/[0.05] p-5 flex gap-4 items-start">
+                                <span className="material-symbols-outlined text-primary shrink-0" aria-hidden="true">check_circle</span>
+                                <p className="text-gray-200 leading-relaxed">{typeof item === "string" ? item : item?.text}</p>
+                            </div>)}
                         </div>
-                    </section>
-                )}
+                        {editoria.why_description && <p className="text-gray-400 mt-8 max-w-3xl leading-relaxed">{editoria.why_description}</p>}
+                    </div>
+                </section>
 
-                {/* PROGRAM */}
-                {Array.isArray(editoria.program_days) && (
-                    <section id={getId(3, "program")} className="scroll-mt-24 max-w-[1200px] mx-auto px-6 py-24">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {editoria.program_days.map((day, i) => (
-                                <div key={i} className="p-8 border border-white/5 bg-white/5 rounded-xl">
-                                    <span className="text-primary font-bold text-sm block mb-6">
-                                        {day.day_label}
-                                    </span>
-                                    <h3 className="text-white text-2xl mb-4 italic">{day.title}</h3>
-                                    <p className="text-gray-400">{day.description}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {editoria.program_button_text && (
-                            <div className="mt-16 text-center">
-                                <a href={editoria.program_button_url || undefined} className="bg-primary text-background-dark px-12 py-4 rounded-lg font-bold text-lg hover:bg-white transition">
-                                    {editoria.program_button_text}
-                                </a>
-                            </div>
-                        )}
-                    </section>
-                )}
-
-                {/* FOR WHOM */}
-                <section id={getId(4, "for-whom")} className="scroll-mt-24 bg-graphite py-24 border-y border-white/5">
-                    <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
-
+                <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+                    <div className="grid md:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-8 md:gap-14 items-center">
+                        {editoria.author_image_url && <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="w-full max-w-sm mx-auto aspect-[4/5] object-cover rounded-2xl border border-white/10" />}
                         <div>
-                            <h2 className="text-white text-4xl italic">{editoria.for_whom_title}</h2>
-                            <p className="text-gray-400 mt-4">{editoria.for_whom_description}</p>
-
-                            <ul className="space-y-4 mt-6">
-                                {editoria.for_whom_list?.map((item, i) => (
-                                    <li key={i} className="text-gray-300">• {item}</li>
-                                ))}
+                            <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">Кто проводит практикум</p>
+                            <h2 className="text-white text-3xl md:text-4xl font-bold">{editoria.author_name || "Давид Арутюнов"}</h2>
+                            <p className="text-gray-300 leading-relaxed mt-5">{editoria.author_quote}</p>
+                            <ul className="mt-5 space-y-3">
+                                {editoria.author_points?.map((p, i) => <li key={i} className="flex gap-3 text-gray-400"><span className="text-primary">✓</span><span>{typeof p === "string" ? p : p?.text}</span></li>)}
                             </ul>
-
-                            {editoria.for_whom_button_text && (
-                                <a href={editoria.for_whom_button_url || undefined} className="mt-6 text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition">
-                                    {editoria.for_whom_button_text}
-                                </a>
-                            )}
-                        </div>
-
-                        {editoria.for_whom_image_url && (
-                            <img src={editoria.for_whom_image_url} className="rounded-xl shadow-2xl" alt="For whom" />
-                        )}
-                    </div>
-                </section>
-
-                {/* WHY */}
-                {editoria.why_title && (
-                    <section id={getId(5, "why")} className="scroll-mt-24 max-w-[800px] mx-auto px-6 py-32 text-center">
-                        <h2 className="text-white text-3xl italic">{editoria.why_title}</h2>
-                        <p className="text-gray-400 text-xl mt-6">{editoria.why_description}</p>
-
-                        {editoria.why_button_text && (
-                            <a href={editoria.why_button_url || undefined} className="text-primary border-b border-primary py-1 font-bold text-lg hover:text-white hover:border-white transition-all">
-                                {editoria.why_button_text}
-                            </a>
-                        )}
-                    </section>
-                )}
-
-                {/* AUTHOR */}
-                <section id={getId(6, "author")} className="scroll-mt-24 max-w-[1200px] mx-auto px-6 py-24 border-t border-white/5">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-                        {editoria.author_image_url && (
-                            <img
-                                src={editoria.author_image_url}
-                                className="w-full h-[600px] object-cover rounded-xl shadow-2xl"
-                                alt="Author"
-                            />
-                        )}
-
-                        <div>
-                            <h2 className="text-white text-5xl italic">{editoria.author_name}</h2>
-                            <p className="text-gray-300 mt-6 italic">{editoria.author_quote}</p>
-
-                            {editoria.author_points?.map((p, i) => (
-                                <p key={i} className="text-gray-400 mt-2">• {typeof p === "string" ? p : p?.text}</p>
-                            ))}
-
-                            {editoria.author_button_text && (
-                                <div className="mt-8">
-                                    <a href={editoria.author_button_url || undefined} className="inline-flex items-center justify-center bg-primary text-background-dark px-10 py-4 rounded-lg font-bold transition hover:bg-white">
-                                        {editoria.author_button_text}
-                                    </a>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </section>
 
-                {/* FINAL CTA */}
-                {editoria.cta_title && (
-                    <section id={getId(7, "final")} className="scroll-mt-24 max-w-[1200px] mx-auto px-6 py-24">
-                        <div className="bg-gradient-to-br from-graphite to-background-dark border border-primary/30 rounded-3xl p-12 lg:p-24 text-center space-y-8">
-                            <h2 className="text-white text-4xl lg:text-6xl italic">
-                                {editoria.cta_title}
-                            </h2>
-
-                            <p className="text-gray-400 text-xl">
-                                {editoria.cta_description}
-                            </p>
-
-                            {editoria.cta_button_text && (
-                                <a href={editoria.cta_button_url || undefined} className="bg-primary text-background-dark text-xl font-bold py-6 px-12 rounded-xl">
-                                    {editoria.cta_button_text}
-                                </a>
-                            )}
+                <section id="how-to-join" className="scroll-mt-8 bg-white/[0.025] border-y border-white/10 py-16 md:py-20">
+                    <div className="max-w-5xl mx-auto px-6">
+                        <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-10">Как присоединиться?</h2>
+                        <div className="grid md:grid-cols-3 gap-5">
+                            {[
+                                ["Нажми на кнопку", "Выбери «Присоединиться бесплатно» на этой странице."],
+                                ["Открой Telegram", "Перейди в канал практикума и подпишись на анонсы."],
+                                ["Подготовься к эфиру", "Следи за информацией о начале и ссылками на эфиры."],
+                            ].map(([title, description], i) => <div key={i} className="rounded-2xl bg-white/[0.05] border border-white/10 p-6">
+                                <span className="text-primary text-3xl font-bold">{String(i + 1).padStart(2, "0")}</span>
+                                <h3 className="text-white font-bold text-lg mt-4">{title}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed mt-2">{description}</p>
+                            </div>)}
                         </div>
-                    </section>
-                )}
+                        <p className="text-gray-400 text-sm text-center mt-6">Telegram нужен для анонсов и доступа к практикуму. Участие бесплатное.</p>
+                        <div className="text-center mt-8"><JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink></div>
+                    </div>
+                </section>
 
+                <section className="max-w-3xl mx-auto px-6 py-16 md:py-20">
+                    <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-9">Частые вопросы</h2>
+                    <div className="space-y-3">
+                        {defaultQuestions.map((item, i) => <div key={i} className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden">
+                            <button type="button" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
+                                <span>{item.question}</span><span className="text-primary text-xl shrink-0" aria-hidden="true">{openFaq === i ? "−" : "+"}</span>
+                            </button>
+                            {openFaq === i && <p className="px-5 pb-5 text-gray-400 leading-relaxed">{item.answer}</p>}
+                        </div>)}
+                    </div>
+                </section>
+
+                <section className="max-w-5xl mx-auto px-6 pb-20 md:pb-24">
+                    <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-white/[0.06] to-transparent px-6 py-12 md:p-14 text-center">
+                        <h2 className="text-white text-3xl md:text-5xl font-bold">{editoria.cta_title || "Возможно, пора выбрать себя"}</h2>
+                        <p className="text-gray-300 max-w-2xl mx-auto mt-5 leading-relaxed">{editoria.cta_description}</p>
+                        <p className="text-primary text-sm mt-6 mb-5 font-semibold">3 дня · Бесплатно · Онлайн</p>
+                        <JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink>
+                    </div>
+                </section>
             </main>
 
-            <Footer />
+            <footer className="border-t border-white/10 py-8">
+                <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
+                    <span>© {new Date().getFullYear()} {settings?.site_name || "Arutyun"}</span>
+                    <a href="/legal" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
+                </div>
+            </footer>
         </>
     );
 }
