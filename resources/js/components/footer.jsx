@@ -17,15 +17,15 @@ export default function Footer() {
         <footer id="contacts" className="relative overflow-hidden bg-background-dark border-t border-primary/10 text-white">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90vw,800px)] h-64 rounded-full bg-primary/[0.055] blur-[100px] pointer-events-none" aria-hidden="true" />
             <div className="relative max-w-7xl mx-auto px-6 pt-10 md:pt-20 pb-8">
-                <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.09] via-white/[0.025] to-transparent px-5 py-8 sm:px-10 md:py-14 text-center mb-9 md:mb-16">
-                    <span className="text-primary text-xs font-bold uppercase tracking-[0.22em]">Пространство для себя</span>
-                    <h2 className="text-2xl md:text-4xl font-bold mt-4 mb-4 leading-tight">Иногда один шаг меняет многое.</h2>
-                    <p className="text-white/65 max-w-xl mx-auto leading-relaxed mb-5 md:mb-7 text-sm md:text-base">Начни с простого знакомства с собой — на бесплатном трёхдневном практикуме.</p>
-                    <a href="/editoria" className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-primary px-7 py-4 text-background-dark font-bold hover:brightness-110 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-                        Познакомиться с практикумом
+                {footer?.cta_enabled !== false && <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.09] via-white/[0.025] to-transparent px-5 py-8 sm:px-10 md:py-14 text-center mb-9 md:mb-16">
+                    <span className="text-primary text-xs font-bold uppercase tracking-[0.22em]">{footer?.cta_badge || "Пространство для себя"}</span>
+                    <h2 className="text-2xl md:text-4xl font-bold mt-4 mb-4 leading-tight">{footer?.cta_title || "Иногда один шаг меняет многое."}</h2>
+                    <p className="text-white/65 max-w-xl mx-auto leading-relaxed mb-5 md:mb-7 text-sm md:text-base">{footer?.cta_description || "Начни с простого знакомства с собой — на бесплатном трёхдневном практикуме."}</p>
+                    <a href={footer?.cta_button_url || "/editoria"} className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-primary px-7 py-4 text-background-dark font-bold hover:brightness-110 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                        {footer?.cta_button_text || "Познакомиться с практикумом"}
                         <span className="material-symbols-outlined text-xl" aria-hidden="true">arrow_outward</span>
                     </a>
-                </div>
+                </div>}
 
                 <div className="grid grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] gap-x-5 md:gap-x-10 gap-y-8 md:gap-y-12 pb-9 md:pb-14">
                     <div className="max-w-sm col-span-2 lg:col-span-1">
