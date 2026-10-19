@@ -181,6 +181,7 @@ class ClosedGroupForm
                         TextInput::make('pricing_old_price')->label('Прежняя стоимость'),
                         TextInput::make('pricing_current_price')->label('Текущая стоимость'),
                         TextInput::make('pricing_button_text')->label('Текст кнопки оплаты'),
+                        TextInput::make('pricing_button_url')->label('Ссылка кнопки оплаты')->placeholder('https://...'),
                         TextInput::make('pricing_note')->label('Примечание о стоимости'),
 
                         Repeater::make('pricing_features')->label('Преимущества предложения')
