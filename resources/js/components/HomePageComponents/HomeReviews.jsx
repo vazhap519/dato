@@ -1,131 +1,46 @@
-import { usePage } from "@inertiajs/react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {Autoplay } from "swiper/modules";
-
+import { Navigation, Pagination, A11y } from "swiper/modules";
 import "swiper/css";
-export default function HomeReviews({review}) {
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-
-    if (!review) return null;
-
+export default function HomeReviews({ review }) {
+    const testimonials = Array.isArray(review?.content) ? review.content.filter(item => item?.description?.trim()) : [];
+    if (!review || testimonials.length === 0) return null;
     return (
-        <section className="py-24 bg-card-dark/30" id="reviews">
-            <div className="max-w-7xl mx-auto px-6">
-
-                {/* HEADER — მხოლოდ ერთხელ */}
-              <div className="text-center mb-12 sm:mb-16 px-4">
-    <h2 className="text-primary text-xs sm:text-sm font-bold tracking-widest uppercase mb-4">
-        {review.review_sm_header}
-    </h2>
-
-    <h3 className="
-        text-2xl
-        sm:text-3xl
-        md:text-4xl
-        lg:text-5xl
-        font-bold
-        leading-tight
-        break-words
-        max-w-3xl
-        mx-auto
-    ">
-        {review.review_xl_header}
-    </h3>
-</div>
-
-
-                {/* GRID — map */}
-                {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                    {review.content?.map((item, index) => (
-                        <div
-                            key={index}
-                            className="p-8 rounded-2xl bg-card-dark border border-white/5 space-y-6 flex flex-col justify-between"
-                        >
-                            <div className="text-primary">
-                                <span className="material-symbols-outlined fill-1">
-                                    format_quote
-                                </span>
-                            </div>
-
-                            <p className="text-slate-300 italic font-light leading-relaxed">
-                                "{item.description}"
-                            </p>
-
-                            <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                                <div className="size-12 rounded-full bg-slate-700 overflow-hidden">
-                                    {item.u_image && (
-                                        <img
-                                            src={item.u_image}
-                                            alt={item.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    )}
-                                </div>
-
-                                <div>
-                                    <h5 className="font-bold">
-                                        {item.name} {item.lastname}
-                                    </h5>
-                                    <p className="text-xs text-slate-500 uppercase">
-                                        {item.position}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+        <section className="py-20 md:py-28 bg-card-dark/30" aria-label="Истории участников">
+            <div className="max-w-6xl mx-auto px-6">
+                <div className="text-center mb-10">
+                    <p className="text-primary text-xs sm:text-sm font-bold tracking-widest uppercase mb-4">{review.review_sm_header}</p>
+                    <h2 className="text-3xl md:text-5xl font-bold">{review.review_xl_header}</h2>
+                </div>
+                <Swiper
+                    modules={[Navigation, Pagination, A11y]}
+                    spaceBetween={24}
+                    slidesPerView={1}
+                    navigation
+                    pagination={{ clickable: true }}
+                    breakpoints={{ 900: { slidesPerView: 2 } }}
+                    className="pb-14 [&_.swiper-button-next]:text-primary [&_.swiper-button-prev]:text-primary [&_.swiper-pagination-bullet-active]:bg-primary"
+                >
+                    {testimonials.map((item, index) => (
+                        <SwiperSlide key={index} className="h-auto">
+                            <figure className="h-full rounded-2xl bg-card-dark border border-white/10 p-7 md:p-10 flex flex-col">
+                                <span className="material-symbols-outlined text-primary text-4xl mb-4" aria-hidden="true">format_quote</span>
+                                <blockquote className="text-slate-200 text-lg italic leading-relaxed flex-1">«{item.description}»</blockquote>
+                                <figcaption className="flex items-center gap-4 mt-8 pt-6 border-t border-white/10">
+                                    <div className="size-12 shrink-0 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
+                                        {item.u_image ? <img src={item.u_image.startsWith("/") || item.u_image.startsWith("http") ? item.u_image : `/storage/${item.u_image}`} alt="" loading="lazy" className="w-full h-full object-cover" /> : <span className="material-symbols-outlined text-white/40" aria-hidden="true">person</span>}
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold text-white">{[item.name, item.lastname].filter(Boolean).join(" ")}</p>
+                                        {item.position && <p className="text-xs text-slate-400 mt-1">{item.position}</p>}
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </SwiperSlide>
                     ))}
-                </div> */}
-{/* CAROUSEL */}
-<Swiper
-    modules={[Autoplay]}
-    spaceBetween={24}
-    slidesPerView={1}
-    autoplay={{ delay: 2000 }}
-    breakpoints={{
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 },
-    }}
->
-    {review.content?.map((item, index) => (
-        <SwiperSlide key={index}>
-            <div className="h-full p-8 rounded-2xl bg-card-dark border border-white/5 space-y-6 flex flex-col justify-between">
-                <div className="text-primary">
-                    <span className="material-symbols-outlined fill-1">
-                        format_quote
-                    </span>
-                </div>
-
-                <p className="text-slate-300 italic font-light leading-relaxed">
-                    "{item.description}"
-                </p>
-
-                <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                    <div className="size-12 rounded-full bg-slate-700 overflow-hidden">
-                        {item.u_image && (
-                            <img   loading="eager"
-                                   fetchpriority="high"
-                                   decoding="async"
-                                src={`/storage/${item.u_image}`}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                            />
-                        )}
-                    </div>
-
-                    <div>
-                        <h5 className="font-bold">
-                            {item.name} {item.lastname}
-                        </h5>
-                        <p className="text-xs text-slate-500 uppercase">
-                            {item.position}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </SwiperSlide>
-    ))}
-</Swiper>
-
+                </Swiper>
             </div>
         </section>
     );
