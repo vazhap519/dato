@@ -66,7 +66,7 @@ class HandleInertiaRequests extends Middleware
 
     $routeName = $request->route()?->getName();
 
-    $page = \App\Models\LandingPage::where('key', 'home')
+    $page = \App\Models\LandingPage::where('key', $routeName)
         ->with(['navigationItems' => function ($q) {
             $q->where('is_active', true)
               ->orderBy('sort');
@@ -81,6 +81,25 @@ class HandleInertiaRequests extends Middleware
         ])->values()
         : [];
 },
+            'headerNavigation' => function () {
+                $pages = LandingPage::with(['navigationItems' => function ($query) {
+                    $query->where('is_active', true)->orderBy('sort');
+                }])->orderBy('id')->get();
+
+                return $pages->flatMap(function ($page) {
+                    if (! in_array($page->key, ['home', 'personal', 'practice', 'legal', 'editoria'], true)) {
+                        return collect();
+                    }
+
+                    $path = route($page->key, [], false);
+
+                    return $page->navigationItems->map(fn ($item) => [
+                        'id' => $item->id,
+                        'label' => $item->label,
+                        'href' => $path . '#' . ltrim($item->href, '#'),
+                    ]);
+                })->values();
+            },
             /*
             |--------------------------------------------------------------------------
             | Footer
