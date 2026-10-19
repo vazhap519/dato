@@ -8,7 +8,7 @@ class Footer extends Model
 {
     protected $fillable = [
         'brand_name',
-        'cta_enabled', 'cta_badge', 'cta_title', 'cta_description', 'cta_button_text', 'cta_button_url',
+        'navigation_links', 'bottom_tagline', 'cta_enabled', 'cta_badge', 'cta_title', 'cta_description', 'cta_button_text', 'cta_button_url',
 'description',
 'nav_title',
 'support_title',
@@ -25,5 +25,5 @@ class Footer extends Model
 'tiktok',
     ];
 
-    protected $casts = ['cta_enabled' => 'boolean'];
+    protected $casts = ['cta_enabled' => 'boolean', 'navigation_links' => 'array'];
 }
