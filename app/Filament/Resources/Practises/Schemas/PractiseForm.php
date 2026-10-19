@@ -24,6 +24,27 @@ class PractiseForm
 
                 TextInput::make('header_small')->label('Подзаголовок'),
 
+
+                \Filament\Schemas\Components\Section::make('Бесплатный практикум на главной')
+                    ->schema([
+                        Toggle::make('free_enabled')->label('Показывать карточку')->default(true),
+                        TextInput::make('free_title')->label('Название'),
+                        Textarea::make('free_description')->label('Описание'),
+                        TextInput::make('free_button_text')->label('Текст кнопки'),
+                        TextInput::make('free_button_url')->label('Ссылка кнопки')->placeholder('/editoria'),
+                        SpatieMediaLibraryFileUpload::make('free_image')->label('Изображение')->collection('free_image')->disk('public')->image(),
+                    ])->columns(2),
+                \Filament\Schemas\Components\Section::make('Блок «Начни с трёх дней для себя»')
+                    ->schema([
+                        Toggle::make('start_enabled')->label('Показывать блок')->default(true),
+                        TextInput::make('start_badge')->label('Надзаголовок'),
+                        TextInput::make('start_title')->label('Заголовок'),
+                        Textarea::make('start_description')->label('Описание'),
+                        Repeater::make('start_steps')->label('Шаги')->schema([TextInput::make('text')->label('Название')->required()])->reorderable()->collapsible(),
+                        TextInput::make('start_note')->label('Подпись'),
+                        TextInput::make('start_button_text')->label('Текст кнопки'),
+                        TextInput::make('start_button_url')->label('Ссылка кнопки')->placeholder('/editoria'),
+                    ])->columns(2),
                 Repeater::make('contents')->label('Практики')
                     ->relationship()
                     ->schema([
