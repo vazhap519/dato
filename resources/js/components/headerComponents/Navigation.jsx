@@ -11,7 +11,7 @@
 //                 return (
 //                     <a
 //                         key={item.id}
-//                         href={`#${clean}`}
+//                         href={`/#${clean}`}
 //                         className="text-sm font-medium hover:text-primary transition-colors"
 //                     >
 //                         {item.label}
@@ -27,16 +27,21 @@ export default function Navigation() {
     const { navigation = [] } = usePage().props;
 
     const handleClick = (e, href) => {
-        e.preventDefault();
+        const id = String(href || "").trim().replace(/^#/, "");
+        if (!id) {
+            e.preventDefault();
+            return;
+        }
 
-        const id = String(href || "").replace(/^#/, "");
+        // On other pages, navigate to the corresponding section on the home page.
+        if (window.location.pathname !== "/") {
+            return;
+        }
+
         const el = document.getElementById(id);
-
         if (el) {
-            el.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
+            e.preventDefault();
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     };
 
