@@ -72,8 +72,8 @@ console.log(practiceSection)
 
                 <button
                     onClick={() => {
-                        if (item.slug) {
-                            router.visit(`/closed-group/${item.slug}`);
+                        if (item.url) {
+                            router.visit(item.url);
                         }
                     }}
                     className="w-full btn-primary-unified text-center"
