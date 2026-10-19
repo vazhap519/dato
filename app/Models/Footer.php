@@ -8,6 +8,7 @@ class Footer extends Model
 {
     protected $fillable = [
         'brand_name',
+        'cta_enabled', 'cta_badge', 'cta_title', 'cta_description', 'cta_button_text', 'cta_button_url',
 'description',
 'nav_title',
 'support_title',
@@ -23,4 +24,6 @@ class Footer extends Model
 'telegram',
 'tiktok',
     ];
+
+    protected $casts = ['cta_enabled' => 'boolean'];
 }
