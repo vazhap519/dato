@@ -190,13 +190,15 @@ export default function Editoria() {
                             <p className="text-gray-300 mt-6 italic">{editoria.author_quote}</p>
 
                             {editoria.author_points?.map((p, i) => (
-                                <p key={i} className="text-gray-400 mt-2">• {p}</p>
+                                <p key={i} className="text-gray-400 mt-2">• {typeof p === "string" ? p : p?.text}</p>
                             ))}
 
                             {editoria.author_button_text && (
-                                <a href={editoria.author_button_url || undefined} className="mt-6 bg-primary text-background-dark px-10 py-4 rounded-lg font-bold">
-                                    {editoria.author_button_text}
-                                </a>
+                                <div className="mt-8">
+                                    <a href={editoria.author_button_url || undefined} className="inline-flex items-center justify-center bg-primary text-background-dark px-10 py-4 rounded-lg font-bold transition hover:bg-white">
+                                        {editoria.author_button_text}
+                                    </a>
+                                </div>
                             )}
                         </div>
                     </div>
