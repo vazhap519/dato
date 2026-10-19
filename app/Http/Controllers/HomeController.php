@@ -48,6 +48,11 @@ class HomeController extends Controller
                         'price'        => $item->price,
                         'is_premium'   => false, // თუ გინდა დაამატე ველი DB-ში
                         'slug' => optional($item->closedGroup)->slug,
+                        'url' => $item->product_type === 'personal'
+                            ? route('personal')
+                            : (optional($item->closedGroup)->slug
+                                ? route('closed-group.show', ['slug' => $item->closedGroup->slug])
+                                : null),
                         'image' => $item->getFirstMediaUrl('practice_images', 'webp')
                             ?: $item->getFirstMediaUrl('practice_images'),
                     ];
