@@ -66,7 +66,7 @@ class HandleInertiaRequests extends Middleware
 
     $routeName = $request->route()?->getName();
 
-    $page = \App\Models\LandingPage::where('key', $routeName)
+    $page = \App\Models\LandingPage::where('key', 'home')
         ->with(['navigationItems' => function ($q) {
             $q->where('is_active', true)
               ->orderBy('sort');
