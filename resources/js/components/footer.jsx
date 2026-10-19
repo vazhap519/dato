@@ -10,6 +10,7 @@ const primaryLinks = [
 export default function Footer() {
     const { footer, settings } = usePage().props;
     const year = new Date().getFullYear();
+    const navigationLinks = Array.isArray(footer?.navigation_links) && footer.navigation_links.length ? footer.navigation_links : primaryLinks;
     const email = footer?.email?.trim();
     const location = footer?.location?.trim();
 
@@ -43,7 +44,7 @@ export default function Footer() {
                     <nav aria-label="Навигация в подвале">
                         <h3 className="text-white font-bold text-xs uppercase tracking-[0.18em] mb-4 md:mb-6">{footer?.nav_title || "Навигация"}</h3>
                         <ul className="space-y-2.5 md:space-y-3.5">
-                            {primaryLinks.map(link => (
+                            {navigationLinks.map(link => (
                                 <li key={link.href}><a href={link.href} className="text-white/65 text-sm hover:text-primary transition-colors">{link.label}</a></li>
                             ))}
                         </ul>
@@ -74,7 +75,7 @@ export default function Footer() {
 
                 <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row gap-3 justify-between items-center text-center sm:text-left text-white/40 text-xs">
                     <span>© {year} {footer?.brand_name || settings?.site_name || "Arutyun"}. Все права защищены.</span>
-                    <span>Мир проще, чем кажется.</span>
+                    <span>{footer?.bottom_tagline || "Мир проще, чем кажется."}</span>
                 </div>
             </div>
         </footer>
