@@ -1,46 +1,17 @@
-import Header from "@/components/Header.jsx";
-import Footer from "@/components/footer.jsx";
-
 export default function PersonalFaq({ personal }) {
-
     if (!personal) return null;
-
     return (
-
-        <section className="py-24 px-6 lg:px-20" id="faq">
-            <div className="max-w-3xl mx-auto">
-
-                {/* TITLE */}
-                <h2 className="text-4xl font-bold text-white text-center mb-16 italic">
-                    {personal.faq_title}
-                </h2>
-
-                <div className="flex flex-col gap-4">
-
-                    {personal.faq_items?.map((item, index) => (
-                        <details
-                            key={index}
-                            className="group border border-white/5 rounded-2xl bg-white/5 overflow-hidden open:border-primary/30 transition-all"
-                        >
-                            <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                                <span className="text-lg font-bold text-white">
-                                    {item.question}
-                                </span>
-
-                                <span className="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">
-                                    expand_more
-                                </span>
-                            </summary>
-
-                            <div className="px-6 pb-6 text-white/50 leading-relaxed">
-                                {item.answer}
-                            </div>
-                        </details>
-                    ))}
-
-                </div>
+        <div className="max-w-3xl mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-9">{personal.faq_title}</h2>
+            <div className="flex flex-col gap-3">
+                {personal.faq_items?.map((item, index) => <details key={index} open={index === 0 ? true : undefined} className="group border border-white/10 rounded-xl bg-white/[0.05] overflow-hidden open:border-primary/30">
+                    <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none">
+                        <span className="text-base font-semibold text-white">{item.question}</span>
+                        <span className="material-symbols-outlined text-primary group-open:rotate-180 transition-transform shrink-0" aria-hidden="true">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-5 text-white/65 leading-relaxed">{item.answer}</div>
+                </details>)}
             </div>
-        </section>
-
+        </div>
     );
 }
