@@ -35,6 +35,7 @@ class ClosedGroup extends Model implements HasMedia
         'pricing_old_price',
         'pricing_current_price',
         'pricing_button_text',
+        'pricing_button_url',
         'pricing_note',
         'pricing_features',
     ];
