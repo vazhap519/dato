@@ -39,6 +39,20 @@ class HomeController extends Controller
             'practiceSection' => $practice ? [
                 'header_big'   => $practice->header_big,
                 'header_small' => $practice->header_small,
+                'free_enabled' => $practice->free_enabled,
+                'free_title' => $practice->free_title,
+                'free_description' => $practice->free_description,
+                'free_button_text' => $practice->free_button_text,
+                'free_button_url' => $practice->free_button_url,
+                'start_enabled' => $practice->start_enabled,
+                'start_badge' => $practice->start_badge,
+                'start_title' => $practice->start_title,
+                'start_description' => $practice->start_description,
+                'start_steps' => $practice->start_steps,
+                'start_note' => $practice->start_note,
+                'start_button_text' => $practice->start_button_text,
+                'start_button_url' => $practice->start_button_url,
+                'free_image' => $practice->getFirstMediaUrl('free_image'),
 
                 'content' => $practice->contents->map(function ($item) {
 
