@@ -94,12 +94,14 @@ export default function Editoria() {
                         <h2 className="text-white text-3xl md:text-4xl font-bold">Что ждёт тебя за три дня</h2>
                         <p className="text-gray-400 mt-4">Каждый день — новая тема, наблюдения и практические задания.</p>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-5">
-                        {days.map((day, i) => <article key={i} className="rounded-2xl border border-white/10 bg-white/[0.05] p-7 h-full">
-                            <span className="text-primary text-4xl font-bold block mb-5">{String(i + 1).padStart(2, "0")}</span>
-                            <p className="text-primary text-xs font-bold uppercase tracking-widest mb-2">{day.day_label || `День ${i + 1}`}</p>
-                            <h3 className="text-white text-xl font-bold mb-3">{day.title}</h3>
-                            <p className="text-gray-400 leading-relaxed">{day.description}</p>
+                    <div className="grid md:grid-cols-3 gap-3 md:gap-5">
+                        {days.map((day, i) => <article key={i} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 md:p-7 h-full">
+                            <button type="button" aria-expanded={openDay === i} onClick={() => setOpenDay(openDay === i ? -1 : i)} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
+                                <span className="text-primary text-2xl md:text-4xl font-bold md:block md:mb-5">{String(i + 1).padStart(2, "0")}</span>
+                                <span className="flex-1"><span className="text-primary text-xs font-bold uppercase tracking-widest block md:mb-2">{day.day_label || `День ${i + 1}`}</span><span className="text-white text-base md:text-xl font-bold block">{day.title}</span></span>
+                                <span className="md:hidden text-primary text-xl" aria-hidden="true">{openDay === i ? "−" : "+"}</span>
+                            </button>
+                            <p className={`${openDay === i ? "block" : "hidden"} md:block text-gray-400 leading-relaxed mt-3 md:mt-0`}>{day.description}</p>
                         </article>)}
                     </div>
                     <div className="text-center mt-9"><JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink></div>
@@ -182,6 +184,9 @@ export default function Editoria() {
                     <a href="/legal" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
                 </div>
             </footer>
+            <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <JoinLink href={joinUrl} className="w-full py-3">Присоединиться бесплатно</JoinLink>
+            </div>
         </>
     );
 }
