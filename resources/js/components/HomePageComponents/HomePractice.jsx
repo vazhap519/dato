@@ -21,7 +21,7 @@ export default function HomePractice({ practiceSection }) {
     };
     const items = [...(practiceSection.free_enabled === false ? [] : [free]), ...content.slice(0, 2)];
     return (
-        <section className="py-12 md:py-24 bg-background-light dark:bg-background-dark">
+        <section id="interaction-formats" className="scroll-mt-24 py-12 md:py-24 bg-background-light dark:bg-background-dark">
             <div className="max-w-7xl mx-auto px-6">
 
                 {/* HEADER */}
