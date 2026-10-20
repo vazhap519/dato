@@ -24,6 +24,7 @@ function JoinLink({ href, children, secondary = false, className = "" }) {
 export default function Editoria() {
     const { editoria, settings } = usePage().props;
     const [openFaq, setOpenFaq] = useState(0);
+    const [openDay, setOpenDay] = useState(-1);
 
     if (!editoria) return <><Seo /><main className="min-h-screen flex items-center justify-center px-6 text-white text-center">Содержимое страницы пока не опубликовано</main></>;
 
@@ -52,7 +53,7 @@ export default function Editoria() {
     return (
         <>
             <Seo />
-            <header className="relative z-20 border-b border-white/10 bg-background-dark">
+            <header className="hidden md:block relative z-20 border-b border-white/10 bg-background-dark">
                 <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
                     <div className="flex items-center" aria-label={settings?.site_name || "Arutyun"}>
                         {settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Arutyun"} className="h-10 w-auto max-w-36 object-contain" /> : <span className="text-primary font-display text-2xl italic">Arutyun</span>}
@@ -62,27 +63,27 @@ export default function Editoria() {
             </header>
 
             <main>
-                <section className="max-w-6xl mx-auto px-6 py-12 md:py-20 lg:py-24 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                    <div className="order-2 lg:order-1">
+                <section className="max-w-6xl mx-auto px-5 pt-8 pb-10 md:px-6 md:py-20 lg:py-24 grid lg:grid-cols-2 gap-6 lg:gap-16 items-center">
+                    <div className="order-1 lg:order-1">
                         <p className="inline-flex rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase px-4 py-2 mb-6">{editoria.hero_badge || "Бесплатный трёхдневный практикум"}</p>
-                        <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight mb-6">Устал жить <span className="text-primary italic">на автомате?</span></h1>
-                        <p className="text-gray-300 text-lg leading-relaxed max-w-xl mb-7">{editoria.hero_description || "Три дня, чтобы остановиться, разобраться в привычных реакциях и начать лучше понимать себя."}</p>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-300 mb-7">
-                            <span>✦ 3 дня</span><span>✦ Бесплатно</span><span>✦ Онлайн</span>
+                        <h1 className="text-white text-[2.35rem] sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight mb-4 md:mb-6">Устал жить <span className="text-primary italic">на автомате?</span></h1>
+                        <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-xl mb-5 md:mb-7">{editoria.hero_description || "Три дня, чтобы остановиться, разобраться в привычных реакциях и начать лучше понимать себя."}</p>
+                        <div className="flex flex-wrap gap-2 md:gap-4 text-sm text-gray-300 mb-6 md:mb-7">
+                            <span className="rounded-full bg-white/10 px-3 py-1">✦ 3 дня</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Бесплатно</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Онлайн</span>
                         </div>
                         <JoinLink href={joinUrl} className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
-                    <div className="order-1 lg:order-2">
+                    <div className="hidden md:block order-2 lg:order-2">
                         {editoria.hero_image_url && <img src={editoria.hero_image_url} alt="Трёхдневный практикум «Познай себя»" className="w-full max-w-md mx-auto aspect-square object-cover rounded-3xl border border-white/10" />}
                     </div>
                 </section>
 
                 <section className="bg-white/[0.025] border-y border-white/10 py-8 md:py-10">
-                    <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-3 gap-4">
-                        {info.slice(0, 3).map((item, i) => <div key={i} className="flex items-start gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-5">
-                            <span className="material-symbols-outlined text-primary text-3xl" aria-hidden="true">{["calendar_month", "redeem", "forum"][i]}</span>
-                            <div><h2 className="text-white font-bold text-lg">{item.title}</h2><p className="text-gray-400 text-sm leading-relaxed mt-1">{item.description}</p></div>
+                    <div className="max-w-6xl mx-auto px-5 md:px-6 grid grid-cols-3 gap-2 md:gap-4">
+                        {info.slice(0, 3).map((item, i) => <div key={i} className="flex flex-col md:flex-row items-start gap-2 md:gap-4 rounded-xl md:rounded-2xl bg-white/[0.04] border border-white/10 p-3 md:p-5">
+                            <span className="material-symbols-outlined text-primary text-xl md:text-3xl" aria-hidden="true">{["calendar_month", "redeem", "forum"][i]}</span>
+                            <div><h2 className="text-white font-bold text-xs md:text-lg break-words">{item.title}</h2><p className="hidden md:block text-gray-400 text-sm leading-relaxed mt-1">{item.description}</p></div>
                         </div>)}
                     </div>
                 </section>
@@ -121,13 +122,13 @@ export default function Editoria() {
                 </section>
 
                 <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-                    <div className="grid md:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-8 md:gap-14 items-center">
-                        {editoria.author_image_url && <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="w-full max-w-sm mx-auto aspect-[4/5] object-cover rounded-2xl border border-white/10" />}
+                    <div className="grid grid-cols-[auto_minmax(0,1fr)] md:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-4 md:gap-14 items-center">
+                        {editoria.author_image_url && <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="w-28 h-28 md:w-full md:h-auto md:max-w-sm mx-auto aspect-square md:aspect-[4/5] object-cover rounded-full md:rounded-2xl border border-white/10" />}
                         <div>
                             <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">Кто проводит практикум</p>
                             <h2 className="text-white text-3xl md:text-4xl font-bold">{editoria.author_name || "Давид Арутюнов"}</h2>
-                            <p className="text-gray-300 leading-relaxed mt-5">{editoria.author_quote}</p>
-                            <ul className="mt-5 space-y-3">
+                            <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-3 md:mt-5 line-clamp-4 md:line-clamp-none">{editoria.author_quote}</p>
+                            <ul className="hidden md:block mt-5 space-y-3">
                                 {editoria.author_points?.map((p, i) => <li key={i} className="flex gap-3 text-gray-400"><span className="text-primary">✓</span><span>{typeof p === "string" ? p : p?.text}</span></li>)}
                             </ul>
                         </div>
@@ -142,10 +143,10 @@ export default function Editoria() {
                                 ["Нажми на кнопку", "Выбери «Присоединиться бесплатно» на этой странице."],
                                 ["Открой Telegram", "Перейди в канал практикума и подпишись на анонсы."],
                                 ["Подготовься к эфиру", "Следи за информацией о начале и ссылками на эфиры."],
-                            ].map(([title, description], i) => <div key={i} className="rounded-2xl bg-white/[0.05] border border-white/10 p-6">
-                                <span className="text-primary text-3xl font-bold">{String(i + 1).padStart(2, "0")}</span>
-                                <h3 className="text-white font-bold text-lg mt-4">{title}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed mt-2">{description}</p>
+                            ].map(([title, description], i) => <div key={i} className="rounded-2xl bg-white/[0.05] border border-white/10 p-4 md:p-6">
+                                <span className="text-primary text-2xl md:text-3xl font-bold">{String(i + 1).padStart(2, "0")}</span>
+                                <h3 className="text-white font-bold text-lg mt-2 md:mt-4">{title}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed mt-1 md:mt-2">{description}</p>
                             </div>)}
                         </div>
                         <p className="text-gray-400 text-sm text-center mt-6">Telegram нужен для анонсов и доступа к практикуму. Участие бесплатное.</p>
@@ -175,7 +176,7 @@ export default function Editoria() {
                 </section>
             </main>
 
-            <footer className="border-t border-white/10 py-8">
+            <footer className="border-t border-white/10 py-8 mb-20 md:mb-0">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
                     <span>© {new Date().getFullYear()} {settings?.site_name || "Arutyun"}</span>
                     <a href="/legal" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
