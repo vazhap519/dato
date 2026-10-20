@@ -16,7 +16,7 @@ export default function HomeHero({hero}) {
                     </div>
                     <h1 className="text-[clamp(2.8rem,12vw,4rem)] md:text-8xl font-light leading-tight">
                         {hero.title_line_1} <br/>
-                        <span className="font-extrabold text-primary"> {hero.title_highlight}</span>
+                        <span className="font-extrabold text-primary text-[0.78em] md:text-[0.72em] whitespace-nowrap"> {hero.title_highlight}</span>
                     </h1>
 
                     <p className="text-base md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
