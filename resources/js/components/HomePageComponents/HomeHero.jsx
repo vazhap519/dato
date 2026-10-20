@@ -25,7 +25,7 @@ export default function HomeHero({hero}) {
 
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
                         <a
-                            href="#products"
+                            href="#interaction-formats"
                             className="bg-primary text-background-dark px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
                         >
                             {hero.primary_button_text || "Начать с бесплатного практикума"}
