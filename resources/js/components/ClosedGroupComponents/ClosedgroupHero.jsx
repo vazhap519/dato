@@ -28,17 +28,17 @@ export default function ClosedGroupHero({ group }) {
                     </div>
                     <p className="text-sm text-gray-400">Материалы · Практики · Общение</p>
                 </div>
-                <div className="relative -mx-6 h-[370px] overflow-visible sm:mx-0 sm:h-[490px] lg:-ml-20 lg:-mr-24 lg:h-[680px] xl:-ml-28 xl:-mr-32">
+                <div className="pointer-events-none relative -mx-6 -mt-3 h-[400px] overflow-visible sm:mx-0 sm:h-[530px] lg:-ml-36 lg:-mr-[max(6rem,calc((100vw-80rem)/2))] lg:h-[750px] xl:-ml-44 xl:h-[790px]">
                     {group.hero_image_url && (
                         <img
                             src={group.hero_image_url}
                             alt={group.hero_title || "Круг души"}
                             loading="eager"
                             fetchPriority="high"
-                            className="absolute inset-0 h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_72%_72%_at_53%_49%,black_43%,transparent_100%)] lg:[mask-image:linear-gradient(to_right,transparent_0%,black_23%,black_77%,transparent_100%)]"
+                            className="absolute inset-0 h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_78%_78%_at_52%_47%,black_40%,transparent_100%)] lg:[mask-image:radial-gradient(ellipse_86%_88%_at_54%_48%,black_48%,transparent_100%)]"
                         />
                     )}
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#19160f]/40 to-transparent" aria-hidden="true" />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#19160f]/60 to-transparent" aria-hidden="true" />
                 </div>
             </div>
         </section>
