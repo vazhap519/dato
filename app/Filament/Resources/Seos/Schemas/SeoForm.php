@@ -26,9 +26,11 @@ class SeoForm
                             ->options([
                                 'home' => 'Главная',
                                 'personal' => 'Персональные услуги',
-                                'practice' => 'Практики',
+                                'practice' => 'Практики (/shop)',
+                                'closed-group.show' => 'Закрытое сообщество (/closed-group/{slug})',
+                                'links' => 'Полезные ссылки (/links)',
                                 'legal' => 'Юридическая информация',
-                                'editoria' => 'Редакционные материалы',
+                                'editoria' => 'Бесплатный практикум (/editoria)',
                             ])
                             ->required()
                             ->unique(ignoreRecord: true),
@@ -47,13 +49,13 @@ class SeoForm
                             ->label('Мета-заголовок')
                             ->required()
                             ->maxLength(60)
-                            ->helperText('Рекомендуемая длина: 50–60 символов'),
+                            ->helperText('Уникальный заголовок для каждой страницы, до 60 символов'),
 
                         Textarea::make('description')
-                            ->label('Текст отзыва')
+                            ->label('SEO-описание страницы')
                             ->rows(3)
                             ->maxLength(160)
-                            ->helperText('Рекомендуемая длина: 140–160 символов')
+                            ->helperText('Уникальное описание содержания страницы, до 160 символов')
                             ->columnSpanFull(),
 
                         TagsInput::make('keywords')
