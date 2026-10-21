@@ -35,6 +35,11 @@ const pixelEvent = (name, label, href) => {
     } catch { /* No destination parameter for invalid URLs. */ }
     try {
         window.fbq("trackCustom", name, data);
+        // One shared conversion across all five Telegram join CTAs.
+        // Keep the individual events above for per-button reporting.
+        if (["HeroJoinClick", "ProgramJoinClick", "HowToJoinClick", "FinalJoinClick", "MobileJoinClick"].includes(name)) {
+            window.fbq("trackCustom", "TelegramJoinClick", { button_location: name });
+        }
     } catch { /* Analytics must never interfere with navigation. */ }
 };
 
