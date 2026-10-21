@@ -1,100 +1,82 @@
 import { router } from "@inertiajs/react";
+
 export default function HomePractice({ practiceSection }) {
-
-
     if (!practiceSection) return null;
 
-    const {
-        header_big,
-        header_small,
-        content = []
-    } = practiceSection;
-
-    
+    const { header_big, header_small, content = [] } = practiceSection;
     const free = {
         title: practiceSection.free_title || "Бесплатный практикум «Познай себя»",
         description: practiceSection.free_description || "Три дня, чтобы лучше понять себя через наблюдение, вопросы и практические задания.",
         url: practiceSection.free_button_url || "/editoria",
-        image: practiceSection.free_image,
         button_text: practiceSection.free_button_text || "Начать бесплатно",
         is_free: true,
     };
     const items = [...(practiceSection.free_enabled === false ? [] : [free]), ...content.slice(0, 2)];
+
     return (
         <section id="interaction-formats" className="scroll-mt-24 py-12 md:py-24 bg-background-light dark:bg-background-dark">
             <div className="max-w-7xl mx-auto px-6">
-
-                {/* HEADER */}
-                <div className="flex justify-between items-end mb-7 md:mb-16">
-                    <div className="max-w-xl">
-                        <h2 className="text-primary text-sm font-bold tracking-widest uppercase mb-4">
-                            {header_small ?? "Предложения"}
-                        </h2>
-
-                        <h3 className="text-2xl md:text-4xl font-bold">
-                            {header_big ?? "Продукты и услуги"}
-                        </h3>
-                    </div>
+                <div className="mb-8 md:mb-14">
+                    <h2 className="text-primary text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                        {header_small ?? "Предложения"}
+                    </h2>
+                    <h3 className="text-2xl md:text-4xl font-bold max-w-xl">
+                        {header_big ?? "Продукты и услуги"}
+                    </h3>
                 </div>
 
-                {/* PRODUCT GRID — MAP */}
-           {/* PRODUCTS — 2 ITEMS DESIGN */}
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-8">
-    {items.map((item, index) => (
-        <div
-            key={index}
-            className="group bg-card-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all flex flex-row md:flex-col min-h-36 md:min-h-0"
-        >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+                    {items.map((item, index) => (
+                        <article key={index} className="group flex flex-col min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-card-dark transition-colors hover:border-primary/40">
+                            <div className="relative h-44 sm:h-52 md:h-48 lg:h-52 overflow-hidden bg-[#16130e]" aria-hidden="true">
+                                <div className="absolute inset-0" style={{
+                                    background: index === 0
+                                        ? "radial-gradient(ellipse at 50% 90%, rgba(245,182,54,.25), transparent 58%), linear-gradient(135deg,#282010,#100f0c 75%)"
+                                        : index === 1
+                                            ? "radial-gradient(ellipse at 50% 65%,rgba(212,145,55,.26),transparent 65%),linear-gradient(135deg,#2a1d17,#100e0d)"
+                                            : "radial-gradient(ellipse at 65% 50%,rgba(234,169,68,.22),transparent 65%),linear-gradient(135deg,#211a14,#0e0d0b)"
+                                }} />
+                                {index === 0 ? (
+                                    <>
+                                        <div className="absolute left-1/2 top-[22%] h-48 w-48 -translate-x-1/2 rounded-full border border-primary/70 shadow-[0_0_32px_rgba(255,196,55,.22),inset_0_0_35px_rgba(255,196,55,.08)]" />
+                                        <div className="absolute inset-x-0 bottom-5 text-center text-primary font-bold text-sm sm:text-base tracking-wide">3 дня · Бесплатно · Онлайн</div>
+                                    </>
+                                ) : index === 1 ? (
+                                    <div className="absolute inset-0 flex items-center justify-center gap-[-8px]">
+                                        <div className="h-24 w-24 rounded-full border border-primary/30 bg-gradient-to-b from-[#7a552c] to-[#21170e] shadow-[0_0_50px_rgba(255,192,69,.12)]" />
+                                        <div className="-ml-5 h-32 w-32 rounded-full border border-primary/60 bg-gradient-to-b from-[#ac7840] to-[#281b12] shadow-[0_0_45px_rgba(255,192,69,.18)]" />
+                                        <div className="-ml-5 h-24 w-24 rounded-full border border-primary/30 bg-gradient-to-b from-[#7a552c] to-[#21170e]" />
+                                    </div>
+                                ) : (
+                                    <div className="absolute inset-0 flex items-center justify-center gap-8">
+                                        <div className="h-28 w-20 rounded-t-full rounded-b-2xl border border-primary/35 bg-gradient-to-b from-[#876037] to-[#231911] shadow-[0_0_35px_rgba(255,192,69,.12)]" />
+                                        <div className="h-28 w-20 rounded-t-full rounded-b-2xl border border-primary/35 bg-gradient-to-b from-[#876037] to-[#231911] shadow-[0_0_35px_rgba(255,192,69,.12)]" />
+                                    </div>
+                                )}
+                                {item.is_free && (
+                                    <span className="absolute top-3 left-3 rounded-md bg-primary px-2.5 py-1.5 text-[10px] font-black uppercase text-background-dark">
+                                        Начни здесь · Бесплатно
+                                    </span>
+                                )}
+                                {!item.is_free && item.is_premium && (
+                                    <span className="absolute top-3 left-3 rounded-md bg-primary px-2.5 py-1.5 text-[10px] font-black uppercase text-background-dark">Premium</span>
+                                )}
+                            </div>
 
-            {/* IMAGE */}
-            <div className="relative overflow-hidden w-[38%] shrink-0 md:w-full md:aspect-video">
-                {item.image ? (
-                    <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                ) : (
-                    <div className="w-full h-full min-h-36 md:min-h-0 bg-gradient-to-br from-primary/20 via-card-dark to-background-dark flex items-center justify-center text-primary font-bold text-xs md:text-lg px-2 md:px-5 text-center">
-                        3 дня · Бесплатно · Онлайн
-                    </div>
-                )}
-
-                {item.is_free ? <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-primary text-background-dark text-[9px] md:text-xs font-black px-1.5 md:px-3 py-1 rounded uppercase">Начни здесь · Бесплатно</div> : item.is_premium && (
-                    <div className="absolute top-4 left-4 bg-primary text-background-dark text-xs font-black px-3 py-1 rounded uppercase">
-                        Premium
-                    </div>
-                )}
-            </div>
-
-            {/* CONTENT */}
-            <div className="p-3.5 md:p-8 flex-1 min-w-0 flex flex-col justify-between">
-                <div>
-                    <h4 className="text-base md:text-2xl font-bold mb-1 md:mb-3">
-                        {item.title}
-                    </h4>
-
-                    <p className="text-slate-400 text-xs md:text-base mb-2 md:mb-6 font-light leading-relaxed line-clamp-3 md:line-clamp-none">
-                        {item.description}
-                    </p>
+                            <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-6 lg:p-7">
+                                <h4 className="mb-3 text-xl md:text-xl lg:text-2xl font-bold leading-snug">{item.title}</h4>
+                                <p className="mb-6 flex-1 text-sm md:text-base leading-relaxed text-slate-400">{item.description}</p>
+                                <button
+                                    type="button"
+                                    onClick={() => item.url && router.visit(item.url)}
+                                    className="btn-primary-unified w-full !py-3 text-center text-sm md:text-base"
+                                >
+                                    {item.is_free ? item.button_text : "Подробнее"}
+                                </button>
+                            </div>
+                        </article>
+                    ))}
                 </div>
-
-                <button
-                    onClick={() => {
-                        if (item.url) {
-                            router.visit(item.url);
-                        }
-                    }}
-                    className="w-full btn-primary-unified text-center text-xs md:text-base !py-2 md:!py-3"
-                >
-                    {item.is_free ? item.button_text : "Подробнее"}
-                </button>
-            </div>
-
-        </div>
-    ))}
-</div>
-
             </div>
         </section>
     );
