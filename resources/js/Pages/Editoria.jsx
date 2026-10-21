@@ -21,6 +21,7 @@ const fallbackDays = [
 const PIXEL_ID = "1435515278787720";
 const onEditoria = () => window.location.pathname === "/editoria" || window.location.pathname === "/editoria/";
 let pixelMounted = false;
+let pixelInitialized = false;
 
 const pixelEvent = (name, label, href) => {
     if (!pixelMounted || !onEditoria() || typeof window.fbq !== "function") return;
@@ -54,8 +55,11 @@ function useEditoriaPixel() {
             window._fbq = fbq;
         }
 
-        // Meta's init and PageView are sent exactly once for this page mount.
-        window.fbq("init", PIXEL_ID);
+        // Init only once per active bootstrap; PageView once per landing-page mount.
+        if (!pixelInitialized) {
+            window.fbq("init", PIXEL_ID);
+            pixelInitialized = true;
+        }
         window.fbq("track", "PageView");
 
         let script = document.querySelector('script[data-editoria-pixel="true"]');
@@ -69,6 +73,7 @@ function useEditoriaPixel() {
 
         return () => {
             pixelMounted = false;
+            pixelInitialized = false;
             // An Inertia route change must not leave an active tracker behind.
             script?.remove();
             if (window._fbq === window.fbq) {
