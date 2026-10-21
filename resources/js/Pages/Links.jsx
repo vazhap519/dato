@@ -33,6 +33,49 @@ export default function Links() {
                         })}
                         {links.length === 0 && <p className="rounded-2xl border border-white/10 p-6 text-center text-sm text-[#bdb4a3]">Скоро здесь появятся полезные ссылки.</p>}
                     </div>
+                    <section aria-labelledby="open-browser-title" className="mt-14 w-full border-t border-[#63502a]/50 pt-10">
+                        <div className="mb-7 text-center">
+                            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#f8c83c]/25 bg-[#f8c83c]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#f8c83c]">
+                                <span className="material-symbols-outlined text-base" aria-hidden="true">open_in_browser</span>
+                                Важно
+                            </span>
+                            <h2 id="open-browser-title" className="text-xl font-bold sm:text-2xl">Как открыть ссылки</h2>
+                            <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-[#bdb4a3]">
+                                Если ты открыл эту страницу через TikTok, Instagram или другое приложение, некоторые ссылки могут не работать во встроенном браузере.
+                            </p>
+                        </div>
+                        <div className="rounded-3xl border border-[#63502a]/60 bg-gradient-to-b from-[#2b2417] to-[#1e1a13] p-4 shadow-[0_14px_40px_rgba(0,0,0,0.2)] sm:p-6">
+                            <div className="mx-auto max-w-[330px] overflow-hidden rounded-[22px] border border-[#7b6332]/60 bg-[#17140e] shadow-[0_12px_30px_rgba(0,0,0,0.3)]">
+                                <div className="flex items-center justify-between border-b border-[#63502a]/40 bg-[#292318] px-4 py-3">
+                                    <span className="flex items-center gap-2 text-xs text-white/75"><span className="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span> Встроенный браузер</span>
+                                    <div className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[#f8c83c]/60 bg-[#f8c83c]/15 text-[#f8c83c]">
+                                        <span className="material-symbols-outlined" aria-hidden="true">more_horiz</span>
+                                        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#f8c83c] text-[11px] font-bold text-[#17140e]">1</span>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center gap-2 px-4 py-7">
+                                    <span className="font-serif text-2xl italic text-[#f8c83c]">Arutyun</span>
+                                    <span className="text-xs text-[#bdb4a3]">Полезные ссылки</span>
+                                    <span className="material-symbols-outlined mt-3 text-4xl text-[#f8c83c]" aria-hidden="true">south</span>
+                                </div>
+                                <div className="mx-3 mb-3 rounded-xl border border-[#f8c83c]/45 bg-[#3a2d16] p-3">
+                                    <div className="flex items-center gap-3">
+                                        <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f8c83c]/20 text-[#f8c83c]">
+                                            <span className="material-symbols-outlined" aria-hidden="true">open_in_browser</span>
+                                            <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#f8c83c] text-[11px] font-bold text-[#17140e]">2</span>
+                                        </span>
+                                        <span className="text-sm font-semibold">Открыть в браузере</span>
+                                        <span className="material-symbols-outlined ml-auto text-[#f8c83c]" aria-hidden="true">north_east</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-6 space-y-3">
+                                <p className="flex items-start gap-3 text-sm leading-relaxed"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f8c83c] text-xs font-bold text-[#17140e]">1</span><span>Нажми на <strong className="text-white">три точки (⋯)</strong> или значок меню в верхнем углу встроенного браузера.</span></p>
+                                <p className="flex items-start gap-3 text-sm leading-relaxed"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f8c83c] text-xs font-bold text-[#17140e]">2</span><span>Выбери <strong className="text-white">«Открыть в браузере»</strong> — страница откроется в Chrome, Safari или другом браузере.</span></p>
+                            </div>
+                            <p className="mt-5 text-center text-xs leading-relaxed text-[#a99b82]">Название и расположение пунктов могут отличаться в разных приложениях.</p>
+                        </div>
+                    </section>
                     <a href="/" className="mt-10 text-sm text-[#bdb4a3] underline-offset-4 transition hover:text-[#f8c83c] hover:underline">Перейти на основной сайт</a>
                     <p className="mt-8 text-xs text-[#746c5c]">© Arutyun</p>
                 </div>
