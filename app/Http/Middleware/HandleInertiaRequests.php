@@ -142,29 +142,32 @@ class HandleInertiaRequests extends Middleware
             |--------------------------------------------------------------------------
             */
             'seo' => function () use ($request) {
-
                 $routeName = $request->route()?->getName();
-
                 if (! $routeName) return null;
 
-                return cache()->rememberForever("seo_{$routeName}", function () use ($routeName, $request) {
-
-                    $seo = \App\Models\Seo::where('page', $routeName)->first();
-
-                    if (! $seo) return null;
+                $seo = cache()->rememberForever("seo_{$routeName}", function () use ($routeName) {
+                    $record = Seo::where('page', $routeName)->first();
+                    if (! $record) return null;
 
                     return [
-                        'title' => $seo->title ?? config('app.name'),
-                        'description' => $seo->description,
-                        'keywords' => is_array($seo->keywords)
-                            ? implode(', ', $seo->keywords)
-                            : $seo->keywords,
-                        'image' => $seo->seo_image_url,
-                        'canonical' => $seo->canonical
-                            ? $seo->canonical
-                            : url($request->path()),
+                        'title' => $record->title,
+                        'description' => $record->description,
+                        'keywords' => is_array($record->keywords) ? implode(', ', $record->keywords) : $record->keywords,
+                        'image' => $record->seo_image_url,
+                        'canonical' => $record->canonical,
                     ];
                 });
+
+                if (! $seo) return null;
+
+                // Dynamic URLs must not inherit a canonical from a different group slug.
+                if ($routeName === 'closed-group.show') {
+                    $seo['canonical'] = $request->url();
+                } else {
+                    $seo['canonical'] = $seo['canonical'] ?: $request->url();
+                }
+
+                return $seo;
             },
 
             'settings' => function () {
