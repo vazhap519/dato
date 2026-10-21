@@ -22,8 +22,8 @@ export default function HomeHero({ hero }) {
 
     return (
         <section className="relative overflow-hidden hero-gradient lg:min-h-[90vh] lg:flex lg:items-center">
-            <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-0 px-6 lg:grid-cols-2 lg:gap-12">
-                <div className="relative z-10 pt-40 text-center sm:pt-40 lg:py-12 lg:text-left">
+            <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-0 px-0 lg:grid-cols-2 lg:gap-12 lg:px-6">
+                <div className="relative z-10 w-full min-w-0 px-6 pt-40 text-center sm:pt-40 lg:px-0 lg:py-12 lg:text-left">
                     <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
                         <span className="relative flex h-2 w-2">
                             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
@@ -50,7 +50,7 @@ export default function HomeHero({ hero }) {
                 </div>
 
                 {/* The mobile portrait, callout and CTAs form one responsive composition. */}
-                <div className="relative mx-auto -mt-1 w-[calc(100%+3rem)] max-w-[540px] lg:mt-0 lg:h-[80vh] lg:w-full lg:max-w-none">
+                <div className="relative mx-auto -mt-1 w-full max-w-[540px] lg:mt-0 lg:h-[80vh] lg:w-full lg:max-w-none">
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_60%_55%,rgba(174,104,24,0.26),transparent_72%)] lg:hidden" />
                     <img
                         src={imageUrl}
@@ -65,7 +65,7 @@ export default function HomeHero({ hero }) {
                         Всё<br />начинается<br />с тебя
                     </div>
                     {/* Buttons float over the fading bottom of the portrait, not below a framed image. */}
-                    <div className="relative z-20 mx-6 -mt-[17%] flex flex-col gap-3 pb-8 sm:mx-auto sm:w-[85%] sm:max-w-[420px] lg:hidden">
+                    <div className="relative z-20 mx-auto -mt-[17%] flex w-[calc(100%-3rem)] max-w-[420px] flex-col gap-3 pb-8 lg:hidden">
                         {actions}
                     </div>
                 </div>
