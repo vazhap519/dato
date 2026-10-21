@@ -23,7 +23,7 @@ export default function HomeHero({ hero }) {
     return (
         <section className="relative overflow-hidden hero-gradient lg:min-h-[90vh] lg:flex lg:items-center">
             <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-0 px-6 lg:grid-cols-2 lg:gap-12">
-                <div className="relative z-10 pt-8 text-center lg:py-12 lg:text-left">
+                <div className="relative z-10 pt-24 text-center sm:pt-28 lg:py-12 lg:text-left">
                     <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
                         <span className="relative flex h-2 w-2">
                             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
@@ -49,21 +49,22 @@ export default function HomeHero({ hero }) {
                     </div>
                 </div>
 
-                <div className="relative mx-auto mt-2 flex h-[260px] w-full max-w-[420px] items-end justify-center sm:h-[380px] lg:mt-0 lg:h-[80vh] lg:max-w-none">
+                <div className="relative mx-auto -mt-1 flex h-[360px] w-[calc(100%+3rem)] max-w-[520px] items-end justify-center sm:h-[470px] lg:mt-0 lg:h-[80vh] lg:w-full lg:max-w-none">
                     <img
                         src={imageUrl}
                         alt="Давид Арутюнов"
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
-                        className="pointer-events-none h-full w-full object-contain object-bottom [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
+                        className="pointer-events-none h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_75%_75%_at_50%_48%,black_58%,transparent_100%)] lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
                     />
-                    <div className="pointer-events-none absolute left-[3%] top-[42%] z-10 max-w-[42%] -rotate-6 text-center text-lg font-semibold italic tracking-wide text-primary drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] sm:text-2xl lg:hidden">
-                        Начни с себя
+                    <div className="pointer-events-none absolute left-[5%] top-[47%] z-10 w-[33%] text-left text-lg font-semibold italic leading-tight tracking-tight text-primary drop-shadow-[0_2px_10px_rgba(0,0,0,1)] sm:text-2xl lg:hidden">
+                        Всё начинается с тебя
+                        <span className="mt-2 block h-px w-full origin-left -rotate-6 bg-gradient-to-r from-primary to-transparent" />
                     </div>
                 </div>
 
-                <div className="relative z-10 -mt-1 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
+                <div className="relative z-10 -mt-10 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
                     {actions}
                 </div>
             </div>
