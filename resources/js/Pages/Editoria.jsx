@@ -16,27 +16,33 @@ const fallbackDays = [
 ];
 
 
-// Meta Pixel is deliberately scoped to this landing page. No global pixel bootstrap.
+// Meta Pixel is initialized exclusively while the /editoria Inertia page is mounted.
+// The route check accepts /editoria, /editoria/ and URLs with query parameters.
 const PIXEL_ID = "1435515278787720";
+const onEditoria = () => /^\\/editoria\\/?$/.test(window.location.pathname);
+let pixelMounted = false;
+
 const pixelEvent = (name, label, href) => {
-    if (window.location.pathname !== "/editoria" || typeof window.fbq !== "function") return;
-    // Do not send URL query strings, fragments (except local anchors), or user data.
-    let destination = "";
+    if (!pixelMounted || !onEditoria() || typeof window.fbq !== "function") return;
+    const data = { button_name: label };
     try {
-        const parsed = new URL(href || "", window.location.origin);
-        destination = parsed.origin === window.location.origin
-            ? parsed.pathname + (parsed.hash.startsWith("#") ? parsed.hash : "")
-            : parsed.origin + parsed.pathname;
-    } catch { /* malformed destination: omit */ }
-    window.fbq("trackCustom", name, { button_name: label, destination_url: destination });
+        const destination = new URL(href || "", window.location.origin);
+        // No query strings, user identifiers or fragments from external links.
+        data.destination_url = destination.origin === window.location.origin
+            ? destination.pathname + destination.hash
+            : destination.origin + destination.pathname;
+    } catch { /* No destination parameter for invalid URLs. */ }
+    window.fbq("trackCustom", name, data);
 };
 
 function useEditoriaPixel() {
     useEffect(() => {
-        if (window.location.pathname !== "/editoria") return;
-        // Standard Meta bootstrap, loaded only when the landing page mounts.
-        const existing = window.fbq;
-        if (!existing) {
+        if (!onEditoria()) return;
+        pixelMounted = true;
+
+        // Meta's standard queue/bootstrap pattern; never add it to the global layout.
+        // Guard against duplicate injection when the page is mounted again.
+        if (!window.fbq) {
             const fbq = function () {
                 if (fbq.callMethod) fbq.callMethod.apply(fbq, arguments);
                 else fbq.queue.push(arguments);
@@ -47,17 +53,25 @@ function useEditoriaPixel() {
             window.fbq = fbq;
             window._fbq = fbq;
         }
+
+        // Meta's init and PageView are sent exactly once for this page mount.
         window.fbq("init", PIXEL_ID);
         window.fbq("track", "PageView");
-        const script = document.createElement("script");
-        script.async = true;
-        script.src = "https://connect.facebook.net/en_US/fbevents.js";
-        script.dataset.editoriaPixel = "true";
-        document.head.appendChild(script);
+
+        let script = document.querySelector('script[data-editoria-pixel="true"]');
+        if (!script) {
+            script = document.createElement("script");
+            script.async = true;
+            script.src = "https://connect.facebook.net/en_US/fbevents.js";
+            script.dataset.editoriaPixel = "true";
+            document.head.appendChild(script);
+        }
+
         return () => {
-            script.remove();
-            // Prevent further tracking if Inertia navigates to another route.
-            if (window.fbq && window._fbq === window.fbq) {
+            pixelMounted = false;
+            // An Inertia route change must not leave an active tracker behind.
+            script?.remove();
+            if (window._fbq === window.fbq) {
                 delete window.fbq;
                 delete window._fbq;
             }
@@ -232,7 +246,7 @@ export default function Editoria() {
             <footer className="border-t border-white/10 py-8 mb-20 md:mb-0">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
                     <span>© {new Date().getFullYear()} {settings?.site_name || "Arutyun"}</span>
-                    <a href="/legal" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
+                    <a href="/legal" onClick={() => pixelEvent("CTA_Click_Footer_Legal", "Юридическая информация и конфиденциальность", "/legal")} className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
