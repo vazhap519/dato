@@ -60,9 +60,10 @@ export default function HomeHero({ hero }) {
                         decoding="async"
                         className="pointer-events-none relative block h-auto w-full [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,transparent_0%,black_12%,black_75%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in] lg:absolute lg:inset-0 lg:h-full lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
                     />
-                    {/* Place the callout left of the pointing hand without an artificial arrow. */}
-                    <div className="pointer-events-none absolute left-[7%] top-[35%] z-10 w-[34%] text-left text-[clamp(1.15rem,5.2vw,1.75rem)] font-semibold italic leading-[1.12] tracking-tight text-primary [text-shadow:0_2px_12px_#000,0_0_22px_#000] lg:hidden">
-                        Всё<br />начинается<br />с тебя
+                    {/* Compact mobile callout: aligned within the portrait, independent of the hand gesture. */}
+                    <div className="pointer-events-none absolute left-[9%] top-[31%] z-10 w-[43%] text-left text-[clamp(0.9rem,3.9vw,1.3rem)] font-semibold italic leading-[1.2] tracking-tight text-[#f5c65c] [text-shadow:0_2px_8px_rgba(0,0,0,0.75)] lg:hidden">
+                        <span className="block whitespace-nowrap">Всё начинается</span>
+                        <span className="block">с тебя</span>
                     </div>
                     {/* Buttons float over the fading bottom of the portrait, not below a framed image. */}
                     <div className="relative z-20 mx-auto -mt-[17%] flex w-[calc(100%-3rem)] max-w-[420px] flex-col gap-3 pb-8 lg:hidden">
