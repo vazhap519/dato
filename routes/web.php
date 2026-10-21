@@ -10,6 +10,15 @@ use App\Http\Controllers\PersonalController;
 use Spatie\Sitemap\SitemapGenerator;
 use App\Models\SiteSetting;
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/links', function () {
+    return Inertia::render('Links', [
+        'links' => \App\Models\UsefulLink::query()
+            ->where('is_active', true)
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get(['id', 'title', 'description', 'url', 'icon']),
+    ]);
+})->name('links');
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
         ->toResponse(request())
