@@ -1,4 +1,5 @@
 import { usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header.jsx";
 import Footer from "@/components/footer.jsx";
 import Seo from "@/components/Seo.jsx";
@@ -22,6 +23,12 @@ function LegalText({ html }) {
 
 export default function Legal() {
     const { legal } = usePage().props;
+    const [showTop, setShowTop] = useState(false);
+    useEffect(() => {
+        const onScroll = () => setShowTop(window.scrollY > 600);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
     const configured = Array.isArray(legal?.sections_nav) ? legal.sections_nav : [];
     const sections = defaults.map((section, index) => ({
@@ -114,6 +121,7 @@ export default function Legal() {
                     )}
                 </div>
             </main>
+            {showTop && <button type="button" aria-label="Наверх" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary text-black shadow-lg font-bold print:hidden">↑</button>}
             <Footer />
             <style>{`
                 .legal-document { font-size: 16px; line-height: 1.85; overflow-wrap: anywhere; }
@@ -125,6 +133,7 @@ export default function Legal() {
                 .legal-document ol { list-style-type: decimal; }
                 .legal-document li { margin-bottom: 0.5rem; }
                 .legal-document h3 { border-left: 2px solid #eabf45; padding-left: 0.75rem; }
+                .legal-document h4 { font-weight: 700; margin: 1.5rem 0 0.75rem; }
                 .legal-document a { text-decoration: underline; }
                 @media print {
                     header, footer { display: none !important; }
