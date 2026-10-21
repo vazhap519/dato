@@ -14,6 +14,7 @@ export default function Seo() {
 
             <meta name="description" content={description} />
             <meta name="robots" content={robots} />
+            {seo?.keywords && <meta name="keywords" content={seo.keywords} />}
 
             {/* Open Graph */}
             <meta property="og:title" content={seo?.og_title ?? title} />
