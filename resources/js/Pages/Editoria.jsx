@@ -92,7 +92,27 @@ function useEditoriaPixel() {
 function JoinLink({ href, children, secondary = false, className = "", eventName }) {
     const base = "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 font-bold text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
     const colors = secondary ? "border border-primary/50 text-primary hover:bg-primary/10" : "bg-primary text-background-dark hover:brightness-110 shadow-lg shadow-primary/10";
-    return <a href={href || "#how-to-join"} onClick={() => eventName && pixelEvent(eventName, "Присоединиться бесплатно", href || "#how-to-join")} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
+    const destination = href || "#how-to-join";
+
+    const handleClick = (event) => {
+        if (!eventName) return;
+        pixelEvent(eventName, "Присоединиться бесплатно", destination);
+
+        // A same-tab external navigation (Telegram in particular) can cancel the
+        // image request used by Meta before it leaves the browser. Give it a
+        // short opportunity to start; never delay modified/new-tab clicks.
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        const anchor = event.currentTarget;
+        if (anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+        const url = new URL(anchor.href, window.location.href);
+        if (url.origin === window.location.origin && url.pathname === window.location.pathname) return;
+        if (!pixelMounted || !onEditoria() || typeof window.fbq !== "function") return;
+
+        event.preventDefault();
+        window.setTimeout(() => { window.location.assign(anchor.href); }, 120);
+    };
+
+    return <a href={destination} onClick={handleClick} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
 }
 
 export default function Editoria() {
