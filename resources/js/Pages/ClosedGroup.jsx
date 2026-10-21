@@ -1,4 +1,5 @@
 import { usePage } from "@inertiajs/react";
+import Seo from "@/components/Seo.jsx";
 import Header from "@/components/Header.jsx";
 import ClosedGroupHero from "@/components/ClosedGroupComponents/ClosedgroupHero.jsx";
 import Conditions from "@/components/ClosedGroupComponents/Сonditions.jsx";
@@ -23,6 +24,7 @@ export default function ClosedGroup() {
 
     return (
         <>
+            <Seo />
             <Header />
 
             <main className="pt-20">
