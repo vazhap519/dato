@@ -50,7 +50,7 @@ export default function HomeHero({ hero }) {
                 </div>
 
                 {/* The mobile portrait, callout and CTAs form one responsive composition. */}
-                <div className="relative mx-auto -mt-1 w-full max-w-[540px] lg:mt-0 lg:h-[80vh] lg:w-full lg:max-w-none">
+                <div className="relative mx-auto -mt-1 w-full max-w-[540px] lg:mt-0 lg:h-[88vh] lg:w-full lg:max-w-none">
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_60%_55%,rgba(174,104,24,0.26),transparent_72%)] lg:hidden" />
                     <img
                         src={imageUrl}
@@ -58,7 +58,7 @@ export default function HomeHero({ hero }) {
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
-                        className="pointer-events-none relative block h-auto w-full origin-center translate-x-[5%] scale-[1.06] [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,transparent_0%,black_12%,black_75%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in] lg:absolute lg:inset-0 lg:translate-x-0 lg:scale-100 lg:h-full lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
+                        className="pointer-events-none relative block h-auto w-full origin-center translate-x-[5%] scale-[1.06] [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,transparent_0%,black_12%,black_75%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in] lg:absolute lg:inset-0 lg:translate-x-[8%] lg:scale-[1.18] lg:h-full lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_19%,black_91%,transparent_100%),linear-gradient(to_bottom,black_0%,black_70%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
                     />
                     {/* Buttons float over the fading bottom of the portrait, not below a framed image. */}
                     <div className="relative z-20 mx-auto -mt-[17%] flex w-[calc(100%-3rem)] max-w-[420px] flex-col gap-3 pb-8 lg:hidden">
