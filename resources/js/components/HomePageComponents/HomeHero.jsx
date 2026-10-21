@@ -56,9 +56,8 @@ export default function HomeHero({ hero }) {
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
-                        className="pointer-events-none h-full w-full object-contain object-bottom"
+                        className="pointer-events-none h-full w-full object-contain object-bottom [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
                     />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-background-dark/80 to-transparent lg:hidden" />
                 </div>
 
                 <div className="relative z-10 -mt-1 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
