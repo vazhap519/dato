@@ -47,7 +47,7 @@ export default function PersonalHero({ personal }) {
                             <img loading="eager" fetchPriority="high" decoding="async"
                                 src={personal.hero_image}
                                 alt={personal.hero_author_name || "Давид Арутюнов"}
-                                className="absolute z-10 bottom-[-4%] right-[-4%] w-[112%] max-w-none h-auto max-h-[110%] object-contain object-bottom sm:right-[-3%] sm:w-[112%] lg:right-[-10%] lg:bottom-[-5%] lg:w-[133%] lg:max-h-[118%] xl:right-[-12%] xl:w-[138%] [mask-image:linear-gradient(to_bottom,black_0%,black_72%,transparent_100%)] drop-shadow-[0_18px_32px_rgba(0,0,0,0.25)]"
+                                className="absolute z-10 bottom-[-4%] right-[-16%] w-[145%] max-w-none h-auto max-h-none object-contain object-bottom sm:right-[-10%] sm:w-[138%] lg:right-[-23%] lg:bottom-[-7%] lg:w-[168%] xl:right-[-26%] xl:w-[175%] [mask-image:linear-gradient(to_bottom,black_0%,black_72%,transparent_100%)] drop-shadow-[0_18px_32px_rgba(0,0,0,0.25)]"
                             />
                         )}
                     </div>
