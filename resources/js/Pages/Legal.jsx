@@ -81,19 +81,19 @@ export default function Legal() {
                                 </aside>
 
                                 <div className="flex-1 min-w-0 max-w-[820px] space-y-12 md:space-y-16">
-                                    <section id={sections[0].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12"><div className="mb-5 flex items-center gap-3 text-primary text-xs font-bold uppercase tracking-widest"><span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/40 bg-primary/10">01</span><span>Документ 1 из 4</span></div>
+                                    <section id={sections[0].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12">
                                         {legal.privacy_title && <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">{legal.privacy_title}</h2>}
                                         <LegalText html={legal.privacy_content} />
                                     </section>
-                                    <section id={sections[1].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12"><div className="mb-5 flex items-center gap-3 text-primary text-xs font-bold uppercase tracking-widest"><span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/40 bg-primary/10">02</span><span>Документ 2 из 4</span></div>
+                                    <section id={sections[1].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12">
                                         {legal.agreement_title && <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">{legal.agreement_title}</h2>}
                                         <LegalText html={legal.agreement_content} />
                                     </section>
-                                    <section id={sections[2].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12"><div className="mb-5 flex items-center gap-3 text-primary text-xs font-bold uppercase tracking-widest"><span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/40 bg-primary/10">03</span><span>Документ 3 из 4</span></div>
+                                    <section id={sections[2].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12">
                                         {legal.offer_title && <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">{legal.offer_title}</h2>}
                                         <LegalText html={legal.offer_content} />
                                     </section>
-                                    <section id={sections[3].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12"><div className="mb-5 flex items-center gap-3 text-primary text-xs font-bold uppercase tracking-widest"><span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/40 bg-primary/10">04</span><span>Документ 4 из 4</span></div>
+                                    <section id={sections[3].anchor} className="scroll-mt-28 border-t-2 border-primary/60 pt-9 md:pt-12">
                                         {legal.details_title && <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">{legal.details_title}</h2>}
                                         {legal.company_details?.length > 0 && (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
