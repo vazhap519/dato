@@ -39,20 +39,20 @@ export default function PersonalHero({ personal }) {
                     </div>
                 </div>
                 <div className="order-2 relative w-full max-w-[660px] mx-auto lg:mr-0 lg:-ml-6 xl:-ml-12">
-                    <div className="relative isolate w-full h-[300px] min-[390px]:h-[340px] sm:h-[440px] lg:h-[520px] xl:h-[570px]">
+                    <div className="relative isolate w-full h-[320px] min-[390px]:h-[370px] sm:h-[470px] lg:h-[550px] xl:h-[590px]">
                         <div className="absolute inset-[7%] rounded-full bg-primary/20 blur-[65px] pointer-events-none" aria-hidden="true" />
-                        <div className="absolute w-[66%] aspect-square right-[7%] top-[12%] rounded-full border border-primary/25 shadow-[0_0_75px_rgba(245,185,42,0.12)] pointer-events-none" aria-hidden="true" />
-                        <div className="absolute w-[70%] aspect-square right-[4%] top-[11%] rounded-full bg-[radial-gradient(circle,rgba(245,185,42,0.19),transparent_72%)] pointer-events-none" aria-hidden="true" />
+                        <div className="absolute w-[60%] aspect-square right-[9%] top-[13%] rounded-full border border-primary/25 shadow-[0_0_75px_rgba(245,185,42,0.12)] pointer-events-none" aria-hidden="true" />
+                        <div className="absolute w-[66%] aspect-square right-[6%] top-[11%] rounded-full bg-[radial-gradient(circle,rgba(245,185,42,0.19),transparent_72%)] pointer-events-none" aria-hidden="true" />
                         {personal.hero_image && (
                             <img loading="eager" fetchPriority="high" decoding="async"
                                 src={personal.hero_image}
                                 alt={personal.hero_author_name || "Давид Арутюнов"}
-                                className="absolute z-10 bottom-[-9%] left-1/2 -translate-x-1/2 w-[122%] max-w-none h-[115%] object-contain object-bottom sm:w-[118%] lg:w-[138%] lg:left-[46%] xl:w-[145%] drop-shadow-[0_18px_32px_rgba(0,0,0,0.25)]"
+                                className="absolute z-10 bottom-[-23%] right-[-16%] w-[145%] max-w-none h-[145%] object-contain object-bottom sm:right-[-10%] sm:w-[138%] lg:right-[-25%] lg:bottom-[-24%] lg:w-[168%] lg:h-[155%] xl:right-[-28%] xl:w-[175%] [mask-image:linear-gradient(to_bottom,black_0%,black_65%,transparent_91%)] drop-shadow-[0_18px_32px_rgba(0,0,0,0.25)]"
                             />
                         )}
-                        <div className="absolute z-20 inset-x-0 bottom-[-1px] h-[26%] bg-gradient-to-t from-background-dark via-background-dark/65 to-transparent pointer-events-none" aria-hidden="true" />
+                        <div className="absolute z-20 inset-x-0 bottom-[-1px] h-[12%] bg-gradient-to-t from-background-dark to-transparent pointer-events-none" aria-hidden="true" />
                     </div>
-                    <div className="relative z-30 -mt-12 sm:-mt-14 lg:-mt-20 px-1 sm:px-5 lg:px-14">
+                    <div className="relative z-30 -mt-12 sm:-mt-14 lg:-mt-24 px-1 sm:px-5 lg:px-14">
                         <p className="text-primary font-bold text-lg sm:text-xl">{personal.hero_author_name}</p>
                         <p className="text-white/80 text-sm italic">{personal.hero_author_role}</p>
                         <div className="mt-4 h-px w-32 bg-gradient-to-r from-primary/70 to-transparent" aria-hidden="true" />
