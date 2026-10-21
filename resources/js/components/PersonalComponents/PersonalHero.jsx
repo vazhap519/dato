@@ -3,9 +3,9 @@ export default function PersonalHero({ personal }) {
     const secondary = personal.hero_secondary_button_url?.trim() || "#about";
 
     return (
-        <section className="relative overflow-hidden px-5 pt-10 pb-16 sm:px-8 md:py-20 lg:px-14 xl:px-20">
+        <section className="relative overflow-hidden px-5 pt-8 pb-12 sm:px-8 md:py-16 lg:px-14 xl:px-20">
             <div className="absolute inset-0 cinematic-glow pointer-events-none" />
-            <div className="relative max-w-7xl mx-auto grid lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)] gap-9 lg:gap-12 xl:gap-16 items-center">
+            <div className="relative max-w-7xl mx-auto grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] gap-7 lg:gap-4 xl:gap-8 items-center">
                 <div className="order-1 flex flex-col gap-5 md:gap-7 min-w-0">
                     {personal.hero_badge && (
                         <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 px-4 py-2 rounded-full w-fit">
@@ -38,20 +38,21 @@ export default function PersonalHero({ personal }) {
                         <span className="inline-flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base" aria-hidden="true">forum</span>Личный разговор</span>
                     </div>
                 </div>
-                <div className="order-2 relative w-full max-w-[560px] mx-auto lg:mr-0">
-                    <div className="relative isolate min-h-[300px] sm:min-h-[400px] lg:min-h-[520px] flex flex-col justify-end">
-                        <div className="absolute inset-x-[5%] top-[12%] bottom-[14%] rounded-full bg-primary/15 blur-[75px] pointer-events-none" aria-hidden="true" />
-                        <div className="absolute w-[72%] aspect-square left-1/2 top-[8%] -translate-x-1/2 rounded-full border border-primary/30 shadow-[0_0_70px_rgba(245,185,42,0.09)] pointer-events-none" aria-hidden="true" />
-                        <div className="absolute w-[52%] aspect-square left-1/2 top-[19%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(245,185,42,0.17),transparent_72%)] pointer-events-none" aria-hidden="true" />
+                <div className="order-2 relative w-full max-w-[660px] mx-auto lg:mr-0 lg:-ml-6 xl:-ml-12">
+                    <div className="relative isolate w-full h-[300px] min-[390px]:h-[340px] sm:h-[440px] lg:h-[520px] xl:h-[570px]">
+                        <div className="absolute inset-[7%] rounded-full bg-primary/20 blur-[65px] pointer-events-none" aria-hidden="true" />
+                        <div className="absolute w-[66%] aspect-square right-[7%] top-[12%] rounded-full border border-primary/25 shadow-[0_0_75px_rgba(245,185,42,0.12)] pointer-events-none" aria-hidden="true" />
+                        <div className="absolute w-[70%] aspect-square right-[4%] top-[11%] rounded-full bg-[radial-gradient(circle,rgba(245,185,42,0.19),transparent_72%)] pointer-events-none" aria-hidden="true" />
                         {personal.hero_image && (
                             <img loading="eager" fetchPriority="high" decoding="async"
                                 src={personal.hero_image}
                                 alt={personal.hero_author_name || "Давид Арутюнов"}
-                                className="relative z-10 w-full h-[285px] sm:h-[390px] lg:h-[495px] object-contain object-bottom drop-shadow-[0_18px_32px_rgba(0,0,0,0.3)]"
+                                className="absolute z-10 bottom-[-9%] left-1/2 -translate-x-1/2 w-[122%] max-w-none h-[115%] object-contain object-bottom sm:w-[118%] lg:w-[138%] lg:left-[46%] xl:w-[145%] drop-shadow-[0_18px_32px_rgba(0,0,0,0.25)]"
                             />
                         )}
+                        <div className="absolute z-20 inset-x-0 bottom-[-1px] h-[26%] bg-gradient-to-t from-background-dark via-background-dark/65 to-transparent pointer-events-none" aria-hidden="true" />
                     </div>
-                    <div className="relative z-20 -mt-1 px-3 sm:px-7 lg:px-10">
+                    <div className="relative z-30 -mt-12 sm:-mt-14 lg:-mt-20 px-1 sm:px-5 lg:px-14">
                         <p className="text-primary font-bold text-lg sm:text-xl">{personal.hero_author_name}</p>
                         <p className="text-white/80 text-sm italic">{personal.hero_author_role}</p>
                         <div className="mt-4 h-px w-32 bg-gradient-to-r from-primary/70 to-transparent" aria-hidden="true" />
