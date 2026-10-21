@@ -1,63 +1,70 @@
-export default function HomeHero({hero}) {
+export default function HomeHero({ hero }) {
     if (!hero) return null;
 
+    const imageUrl = hero.hero_image_url || "/images/placeholder.webp";
+
+    const actions = (
+        <>
+            <a
+                href="#interaction-formats"
+                className="bg-primary text-background-dark px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
+            >
+                {hero.primary_button_text || "Начать с бесплатного практикума"}
+            </a>
+            <a
+                href={hero.secondary_button_href || "#about"}
+                className="border border-white/10 hover:bg-white/5 px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-medium transition-all text-center"
+            >
+                {hero.secondary_button_text || "Узнать обо мне"}
+            </a>
+        </>
+    );
+
     return (
-        <section className="relative min-h-0 lg:min-h-[90vh] flex items-center overflow-hidden hero-gradient">
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-12 items-center w-full">
-                <div className="z-10 space-y-5 md:space-y-8 pt-8 pb-3 lg:py-12">
-                    <div
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
-<span className="relative flex h-2 w-2">
-<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-<span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-</span>
-                        {/*Внутреннее пробуждение*/}
+        <section className="relative overflow-hidden hero-gradient lg:min-h-[90vh] lg:flex lg:items-center">
+            <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-0 px-6 lg:grid-cols-2 lg:gap-12">
+                <div className="relative z-10 pt-8 text-center lg:py-12 lg:text-left">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
+                        <span className="relative flex h-2 w-2">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+                        </span>
                         {hero.badge_text}
                     </div>
-                    <h1 className="text-[clamp(2.8rem,12vw,4rem)] md:text-8xl font-light leading-tight">
-                        {hero.title_line_1} <br/>
-                        <span className="font-extrabold text-primary text-[0.78em] md:text-[0.72em] whitespace-nowrap"> {hero.title_highlight}</span>
+
+                    <h1 className="mt-5 text-[clamp(2.55rem,10vw,4rem)] font-light leading-[1.12] md:text-8xl lg:mt-8">
+                        {hero.title_line_1}
+                        <br />
+                        <span className="whitespace-nowrap text-[0.78em] font-extrabold text-primary md:text-[0.72em]">
+                            {hero.title_highlight}
+                        </span>
                     </h1>
 
-                    <p className="text-base md:text-2xl text-slate-400 max-w-lg leading-relaxed font-light italic">
+                    <p className="mx-auto mt-5 max-w-lg text-base font-light italic leading-relaxed text-slate-400 md:text-2xl lg:mx-0 lg:mt-8">
                         {hero.subtitle || "Книги, практикумы и живые разговоры для тех, кто хочет лучше понять себя, выйти из привычных сценариев и начать жить осознаннее."}
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
-                        <a
-                            href="#interaction-formats"
-                            className="bg-primary text-background-dark px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-bold hover:shadow-[0_0_20px_rgba(250,198,56,0.3)] transition-all text-center"
-                        >
-                            {hero.primary_button_text || "Начать с бесплатного практикума"}
-                        </a>
-
-                        <a
-                            href={hero.secondary_button_href || "#about"}
-                            className="border border-white/10 hover:bg-white/5 px-5 md:px-10 py-3.5 md:py-4 rounded-xl text-sm md:text-lg font-medium transition-all text-center"
-                        >
-                            {hero.secondary_button_text || "Узнать обо мне"}
-                        </a>
+                    <div className="hidden flex-col gap-3 pt-6 sm:flex-row md:gap-4 lg:flex">
+                        {actions}
                     </div>
                 </div>
 
-                {/* <div className="relative h-[230px] sm:h-[330px] lg:h-[80vh] flex justify-center items-end bg-transparent">
-                    <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
-                    <img   loading="eager"
-                           fetchpriority="high"
-                           decoding="async"  alt="David Arutyunov" className="h-full w-full object-cover object-top rounded-t-[100px] bg-transparent"
+                <div className="relative mx-auto mt-2 flex h-[260px] w-full max-w-[420px] items-end justify-center sm:h-[380px] lg:mt-0 lg:h-[80vh] lg:max-w-none">
+                    <img
+                        src={imageUrl}
+                        alt="Давид Арутюнов"
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
+                        className="pointer-events-none h-full w-full object-contain object-bottom"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-background-dark/80 to-transparent lg:hidden" />
+                </div>
 
-
-                         src={hero?.hero_image_url ?? "/images/placeholder.webp"}/>
-                </div> */}
-
-
-
-<div className="relative lg:h-[80vh] flex justify-center items-end">
-<img alt="Давид Арутюнов" className="h-full w-auto max-w-full object-contain object-bottom pointer-events-none" 
-src={hero?.hero_image_url ?? "/images/placeholder.webp"}/>
-</div>
-
+                <div className="relative z-10 -mt-1 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
+                    {actions}
+                </div>
             </div>
         </section>
-    )
+    );
 }
