@@ -25,7 +25,7 @@ class GenerateSitemap extends Command
         $sitemap->add(Url::create('/legal')->setPriority(0.3));
 
         // Dynamic Closed Groups
-        ClosedGroup::where('is_active', true)->get()->each(function ($group) use ($sitemap) {
+        ClosedGroup::whereNotNull('slug')->where('slug', '<>', '')->get()->each(function ($group) use ($sitemap) {
             $sitemap->add(
                 Url::create("/closed-group/{$group->slug}")
                     ->setLastModificationDate($group->updated_at)
