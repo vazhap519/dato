@@ -35,7 +35,7 @@ export default function ClosedGroupHero({ group }) {
                             alt={group.hero_title || "Круг души"}
                             loading="eager"
                             fetchPriority="high"
-                            className="absolute inset-0 h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_68%_69%_at_52%_48%,black_38%,transparent_94%)] lg:[mask-image:radial-gradient(ellipse_69%_72%_at_53%_49%,black_43%,transparent_96%)]"
+                            className="absolute inset-0 h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_40%,transparent_96%)] lg:[mask-image:radial-gradient(ellipse_61%_59%_at_51%_50%,black_43%,transparent_96%)]"
                         />
                     )}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#19160f]/70 to-transparent" aria-hidden="true" />
