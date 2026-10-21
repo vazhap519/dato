@@ -167,7 +167,7 @@ export default function Editoria() {
                     <div className="flex items-center" aria-label={settings?.site_name || "Arutyun"}>
                         {settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Arutyun"} className="h-10 w-auto max-w-36 object-contain" /> : <span className="text-primary font-display text-2xl italic">Arutyun</span>}
                     </div>
-                    <a href="#how-to-join" data-meta-event="CTA_Click_Header_HowToJoin" data-meta-label="Как участвовать" className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
+                    <a href="#how-to-join" data-meta-event="HeaderHowToJoinClick" data-meta-label="Как участвовать" className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
                 </div>
             </header>
 
@@ -180,7 +180,7 @@ export default function Editoria() {
                         <div className="flex flex-wrap gap-2 md:gap-4 text-sm text-gray-300 mb-6 md:mb-7">
                             <span className="rounded-full bg-white/10 px-3 py-1">✦ 3 дня</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Бесплатно</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Онлайн</span>
                         </div>
-                        <JoinLink href={joinUrl} eventName="CTA_Click_Hero_Join" className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={joinUrl} eventName="HeroJoinClick" className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
                     <div className="hidden md:block order-2 lg:order-2">
@@ -205,7 +205,7 @@ export default function Editoria() {
                     </div>
                     <div className="grid md:grid-cols-3 gap-3 md:gap-5">
                         {days.map((day, i) => <article key={i} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 md:p-7 h-full">
-                            <button type="button" aria-expanded={openDay === i} data-meta-event={`CTA_Click_Program_Day_${i + 1}`} data-meta-label={`Программа: день ${i + 1}`} onClick={() => { setOpenDay(openDay === i ? -1 : i); }} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
+                            <button type="button" aria-expanded={openDay === i} data-meta-event={`ProgramDayClick_${i + 1}`} data-meta-label={`Программа: день ${i + 1}`} onClick={() => { setOpenDay(openDay === i ? -1 : i); }} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
                                 <span className="text-primary text-2xl md:text-4xl font-bold md:block md:mb-5">{String(i + 1).padStart(2, "0")}</span>
                                 <span className="flex-1"><span className="text-primary text-xs font-bold uppercase tracking-widest block md:mb-2">{day.day_label || `День ${i + 1}`}</span><span className="text-white text-base md:text-xl font-bold block">{day.title}</span></span>
                                 <span className="md:hidden text-primary text-xl" aria-hidden="true">{openDay === i ? "−" : "+"}</span>
@@ -213,7 +213,7 @@ export default function Editoria() {
                             <p className={`${openDay === i ? "block" : "hidden"} md:block text-gray-400 leading-relaxed mt-3 md:mt-0`}>{day.description}</p>
                         </article>)}
                     </div>
-                    <div className="text-center mt-9"><JoinLink href={joinUrl} eventName="CTA_Click_Program_Join">Присоединиться бесплатно</JoinLink></div>
+                    <div className="text-center mt-9"><JoinLink href={joinUrl} eventName="ProgramJoinClick">Присоединиться бесплатно</JoinLink></div>
                 </section>
 
                 <section className="bg-white/[0.025] border-y border-white/10 py-16 md:py-20">
@@ -261,7 +261,7 @@ export default function Editoria() {
                             </div>)}
                         </div>
                         <p className="text-gray-400 text-sm text-center mt-6">Telegram нужен для анонсов и доступа к практикуму. Участие бесплатное.</p>
-                        <div className="text-center mt-8"><JoinLink href={joinUrl} eventName="CTA_Click_HowToJoin_Join">Присоединиться бесплатно</JoinLink></div>
+                        <div className="text-center mt-8"><JoinLink href={joinUrl} eventName="HowToJoinClick">Присоединиться бесплатно</JoinLink></div>
                     </div>
                 </section>
 
@@ -269,7 +269,7 @@ export default function Editoria() {
                     <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-9">Частые вопросы</h2>
                     <div className="space-y-3">
                         {defaultQuestions.map((item, i) => <div key={i} className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden">
-                            <button type="button" aria-expanded={openFaq === i} data-meta-event={`CTA_Click_FAQ_${i + 1}`} data-meta-label={item.question} onClick={() => { setOpenFaq(openFaq === i ? -1 : i); }} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
+                            <button type="button" aria-expanded={openFaq === i} data-meta-event={`FaqClick_${i + 1}`} data-meta-label={item.question} onClick={() => { setOpenFaq(openFaq === i ? -1 : i); }} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
                                 <span>{item.question}</span><span className="text-primary text-xl shrink-0" aria-hidden="true">{openFaq === i ? "−" : "+"}</span>
                             </button>
                             {openFaq === i && <p className="px-5 pb-5 text-gray-400 leading-relaxed">{item.answer}</p>}
@@ -282,7 +282,7 @@ export default function Editoria() {
                         <h2 className="text-white text-3xl md:text-5xl font-bold">{editoria.cta_title || "Возможно, пора выбрать себя"}</h2>
                         <p className="text-gray-300 max-w-2xl mx-auto mt-5 leading-relaxed">{editoria.cta_description}</p>
                         <p className="text-primary text-sm mt-6 mb-5 font-semibold">3 дня · Бесплатно · Онлайн</p>
-                        <JoinLink href={joinUrl} eventName="CTA_Click_Final_Join">Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={joinUrl} eventName="FinalJoinClick">Присоединиться бесплатно</JoinLink>
                     </div>
                 </section>
             </main>
@@ -290,11 +290,11 @@ export default function Editoria() {
             <footer className="border-t border-white/10 py-8 mb-20 md:mb-0">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
                     <span>© {new Date().getFullYear()} {settings?.site_name || "Arutyun"}</span>
-                    <a href="/legal" data-meta-event="CTA_Click_Footer_Legal" data-meta-label="Юридическая информация и конфиденциальность" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
+                    <a href="/legal" data-meta-event="FooterLegalClick" data-meta-label="Юридическая информация и конфиденциальность" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                <JoinLink href={joinUrl} eventName="CTA_Click_MobileSticky_Join" className="w-full py-3">Присоединиться бесплатно</JoinLink>
+                <JoinLink href={joinUrl} eventName="MobileJoinClick" className="w-full py-3">Присоединиться бесплатно</JoinLink>
             </div>
         </>
     );
