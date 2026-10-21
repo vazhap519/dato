@@ -58,10 +58,10 @@ export default function HomeHero({ hero }) {
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
-                        className="pointer-events-none relative block h-auto w-full [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,transparent_0%,black_12%,black_75%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in] lg:absolute lg:inset-0 lg:h-full lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
+                        className="pointer-events-none relative block h-auto w-full origin-center translate-x-[5%] scale-[1.06] [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,transparent_0%,black_12%,black_75%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in] lg:absolute lg:inset-0 lg:translate-x-0 lg:scale-100 lg:h-full lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
                     />
                     {/* Mobile callout positioned near the pointing hand, away from the face. */}
-                    <div className="pointer-events-none absolute left-[7%] top-[49%] z-10 w-[35%] text-left text-[clamp(0.95rem,4.2vw,1.3rem)] font-semibold italic leading-[1.12] tracking-tight text-[#f5c65c] [text-shadow:0_2px_8px_rgba(0,0,0,0.7)] lg:hidden">
+                    <div className="pointer-events-none absolute left-[7%] top-[43%] z-10 w-[35%] text-left text-[clamp(0.95rem,4.2vw,1.3rem)] font-semibold italic leading-[1.12] tracking-tight text-[#f5c65c] [text-shadow:0_2px_8px_rgba(0,0,0,0.7)] lg:hidden">
                         <span className="block">Всё</span>
                         <span className="block">начинается</span>
                         <span className="block">с тебя</span>
