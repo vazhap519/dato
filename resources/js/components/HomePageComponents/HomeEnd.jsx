@@ -1,9 +1,16 @@
-import { usePage, Link } from "@inertiajs/react";
+
 
 export default function HomeEnd({contact}) {
 
 
     if (!contact) return null;
+
+    const rawButtonUrl = contact.button_url?.trim() || "";
+    const buttonUrl = rawButtonUrl && !/^(?:[a-z][a-z\\d+.-]*:|\/|#)/i.test(rawButtonUrl)
+        ? (/^(?:[\\w-]+\\.)+[a-z]{2,}(?::\\d+)?(?:[/?#]|$)/i.test(rawButtonUrl)
+            ? `https://${rawButtonUrl}`
+            : rawButtonUrl)
+        : rawButtonUrl;
 
     return (
         <section className="py-12 md:py-24 bg-background-light dark:bg-background-dark">
@@ -46,16 +53,16 @@ export default function HomeEnd({contact}) {
                                 {contact .description}
                             </p>
 
-                            {contact .button_url && (
-                                <Link
-                                    href={contact .button_url}
+                            {buttonUrl && (
+                                <a
+                                    href={buttonUrl}
                                     className="gold-glow group flex w-full sm:w-auto justify-center items-center gap-3 md:gap-4 bg-primary text-background-dark px-5 md:px-8 py-3.5 md:py-4 rounded-2xl text-base md:text-lg sm:text-xl font-bold transition-all hover:scale-[1.02] active:scale-95"
                                 >
                                     {contact .button_text}
                                     <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">
                                         arrow_forward
                                     </span>
-                                </Link>
+                                </a>
                             )}
                         </div>
 
