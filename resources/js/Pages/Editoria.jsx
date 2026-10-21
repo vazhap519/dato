@@ -33,7 +33,9 @@ const pixelEvent = (name, label, href) => {
             ? destination.pathname + destination.hash
             : destination.origin + destination.pathname;
     } catch { /* No destination parameter for invalid URLs. */ }
-    window.fbq("trackCustom", name, data);
+    try {
+        window.fbq("trackCustom", name, data);
+    } catch { /* Analytics must never interfere with navigation. */ }
 };
 
 function useEditoriaPixel() {
@@ -55,12 +57,15 @@ function useEditoriaPixel() {
             window._fbq = fbq;
         }
 
-        // Init only once per active bootstrap; PageView once per landing-page mount.
+        // Prevent Meta from automatically tracking Inertia/History API navigations.
+        // Only the explicit landing-page PageView is permitted.
+        window.fbq.disablePushState = true;
         if (!pixelInitialized) {
+            window.fbq("set", "autoConfig", false, PIXEL_ID);
             window.fbq("init", PIXEL_ID);
             pixelInitialized = true;
         }
-        window.fbq("track", "PageView");
+        window.fbq("trackSingle", PIXEL_ID, "PageView");
 
         let script = document.querySelector('script[data-editoria-pixel="true"]');
         if (!script) {
@@ -166,7 +171,7 @@ export default function Editoria() {
                     </div>
                     <div className="grid md:grid-cols-3 gap-3 md:gap-5">
                         {days.map((day, i) => <article key={i} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 md:p-7 h-full">
-                            <button type="button" aria-expanded={openDay === i} onClick={() => setOpenDay(openDay === i ? -1 : i)} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
+                            <button type="button" aria-expanded={openDay === i} onClick={() => { pixelEvent(`CTA_Click_Program_Day_${i + 1}`, `Программа: день ${i + 1}`, "#program"); setOpenDay(openDay === i ? -1 : i); }} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
                                 <span className="text-primary text-2xl md:text-4xl font-bold md:block md:mb-5">{String(i + 1).padStart(2, "0")}</span>
                                 <span className="flex-1"><span className="text-primary text-xs font-bold uppercase tracking-widest block md:mb-2">{day.day_label || `День ${i + 1}`}</span><span className="text-white text-base md:text-xl font-bold block">{day.title}</span></span>
                                 <span className="md:hidden text-primary text-xl" aria-hidden="true">{openDay === i ? "−" : "+"}</span>
@@ -226,11 +231,11 @@ export default function Editoria() {
                     </div>
                 </section>
 
-                <section className="max-w-3xl mx-auto px-6 py-16 md:py-20">
+                <section id="faq" className="max-w-3xl mx-auto px-6 py-16 md:py-20">
                     <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-9">Частые вопросы</h2>
                     <div className="space-y-3">
                         {defaultQuestions.map((item, i) => <div key={i} className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden">
-                            <button type="button" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
+                            <button type="button" aria-expanded={openFaq === i} onClick={() => { pixelEvent(`CTA_Click_FAQ_${i + 1}`, item.question, "#faq"); setOpenFaq(openFaq === i ? -1 : i); }} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
                                 <span>{item.question}</span><span className="text-primary text-xl shrink-0" aria-hidden="true">{openFaq === i ? "−" : "+"}</span>
                             </button>
                             {openFaq === i && <p className="px-5 pb-5 text-gray-400 leading-relaxed">{item.answer}</p>}
