@@ -14,7 +14,7 @@ function LegalText({ html }) {
     if (!html) return null;
     return (
         <div
-            className="legal-document text-muted-text dark:text-gray-300 leading-7"
+            className="legal-document text-muted-text dark:text-gray-300"
             dangerouslySetInnerHTML={{ __html: html }}
         />
     );
@@ -61,19 +61,19 @@ export default function Legal() {
                                 )}
                             </div>
 
-                            <div className="flex flex-col lg:flex-row gap-12">
-                                <aside className="w-full lg:w-72 print:hidden">
-                                    <nav className="sticky top-32 flex flex-col gap-2" aria-label="Разделы документов">
+                            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+                                <aside className="w-full lg:w-64 print:hidden">
+                                    <nav className="lg:sticky lg:top-32 grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-3" aria-label="Разделы документов">
                                         {sections.map((item) => (
                                             <a key={item.anchor} href={`#${item.anchor}`}
-                                                className="px-4 py-3 rounded-xl hover:bg-white dark:hover:bg-white/5 transition-all">
+                                                className="px-3 py-3 text-sm rounded-xl hover:bg-primary/10 hover:text-primary transition-all">
                                                 {item.label}
                                             </a>
                                         ))}
                                     </nav>
                                 </aside>
 
-                                <div className="flex-1 min-w-0 space-y-16">
+                                <div className="flex-1 min-w-0 max-w-[820px] space-y-16">
                                     <section id={sections[0].anchor} className="scroll-mt-28">
                                         {legal.privacy_title && <h2 className="text-3xl font-bold mb-6">{legal.privacy_title}</h2>}
                                         <LegalText html={legal.privacy_content} />
@@ -116,12 +116,15 @@ export default function Legal() {
             </main>
             <Footer />
             <style>{`
+                .legal-document { font-size: 16px; line-height: 1.85; overflow-wrap: anywhere; }
+                .legal-document h2 { scroll-margin-top: 7rem; }
                 .legal-document h3 { font-size: 1.25rem; font-weight: 700; margin: 1.75rem 0 0.75rem; color: inherit; }
                 .legal-document p { margin-bottom: 1rem; }
                 .legal-document ul, .legal-document ol { padding-left: 1.5rem; margin: 0.75rem 0 1.25rem; }
                 .legal-document ul { list-style-type: disc; }
                 .legal-document ol { list-style-type: decimal; }
                 .legal-document li { margin-bottom: 0.5rem; }
+                .legal-document h3 { border-left: 2px solid #eabf45; padding-left: 0.75rem; }
                 .legal-document a { text-decoration: underline; }
                 @media print {
                     header, footer { display: none !important; }
