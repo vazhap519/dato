@@ -23,7 +23,7 @@ export default function HomeHero({ hero }) {
     return (
         <section className="relative overflow-hidden hero-gradient lg:min-h-[90vh] lg:flex lg:items-center">
             <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-0 px-0 lg:grid-cols-2 lg:gap-12 lg:px-6">
-                <div className="relative z-10 w-full min-w-0 px-6 pt-40 text-center sm:pt-40 lg:px-0 lg:py-12 lg:text-left">
+                <div className="relative z-10 w-full min-w-0 px-6 pt-8 text-center sm:pt-12 lg:px-0 lg:py-12 lg:text-left">
                     <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
                         <span className="relative flex h-2 w-2">
                             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
