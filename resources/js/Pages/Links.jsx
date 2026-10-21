@@ -1,12 +1,11 @@
-import { Head, usePage } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
+import Seo from "@/components/Seo.jsx";
 
 export default function Links() {
     const { links = [], settings = {} } = usePage().props;
     return (
         <>
-            <Head title="Полезные ссылки — Давид Арутюнов">
-                <meta name="description" content="Все полезные ссылки Давида Арутюнова: практикумы, сообщество, книги и социальные сети." />
-            </Head>
+            <Seo />
             <main className="relative min-h-screen overflow-hidden bg-[#17140e] px-5 pb-16 pt-12 text-white">
                 <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-[#f8c83c]/[0.09] blur-[100px]" />
                 <div className="relative mx-auto flex w-full max-w-[480px] flex-col items-center">
