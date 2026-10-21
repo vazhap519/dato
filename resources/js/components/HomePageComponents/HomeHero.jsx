@@ -49,22 +49,26 @@ export default function HomeHero({ hero }) {
                     </div>
                 </div>
 
-                <div className="relative mx-auto -mt-1 flex h-[360px] w-[calc(100%+3rem)] max-w-[520px] items-end justify-center sm:h-[470px] lg:mt-0 lg:h-[80vh] lg:w-full lg:max-w-none">
+                <div className="relative mx-auto mt-3 h-[390px] w-[calc(100%+3rem)] max-w-[520px] sm:h-[490px] lg:mt-0 lg:h-[80vh] lg:w-full lg:max-w-none">
+                    {/* Mobile glow continues beyond the source image, avoiding a visible rectangular edge. */}
+                    <div className="pointer-events-none absolute inset-[-12%] rounded-full bg-[radial-gradient(ellipse_at_60%_55%,rgba(178,112,27,0.23)_0%,rgba(105,66,19,0.12)_35%,transparent_70%)] lg:hidden" />
                     <img
                         src={imageUrl}
                         alt="Давид Арутюнов"
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
-                        className="pointer-events-none h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_75%_75%_at_50%_48%,black_58%,transparent_100%)] lg:object-contain lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
+                        className="pointer-events-none absolute inset-0 h-full w-full object-contain object-center [mask-image:radial-gradient(ellipse_78%_77%_at_52%_49%,black_66%,transparent_100%)] lg:object-bottom lg:[mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] lg:[mask-composite:intersect] lg:[-webkit-mask-composite:source-in]"
                     />
-                    <div className="pointer-events-none absolute left-[5%] top-[47%] z-10 w-[33%] text-left text-lg font-semibold italic leading-tight tracking-tight text-primary drop-shadow-[0_2px_10px_rgba(0,0,0,1)] sm:text-2xl lg:hidden">
-                        Всё начинается с тебя
-                        <span className="mt-2 block h-px w-full origin-left -rotate-6 bg-gradient-to-r from-primary to-transparent" />
+                    <div className="pointer-events-none absolute left-[3%] top-[49%] z-10 w-[31%] text-left text-[clamp(1.05rem,4.5vw,1.5rem)] font-semibold italic leading-[1.15] tracking-tight text-primary drop-shadow-[0_2px_10px_rgba(0,0,0,1)] lg:hidden">
+                        Всё<br />начинается<br />с тебя
+                        <svg className="mt-1 h-7 w-full overflow-visible text-primary" viewBox="0 0 120 28" fill="none" aria-hidden="true">
+                            <path d="M2 20 Q 55 2 109 17 M98 8 L109 17 L96 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                     </div>
                 </div>
 
-                <div className="relative z-10 -mt-10 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
+                <div className="relative z-10 -mt-7 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
                     {actions}
                 </div>
             </div>
