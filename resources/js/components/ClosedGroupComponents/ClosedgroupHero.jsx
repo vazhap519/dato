@@ -28,14 +28,14 @@ export default function ClosedGroupHero({ group }) {
                     </div>
                     <p className="order-6 lg:order-none text-sm text-gray-400">Материалы · Практики · Общение</p>
                 </div>
-                <div className="order-4 pointer-events-none relative w-full min-w-0 -mx-6 lg:order-none -mt-5 h-[330px] overflow-visible sm:mx-0 sm:h-[450px] lg:mt-0 lg:translate-x-52 xl:translate-x-60 lg:-ml-36 lg:-mr-[max(6rem,calc((100vw-80rem)/2))] lg:h-[750px] xl:-ml-44 xl:h-[790px]">
+                <div className="order-4 pointer-events-none relative w-full min-w-0 -mx-6 lg:order-none -mt-5 h-[330px] overflow-visible sm:mx-0 sm:h-[450px] lg:mt-0 lg:ml-0 lg:mr-0 lg:h-[750px] xl:h-[790px]">
                     {group.hero_image_url && (
                         <img
                             src={group.hero_image_url}
                             alt={group.hero_title || "Круг души"}
                             loading="eager"
                             fetchPriority="high"
-                            className="absolute inset-0 h-full w-full object-contain object-bottom lg:object-cover lg:object-center [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_40%,transparent_96%)] lg:[mask-image:radial-gradient(ellipse_61%_59%_at_51%_50%,black_43%,transparent_96%)]"
+                            className="absolute inset-0 h-full w-full object-contain object-bottom lg:object-contain lg:object-right [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_40%,transparent_96%)] lg:[mask-image:radial-gradient(ellipse_61%_59%_at_51%_50%,black_43%,transparent_96%)]"
                         />
                     )}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#19160f]/70 to-transparent" aria-hidden="true" />
