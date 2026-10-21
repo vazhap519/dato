@@ -19,7 +19,7 @@ const fallbackDays = [
 // Meta Pixel is initialized exclusively while the /editoria Inertia page is mounted.
 // The route check accepts /editoria, /editoria/ and URLs with query parameters.
 const PIXEL_ID = "1435515278787720";
-const onEditoria = () => /^\\/editoria\\/?$/.test(window.location.pathname);
+const onEditoria = () => window.location.pathname === "/editoria" || window.location.pathname === "/editoria/";
 let pixelMounted = false;
 
 const pixelEvent = (name, label, href) => {
