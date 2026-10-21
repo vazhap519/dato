@@ -3,8 +3,33 @@ export default function PersonalHero({ personal }) {
     const secondary = personal.hero_secondary_button_url?.trim() || "#about";
 
     return (
-        <section className="relative isolate overflow-hidden px-5 pt-8 pb-14 sm:px-8 md:py-16 lg:px-14 xl:px-20">
+        <section className="relative isolate overflow-hidden px-5 pt-6 pb-14 sm:px-8 md:pt-10 md:pb-16 lg:px-14 xl:px-20">
             <div className="absolute inset-0 cinematic-glow pointer-events-none" />
+            {/* Decorative gold ribbons are vector shapes, not a flattened screenshot. */}
+            <svg className="pointer-events-none absolute inset-x-0 top-0 h-[270px] w-full opacity-70 sm:h-[340px] lg:h-[400px]" viewBox="0 0 1440 400" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                <defs>
+                    <linearGradient id="consultation-ribbon" x1="0" y1="0" x2="1440" y2="280" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#E8A820" stopOpacity="0" />
+                        <stop offset=".25" stopColor="#F8C64C" stopOpacity=".65" />
+                        <stop offset=".58" stopColor="#C48A1B" stopOpacity=".16" />
+                        <stop offset=".88" stopColor="#FFD56A" stopOpacity=".7" />
+                        <stop offset="1" stopColor="#D99A20" stopOpacity=".08" />
+                    </linearGradient>
+                </defs>
+                <path d="M-90 12 C120 168 226 -48 442 50 S744 234 943 103 S1232 36 1530 170" stroke="url(#consultation-ribbon)" strokeWidth="1.6" />
+                <path d="M-70 34 C153 188 230 -18 462 75 S762 256 963 123 S1260 60 1520 196" stroke="url(#consultation-ribbon)" strokeWidth=".7" opacity=".55" />
+                <path d="M-80 3 C160 133 260 -63 470 26 S765 202 975 79 S1264 15 1530 142" stroke="url(#consultation-ribbon)" strokeWidth=".7" opacity=".45" />
+                <path d="M1040 -50 C1160 50 1360 55 1450 170 S1410 340 1310 405" stroke="url(#consultation-ribbon)" strokeWidth="1.3" opacity=".65" />
+                <path d="M1080 -70 C1200 42 1370 70 1470 190 S1440 340 1330 420" stroke="url(#consultation-ribbon)" strokeWidth=".7" opacity=".4" />
+                {[[145,54,1.5],[320,80,1],[586,95,1.2],[813,164,1.5],[1010,86,1],[1260,114,1.5],[1355,224,1],[1150,41,1]].map(([cx,cy,r], i) => (
+                    <circle key={i} cx={cx} cy={cy} r={r} fill="#F8C64C" opacity=".65" />
+                ))}
+            </svg>
+            <svg className="pointer-events-none absolute right-0 top-[30%] hidden h-[60%] w-[32%] opacity-40 lg:block" viewBox="0 0 460 560" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                <path d="M490 -35 C335 105 470 177 345 292 S168 419 470 590" stroke="#D8A02B" strokeWidth="1.3" opacity=".7" />
+                <path d="M510 -10 C370 115 490 195 363 309 S200 429 495 565" stroke="#F6C651" strokeWidth=".7" opacity=".6" />
+                <path d="M470 15 C365 125 450 200 320 320 S180 445 450 575" stroke="#A8781C" strokeWidth=".7" opacity=".5" />
+            </svg>
             <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent via-primary/[0.025] to-transparent pointer-events-none" aria-hidden="true" />
             <div className="relative max-w-7xl mx-auto grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] gap-7 lg:gap-4 xl:gap-8 items-center">
                 <div className="order-1 relative z-20 flex flex-col gap-5 md:gap-7 min-w-0">
@@ -41,9 +66,9 @@ export default function PersonalHero({ personal }) {
                 </div>
                 <div className="order-2 relative w-full max-w-[660px] mx-auto lg:mr-0 lg:-ml-6 xl:-ml-12">
                     <div className="relative w-full h-[330px] min-[390px]:h-[390px] sm:h-[470px] lg:h-[550px] xl:h-[590px]">
-                        <div className="absolute inset-[7%] rounded-full bg-primary/20 blur-[65px] pointer-events-none" aria-hidden="true" />
-                        <div className="absolute w-[60%] aspect-square right-[9%] top-[13%] rounded-full border border-primary/25 shadow-[0_0_75px_rgba(245,185,42,0.12)] pointer-events-none" aria-hidden="true" />
-                        <div className="absolute w-[66%] aspect-square right-[6%] top-[11%] rounded-full bg-[radial-gradient(circle,rgba(245,185,42,0.19),transparent_72%)] pointer-events-none" aria-hidden="true" />
+                        <div className="absolute inset-[14%] bg-primary/15 blur-[90px] pointer-events-none" aria-hidden="true" />
+                        
+                        
                         {personal.hero_image && (
                             <img loading="eager" fetchPriority="high" decoding="async"
                                 src={personal.hero_image}
