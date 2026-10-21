@@ -56,7 +56,7 @@ export default function PersonalHero({ personal }) {
                             <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
                         </a>
                     </div>
-                    <div className="hidden lg:flex flex-wrap items-center gap-x-4 gap-y-2 text-white/70 text-sm rounded-xl border border-white/[0.07] bg-white/[0.025] px-5 py-3.5 w-fit">
+                    <div className="hidden lg:flex lg:order-6 flex-wrap items-center gap-x-4 gap-y-2 text-white/70 text-sm rounded-xl border border-white/[0.07] bg-white/[0.025] px-5 py-3.5 w-fit">
                         <span className="inline-flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base" aria-hidden="true">schedule</span>60 минут</span>
                         <span className="text-primary/40" aria-hidden="true">·</span>
                         <span className="inline-flex items-center gap-2"><span className="material-symbols-outlined text-primary text-base" aria-hidden="true">videocam</span>Онлайн</span>
