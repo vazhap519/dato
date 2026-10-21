@@ -181,7 +181,7 @@ export default function Editoria() {
 
             <main>
                 <section className="max-w-6xl mx-auto px-5 pt-8 pb-10 md:px-6 md:py-20 lg:py-24 grid lg:grid-cols-2 gap-6 lg:gap-16 items-center">
-                    <div className="order-1 lg:order-1">
+                    <div className="order-1 lg:order-1 relative z-10">
                         <p className="inline-flex rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase px-4 py-2 mb-6">{editoria.hero_badge || "Бесплатный трёхдневный практикум"}</p>
                         <h1 className="text-white text-[2.35rem] sm:text-5xl lg:text-6xl font-bold leading-[1.12] tracking-tight mb-4 md:mb-6">Устал жить <span className="text-primary italic">на автомате?</span></h1>
                         <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-xl mb-5 md:mb-7">{editoria.hero_description || "Три дня, чтобы остановиться, разобраться в привычных реакциях и начать лучше понимать себя."}</p>
@@ -191,8 +191,8 @@ export default function Editoria() {
                         <JoinLink href={joinUrl} eventName="HeroJoinClick" className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
-                    <div className="hidden md:flex order-2 lg:order-2 relative items-center justify-center lg:justify-end lg:-mr-10 xl:-mr-16">
-                        {editoria.hero_image_url && <img src={editoria.hero_image_url} alt="Давид — ведущий трёхдневного практикума" className="block w-full max-w-[580px] lg:max-w-none lg:w-[115%] xl:w-[125%] h-auto object-contain border-0 rounded-none shadow-none" />}
+                    <div className="hidden md:flex order-2 lg:order-2 relative z-0 items-center justify-center lg:justify-end lg:-mr-10 xl:-mr-16 pointer-events-none">
+                        {editoria.hero_image_url && <img src={editoria.hero_image_url} alt="Давид — ведущий трёхдневного практикума" className="block w-full max-w-[580px] lg:max-w-none lg:w-[115%] xl:w-[125%] h-auto object-contain border-0 rounded-none shadow-none" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 33%, black 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 83%, transparent 100%)', maskImage: 'linear-gradient(to right, transparent 0%, black 33%, black 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 83%, transparent 100%)', WebkitMaskComposite: 'source-in', maskComposite: 'intersect' }} />}
                     </div>
                 </section>
 
