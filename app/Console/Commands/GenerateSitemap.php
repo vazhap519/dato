@@ -18,9 +18,11 @@ class GenerateSitemap extends Command
 
         // Static Pages
         $sitemap->add(Url::create('/')->setPriority(1.0));
+        $sitemap->add(Url::create('/personal')->setPriority(0.9));
         $sitemap->add(Url::create('/editoria')->setPriority(0.9));
-        $sitemap->add(Url::create('/practice')->setPriority(0.9));
-        $sitemap->add(Url::create('/legal')->setPriority(0.8));
+        $sitemap->add(Url::create('/shop')->setPriority(0.8));
+        $sitemap->add(Url::create('/links')->setPriority(0.7));
+        $sitemap->add(Url::create('/legal')->setPriority(0.3));
 
         // Dynamic Closed Groups
         ClosedGroup::where('is_active', true)->get()->each(function ($group) use ($sitemap) {
