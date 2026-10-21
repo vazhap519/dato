@@ -1,7 +1,21 @@
 import { usePage } from "@inertiajs/react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Navigation() {
     const { headerNavigation = [] } = usePage().props;
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const menuRef = useRef(null);
+    useEffect(() => {
+        if (!mobileOpen) return;
+        const outside = (e) => { if (!menuRef.current?.contains(e.target)) setMobileOpen(false); };
+        const escape = (e) => { if (e.key === "Escape") setMobileOpen(false); };
+        document.addEventListener("pointerdown", outside);
+        document.addEventListener("keydown", escape);
+        return () => {
+            document.removeEventListener("pointerdown", outside);
+            document.removeEventListener("keydown", escape);
+        };
+    }, [mobileOpen]);
 
     const orderedNavigation = [...headerNavigation].sort((a, b) => {
         const rank = (item) => {
@@ -28,6 +42,7 @@ export default function Navigation() {
     };
 
     return (
+        <>
         <nav aria-label="Основная навигация" className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.035] px-2 py-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md">
             {orderedNavigation.map((item) => {
                 const path = new URL(item.href, "https://arutyun.me").pathname.replace(/\/$/, "") || "/";
@@ -46,5 +61,25 @@ export default function Navigation() {
                 );
             })}
         </nav>
+        <div className="relative md:hidden" ref={menuRef}>
+            <button type="button" aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={mobileOpen} aria-controls="mobile-site-navigation" onClick={() => setMobileOpen(!mobileOpen)} className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
+                <span className="material-symbols-outlined text-[25px]" aria-hidden="true">{mobileOpen ? "close" : "menu"}</span>
+            </button>
+            {mobileOpen && (
+                <nav id="mobile-site-navigation" aria-label="Мобильная навигация" className="absolute right-0 top-full mt-3 w-[min(310px,calc(100vw-48px))] rounded-2xl border border-primary/20 bg-[#201b10] p-2 shadow-2xl">
+                    {orderedNavigation.map((item) => {
+                        const path = new URL(item.href, "https://arutyun.me").pathname;
+                        const active = typeof window !== "undefined" && path === window.location.pathname;
+                        return (
+                            <a key={item.id} href={item.href} aria-current={active ? "page" : undefined} onClick={(e) => { handleClick(e, item.href); setMobileOpen(false); }} className={"flex items-center justify-between rounded-xl px-4 py-3.5 text-sm font-medium " + (active ? "bg-primary/10 text-primary" : "text-white/90 hover:bg-white/10 hover:text-primary")}>
+                                <span>{item.label}</span>
+                                <span className="material-symbols-outlined text-[17px] opacity-60" aria-hidden="true">{active ? "check" : "arrow_forward"}</span>
+                            </a>
+                        );
+                    })}
+                </nav>
+            )}
+        </div>
+        </>
     );
 }
