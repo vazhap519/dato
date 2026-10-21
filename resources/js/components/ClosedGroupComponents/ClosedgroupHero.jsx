@@ -6,16 +6,16 @@ export default function ClosedGroupHero({ group }) {
             <div className="relative z-10 mx-auto flex flex-col max-w-7xl lg:grid items-center gap-5 px-6 pb-12 pt-8 sm:px-8 md:gap-8 md:py-14 lg:min-h-[700px] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-0 lg:px-12 xl:px-16">
                 <div className="contents lg:relative lg:z-20 lg:flex lg:flex-col lg:items-start lg:gap-7">
                     {group.hero_badge && (
-                        <div className="order-1 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                        <div className="order-1 lg:order-none inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
                             <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_rgba(245,185,42,0.6)]" aria-hidden="true" />
                             {group.hero_badge}
                         </div>
                     )}
-                    <h1 className="order-2 max-w-[760px] text-[clamp(2.6rem,7vw,4.5rem)] font-display font-medium leading-[1.07] tracking-tight text-white">
+                    <h1 className="order-2 lg:order-none max-w-[760px] text-[clamp(2.6rem,7vw,4.5rem)] font-display font-medium leading-[1.07] tracking-tight text-white">
                         {group.hero_title}
                         <span className="mt-1 block text-primary/95 italic">{group.hero_title_highlight}</span>
                     </h1>
-                    <p className="order-3 max-w-[590px] whitespace-pre-line text-[15px] leading-[1.8] text-white/80 sm:text-base lg:text-[17px]">
+                    <p className="order-3 lg:order-none max-w-[590px] whitespace-pre-line text-[15px] leading-[1.8] text-white/80 sm:text-base lg:text-[17px]">
                         {group.hero_description}
                     </p>
                     <div className="order-5 flex w-full flex-col flex-wrap gap-3 pt-1 sm:w-auto sm:flex-row lg:order-none">
@@ -26,16 +26,16 @@ export default function ClosedGroupHero({ group }) {
                             {group.hero_button_secondary || "Что внутри"}
                         </a>
                     </div>
-                    <p className="order-6 text-sm text-gray-400">Материалы · Практики · Общение</p>
+                    <p className="order-6 lg:order-none text-sm text-gray-400">Материалы · Практики · Общение</p>
                 </div>
-                <div className="order-4 pointer-events-none relative -mx-6 lg:order-none -mt-3 h-[400px] overflow-visible sm:mx-0 sm:h-[530px] lg:-ml-36 lg:-mr-[max(6rem,calc((100vw-80rem)/2))] lg:h-[750px] xl:-ml-44 xl:h-[790px]">
+                <div className="order-4 pointer-events-none relative w-full min-w-0 -mx-6 lg:order-none -mt-3 h-[400px] overflow-visible sm:mx-0 sm:h-[530px] lg:-ml-36 lg:-mr-[max(6rem,calc((100vw-80rem)/2))] lg:h-[750px] xl:-ml-44 xl:h-[790px]">
                     {group.hero_image_url && (
                         <img
                             src={group.hero_image_url}
                             alt={group.hero_title || "Круг души"}
                             loading="eager"
                             fetchPriority="high"
-                            className="absolute inset-0 h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_40%,transparent_96%)] lg:[mask-image:radial-gradient(ellipse_61%_59%_at_51%_50%,black_43%,transparent_96%)]"
+                            className="absolute inset-0 h-full w-full object-contain object-center lg:object-cover [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_40%,transparent_96%)] lg:[mask-image:radial-gradient(ellipse_61%_59%_at_51%_50%,black_43%,transparent_96%)]"
                         />
                     )}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#19160f]/70 to-transparent" aria-hidden="true" />
