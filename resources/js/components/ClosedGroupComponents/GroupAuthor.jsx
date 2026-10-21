@@ -10,7 +10,14 @@ export default function GroupAuthor({ group }) {
                 </div>
             </div>
             <div className="order-1 md:order-2 flex justify-center">
-                {group.author_image_url && <div className="w-full max-w-[380px] aspect-[4/5] rounded-3xl overflow-hidden border border-white/10"><img src={group.author_image_url} alt={group.author_name} className="w-full h-full object-cover" /></div>}
+                {group.author_image_url && (
+                    <div className="relative group">
+                        <div className="size-60 sm:size-72 md:size-96 lg:size-[420px] rounded-full p-1 border border-primary/20 portrait-glow transition-all duration-700 group-hover:border-primary/40 overflow-hidden">
+                            <img loading="lazy" src={group.author_image_url} alt={group.author_name} className="w-full h-full object-cover rounded-full transition-all duration-1000 transform scale-105 group-hover:scale-100" />
+                        </div>
+                        <div className="absolute -inset-2 border border-primary/5 rounded-full -z-10 animate-[pulse_6s_ease-in-out_infinite]"></div>
+                    </div>
+                )}
             </div>
         </div>
     );
