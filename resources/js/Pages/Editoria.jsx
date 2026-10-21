@@ -43,6 +43,19 @@ function useEditoriaPixel() {
         if (!onEditoria()) return;
         pixelMounted = true;
 
+        // Capture native clicks before React's synthetic event handlers and
+        // external navigation. The delegated handler survives React re-renders.
+        const handleTrackedClick = (event) => {
+            const target = event.target instanceof Element
+                ? event.target.closest("[data-meta-event]")
+                : null;
+            if (!target || !onEditoria() || !document.contains(target)) return;
+            const name = target.getAttribute("data-meta-event");
+            if (!name) return;
+            pixelEvent(name, target.getAttribute("data-meta-label") || target.textContent.trim(), target.getAttribute("href") || window.location.href);
+        };
+        document.addEventListener("click", handleTrackedClick, true);
+
         // Meta's standard queue/bootstrap pattern; never add it to the global layout.
         // Guard against duplicate injection when the page is mounted again.
         if (!window.fbq) {
@@ -77,6 +90,7 @@ function useEditoriaPixel() {
         }
 
         return () => {
+            document.removeEventListener("click", handleTrackedClick, true);
             pixelMounted = false;
             pixelInitialized = false;
             // An Inertia route change must not leave an active tracker behind.
@@ -96,7 +110,7 @@ function JoinLink({ href, children, secondary = false, className = "", eventName
 
     const handleClick = (event) => {
         if (!eventName) return;
-        pixelEvent(eventName, "Присоединиться бесплатно", destination);
+        // The native capture listener sends exactly one event for this link.
 
         // A same-tab external navigation (Telegram in particular) can cancel the
         // image request used by Meta before it leaves the browser. Give it a
@@ -112,7 +126,7 @@ function JoinLink({ href, children, secondary = false, className = "", eventName
         window.setTimeout(() => { window.location.assign(anchor.href); }, 120);
     };
 
-    return <a href={destination} onClick={handleClick} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
+    return <a href={destination} data-meta-event={eventName} data-meta-label="Присоединиться бесплатно" onClick={handleClick} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
 }
 
 export default function Editoria() {
@@ -153,7 +167,7 @@ export default function Editoria() {
                     <div className="flex items-center" aria-label={settings?.site_name || "Arutyun"}>
                         {settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Arutyun"} className="h-10 w-auto max-w-36 object-contain" /> : <span className="text-primary font-display text-2xl italic">Arutyun</span>}
                     </div>
-                    <a href="#how-to-join" onClick={() => pixelEvent("CTA_Click_Header_HowToJoin", "Как участвовать", "#how-to-join")} className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
+                    <a href="#how-to-join" data-meta-event="CTA_Click_Header_HowToJoin" data-meta-label="Как участвовать" className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
                 </div>
             </header>
 
@@ -191,7 +205,7 @@ export default function Editoria() {
                     </div>
                     <div className="grid md:grid-cols-3 gap-3 md:gap-5">
                         {days.map((day, i) => <article key={i} className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 md:p-7 h-full">
-                            <button type="button" aria-expanded={openDay === i} onClick={() => { pixelEvent(`CTA_Click_Program_Day_${i + 1}`, `Программа: день ${i + 1}`, "#program"); setOpenDay(openDay === i ? -1 : i); }} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
+                            <button type="button" aria-expanded={openDay === i} data-meta-event={`CTA_Click_Program_Day_${i + 1}`} data-meta-label={`Программа: день ${i + 1}`} onClick={() => { setOpenDay(openDay === i ? -1 : i); }} className="w-full flex items-center gap-3 text-left md:pointer-events-none">
                                 <span className="text-primary text-2xl md:text-4xl font-bold md:block md:mb-5">{String(i + 1).padStart(2, "0")}</span>
                                 <span className="flex-1"><span className="text-primary text-xs font-bold uppercase tracking-widest block md:mb-2">{day.day_label || `День ${i + 1}`}</span><span className="text-white text-base md:text-xl font-bold block">{day.title}</span></span>
                                 <span className="md:hidden text-primary text-xl" aria-hidden="true">{openDay === i ? "−" : "+"}</span>
@@ -255,7 +269,7 @@ export default function Editoria() {
                     <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-9">Частые вопросы</h2>
                     <div className="space-y-3">
                         {defaultQuestions.map((item, i) => <div key={i} className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden">
-                            <button type="button" aria-expanded={openFaq === i} onClick={() => { pixelEvent(`CTA_Click_FAQ_${i + 1}`, item.question, "#faq"); setOpenFaq(openFaq === i ? -1 : i); }} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
+                            <button type="button" aria-expanded={openFaq === i} data-meta-event={`CTA_Click_FAQ_${i + 1}`} data-meta-label={item.question} onClick={() => { setOpenFaq(openFaq === i ? -1 : i); }} className="w-full text-left p-5 flex items-center justify-between gap-4 text-white font-semibold">
                                 <span>{item.question}</span><span className="text-primary text-xl shrink-0" aria-hidden="true">{openFaq === i ? "−" : "+"}</span>
                             </button>
                             {openFaq === i && <p className="px-5 pb-5 text-gray-400 leading-relaxed">{item.answer}</p>}
@@ -276,7 +290,7 @@ export default function Editoria() {
             <footer className="border-t border-white/10 py-8 mb-20 md:mb-0">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
                     <span>© {new Date().getFullYear()} {settings?.site_name || "Arutyun"}</span>
-                    <a href="/legal" onClick={() => pixelEvent("CTA_Click_Footer_Legal", "Юридическая информация и конфиденциальность", "/legal")} className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
+                    <a href="/legal" data-meta-event="CTA_Click_Footer_Legal" data-meta-label="Юридическая информация и конфиденциальность" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
