@@ -9,6 +9,7 @@ export default function HomePractice({ practiceSection }) {
         description: practiceSection.free_description || "Три дня, чтобы лучше понять себя через наблюдение, вопросы и практические задания.",
         url: practiceSection.free_button_url || "/editoria",
         button_text: practiceSection.free_button_text || "Начать бесплатно",
+        image: practiceSection.free_image,
         is_free: true,
     };
     const items = [...(practiceSection.free_enabled === false ? [] : [free]), ...content.slice(0, 2)];
@@ -28,31 +29,20 @@ export default function HomePractice({ practiceSection }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
                     {items.map((item, index) => (
                         <article key={index} className="group flex flex-col min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-card-dark transition-colors hover:border-primary/40">
-                            <div className="relative h-44 sm:h-52 md:h-48 lg:h-52 overflow-hidden bg-[#16130e]" aria-hidden="true">
-                                <div className="absolute inset-0" style={{
-                                    background: index === 0
-                                        ? "radial-gradient(ellipse at 50% 90%, rgba(245,182,54,.25), transparent 58%), linear-gradient(135deg,#282010,#100f0c 75%)"
-                                        : index === 1
-                                            ? "radial-gradient(ellipse at 50% 65%,rgba(212,145,55,.26),transparent 65%),linear-gradient(135deg,#2a1d17,#100e0d)"
-                                            : "radial-gradient(ellipse at 65% 50%,rgba(234,169,68,.22),transparent 65%),linear-gradient(135deg,#211a14,#0e0d0b)"
-                                }} />
-                                {index === 0 ? (
-                                    <>
-                                        <div className="absolute left-1/2 top-[22%] h-48 w-48 -translate-x-1/2 rounded-full border border-primary/70 shadow-[0_0_32px_rgba(255,196,55,.22),inset_0_0_35px_rgba(255,196,55,.08)]" />
-                                        <div className="absolute inset-x-0 bottom-5 text-center text-primary font-bold text-sm sm:text-base tracking-wide">3 дня · Бесплатно · Онлайн</div>
-                                    </>
-                                ) : index === 1 ? (
-                                    <div className="absolute inset-0 flex items-center justify-center gap-[-8px]">
-                                        <div className="h-24 w-24 rounded-full border border-primary/30 bg-gradient-to-b from-[#7a552c] to-[#21170e] shadow-[0_0_50px_rgba(255,192,69,.12)]" />
-                                        <div className="-ml-5 h-32 w-32 rounded-full border border-primary/60 bg-gradient-to-b from-[#ac7840] to-[#281b12] shadow-[0_0_45px_rgba(255,192,69,.18)]" />
-                                        <div className="-ml-5 h-24 w-24 rounded-full border border-primary/30 bg-gradient-to-b from-[#7a552c] to-[#21170e]" />
-                                    </div>
+                            <div className="relative h-52 sm:h-60 md:h-52 lg:h-56 overflow-hidden bg-[#1c1711]" aria-hidden="true">
+                                {item.image ? (
+                                    <img
+                                        src={item.image}
+                                        alt=""
+                                        loading="lazy"
+                                        className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
+                                    />
                                 ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center gap-8">
-                                        <div className="h-28 w-20 rounded-t-full rounded-b-2xl border border-primary/35 bg-gradient-to-b from-[#876037] to-[#231911] shadow-[0_0_35px_rgba(255,192,69,.12)]" />
-                                        <div className="h-28 w-20 rounded-t-full rounded-b-2xl border border-primary/35 bg-gradient-to-b from-[#876037] to-[#231911] shadow-[0_0_35px_rgba(255,192,69,.12)]" />
-                                    </div>
+                                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_60%,rgba(226,166,68,0.27),transparent_70%),linear-gradient(135deg,#352718,#15120e)]" />
                                 )}
+                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241d12]/70 via-transparent to-[#16120c]/10" />
+                                <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#1c1711]/30 to-transparent" />
+                                <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#1c1711]/30 to-transparent" />
                                 {item.is_free && (
                                     <span className="absolute top-3 left-3 rounded-md bg-primary px-2.5 py-1.5 text-[10px] font-black uppercase text-background-dark">
                                         Начни здесь · Бесплатно
