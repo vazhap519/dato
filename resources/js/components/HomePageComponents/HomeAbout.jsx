@@ -12,7 +12,7 @@ export default function HomeAbout({ about }) {
                         <div className="size-60 sm:size-72 md:size-96 lg:size-[420px] rounded-full p-1 border border-primary/20 portrait-glow transition-all duration-700 group-hover:border-primary/40 overflow-hidden">
                             <img loading="lazy"
                                 alt={about.image_alt || about.kicker || "About image"}
-                                className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-1000 transform scale-105 group-hover:scale-100"
+                                className="w-full h-full object-cover rounded-full transition-all duration-1000 transform scale-105 group-hover:scale-100"
                                 src={about.about_image_url || ""}
                             />
                         </div>
