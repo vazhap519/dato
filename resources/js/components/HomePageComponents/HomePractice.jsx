@@ -35,7 +35,7 @@ export default function HomePractice({ practiceSection }) {
                                         src={item.image}
                                         alt=""
                                         loading="lazy"
-                                        className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
+                                        className="absolute inset-0 h-full w-full object-cover object-left md:object-center transition-transform duration-700 group-hover:scale-[1.035]"
                                     />
                                 ) : (
                                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_60%,rgba(226,166,68,0.27),transparent_70%),linear-gradient(135deg,#352718,#15120e)]" />
