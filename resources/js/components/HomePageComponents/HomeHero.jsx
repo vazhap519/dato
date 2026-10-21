@@ -58,6 +58,9 @@ export default function HomeHero({ hero }) {
                         decoding="async"
                         className="pointer-events-none h-full w-full object-contain object-bottom [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
                     />
+                    <div className="pointer-events-none absolute left-[3%] top-[42%] z-10 max-w-[42%] -rotate-6 text-center text-lg font-semibold italic tracking-wide text-primary drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] sm:text-2xl lg:hidden">
+                        Начни с себя
+                    </div>
                 </div>
 
                 <div className="relative z-10 -mt-1 flex flex-col gap-3 pb-8 sm:mx-auto sm:w-full sm:max-w-[420px] lg:hidden">
