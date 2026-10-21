@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Seo from "@/components/Seo.jsx";
 
 const defaultQuestions = [
@@ -15,14 +15,65 @@ const fallbackDays = [
     { day_label: "День 3", title: "Выход из сна", description: "Учимся замечать автоматические сценарии и выбирать следующий шаг осознаннее." },
 ];
 
-function JoinLink({ href, children, secondary = false, className = "" }) {
+
+// Meta Pixel is deliberately scoped to this landing page. No global pixel bootstrap.
+const PIXEL_ID = "1435515278787720";
+const pixelEvent = (name, label, href) => {
+    if (window.location.pathname !== "/editoria" || typeof window.fbq !== "function") return;
+    // Do not send URL query strings, fragments (except local anchors), or user data.
+    let destination = "";
+    try {
+        const parsed = new URL(href || "", window.location.origin);
+        destination = parsed.origin === window.location.origin
+            ? parsed.pathname + (parsed.hash.startsWith("#") ? parsed.hash : "")
+            : parsed.origin + parsed.pathname;
+    } catch { /* malformed destination: omit */ }
+    window.fbq("trackCustom", name, { button_name: label, destination_url: destination });
+};
+
+function useEditoriaPixel() {
+    useEffect(() => {
+        if (window.location.pathname !== "/editoria") return;
+        // Standard Meta bootstrap, loaded only when the landing page mounts.
+        const existing = window.fbq;
+        if (!existing) {
+            const fbq = function () {
+                if (fbq.callMethod) fbq.callMethod.apply(fbq, arguments);
+                else fbq.queue.push(arguments);
+            };
+            fbq.queue = [];
+            fbq.loaded = true;
+            fbq.version = "2.0";
+            window.fbq = fbq;
+            window._fbq = fbq;
+        }
+        window.fbq("init", PIXEL_ID);
+        window.fbq("track", "PageView");
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://connect.facebook.net/en_US/fbevents.js";
+        script.dataset.editoriaPixel = "true";
+        document.head.appendChild(script);
+        return () => {
+            script.remove();
+            // Prevent further tracking if Inertia navigates to another route.
+            if (window.fbq && window._fbq === window.fbq) {
+                delete window.fbq;
+                delete window._fbq;
+            }
+        };
+    }, []);
+}
+
+function JoinLink({ href, children, secondary = false, className = "", eventName }) {
     const base = "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 font-bold text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
     const colors = secondary ? "border border-primary/50 text-primary hover:bg-primary/10" : "bg-primary text-background-dark hover:brightness-110 shadow-lg shadow-primary/10";
-    return <a href={href || "#how-to-join"} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
+    return <a href={href || "#how-to-join"} onClick={() => eventName && pixelEvent(eventName, "Присоединиться бесплатно", href || "#how-to-join")} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
 }
 
 export default function Editoria() {
     const { editoria, settings } = usePage().props;
+    useEditoriaPixel();
     const [openFaq, setOpenFaq] = useState(0);
     const [openDay, setOpenDay] = useState(-1);
 
@@ -58,7 +109,7 @@ export default function Editoria() {
                     <div className="flex items-center" aria-label={settings?.site_name || "Arutyun"}>
                         {settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Arutyun"} className="h-10 w-auto max-w-36 object-contain" /> : <span className="text-primary font-display text-2xl italic">Arutyun</span>}
                     </div>
-                    <a href="#how-to-join" className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
+                    <a href="#how-to-join" onClick={() => pixelEvent("CTA_Click_Header_HowToJoin", "Как участвовать", "#how-to-join")} className="text-sm font-semibold text-primary border border-primary/40 rounded-lg px-4 py-2 hover:bg-primary/10 transition">Как участвовать</a>
                 </div>
             </header>
 
@@ -71,7 +122,7 @@ export default function Editoria() {
                         <div className="flex flex-wrap gap-2 md:gap-4 text-sm text-gray-300 mb-6 md:mb-7">
                             <span className="rounded-full bg-white/10 px-3 py-1">✦ 3 дня</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Бесплатно</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Онлайн</span>
                         </div>
-                        <JoinLink href={joinUrl} className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={joinUrl} eventName="CTA_Click_Hero_Join" className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
                     <div className="hidden md:block order-2 lg:order-2">
@@ -104,7 +155,7 @@ export default function Editoria() {
                             <p className={`${openDay === i ? "block" : "hidden"} md:block text-gray-400 leading-relaxed mt-3 md:mt-0`}>{day.description}</p>
                         </article>)}
                     </div>
-                    <div className="text-center mt-9"><JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink></div>
+                    <div className="text-center mt-9"><JoinLink href={joinUrl} eventName="CTA_Click_Program_Join">Присоединиться бесплатно</JoinLink></div>
                 </section>
 
                 <section className="bg-white/[0.025] border-y border-white/10 py-16 md:py-20">
@@ -152,7 +203,7 @@ export default function Editoria() {
                             </div>)}
                         </div>
                         <p className="text-gray-400 text-sm text-center mt-6">Telegram нужен для анонсов и доступа к практикуму. Участие бесплатное.</p>
-                        <div className="text-center mt-8"><JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink></div>
+                        <div className="text-center mt-8"><JoinLink href={joinUrl} eventName="CTA_Click_HowToJoin_Join">Присоединиться бесплатно</JoinLink></div>
                     </div>
                 </section>
 
@@ -173,7 +224,7 @@ export default function Editoria() {
                         <h2 className="text-white text-3xl md:text-5xl font-bold">{editoria.cta_title || "Возможно, пора выбрать себя"}</h2>
                         <p className="text-gray-300 max-w-2xl mx-auto mt-5 leading-relaxed">{editoria.cta_description}</p>
                         <p className="text-primary text-sm mt-6 mb-5 font-semibold">3 дня · Бесплатно · Онлайн</p>
-                        <JoinLink href={joinUrl}>Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={joinUrl} eventName="CTA_Click_Final_Join">Присоединиться бесплатно</JoinLink>
                     </div>
                 </section>
             </main>
@@ -185,7 +236,7 @@ export default function Editoria() {
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                <JoinLink href={joinUrl} className="w-full py-3">Присоединиться бесплатно</JoinLink>
+                <JoinLink href={joinUrl} eventName="CTA_Click_MobileSticky_Join" className="w-full py-3">Присоединиться бесплатно</JoinLink>
             </div>
         </>
     );
