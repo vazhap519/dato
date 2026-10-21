@@ -191,8 +191,8 @@ export default function Editoria() {
                         <JoinLink href={joinUrl} eventName="HeroJoinClick" className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
-                    <div className="hidden md:block order-2 lg:order-2">
-                        {editoria.hero_image_url && <img src={editoria.hero_image_url} alt="Трёхдневный практикум «Познай себя»" className="w-full max-w-md mx-auto aspect-square object-cover rounded-3xl border border-white/10" />}
+                    <div className="hidden md:flex order-2 lg:order-2 relative items-center justify-center lg:justify-end lg:-mr-10 xl:-mr-16">
+                        {editoria.hero_image_url && <img src={editoria.hero_image_url} alt="Давид — ведущий трёхдневного практикума" className="block w-full max-w-[580px] lg:max-w-none lg:w-[115%] xl:w-[125%] h-auto object-contain border-0 rounded-none shadow-none" />}
                     </div>
                 </section>
 
