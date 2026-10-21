@@ -241,8 +241,13 @@ export default function Editoria() {
                 </section>
 
                 <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-                    <div className="grid grid-cols-[auto_minmax(0,1fr)] md:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-4 md:gap-14 items-center">
-                        {editoria.author_image_url && <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="w-28 h-28 md:w-full md:h-auto md:max-w-sm mx-auto aspect-square md:aspect-[4/5] object-cover rounded-full md:rounded-2xl border border-white/10" />}
+                    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] gap-8 md:gap-12 items-center">
+                        {editoria.author_image_url && (
+                            <div className="relative w-full max-w-[470px] mx-auto md:mx-0 overflow-hidden">
+                                <div aria-hidden="true" className="absolute inset-x-[12%] top-[18%] bottom-[12%] rounded-full bg-primary/10 blur-[70px] pointer-events-none" />
+                                <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="relative block w-full h-auto max-h-[550px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)]" />
+                            </div>
+                        )}
                         <div>
                             <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">Кто проводит практикум</p>
                             <h2 className="text-white text-3xl md:text-4xl font-bold">{editoria.author_name || "Давид Арутюнов"}</h2>
