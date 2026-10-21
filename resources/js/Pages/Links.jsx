@@ -22,7 +22,7 @@ export default function Links() {
                             return (
                                 <a key={item.id} href={item.url} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}
                                    className="group flex min-h-[76px] items-center gap-4 rounded-2xl border border-[#63502a]/60 bg-gradient-to-r from-[#2b2417] to-[#211d15] px-5 py-4 shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#f8c83c]/70 hover:bg-[#342a18] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f8c83c]">
-                                    <span className="material-symbols-outlined flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#f8c83c]/10 text-[25px] text-[#f8c83c]" aria-hidden="true">{item.icon || "link"}</span>
+                                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#f8c83c]/10" aria-hidden="true"><span className="material-symbols-outlined block text-center text-[25px] leading-none text-[#f8c83c]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>{item.icon || "link"}</span></span>
                                     <span className="min-w-0 flex-1">
                                         <span className="block text-[15px] font-semibold leading-snug">{item.title}</span>
                                         {item.description && <span className="mt-1 block text-xs leading-relaxed text-[#bdb4a3]">{item.description}</span>}
