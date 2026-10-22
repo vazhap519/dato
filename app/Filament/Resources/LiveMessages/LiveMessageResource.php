@@ -20,6 +20,8 @@ class LiveMessageResource extends Resource {
     protected static ?string $modelLabel = 'сообщение эфира';
     protected static ?string $pluralModelLabel = 'история чата';
     protected static ?string $navigationLabel = 'История чата';
+    protected static \UnitEnum|string|null $navigationGroup = 'Прямые эфиры';
+    protected static ?int $navigationSort = 3;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
     public static function form(Schema $schema): Schema { return $schema; }
     public static function table(Table $table): Table {
