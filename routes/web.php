@@ -25,7 +25,7 @@ Route::get('/links', function () {
 RateLimiter::for('live-chat', function (\Illuminate\Http\Request $request) {
     $guestId = $request->session()->get('live_guest_id');
     $key = $guestId ? 'guest:'.$guestId : 'ip:'.$request->ip();
-    return [Limit::perMinute(30)->by('minute:'.$key), Limit::perMinute(1)->by('second:'.$key)->decaySeconds(2)];
+    return [Limit::perMinute(30)->by('minute:'.$key), Limit::perSecond(1, 2)->by('second:'.$key)];
 });
 
 // Each live session belongs to one practice day; messages are isolated by session.
