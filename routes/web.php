@@ -40,6 +40,7 @@ Route::post('/live/api/sessions/{session}/host-message', [\App\Http\Controllers\
 Route::post('/live/api/sessions/{session}/chat-control', [\App\Http\Controllers\LiveController::class, 'chatControl'])->middleware('auth');
 Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Http\Controllers\LiveController::class, 'moderate'])->middleware('auth');
 
+Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton'])->middleware('auth');
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
         ->toResponse(request())
