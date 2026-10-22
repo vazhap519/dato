@@ -50,15 +50,28 @@ class LiveController extends Controller {
     private function validatedButton(Request $request): array {
         $data = $request->validate([
             'label' => ['required', 'string', 'min:1', 'max:90'],
-            'url' => ['required', 'string', 'max:2048', 'url:http,https'],
+            'url' => ['required', 'string', 'max:2048'],
             'style' => ['required', 'in:gold,outline'],
             'is_visible' => ['required', 'boolean'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:10000'],
         ]);
         $data['label'] = trim(strip_tags($data['label']));
         abort_if($data['label'] === '', 422, 'Введите название кнопки.');
-        $host = parse_url($data['url'], PHP_URL_HOST);
-        abort_unless($host && ! parse_url($data['url'], PHP_URL_USER) && ! parse_url($data['url'], PHP_URL_PASS), 422, 'Недопустимая ссылка.');
+        $url = $data['url'];
+        $scheme = strtolower(parse_url($url, PHP_URL_SCHEME) ?: '');
+        $host = strtolower(parse_url($url, PHP_URL_HOST) ?: '');
+        $isWeb = in_array($scheme, ['http', 'https'], true) && filter_var($url, FILTER_VALIDATE_URL) && $host !== '';
+        $isTelegram = $scheme === 'tg' && $host === 'resolve'
+            && preg_match('/^tg:\/\/resolve\?[a-zA-Z0-9_=&%.-]+$/', $url);
+        if ($isTelegram) {
+            parse_str(parse_url($url, PHP_URL_QUERY) ?: '', $params);
+            $isTelegram = isset($params['domain'])
+                && preg_match('/^[a-zA-Z][a-zA-Z0-9_]{4,31}$/', $params['domain'])
+                && (!isset($params['appname']) || preg_match('/^[a-zA-Z][a-zA-Z0-9_]{0,63}$/', $params['appname']))
+                && (!isset($params['startapp']) || preg_match('/^[a-zA-Z0-9_-]{1,128}$/', $params['startapp']));
+        }
+        abort_unless(($isWeb || $isTelegram) && ! parse_url($url, PHP_URL_USER) && ! parse_url($url, PHP_URL_PASS), 422, 'Допустимы ссылки https:// или Telegram tg://resolve.');
+
         return $data;
     }
 
