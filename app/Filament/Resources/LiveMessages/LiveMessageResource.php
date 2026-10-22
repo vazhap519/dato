@@ -4,6 +4,7 @@ namespace App\Filament\Resources\LiveMessages;
 
 use App\Filament\Resources\LiveMessages\Pages\ListLiveMessages;
 use App\Models\LiveMessage;
+use App\Models\LiveIpBan;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -32,6 +33,13 @@ class LiveMessageResource extends Resource {
         ])->recordActions([
             Action::make('toggleHidden')->label(fn (LiveMessage $record) => $record->is_hidden ? 'Показать' : 'Скрыть')
                 ->action(fn (LiveMessage $record) => $record->update(['is_hidden' => ! $record->is_hidden])),
+            Action::make('banIp')->label('Заблокировать IP')->color('danger')
+                ->visible(fn (LiveMessage $record) => filled($record->ip_hash))
+                ->requiresConfirmation()
+                ->action(fn (LiveMessage $record) => LiveIpBan::updateOrCreate(
+                    ['ip_hash' => $record->ip_hash],
+                    ['expires_at' => now()->addDay(), 'reason' => 'Модерация чата']
+                )),
             Action::make('banGuest')->label('Заблокировать гостя')->color('danger')
                 ->visible(fn (LiveMessage $record) => $record->live_guest_id !== null)
                 ->requiresConfirmation()
