@@ -28,6 +28,7 @@ export default function Live() {
     const [error, setError] = useState("");
     const [sending, setSending] = useState(false);
     const [openMenu, setOpenMenu] = useState(null);
+    const [online, setOnline] = useState(null);
     const chatEndRef = useRef(null);
     const chatScrollRef = useRef(null);
     const shouldStickToBottom = useRef(true);
@@ -43,6 +44,7 @@ export default function Live() {
         setSession(null);
         setError("");
         setOpenMenu(null);
+        setOnline(null);
         shouldStickToBottom.current = true;
         let mounted = true;
         let busy = false;
@@ -67,6 +69,34 @@ export default function Live() {
         window.addEventListener("focus", onFocus);
         return () => { mounted = false; clearInterval(interval); window.removeEventListener("focus", onFocus); };
     }, [sessionId]);
+
+    useEffect(() => {
+        if (!sessionId) return;
+        let active = true;
+        const heartbeat = async () => {
+            if (document.hidden) return;
+            try {
+                const data = await api(`/live/api/sessions/${sessionId}/presence`, { method: "POST" });
+                if (active) setOnline(data.online);
+            } catch { /* Presence is optional; chat stays available. */ }
+        };
+        heartbeat();
+        const timer = setInterval(heartbeat, 15000);
+        const onFocus = () => heartbeat();
+        window.addEventListener("focus", onFocus);
+        return () => { active = false; clearInterval(timer); window.removeEventListener("focus", onFocus); };
+    }, [sessionId]);
+
+    const toggleChat = async () => {
+        if (!session) return;
+        setError("");
+        try {
+            const data = await api(`/live/api/sessions/${sessionId}/chat-control`, {
+                method: "POST", body: JSON.stringify({ chat_enabled: !session.chat_enabled }),
+            });
+            setSession(previous => ({ ...previous, chat_enabled: data.chat_enabled }));
+        } catch (e) { setError(e.message); }
+    };
 
     const moderate = async (messageId, action) => {
         if (action === "ban_ip" && !window.confirm("Заблокировать IP на 24 часа и скрыть сообщение?")) return;
@@ -94,7 +124,7 @@ export default function Live() {
         if (!draft.trim() || !sessionId || sending) return;
         setSending(true); setError("");
         try {
-            await api(`/live/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ body: draft.trim() }) });
+            await api(canModerate ? `/live/api/sessions/${sessionId}/host-message` : `/live/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ body: draft.trim() }) });
             setDraft("");
             shouldStickToBottom.current = true;
             setMessages(await api(`/live/api/sessions/${sessionId}/messages`));
@@ -139,7 +169,10 @@ export default function Live() {
                                 {session?.description && <p className="p-5 text-sm leading-7 text-white/70">{session.description}</p>}
                             </section>
                             <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
-                                <div className="border-b border-white/10 p-4 font-semibold">Чат участников</div>
+                                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 p-4">
+                                    <div className="font-semibold">Чат участников <span className="ml-2 text-xs font-normal text-white/50">{online === null ? "" : `● ${online} онлайн`}</span></div>
+                                    {canModerate && <button type="button" onClick={toggleChat} className={`rounded-lg border px-3 py-1.5 text-xs font-semibold ${session?.chat_enabled ? "border-red-400/40 text-red-300 hover:bg-red-400/10" : "border-[#f5c542]/50 text-[#f5c542] hover:bg-[#f5c542]/10"}`}>{session?.chat_enabled ? "Закрыть чат" : "Открыть чат"}</button>}
+                                </div>
                                 {session?.pinned_message && <div className="border-b border-[#f5c542]/25 bg-[#f5c542]/10 px-4 py-3 text-sm">
                                     <div className="mb-1 flex items-center justify-between gap-2 text-xs font-bold text-[#f5c542]"><span>📌 Закреплено · {session.pinned_message.author_name}</span>{canModerate && <button type="button" onClick={() => moderate(session.pinned_message.id, "unpin")} className="text-white/60 hover:text-white" aria-label="Открепить">✕</button>}</div>
                                     <p className="whitespace-pre-wrap break-words text-white/90">{session.pinned_message.body}</p>
@@ -147,8 +180,8 @@ export default function Live() {
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
                                     {messages.length === 0 && <p className="text-sm text-white/50">Пока нет сообщений. Начни разговор!</p>}
                                     {messages.map(msg => (
-                                        <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : "relative"}>
-                                            <div className="mb-1 text-xs font-bold text-[#f5c542]">{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
+                                        <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_host ? "relative rounded-xl border border-[#f5c542]/70 bg-[#f5c542]/15 p-3 shadow-sm" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : "relative"}>
+                                            <div className="mb-1 text-xs font-bold text-[#f5c542]">{msg.is_host ? "✦ " : ""}{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
                                             <p className="whitespace-pre-wrap break-words text-sm leading-6 text-white/85">{msg.body}</p>
                                             {canModerate && <div className={`absolute right-0 top-0 ${openMenu === msg.id ? "z-50" : "z-10"}`}>
                                                 <button type="button" aria-label="Действия с сообщением" aria-expanded={openMenu === msg.id} onClick={() => setOpenMenu(openMenu === msg.id ? null : msg.id)}
@@ -166,7 +199,7 @@ export default function Live() {
                                     <div ref={chatEndRef} aria-hidden="true" />
                                 </div>
                                 <div className="border-t border-white/10 p-4">
-                                    {!guest ? (
+                                    {!guest && !canModerate ? (
                                         <form onSubmit={join} className="flex flex-col gap-2">
                                             <label htmlFor="live-name" className="text-sm text-white/75">Как к тебе обращаться?</label>
                                             <input id="live-name" value={name} onChange={e => setName(e.target.value)} maxLength={40} minLength={2} required
@@ -176,10 +209,10 @@ export default function Live() {
                                     ) : (
                                         <form onSubmit={send} className="flex gap-2">
                                             <input value={draft} onChange={e => setDraft(e.target.value)} maxLength={500}
-                                                disabled={session?.status !== "live" || !session?.chat_enabled}
-                                                placeholder={session?.status === "live" && session?.chat_enabled ? `Сообщение от ${guest}` : "Чат сейчас закрыт"}
+                                                disabled={!canModerate && (session?.status !== "live" || !session?.chat_enabled)}
+                                                placeholder={canModerate ? "Сообщение от Давид · Ведущий" : session?.status === "live" && session?.chat_enabled ? `Сообщение от ${guest}` : "Чат сейчас закрыт"}
                                                 className="min-w-0 flex-1 rounded-xl border border-white/20 bg-black/25 px-3 py-3 text-sm outline-none focus:border-[#f5c542]" />
-                                            <button disabled={sending || !draft.trim() || session?.status !== "live" || !session?.chat_enabled}
+                                            <button disabled={sending || !draft.trim() || (!canModerate && (session?.status !== "live" || !session?.chat_enabled))}
                                                 className="rounded-xl bg-[#f5c542] px-4 font-bold text-[#17140e] disabled:opacity-40">➤</button>
                                         </form>
                                     )}
