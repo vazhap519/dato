@@ -70,6 +70,7 @@ export default function Live() {
 
     const moderate = async (messageId, action) => {
         if (action === "ban_ip" && !window.confirm("Заблокировать IP на 24 часа и скрыть сообщение?")) return;
+        if (action === "ban_guest" && !window.confirm("IP старого сообщения неизвестен. Заблокировать только эту гостевую сессию? В другом браузере пользователь сможет войти снова.")) return;
         setOpenMenu(null);
         setError("");
         try {
@@ -154,7 +155,7 @@ export default function Live() {
                                                     className="rounded-lg px-2 py-1 text-lg leading-none text-white/50 hover:bg-white/10 hover:text-white">⋯</button>
                                                 {openMenu === msg.id && <div className="absolute right-0 top-full z-30 w-44 overflow-hidden rounded-xl border border-[#f5c542]/25 bg-[#29231a] py-1 text-left text-xs shadow-xl">
                                                     <button type="button" onClick={() => moderate(msg.id, msg.is_hidden ? "show" : "hide")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_hidden ? "↩ Восстановить" : "🗑 Удалить"}</button>
-                                                    {msg.ip_hash && <button type="button" onClick={() => moderate(msg.id, "ban_ip")} className="block w-full px-3 py-2 text-left text-red-300 hover:bg-white/10">⛔ Заблокировать</button>}
+                                                    {(msg.ip_hash || msg.live_guest_id) && <button type="button" onClick={() => moderate(msg.id, msg.ip_hash ? "ban_ip" : "ban_guest")} className="block w-full px-3 py-2 text-left text-red-300 hover:bg-white/10">⛔ {msg.ip_hash ? "Заблокировать IP" : "Заблокировать гостя"}</button>}
                                                     {!msg.is_hidden && <button type="button" onClick={() => moderate(msg.id, session?.pinned_message?.id === msg.id ? "unpin" : "pin")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{session?.pinned_message?.id === msg.id ? "📌 Открепить" : "📌 Закрепить"}</button>}
                                                     <button type="button" onClick={() => moderate(msg.id, msg.is_highlighted ? "unhighlight" : "highlight")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_highlighted ? "✧ Убрать подсветку" : "✨ Подсветить"}</button>
                                                 </div>}
