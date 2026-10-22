@@ -39,7 +39,7 @@ export default function PersonalHero({ personal }) {
                             <span className="text-primary text-[11px] sm:text-xs font-semibold uppercase tracking-wider">{personal.hero_badge}</span>
                         </div>
                     )}
-                    <h1 className="order-2 text-[clamp(2.15rem,8.5vw,3.25rem)] sm:text-5xl xl:text-[3.65rem] font-bold leading-[1.12] tracking-tight text-white max-w-[660px]">
+                    <h1 className="order-2 text-[clamp(2.15rem,8.5vw,3.25rem)] sm:text-5xl xl:text-[3.65rem] font-bold leading-[1.12] tracking-tight text-white max-w-[660px] text-center lg:text-left mx-auto lg:mx-0">
                         {personal.hero_title_line_1}{" "}
                         <span className="text-primary">{personal.hero_title_highlight}</span>{" "}
                         {personal.hero_title_line_2}
