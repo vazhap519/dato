@@ -230,7 +230,7 @@ export default function Live() {
                                     <div ref={chatEndRef} aria-hidden="true" />
                                 </div>
                                 <div className="border-t border-white/10 p-4">
-                                    {!guest && !canModerate ? (
+                                    {!guest && !can('host') ? (
                                         <form onSubmit={join} className="flex flex-col gap-2">
                                             <label htmlFor="live-name" className="text-sm text-white/75">Как к тебе обращаться?</label>
                                             <input id="live-name" value={name} onChange={e => setName(e.target.value)} maxLength={40} minLength={2} required
