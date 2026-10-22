@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePage } from "@inertiajs/react";
 import Header from "@/components/Header.jsx";
 import Footer from "@/components/footer.jsx";
+import LiveActionButtons from "@/components/LiveActionButtons.jsx";
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content;
 async function api(url, options = {}) {
