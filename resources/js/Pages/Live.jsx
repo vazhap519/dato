@@ -29,6 +29,9 @@ export default function Live() {
     const [sending, setSending] = useState(false);
     const [openMenu, setOpenMenu] = useState(null);
     const [online, setOnline] = useState(null);
+    const [editingButton, setEditingButton] = useState(null);
+    const [buttonDraft, setButtonDraft] = useState({label:"",url:"",style:"gold",is_visible:false,sort_order:0});
+    const [linkPrompt, setLinkPrompt] = useState(null);
     const chatEndRef = useRef(null);
     const chatScrollRef = useRef(null);
     const shouldStickToBottom = useRef(true);
