@@ -27,6 +27,7 @@ export default function Live() {
     const [draft, setDraft] = useState("");
     const [error, setError] = useState("");
     const [sending, setSending] = useState(false);
+    const [openMenu, setOpenMenu] = useState(null);
     const chatEndRef = useRef(null);
     const chatScrollRef = useRef(null);
     const shouldStickToBottom = useRef(true);
@@ -41,6 +42,7 @@ export default function Live() {
         setMessages([]);
         setSession(null);
         setError("");
+        setOpenMenu(null);
         shouldStickToBottom.current = true;
         let mounted = true;
         let busy = false;
@@ -68,12 +70,15 @@ export default function Live() {
 
     const moderate = async (messageId, action) => {
         if (action === "ban_ip" && !window.confirm("Заблокировать IP на 24 часа и скрыть сообщение?")) return;
+        setOpenMenu(null);
         setError("");
         try {
             await api(`/live/api/sessions/${sessionId}/messages/${messageId}/moderate`, {
                 method: "POST", body: JSON.stringify({ action }),
             });
-            setMessages(await api(`/live/api/sessions/${sessionId}/messages`));
+            const [details, chat] = await Promise.all([api(`/live/api/sessions/${sessionId}`), api(`/live/api/sessions/${sessionId}/messages`)]);
+            setSession(details);
+            setMessages(chat);
         } catch (e) { setError(e.message); }
     };
 
@@ -134,17 +139,27 @@ export default function Live() {
                             </section>
                             <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
                                 <div className="border-b border-white/10 p-4 font-semibold">Чат участников</div>
+                                {session?.pinned_message && <div className="border-b border-[#f5c542]/25 bg-[#f5c542]/10 px-4 py-3 text-sm">
+                                    <div className="mb-1 flex items-center justify-between gap-2 text-xs font-bold text-[#f5c542]"><span>📌 Закреплено · {session.pinned_message.author_name}</span>{canModerate && <button type="button" onClick={() => moderate(session.pinned_message.id, "unpin")} className="text-white/60 hover:text-white" aria-label="Открепить">✕</button>}</div>
+                                    <p className="whitespace-pre-wrap break-words text-white/90">{session.pinned_message.body}</p>
+                                </div>}
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
                                     {messages.length === 0 && <p className="text-sm text-white/50">Пока нет сообщений. Начни разговор!</p>}
                                     {messages.map(msg => (
-                                        <div key={msg.id} className={msg.is_hidden ? "rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : ""}>
+                                        <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : "relative"}>
                                             <div className="mb-1 text-xs font-bold text-[#f5c542]">{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
                                             <p className="whitespace-pre-wrap break-words text-sm leading-6 text-white/85">{msg.body}</p>
-                                            {canModerate && <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
-                                                {msg.is_hidden && <span className="text-red-300">Скрыто от зрителей</span>}
-                                                <button type="button" onClick={() => moderate(msg.id, msg.is_hidden ? "show" : "hide")} className="text-white/60 underline hover:text-white">{msg.is_hidden ? "Восстановить" : "Скрыть"}</button>
-                                                {msg.ip_hash && <button type="button" onClick={() => moderate(msg.id, "ban_ip")} className="text-red-300 underline hover:text-red-200">Блокировать IP на 24 ч</button>}
+                                            {canModerate && <div className="absolute right-0 top-0 z-10">
+                                                <button type="button" aria-label="Действия с сообщением" aria-expanded={openMenu === msg.id} onClick={() => setOpenMenu(openMenu === msg.id ? null : msg.id)}
+                                                    className="rounded-lg px-2 py-1 text-lg leading-none text-white/50 hover:bg-white/10 hover:text-white">⋯</button>
+                                                {openMenu === msg.id && <div className="absolute right-0 top-full z-30 w-44 overflow-hidden rounded-xl border border-[#f5c542]/25 bg-[#29231a] py-1 text-left text-xs shadow-xl">
+                                                    <button type="button" onClick={() => moderate(msg.id, msg.is_hidden ? "show" : "hide")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_hidden ? "↩ Восстановить" : "🗑 Удалить"}</button>
+                                                    {msg.ip_hash && <button type="button" onClick={() => moderate(msg.id, "ban_ip")} className="block w-full px-3 py-2 text-left text-red-300 hover:bg-white/10">⛔ Заблокировать</button>}
+                                                    {!msg.is_hidden && <button type="button" onClick={() => moderate(msg.id, session?.pinned_message?.id === msg.id ? "unpin" : "pin")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{session?.pinned_message?.id === msg.id ? "📌 Открепить" : "📌 Закрепить"}</button>}
+                                                    <button type="button" onClick={() => moderate(msg.id, msg.is_highlighted ? "unhighlight" : "highlight")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_highlighted ? "✧ Убрать подсветку" : "✨ Подсветить"}</button>
+                                                </div>}
                                             </div>}
+                                            {msg.is_hidden && <div className="mt-1 text-xs text-red-300">Скрыто от зрителей</div>}
                                         </div>
                                     ))}
                                     <div ref={chatEndRef} aria-hidden="true" />
