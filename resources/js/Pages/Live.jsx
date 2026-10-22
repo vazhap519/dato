@@ -253,7 +253,7 @@ export default function Live() {
                     )}
                 </div>
             </main>
-            <Footer />
+            <Footer hideCta />
         </>
     );
 }
