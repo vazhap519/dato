@@ -182,6 +182,10 @@ class LiveController extends Controller {
     }
 
     public function guest(Request $request) {
+        $moderator = $this->liveModerator($request);
+        if ($moderator && ! $this->allowed($request, 'host')) {
+            return response()->json(['name' => $moderator->login]);
+        }
         $guest = LiveGuest::find($request->session()->get('live_guest_id'));
         return response()->json(['name' => $guest && ! $guest->is_banned ? $guest->name : null]);
     }
@@ -238,14 +242,15 @@ class LiveController extends Controller {
     }
 
     public function send(Request $request, LiveSession $session) {
-        $this->assertIpAllowed($request);
+        $moderator = $this->liveModerator($request);
+        if (! $moderator) $this->assertIpAllowed($request);
         $guest = LiveGuest::find($request->session()->get('live_guest_id'));
-        abort_unless($guest && ! $guest->is_banned, 403, 'Войди в чат, чтобы отправлять сообщения.');
+        abort_unless($moderator || ($guest && ! $guest->is_banned), 403, 'Войди в чат, чтобы отправлять сообщения.');
         abort_unless($session->status === 'live' && $session->chat_enabled, 403, 'Чат сейчас закрыт.');
         $data = $request->validate(['body' => ['required','string','max:500']]);
         $message = LiveMessage::create([
-            'live_session_id' => $session->id, 'live_guest_id' => $guest->id,
-            'author_name' => $guest->name, 'body' => trim(strip_tags($data['body'])),
+            'live_session_id' => $session->id, 'live_guest_id' => $moderator ? null : $guest->id,
+            'author_name' => $moderator ? $moderator->login.' · Модератор' : $guest->name, 'body' => trim(strip_tags($data['body'])),
             'ip_hash' => $this->ipHash($request),
         ]);
         return response()->json($message->only(['id','author_name','body','is_host','created_at']), 201);
