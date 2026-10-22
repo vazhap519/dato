@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PracticeController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
 use Inertia\Inertia;
 use App\Http\Controllers\PersonalController;
 use Spatie\Sitemap\SitemapGenerator;
@@ -19,13 +21,20 @@ Route::get('/links', function () {
             ->get(['id', 'title', 'description', 'url', 'icon']),
     ]);
 })->name('links');
+// Limit chat messages per guest session rather than per shared IP address.
+RateLimiter::for('live-chat', function (\Illuminate\Http\Request $request) {
+    $guestId = $request->session()->get('live_guest_id');
+    $key = $guestId ? 'guest:'.$guestId : 'ip:'.$request->ip();
+    return [Limit::perMinute(30)->by('minute:'.$key), Limit::perMinute(1)->by('second:'.$key)->decaySeconds(2)];
+});
+
 // Each live session belongs to one practice day; messages are isolated by session.
 Route::get('/live', [\App\Http\Controllers\LiveController::class, 'index'])->name('live');
 Route::get('/live/guest', [\App\Http\Controllers\LiveController::class, 'guest']);
 Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:5,1');
 Route::get('/live/api/sessions/{session}', [\App\Http\Controllers\LiveController::class, 'session']);
 Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:120,1');
-Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:6,1');
+Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:live-chat');
 
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
