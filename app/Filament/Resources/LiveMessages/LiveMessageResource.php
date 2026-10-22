@@ -35,7 +35,27 @@ class LiveMessageResource extends Resource {
             IconColumn::make('is_hidden')->label('Скрыто')->boolean(),
             TextColumn::make('created_at')->label('Время')->dateTime('d.m.Y H:i')->sortable(),
         ])->filters([
-            SelectFilter::make('live_session_id')->label('Эфир')->relationship('session','title'),
+            SelectFilter::make('live_session_id')->label('Эфир')->relationship('session','title')->searchable()->preload(),
+            SelectFilter::make('is_hidden')->label('Видимость')
+                ->options(['0' => 'Видимые', '1' => 'Скрытые'])
+                ->query(fn (Builder $query, array $data): Builder => isset($data['value']) && $data['value'] !== ''
+                    ? $query->where('is_hidden', (bool) $data['value']) : $query),
+            SelectFilter::make('author_type')->label('Тип автора')
+                ->options(['host' => 'Ведущий', 'moderator' => 'Модератор', 'guest' => 'Участник'])
+                ->query(function (Builder $query, array $data): Builder {
+                    return match ($data['value'] ?? null) {
+                        'host' => $query->where('is_host', true),
+                        'moderator' => $query->where('is_host', false)->where('author_name', 'like', '% · Модератор'),
+                        'guest' => $query->where('is_host', false)->where('author_name', 'not like', '% · Модератор'),
+                        default => $query,
+                    };
+                }),
+            Filter::make('period')->label('Период')->form([
+                DatePicker::make('from')->label('С даты'),
+                DatePicker::make('until')->label('По дату'),
+            ])->query(fn (Builder $query, array $data): Builder => $query
+                ->when($data['from'] ?? null, fn (Builder $q, $date) => $q->whereDate('created_at', '>=', $date))
+                ->when($data['until'] ?? null, fn (Builder $q, $date) => $q->whereDate('created_at', '<=', $date))),
         ])->defaultSort('created_at', 'desc')->recordActions([
             Action::make('toggleHidden')->label(fn (LiveMessage $record) => $record->is_hidden ? 'Показать' : 'Скрыть')
                 ->action(fn (LiveMessage $record) => $record->update(['is_hidden' => ! $record->is_hidden])),
