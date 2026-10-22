@@ -82,14 +82,14 @@ class LiveController extends Controller {
         $query = $session->messages();
         if (! $moderator) $query->where('is_hidden', false);
         $fields = ['id','author_name','body','is_host','is_highlighted','created_at'];
-        if ($moderator) $fields = array_merge($fields, ['is_hidden','ip_hash']);
+        if ($moderator) $fields = array_merge($fields, ['is_hidden','ip_hash','live_guest_id']);
         return response()->json($query->latest('id')->limit(100)->get($fields)->reverse()->values());
     }
 
     public function moderate(Request $request, LiveSession $session, LiveMessage $message) {
         abort_unless($this->moderator($request), 403);
         abort_unless($message->live_session_id === $session->id, 404);
-        $data = $request->validate(['action' => ['required', 'in:hide,show,ban_ip,pin,unpin,highlight,unhighlight']]);
+        $data = $request->validate(['action' => ['required', 'in:hide,show,ban_ip,ban_guest,pin,unpin,highlight,unhighlight']]);
         if ($data['action'] === 'hide') {
             $message->update(['is_hidden' => true]);
             if ($session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
@@ -102,6 +102,12 @@ class LiveController extends Controller {
         if ($data['action'] === 'unpin' && $session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
         if ($data['action'] === 'highlight') $message->update(['is_highlighted' => true]);
         if ($data['action'] === 'unhighlight') $message->update(['is_highlighted' => false]);
+        if ($data['action'] === 'ban_guest') {
+            abort_unless($message->guest, 422, 'Гость для этого сообщения неизвестен.');
+            $message->guest->update(['is_banned' => true]);
+            $message->update(['is_hidden' => true]);
+            if ($session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
+        }
         if ($data['action'] === 'ban_ip') {
             abort_unless($message->ip_hash, 422, 'IP для этого сообщения неизвестен.');
             LiveIpBan::updateOrCreate(
