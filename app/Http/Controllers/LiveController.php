@@ -6,12 +6,18 @@ use App\Models\LiveGuest;
 use App\Models\LiveIpBan;
 use App\Models\LiveMessage;
 use App\Models\LiveSession;
+use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class LiveController extends Controller {
-    public function index() {
+    private function moderator(Request $request): bool {
+        $user = $request->user();
+        return $user !== null && $user->canAccessPanel(Filament::getPanel('admin'));
+    }
+
+    public function index(Request $request) {
         $sessions = LiveSession::with('series:id,title')->orderByDesc('live_series_id')->orderBy('day_number')->get();
         $active = $sessions->firstWhere('status', 'live') ?? $sessions->firstWhere('status', 'scheduled') ?? $sessions->first();
         return Inertia::render('Live', [
@@ -20,6 +26,7 @@ class LiveController extends Controller {
                 'series' => $s->series?->title, 'status' => $s->status,
             ]),
             'initialSessionId' => $active?->id,
+            'canModerate' => $this->moderator($request),
         ]);
     }
 
@@ -67,8 +74,30 @@ class LiveController extends Controller {
         return response()->json(['name' => $guest && ! $guest->is_banned ? $guest->name : null]);
     }
 
-    public function messages(LiveSession $session) {
-        return response()->json($session->messages()->where('is_hidden', false)->latest('id')->limit(100)->get(['id','author_name','body','is_host','created_at'])->reverse()->values());
+    public function messages(Request $request, LiveSession $session) {
+        $moderator = $this->moderator($request);
+        $query = $session->messages();
+        if (! $moderator) $query->where('is_hidden', false);
+        $fields = ['id','author_name','body','is_host','created_at'];
+        if ($moderator) $fields = array_merge($fields, ['is_hidden','ip_hash']);
+        return response()->json($query->latest('id')->limit(100)->get($fields)->reverse()->values());
+    }
+
+    public function moderate(Request $request, LiveSession $session, LiveMessage $message) {
+        abort_unless($this->moderator($request), 403);
+        abort_unless($message->live_session_id === $session->id, 404);
+        $data = $request->validate(['action' => ['required', 'in:hide,show,ban_ip']]);
+        if ($data['action'] === 'hide') $message->update(['is_hidden' => true]);
+        if ($data['action'] === 'show') $message->update(['is_hidden' => false]);
+        if ($data['action'] === 'ban_ip') {
+            abort_unless($message->ip_hash, 422, 'IP для этого сообщения неизвестен.');
+            LiveIpBan::updateOrCreate(
+                ['ip_hash' => $message->ip_hash],
+                ['expires_at' => now()->addDay(), 'reason' => 'Модерация чата']
+            );
+            $message->update(['is_hidden' => true]);
+        }
+        return response()->json(['ok' => true]);
     }
 
     public function send(Request $request, LiveSession $session) {
