@@ -196,6 +196,7 @@ export default function Live() {
                                     ) : <div className="flex h-full items-center justify-center px-6 text-center text-white/50">Видео появится здесь перед началом эфира</div>}
                                 </div>
                                 {session?.description && <p className="p-5 text-sm leading-7 text-white/70">{session.description}</p>}
+                                <LiveActionButtons sessionId={sessionId} buttons={session?.action_buttons || []} canModerate={canModerate} api={api} onRefresh={async () => setSession(await api("/live/api/sessions/" + sessionId))} />
                             </section>
                             <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
                                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 p-4">
