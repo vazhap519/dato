@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LiveOutboundLink from "./LiveOutboundLink.jsx";
 
 export default function LiveActionButtons({ sessionId, buttons = [], canModerate, onRefresh, api }) {
     const [editing, setEditing] = useState(null);
@@ -37,7 +38,7 @@ export default function LiveActionButtons({ sessionId, buttons = [], canModerate
         </div>
         <div className="flex flex-wrap gap-2">
             {buttons.map(button => <div key={button.id} className="flex items-center gap-1">
-                <a href={button.url} target="_blank" rel="noopener noreferrer" className={button.style === "outline" ? "rounded-xl border border-[#f5c542] px-4 py-3 text-sm text-[#f5c542]" : "rounded-xl bg-[#f5c542] px-4 py-3 text-sm font-bold text-[#17140e]"}>{button.label} ↗</a>
+                <LiveOutboundLink button={button} />
                 {canModerate && <button type="button" onClick={() => edit(button)} className="px-2 text-sm text-white/60">✎</button>}
                 {canModerate && !button.is_visible && <span className="text-xs text-white/40">Скрыта</span>}
             </div>)}
