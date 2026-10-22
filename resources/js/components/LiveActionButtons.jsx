@@ -45,7 +45,7 @@ export default function LiveActionButtons({ sessionId, buttons = [], canModerate
         </div>
         {canModerate && editing !== null && <form onSubmit={save} className="space-y-3 rounded-xl border border-white/15 bg-black/20 p-4">
             <input required maxLength={90} placeholder="Название кнопки" value={draft.label} onChange={e => setDraft({...draft,label:e.target.value})} className="w-full rounded-lg border border-white/20 bg-[#17140e] p-3 text-sm" />
-            <input required type="url" maxLength={2048} placeholder="https://t.me/..." value={draft.url} onChange={e => setDraft({...draft,url:e.target.value})} className="w-full rounded-lg border border-white/20 bg-[#17140e] p-3 text-sm" />
+            <input required type="text" inputMode="url" maxLength={2048} placeholder="https://t.me/... или tg://resolve?..." value={draft.url} onChange={e => setDraft({...draft,url:e.target.value})} className="w-full rounded-lg border border-white/20 bg-[#17140e] p-3 text-sm" />
             <div className="flex flex-wrap items-center gap-3 text-xs">
                 <select value={draft.style} onChange={e => setDraft({...draft,style:e.target.value})} className="rounded-lg border border-white/20 bg-[#17140e] p-2"><option value="gold">Золотая</option><option value="outline">Контурная</option></select>
                 <label>Порядок <input type="number" min="0" max="10000" value={draft.sort_order} onChange={e => setDraft({...draft,sort_order:e.target.value})} className="w-16 rounded-lg border border-white/20 bg-[#17140e] p-2" /></label>
