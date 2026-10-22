@@ -12,6 +12,7 @@ class CreateLiveModerator extends CreateRecord {
     protected function mutateFormDataBeforeCreate(array $data): array {
         $token = LiveModerator::newToken();
         $data['access_token_hash'] = hash('sha256', $token);
+        $data['access_token_encrypted'] = $token;
         session()->flash('live_moderator_link', url('/moderator/'.$token));
         return $data;
     }
