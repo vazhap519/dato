@@ -13,7 +13,7 @@ class EditLiveModerator extends EditRecord {
     protected function getHeaderActions(): array {
         return [Action::make('rotateLink')->label('Создать новую ссылку')->requiresConfirmation()->action(function () {
             $token = LiveModerator::newToken();
-            $this->record->update(['access_token_hash' => hash('sha256', $token)]);
+            $this->record->update(['access_token_hash' => hash('sha256', $token), 'access_token_encrypted' => $token]);
             Notification::make()->title('Новая ссылка (скопируйте сейчас)')->body(url('/moderator/'.$token))->persistent()->success()->send();
         })];
     }
