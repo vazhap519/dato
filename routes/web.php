@@ -24,7 +24,8 @@ Route::get('/links', function () {
 // Limit chat messages per guest session rather than per shared IP address.
 RateLimiter::for('live-chat', function (\Illuminate\Http\Request $request) {
     $guestId = $request->session()->get('live_guest_id');
-    $key = $guestId ? 'guest:'.$guestId : 'ip:'.$request->ip();
+    $moderatorId = $request->session()->get('live_moderator_id');
+    $key = $moderatorId ? 'moderator:'.$moderatorId : ($guestId ? 'guest:'.$guestId : 'ip:'.$request->ip());
     return [Limit::perMinute(30)->by('minute:'.$key), Limit::perSecond(1, 2)->by('second:'.$key)];
 });
 
