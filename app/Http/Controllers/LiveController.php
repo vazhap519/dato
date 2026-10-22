@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LiveActionButton;
 use App\Models\LiveGuest;
 use App\Models\LiveIpBan;
 use App\Models\LiveMessage;
@@ -31,15 +32,55 @@ class LiveController extends Controller {
         ]);
     }
 
-    public function session(LiveSession $session) {
+    public function session(Request $request, LiveSession $session) {
         return response()->json([
             'id' => $session->id, 'title' => $session->title, 'description' => $session->description,
             'status' => $session->status, 'chat_enabled' => $session->chat_enabled,
             'youtube_id' => $this->youtubeId($session->youtube_url),
+            'action_buttons' => LiveActionButton::query()->where('live_session_id', $session->id)
+                ->when(! $this->moderator($request), fn ($query) => $query->where('is_visible', true))
+                ->orderBy('sort_order')->orderBy('id')
+                ->get(['id', 'label', 'url', 'style', 'is_visible', 'sort_order']),
             'pinned_message' => $session->pinned_message_id ? LiveMessage::query()
                 ->whereKey($session->pinned_message_id)->where('is_hidden', false)
                 ->first(['id','author_name','body','is_host','is_highlighted']) : null,
         ]);
+    }
+
+    private function validatedButton(Request $request): array {
+        $data = $request->validate([
+            'label' => ['required', 'string', 'min:1', 'max:90'],
+            'url' => ['required', 'string', 'max:2048', 'url:http,https'],
+            'style' => ['required', 'in:gold,outline'],
+            'is_visible' => ['required', 'boolean'],
+            'sort_order' => ['required', 'integer', 'min:0', 'max:10000'],
+        ]);
+        $data['label'] = trim(strip_tags($data['label']));
+        abort_if($data['label'] === '', 422, 'Введите название кнопки.');
+        $host = parse_url($data['url'], PHP_URL_HOST);
+        abort_unless($host && ! parse_url($data['url'], PHP_URL_USER) && ! parse_url($data['url'], PHP_URL_PASS), 422, 'Недопустимая ссылка.');
+        return $data;
+    }
+
+    public function createButton(Request $request, LiveSession $session) {
+        abort_unless($this->moderator($request), 403);
+        abort_if(LiveActionButton::where('live_session_id', $session->id)->count() >= 12, 422, 'Максимум 12 кнопок для одного эфира.');
+        $button = $session->actionButtons()->create($this->validatedButton($request));
+        return response()->json($button, 201);
+    }
+
+    public function updateButton(Request $request, LiveSession $session, LiveActionButton $button) {
+        abort_unless($this->moderator($request), 403);
+        abort_unless($button->live_session_id === $session->id, 404);
+        $button->update($this->validatedButton($request));
+        return response()->json($button->fresh());
+    }
+
+    public function deleteButton(Request $request, LiveSession $session, LiveActionButton $button) {
+        abort_unless($this->moderator($request), 403);
+        abort_unless($button->live_session_id === $session->id, 404);
+        $button->delete();
+        return response()->json(['ok' => true]);
     }
 
     public function presence(Request $request, LiveSession $session) {
