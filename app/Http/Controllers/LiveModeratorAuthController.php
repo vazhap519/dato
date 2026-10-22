@@ -6,7 +6,6 @@ use App\Models\LiveModerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 
 class LiveModeratorAuthController extends Controller {
     public function show(Request $request, string $token) {
@@ -28,11 +27,12 @@ class LiveModeratorAuthController extends Controller {
         RateLimiter::clear($key);
         $request->session()->regenerate();
         $request->session()->put('live_moderator_id', $moderator->id);
+        $request->session()->put('live_moderator_token_hash', $moderator->access_token_hash);
         return redirect('/live');
     }
 
     public function logout(Request $request) {
-        $request->session()->forget('live_moderator_id');
+        $request->session()->forget(['live_moderator_id', 'live_moderator_token_hash']);
         $request->session()->regenerateToken();
         return redirect('/live');
     }
