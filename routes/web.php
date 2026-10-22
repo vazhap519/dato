@@ -29,6 +29,9 @@ RateLimiter::for('live-chat', function (\Illuminate\Http\Request $request) {
 });
 
 // Each live session belongs to one practice day; messages are isolated by session.
+Route::get('/moderator/{token}', [\\App\\Http\\Controllers\\LiveModeratorAuthController::class, 'show'])->name('live.moderator.show')->middleware('throttle:30,1');
+Route::post('/moderator/{token}', [\\App\\Http\\Controllers\\LiveModeratorAuthController::class, 'login'])->name('live.moderator.login')->middleware('throttle:10,1');
+Route::post('/moderator/logout', [\\App\\Http\\Controllers\\LiveModeratorAuthController::class, 'logout'])->name('live.moderator.logout');
 Route::get('/live', [\App\Http\Controllers\LiveController::class, 'index'])->name('live');
 Route::get('/live/guest', [\App\Http\Controllers\LiveController::class, 'guest']);
 Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:5,1');
@@ -36,13 +39,13 @@ Route::get('/live/api/sessions/{session}', [\App\Http\Controllers\LiveController
 Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:120,1');
 Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:live-chat');
 Route::post('/live/api/sessions/{session}/presence', [\App\Http\Controllers\LiveController::class, 'presence'])->middleware('throttle:12,1');
-Route::post('/live/api/sessions/{session}/host-message', [\App\Http\Controllers\LiveController::class, 'hostSend'])->middleware(['auth', 'throttle:30,1']);
-Route::post('/live/api/sessions/{session}/chat-control', [\App\Http\Controllers\LiveController::class, 'chatControl'])->middleware('auth');
-Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Http\Controllers\LiveController::class, 'moderate'])->middleware('auth');
+Route::post('/live/api/sessions/{session}/host-message', [\App\Http\Controllers\LiveController::class, 'hostSend'])->middleware('throttle:30,1');
+Route::post('/live/api/sessions/{session}/chat-control', [\App\Http\Controllers\LiveController::class, 'chatControl']);
+Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Http\Controllers\LiveController::class, 'moderate']);
 
-Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton'])->middleware('auth');
-Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controllers\LiveController::class, 'updateButton'])->middleware('auth');
-Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton'])->middleware('auth');
+Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton']);
+Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controllers\LiveController::class, 'updateButton']);
+Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton']);
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
         ->toResponse(request())
