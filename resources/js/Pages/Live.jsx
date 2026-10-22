@@ -18,7 +18,7 @@ async function api(url, options = {}) {
 }
 
 export default function Live() {
-    const { sessions = [], initialSessionId } = usePage().props;
+    const { sessions = [], initialSessionId, canModerate = false } = usePage().props;
     const [sessionId, setSessionId] = useState(initialSessionId || null);
     const [session, setSession] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -65,6 +65,17 @@ export default function Live() {
         window.addEventListener("focus", onFocus);
         return () => { mounted = false; clearInterval(interval); window.removeEventListener("focus", onFocus); };
     }, [sessionId]);
+
+    const moderate = async (messageId, action) => {
+        if (action === "ban_ip" && !window.confirm("Заблокировать IP на 24 часа и скрыть сообщение?")) return;
+        setError("");
+        try {
+            await api(`/live/api/sessions/${sessionId}/messages/${messageId}/moderate`, {
+                method: "POST", body: JSON.stringify({ action }),
+            });
+            setMessages(await api(`/live/api/sessions/${sessionId}/messages`));
+        } catch (e) { setError(e.message); }
+    };
 
     const join = async e => {
         e.preventDefault();
@@ -126,9 +137,14 @@ export default function Live() {
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
                                     {messages.length === 0 && <p className="text-sm text-white/50">Пока нет сообщений. Начни разговор!</p>}
                                     {messages.map(msg => (
-                                        <div key={msg.id}>
+                                        <div key={msg.id} className={msg.is_hidden ? "rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : ""}>
                                             <div className="mb-1 text-xs font-bold text-[#f5c542]">{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
                                             <p className="whitespace-pre-wrap break-words text-sm leading-6 text-white/85">{msg.body}</p>
+                                            {canModerate && <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
+                                                {msg.is_hidden && <span className="text-red-300">Скрыто от зрителей</span>}
+                                                <button type="button" onClick={() => moderate(msg.id, msg.is_hidden ? "show" : "hide")} className="text-white/60 underline hover:text-white">{msg.is_hidden ? "Восстановить" : "Скрыть"}</button>
+                                                {msg.ip_hash && <button type="button" onClick={() => moderate(msg.id, "ban_ip")} className="text-red-300 underline hover:text-red-200">Блокировать IP на 24 ч</button>}
+                                            </div>}
                                         </div>
                                     ))}
                                     <div ref={chatEndRef} aria-hidden="true" />
