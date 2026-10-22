@@ -35,6 +35,9 @@ class LiveController extends Controller {
             'id' => $session->id, 'title' => $session->title, 'description' => $session->description,
             'status' => $session->status, 'chat_enabled' => $session->chat_enabled,
             'youtube_id' => $this->youtubeId($session->youtube_url),
+            'pinned_message' => $session->pinned_message_id ? LiveMessage::query()
+                ->whereKey($session->pinned_message_id)->where('is_hidden', false)
+                ->first(['id','author_name','body','is_host','is_highlighted']) : null,
         ]);
     }
 
@@ -78,7 +81,7 @@ class LiveController extends Controller {
         $moderator = $this->moderator($request);
         $query = $session->messages();
         if (! $moderator) $query->where('is_hidden', false);
-        $fields = ['id','author_name','body','is_host','created_at'];
+        $fields = ['id','author_name','body','is_host','is_highlighted','created_at'];
         if ($moderator) $fields = array_merge($fields, ['is_hidden','ip_hash']);
         return response()->json($query->latest('id')->limit(100)->get($fields)->reverse()->values());
     }
@@ -86,9 +89,19 @@ class LiveController extends Controller {
     public function moderate(Request $request, LiveSession $session, LiveMessage $message) {
         abort_unless($this->moderator($request), 403);
         abort_unless($message->live_session_id === $session->id, 404);
-        $data = $request->validate(['action' => ['required', 'in:hide,show,ban_ip']]);
-        if ($data['action'] === 'hide') $message->update(['is_hidden' => true]);
+        $data = $request->validate(['action' => ['required', 'in:hide,show,ban_ip,pin,unpin,highlight,unhighlight']]);
+        if ($data['action'] === 'hide') {
+            $message->update(['is_hidden' => true]);
+            if ($session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
+        }
         if ($data['action'] === 'show') $message->update(['is_hidden' => false]);
+        if ($data['action'] === 'pin') {
+            abort_if($message->is_hidden, 422, 'Скрытое сообщение нельзя закрепить.');
+            $session->update(['pinned_message_id' => $message->id]);
+        }
+        if ($data['action'] === 'unpin' && $session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
+        if ($data['action'] === 'highlight') $message->update(['is_highlighted' => true]);
+        if ($data['action'] === 'unhighlight') $message->update(['is_highlighted' => false]);
         if ($data['action'] === 'ban_ip') {
             abort_unless($message->ip_hash, 422, 'IP для этого сообщения неизвестен.');
             LiveIpBan::updateOrCreate(
@@ -96,6 +109,7 @@ class LiveController extends Controller {
                 ['expires_at' => now()->addDay(), 'reason' => 'Модерация чата']
             );
             $message->update(['is_hidden' => true]);
+            if ($session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
         }
         return response()->json(['ok' => true]);
     }
