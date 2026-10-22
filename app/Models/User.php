@@ -47,8 +47,9 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
-        public function canAccessPanel(Panel $panel): bool
+    public function canAccessPanel(Panel $panel): bool
     {
-        return true; // ტესტისთვის
+        return $panel->getId() === 'admin'
+            && strcasecmp((string) $this->email, 'godsmotivator@gmail.com') === 0;
     }
 }

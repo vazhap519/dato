@@ -19,7 +19,8 @@ async function api(url, options = {}) {
 }
 
 export default function Live() {
-    const { sessions = [], initialSessionId, canModerate = false } = usePage().props;
+    const { sessions = [], initialSessionId, canModerate = false, moderatorPermissions = [], isLiveModerator = false } = usePage().props;
+    const can = permission => moderatorPermissions.includes(permission);
     const [sessionId, setSessionId] = useState(initialSessionId || null);
     const [session, setSession] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -153,7 +154,7 @@ export default function Live() {
         if (!draft.trim() || !sessionId || sending) return;
         setSending(true); setError("");
         try {
-            await api(canModerate ? `/live/api/sessions/${sessionId}/host-message` : `/live/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ body: draft.trim() }) });
+            await api(can('host') ? `/live/api/sessions/${sessionId}/host-message` : `/live/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ body: draft.trim() }) });
             setDraft("");
             shouldStickToBottom.current = true;
             setMessages(await api(`/live/api/sessions/${sessionId}/messages`));
@@ -196,15 +197,15 @@ export default function Live() {
                                     ) : <div className="flex h-full items-center justify-center px-6 text-center text-white/50">Видео появится здесь перед началом эфира</div>}
                                 </div>
                                 {session?.description && <p className="p-5 text-sm leading-7 text-white/70">{session.description}</p>}
-                                <LiveActionButtons sessionId={sessionId} buttons={session?.action_buttons || []} canModerate={canModerate} api={api} onRefresh={async () => setSession(await api("/live/api/sessions/" + sessionId))} />
+                                <LiveActionButtons sessionId={sessionId} buttons={session?.action_buttons || []} canModerate={can('buttons')} api={api} onRefresh={async () => setSession(await api("/live/api/sessions/" + sessionId))} />
                             </section>
                             <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
                                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 p-4">
                                     <div className="font-semibold">Чат участников <span className="ml-2 text-xs font-normal text-white/50">{online === null ? "" : `● ${online} онлайн`}</span></div>
-                                    {canModerate && <button type="button" onClick={toggleChat} className={`rounded-lg border px-3 py-1.5 text-xs font-semibold ${session?.chat_enabled ? "border-red-400/40 text-red-300 hover:bg-red-400/10" : "border-[#f5c542]/50 text-[#f5c542] hover:bg-[#f5c542]/10"}`}>{session?.chat_enabled ? "Закрыть чат" : "Открыть чат"}</button>}
+                                    {can('chat') && <button type="button" onClick={toggleChat} className={`rounded-lg border px-3 py-1.5 text-xs font-semibold ${session?.chat_enabled ? "border-red-400/40 text-red-300 hover:bg-red-400/10" : "border-[#f5c542]/50 text-[#f5c542] hover:bg-[#f5c542]/10"}`}>{session?.chat_enabled ? "Закрыть чат" : "Открыть чат"}</button>}
                                 </div>
                                 {session?.pinned_message && <div className="border-b border-[#f5c542]/25 bg-[#f5c542]/10 px-4 py-3 text-sm">
-                                    <div className="mb-1 flex items-center justify-between gap-2 text-xs font-bold text-[#f5c542]"><span>📌 Закреплено · {session.pinned_message.author_name}</span>{canModerate && <button type="button" onClick={() => moderate(session.pinned_message.id, "unpin")} className="text-white/60 hover:text-white" aria-label="Открепить">✕</button>}</div>
+                                    <div className="mb-1 flex items-center justify-between gap-2 text-xs font-bold text-[#f5c542]"><span>📌 Закреплено · {session.pinned_message.author_name}</span>{can('pin') && <button type="button" onClick={() => moderate(session.pinned_message.id, "unpin")} className="text-white/60 hover:text-white" aria-label="Открепить">✕</button>}</div>
                                     <p className="whitespace-pre-wrap break-words text-white/90">{session.pinned_message.body}</p>
                                 </div>}
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
@@ -213,14 +214,14 @@ export default function Live() {
                                         <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_host ? "relative rounded-xl border border-[#f5c542]/70 bg-[#f5c542]/15 p-3 shadow-sm" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : "relative"}>
                                             <div className="mb-1 text-xs font-bold text-[#f5c542]">{msg.is_host ? "✦ " : ""}{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
                                             <p className="whitespace-pre-wrap break-words text-sm leading-6 text-white/85">{msg.body}</p>
-                                            {canModerate && <div className={`absolute right-0 top-0 ${openMenu === msg.id ? "z-50" : "z-10"}`}>
+                                            {(can('messages') || can('ban') || can('pin') || can('highlight')) && <div className={`absolute right-0 top-0 ${openMenu === msg.id ? "z-50" : "z-10"}`}>
                                                 <button type="button" aria-label="Действия с сообщением" aria-expanded={openMenu === msg.id} onClick={() => setOpenMenu(openMenu === msg.id ? null : msg.id)}
                                                     className="rounded-lg px-2 py-1 text-lg leading-none text-white/50 hover:bg-white/10 hover:text-white">⋯</button>
                                                 {openMenu === msg.id && <div className="absolute right-0 top-full z-50 w-44 overflow-hidden rounded-xl border border-[#f5c542]/40 bg-[#211b13] py-1 text-left text-xs shadow-2xl ring-1 ring-black/70" style={{ backgroundColor: "#211b13", isolation: "isolate" }}>
-                                                    <button type="button" onClick={() => moderate(msg.id, msg.is_hidden ? "show" : "hide")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_hidden ? "↩ Восстановить" : "🗑 Удалить"}</button>
-                                                    {(msg.ip_hash || msg.live_guest_id) && <button type="button" onClick={() => moderate(msg.id, msg.ip_hash ? "ban_ip" : "ban_guest")} className="block w-full px-3 py-2 text-left text-red-300 hover:bg-white/10">⛔ {msg.ip_hash ? "Заблокировать IP" : "Заблокировать гостя"}</button>}
-                                                    {!msg.is_hidden && <button type="button" onClick={() => moderate(msg.id, session?.pinned_message?.id === msg.id ? "unpin" : "pin")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{session?.pinned_message?.id === msg.id ? "📌 Открепить" : "📌 Закрепить"}</button>}
-                                                    <button type="button" onClick={() => moderate(msg.id, msg.is_highlighted ? "unhighlight" : "highlight")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_highlighted ? "✧ Убрать подсветку" : "✨ Подсветить"}</button>
+                                                    {can('messages') && <button type="button" onClick={() => moderate(msg.id, msg.is_hidden ? "show" : "hide")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_hidden ? "↩ Восстановить" : "🗑 Удалить"}</button>}
+                                                    {can('ban') && (msg.ip_hash || msg.live_guest_id) && <button type="button" onClick={() => moderate(msg.id, msg.ip_hash ? "ban_ip" : "ban_guest")} className="block w-full px-3 py-2 text-left text-red-300 hover:bg-white/10">⛔ {msg.ip_hash ? "Заблокировать IP" : "Заблокировать гостя"}</button>}
+                                                    {can('pin') && !msg.is_hidden && <button type="button" onClick={() => moderate(msg.id, session?.pinned_message?.id === msg.id ? "unpin" : "pin")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{session?.pinned_message?.id === msg.id ? "📌 Открепить" : "📌 Закрепить"}</button>}
+                                                    {can('highlight') && <button type="button" onClick={() => moderate(msg.id, msg.is_highlighted ? "unhighlight" : "highlight")} className="block w-full px-3 py-2 text-left hover:bg-white/10">{msg.is_highlighted ? "✧ Убрать подсветку" : "✨ Подсветить"}</button>}
                                                 </div>}
                                             </div>}
                                             {msg.is_hidden && <div className="mt-1 text-xs text-red-300">Скрыто от зрителей</div>}
@@ -229,7 +230,7 @@ export default function Live() {
                                     <div ref={chatEndRef} aria-hidden="true" />
                                 </div>
                                 <div className="border-t border-white/10 p-4">
-                                    {!guest && !canModerate ? (
+                                    {!guest && !can('host') ? (
                                         <form onSubmit={join} className="flex flex-col gap-2">
                                             <label htmlFor="live-name" className="text-sm text-white/75">Как к тебе обращаться?</label>
                                             <input id="live-name" value={name} onChange={e => setName(e.target.value)} maxLength={40} minLength={2} required
@@ -239,10 +240,10 @@ export default function Live() {
                                     ) : (
                                         <form onSubmit={send} className="flex gap-2">
                                             <input value={draft} onChange={e => setDraft(e.target.value)} maxLength={500}
-                                                disabled={!canModerate && (session?.status !== "live" || !session?.chat_enabled)}
-                                                placeholder={canModerate ? "Сообщение от Давид · Ведущий" : session?.status === "live" && session?.chat_enabled ? `Сообщение от ${guest}` : "Чат сейчас закрыт"}
+                                                disabled={!can('host') && (session?.status !== "live" || !session?.chat_enabled)}
+                                                placeholder={can('host') ? "Сообщение от Давид · Ведущий" : session?.status === "live" && session?.chat_enabled ? `Сообщение от ${guest}` : "Чат сейчас закрыт"}
                                                 className="min-w-0 flex-1 rounded-xl border border-white/20 bg-black/25 px-3 py-3 text-sm outline-none focus:border-[#f5c542]" />
-                                            <button disabled={sending || !draft.trim() || (!canModerate && (session?.status !== "live" || !session?.chat_enabled))}
+                                            <button disabled={sending || !draft.trim() || (!can('host') && (session?.status !== "live" || !session?.chat_enabled))}
                                                 className="rounded-xl bg-[#f5c542] px-4 font-bold text-[#17140e] disabled:opacity-40">➤</button>
                                         </form>
                                     )}
@@ -253,6 +254,7 @@ export default function Live() {
                     )}
                 </div>
             </main>
+            {isLiveModerator && <form method="POST" action="/moderator/logout" className="mx-auto max-w-7xl px-4 pb-4"><input type="hidden" name="_token" value={csrf() || ''} /><button type="submit" className="text-sm text-white/60 underline">Выйти из режима модератора</button></form>}
             <Footer />
         </>
     );
