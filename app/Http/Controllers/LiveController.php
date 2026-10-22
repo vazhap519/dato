@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\LiveGuest;
+use App\Models\LiveMessage;
+use App\Models\LiveSession;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
+
+class LiveController extends Controller {
+    public function index() {
+        $sessions = LiveSession::with('series:id,title')->orderByDesc('live_series_id')->orderBy('day_number')->get();
+        $active = $sessions->firstWhere('status', 'live') ?? $sessions->firstWhere('status', 'scheduled') ?? $sessions->first();
+        return Inertia::render('Live', [
+            'sessions' => $sessions->map(fn ($s) => [
+                'id' => $s->id, 'day' => $s->day_number, 'title' => $s->title,
+                'series' => $s->series?->title, 'status' => $s->status,
+            ]),
+            'initialSessionId' => $active?->id,
+        ]);
+    }
+
+    public function session(LiveSession $session) {
+        return response()->json([
+            'id' => $session->id, 'title' => $session->title, 'description' => $session->description,
+            'status' => $session->status, 'chat_enabled' => $session->chat_enabled,
+            'youtube_id' => $this->youtubeId($session->youtube_url),
+        ]);
+    }
+
+    private function youtubeId(?string $url): ?string {
+        if (! $url) return null;
+        $host = strtolower(parse_url($url, PHP_URL_HOST) ?: '');
+        $path = trim(parse_url($url, PHP_URL_PATH) ?: '', '/');
+        if (in_array($host, ['youtu.be', 'www.youtu.be'], true)) $id = explode('/', $path)[0];
+        elseif (in_array($host, ['youtube.com','www.youtube.com','m.youtube.com'], true)) {
+            if (str_starts_with($path, 'live/') || str_starts_with($path, 'embed/')) $id = explode('/', $path)[1] ?? '';
+            else { parse_str(parse_url($url, PHP_URL_QUERY) ?: '', $params); $id = $params['v'] ?? ''; }
+        } else return null;
+        return preg_match('/^[a-zA-Z0-9_-]{11}$/', $id) ? $id : null;
+    }
+
+    public function join(Request $request) {
+        $data = $request->validate(['name' => ['required','string','min:2','max:40']]);
+        $guest = LiveGuest::create(['name' => trim(strip_tags($data['name'])), 'token' => (string) Str::uuid()]);
+        $request->session()->put('live_guest_id', $guest->id);
+        return response()->json(['name' => $guest->name]);
+    }
+
+    public function guest(Request $request) {
+        $guest = LiveGuest::find($request->session()->get('live_guest_id'));
+        return response()->json(['name' => $guest && ! $guest->is_banned ? $guest->name : null]);
+    }
+
+    public function messages(LiveSession $session) {
+        return response()->json($session->messages()->where('is_hidden', false)->latest('id')->limit(100)->get(['id','author_name','body','is_host','created_at'])->reverse()->values());
+    }
+
+    public function send(Request $request, LiveSession $session) {
+        $guest = LiveGuest::find($request->session()->get('live_guest_id'));
+        abort_unless($guest && ! $guest->is_banned, 403, 'Войди в чат, чтобы отправлять сообщения.');
+        abort_unless($session->status === 'live' && $session->chat_enabled, 403, 'Чат сейчас закрыт.');
+        $data = $request->validate(['body' => ['required','string','max:500']]);
+        $message = LiveMessage::create([
+            'live_session_id' => $session->id, 'live_guest_id' => $guest->id,
+            'author_name' => $guest->name, 'body' => trim(strip_tags($data['body'])),
+        ]);
+        return response()->json($message->only(['id','author_name','body','is_host','created_at']), 201);
+    }
+}
