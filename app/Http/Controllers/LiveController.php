@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LiveGuest;
+use App\Models\LiveIpBan;
 use App\Models\LiveMessage;
 use App\Models\LiveSession;
 use Illuminate\Http\Request;
@@ -42,7 +43,19 @@ class LiveController extends Controller {
         return preg_match('/^[a-zA-Z0-9_-]{11}$/', $id) ? $id : null;
     }
 
+    private function ipHash(Request $request): string {
+        return hash_hmac('sha256', $request->ip(), config('app.key'));
+    }
+
+    private function assertIpAllowed(Request $request): void {
+        $blocked = LiveIpBan::where('ip_hash', $this->ipHash($request))
+            ->where(function ($query) { $query->whereNull('expires_at')->orWhere('expires_at', '>', now()); })
+            ->exists();
+        abort_if($blocked, 403, 'Доступ к чату заблокирован модератором.');
+    }
+
     public function join(Request $request) {
+        $this->assertIpAllowed($request);
         $data = $request->validate(['name' => ['required','string','min:2','max:40']]);
         $guest = LiveGuest::create(['name' => trim(strip_tags($data['name'])), 'token' => (string) Str::uuid()]);
         $request->session()->put('live_guest_id', $guest->id);
@@ -59,6 +72,7 @@ class LiveController extends Controller {
     }
 
     public function send(Request $request, LiveSession $session) {
+        $this->assertIpAllowed($request);
         $guest = LiveGuest::find($request->session()->get('live_guest_id'));
         abort_unless($guest && ! $guest->is_banned, 403, 'Войди в чат, чтобы отправлять сообщения.');
         abort_unless($session->status === 'live' && $session->chat_enabled, 403, 'Чат сейчас закрыт.');
@@ -66,6 +80,7 @@ class LiveController extends Controller {
         $message = LiveMessage::create([
             'live_session_id' => $session->id, 'live_guest_id' => $guest->id,
             'author_name' => $guest->name, 'body' => trim(strip_tags($data['body'])),
+            'ip_hash' => $this->ipHash($request),
         ]);
         return response()->json($message->only(['id','author_name','body','is_host','created_at']), 201);
     }
