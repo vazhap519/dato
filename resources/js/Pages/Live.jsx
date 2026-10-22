@@ -94,6 +94,19 @@ export default function Live() {
         setButtonDraft(button || {label:"",url:"",style:"gold",is_visible:false,sort_order:0});
         setEditingButton(button ? button.id : "new");
     };
+    const saveButton = async e => {
+        e.preventDefault();
+        setError("");
+        try {
+            const path = "/live/api/sessions/" + sessionId + "/buttons";
+            await api(editingButton === "new" ? path : path + "/" + editingButton, {
+                method: editingButton === "new" ? "POST" : "PUT",
+                body: JSON.stringify({...buttonDraft, sort_order: Number(buttonDraft.sort_order) || 0})
+            });
+            setSession(await api("/live/api/sessions/" + sessionId));
+            setEditingButton(null);
+        } catch (e) { setError(e.message); }
+    };
     const toggleChat = async () => {
         if (!session) return;
         setError("");
