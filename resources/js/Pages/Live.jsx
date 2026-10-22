@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePage } from "@inertiajs/react";
 import Header from "@/components/Header.jsx";
 import Footer from "@/components/footer.jsx";
@@ -27,24 +27,43 @@ export default function Live() {
     const [draft, setDraft] = useState("");
     const [error, setError] = useState("");
     const [sending, setSending] = useState(false);
+    const chatEndRef = useRef(null);
+    const chatScrollRef = useRef(null);
+    const shouldStickToBottom = useRef(true);
+
+    useEffect(() => {
+        if (shouldStickToBottom.current) chatEndRef.current?.scrollIntoView({ block: "end", behavior: "instant" });
+    }, [messages]);
 
     useEffect(() => { api("/live/guest").then(data => setGuest(data.name)).catch(() => {}); }, []);
     useEffect(() => {
         if (!sessionId) return;
         setMessages([]);
+        setSession(null);
+        setError("");
+        shouldStickToBottom.current = true;
         let mounted = true;
+        let busy = false;
         const refresh = async () => {
+            if (busy || document.hidden) return;
+            busy = true;
             try {
                 const [details, chat] = await Promise.all([
                     api(`/live/api/sessions/${sessionId}`),
                     api(`/live/api/sessions/${sessionId}/messages`),
                 ]);
-                if (mounted) { setSession(details); setMessages(chat); }
+                if (mounted) {
+                    setSession(previous => JSON.stringify(previous) === JSON.stringify(details) ? previous : details);
+                    setMessages(previous => previous.length === chat.length && previous.every((msg, index) => msg.id === chat[index].id && msg.body === chat[index].body) ? previous : chat);
+                }
             } catch { if (mounted) setError("Не удалось обновить эфир."); }
+            finally { busy = false; }
         };
         refresh();
-        const interval = setInterval(refresh, 3000);
-        return () => { mounted = false; clearInterval(interval); };
+        const interval = setInterval(refresh, 1000);
+        const onFocus = () => refresh();
+        window.addEventListener("focus", onFocus);
+        return () => { mounted = false; clearInterval(interval); window.removeEventListener("focus", onFocus); };
     }, [sessionId]);
 
     const join = async e => {
@@ -60,6 +79,7 @@ export default function Live() {
         try {
             await api(`/live/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ body: draft.trim() }) });
             setDraft("");
+            shouldStickToBottom.current = true;
             setMessages(await api(`/live/api/sessions/${sessionId}/messages`));
         } catch (e) { setError(e.message); }
         finally { setSending(false); }
@@ -68,7 +88,7 @@ export default function Live() {
     return (
         <>
             <Header />
-            <main className="min-h-screen bg-[#17140e] px-4 pb-20 pt-28 text-white sm:px-8">
+            <main className="min-h-screen bg-[#17140e] px-4 pb-20 pt-36 text-white sm:px-8 lg:pt-40">
                 <div className="mx-auto max-w-7xl">
                     <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[.25em] text-[#f5c542]">Прямые эфиры · Arutyun</p>
                     <h1 className="mb-3 text-center text-3xl font-bold sm:text-5xl">Практикум «Познай СЕБЯ»</h1>
@@ -103,7 +123,7 @@ export default function Live() {
                             </section>
                             <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
                                 <div className="border-b border-white/10 p-4 font-semibold">Чат участников</div>
-                                <div className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
+                                <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
                                     {messages.length === 0 && <p className="text-sm text-white/50">Пока нет сообщений. Начни разговор!</p>}
                                     {messages.map(msg => (
                                         <div key={msg.id}>
@@ -111,6 +131,7 @@ export default function Live() {
                                             <p className="whitespace-pre-wrap break-words text-sm leading-6 text-white/85">{msg.body}</p>
                                         </div>
                                     ))}
+                                    <div ref={chatEndRef} aria-hidden="true" />
                                 </div>
                                 <div className="border-t border-white/10 p-4">
                                     {!guest ? (
