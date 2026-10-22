@@ -17,11 +17,11 @@ export default function HomePractice({ practiceSection }) {
     return (
         <section id="interaction-formats" className="scroll-mt-24 py-12 md:py-24 bg-background-light dark:bg-background-dark">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="mb-8 md:mb-14">
+                <div className="mb-8 md:mb-14 text-center">
                     <h2 className="text-primary text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
                         {header_small ?? "Предложения"}
                     </h2>
-                    <h3 className="text-2xl md:text-4xl font-bold max-w-xl">
+                    <h3 className="text-2xl md:text-4xl font-bold max-w-xl mx-auto">
                         {header_big ?? "Продукты и услуги"}
                     </h3>
                 </div>
