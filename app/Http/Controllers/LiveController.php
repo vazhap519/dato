@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LiveActionButton;
+use App\Models\LiveModerator;
 use App\Models\LiveGuest;
 use App\Models\LiveIpBan;
 use App\Models\LiveMessage;
@@ -14,9 +15,26 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class LiveController extends Controller {
-    private function moderator(Request $request): bool {
+    private function liveModerator(Request $request): ?LiveModerator {
+        $id = $request->session()->get('live_moderator_id');
+        return $id ? LiveModerator::whereKey($id)->where('is_active', true)->first() : null;
+    }
+
+    private function admin(Request $request): bool {
         $user = $request->user();
         return $user !== null && $user->canAccessPanel(Filament::getPanel('admin'));
+    }
+
+    private function moderator(Request $request): bool {
+        return $this->admin($request) || $this->liveModerator($request) !== null;
+    }
+
+    private function allowed(Request $request, string $permission): bool {
+        return $this->admin($request) || ($this->liveModerator($request)?->hasPermission($permission) ?? false);
+    }
+
+    private function permissions(Request $request): array {
+        return $this->admin($request) ? array_keys(LiveModerator::PERMISSIONS) : ($this->liveModerator($request)?->permissions ?? []);
     }
 
     public function index(Request $request) {
@@ -29,6 +47,8 @@ class LiveController extends Controller {
             ]),
             'initialSessionId' => $active?->id,
             'canModerate' => $this->moderator($request),
+            'moderatorPermissions' => $this->permissions($request),
+            'isLiveModerator' => $this->liveModerator($request) !== null && !$this->admin($request),
         ]);
     }
 
@@ -76,21 +96,21 @@ class LiveController extends Controller {
     }
 
     public function createButton(Request $request, LiveSession $session) {
-        abort_unless($this->moderator($request), 403);
+        abort_unless($this->allowed($request, 'buttons'), 403);
         abort_if(LiveActionButton::where('live_session_id', $session->id)->count() >= 12, 422, 'Максимум 12 кнопок для одного эфира.');
         $button = $session->actionButtons()->create($this->validatedButton($request));
         return response()->json($button, 201);
     }
 
     public function updateButton(Request $request, LiveSession $session, LiveActionButton $button) {
-        abort_unless($this->moderator($request), 403);
+        abort_unless($this->allowed($request, 'buttons'), 403);
         abort_unless($button->live_session_id === $session->id, 404);
         $button->update($this->validatedButton($request));
         return response()->json($button->fresh());
     }
 
     public function deleteButton(Request $request, LiveSession $session, LiveActionButton $button) {
-        abort_unless($this->moderator($request), 403);
+        abort_unless($this->allowed($request, 'buttons'), 403);
         abort_unless($button->live_session_id === $session->id, 404);
         $button->delete();
         return response()->json(['ok' => true]);
@@ -109,7 +129,7 @@ class LiveController extends Controller {
     }
 
     public function hostSend(Request $request, LiveSession $session) {
-        abort_unless($this->moderator($request), 403);
+        abort_unless($this->allowed($request, 'host'), 403);
         $data = $request->validate(['body' => ['required', 'string', 'max:500']]);
         $body = trim(strip_tags($data['body']));
         abort_if($body === '', 422, 'Введите текст сообщения.');
@@ -123,7 +143,7 @@ class LiveController extends Controller {
     }
 
     public function chatControl(Request $request, LiveSession $session) {
-        abort_unless($this->moderator($request), 403);
+        abort_unless($this->allowed($request, 'chat'), 403);
         $data = $request->validate(['chat_enabled' => ['required', 'boolean']]);
         $session->update(['chat_enabled' => $data['chat_enabled']]);
         return response()->json(['chat_enabled' => $session->chat_enabled]);
@@ -178,6 +198,13 @@ class LiveController extends Controller {
         abort_unless($this->moderator($request), 403);
         abort_unless($message->live_session_id === $session->id, 404);
         $data = $request->validate(['action' => ['required', 'in:hide,show,ban_ip,ban_guest,pin,unpin,highlight,unhighlight']]);
+        $required = match ($data['action']) {
+            'hide', 'show' => 'messages',
+            'ban_ip', 'ban_guest' => 'ban',
+            'pin', 'unpin' => 'pin',
+            'highlight', 'unhighlight' => 'highlight',
+        };
+        abort_unless($this->allowed($request, $required), 403);
         if ($data['action'] === 'hide') {
             $message->update(['is_hidden' => true]);
             if ($session->pinned_message_id === $message->id) $session->update(['pinned_message_id' => null]);
