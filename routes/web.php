@@ -35,6 +35,7 @@ Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])
 Route::get('/live/api/sessions/{session}', [\App\Http\Controllers\LiveController::class, 'session']);
 Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:120,1');
 Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:live-chat');
+Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Http\Controllers\LiveController::class, 'moderate'])->middleware('auth');
 
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
