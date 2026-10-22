@@ -22,6 +22,8 @@ class LiveSessionResource extends Resource {
     protected static ?string $modelLabel = 'эфир';
     protected static ?string $pluralModelLabel = 'прямые эфиры';
     protected static ?string $navigationLabel = 'Прямые эфиры';
+    protected static \UnitEnum|string|null $navigationGroup = 'Прямые эфиры';
+    protected static ?int $navigationSort = 1;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedVideoCamera;
 
     public static function form(Schema $schema): Schema {
