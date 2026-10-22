@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { usePage } from "@inertiajs/react";
-import Header from "@/components/Header.jsx";
-import Footer from "@/components/footer.jsx";
 import LiveActionButtons from "@/components/LiveActionButtons.jsx";
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content;
@@ -164,8 +162,7 @@ export default function Live() {
 
     return (
         <>
-            <Header />
-            <main className="min-h-screen bg-[#17140e] px-4 pb-20 pt-36 text-white sm:px-8 lg:pt-40">
+            <main className="min-h-screen bg-[#17140e] px-4 pb-16 pt-12 text-white sm:px-8 lg:pt-16">
                 <div className="mx-auto max-w-7xl">
                     <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[.25em] text-[#f5c542]">Прямые эфиры · Arutyun</p>
                     <h1 className="mb-3 text-center text-3xl font-bold sm:text-5xl">Практикум «Познай СЕБЯ»</h1>
@@ -255,7 +252,6 @@ export default function Live() {
                 </div>
             </main>
             {isLiveModerator && <form method="POST" action="/moderator/logout" className="mx-auto max-w-7xl px-4 pb-4"><input type="hidden" name="_token" value={csrf() || ''} /><button type="submit" className="text-sm text-white/60 underline">Выйти из режима модератора</button></form>}
-            <Footer />
         </>
     );
 }
