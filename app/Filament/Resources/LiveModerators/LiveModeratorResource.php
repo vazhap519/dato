@@ -27,12 +27,12 @@ class LiveModeratorResource extends Resource {
 
     public static function form(Schema $schema): Schema {
         return $schema->components([
-            TextInput::make('login')->label('Логин')->required()->unique(ignoreRecord: true)->maxLength(80),
+            TextInput::make('login')->label('Логин')->default('moderator_ivan')->required()->unique(ignoreRecord: true)->maxLength(80),
             TextInput::make('password')->label('Пароль (оставьте пустым при редактировании, чтобы сохранить текущий)')
                 ->password()->revealable()->required(fn (string $operation): bool => $operation === 'create')
                 ->dehydrated(fn ($state): bool => filled($state))
                 ->dehydrateStateUsing(fn ($state) => Hash::make($state))->minLength(12),
-            CheckboxList::make('permissions')->label('Разрешённые действия')->options(LiveModerator::PERMISSIONS)->columns(2)->required(),
+            CheckboxList::make('permissions')->label('Разрешённые действия')->default(['messages', 'ban', 'pin', 'highlight'])->options(LiveModerator::PERMISSIONS)->columns(2)->required(),
             Toggle::make('is_active')->label('Активен')->default(true),
         ]);
     }
