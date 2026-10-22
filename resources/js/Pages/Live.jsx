@@ -3,13 +3,26 @@ import { usePage } from "@inertiajs/react";
 import LiveActionButtons from "@/components/LiveActionButtons.jsx";
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content;
+const xsrfCookie = () => {
+    const value = document.cookie.split("; ").find(part => part.startsWith("XSRF-TOKEN="));
+    return value ? decodeURIComponent(value.slice("XSRF-TOKEN=".length)) : null;
+};
 async function api(url, options = {}) {
+    const cookieToken = xsrfCookie();
     const response = await fetch(url, {
         credentials: "same-origin",
-        headers: { Accept: "application/json", "Content-Type": "application/json", "X-CSRF-TOKEN": csrf() || "", ...options.headers },
         ...options,
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            ...(cookieToken ? { "X-XSRF-TOKEN": cookieToken } : { "X-CSRF-TOKEN": csrf() || "" }),
+            ...options.headers,
+        },
     });
     if (!response.ok) {
+        if (response.status === 419) {
+            throw new Error("Сессия устарела. Обнови страницу и повтори действие.");
+        }
         const data = await response.json().catch(() => ({}));
         throw new Error(data.message || "Не удалось выполнить действие");
     }
