@@ -20,12 +20,12 @@ Route::get('/links', function () {
     ]);
 })->name('links');
 // Each live session belongs to one practice day; messages are isolated by session.
-Route::get('/live', [\\App\\Http\\Controllers\\LiveController::class, 'index'])->name('live');
-Route::get('/live/guest', [\\App\\Http\\Controllers\\LiveController::class, 'guest']);
-Route::post('/live/join', [\\App\\Http\\Controllers\\LiveController::class, 'join'])->middleware('throttle:5,1');
-Route::get('/live/api/sessions/{session}', [\\App\\Http\\Controllers\\LiveController::class, 'session']);
-Route::get('/live/api/sessions/{session}/messages', [\\App\\Http\\Controllers\\LiveController::class, 'messages'])->middleware('throttle:120,1');
-Route::post('/live/api/sessions/{session}/messages', [\\App\\Http\\Controllers\\LiveController::class, 'send'])->middleware('throttle:6,1');
+Route::get('/live', [\App\Http\Controllers\LiveController::class, 'index'])->name('live');
+Route::get('/live/guest', [\App\Http\Controllers\LiveController::class, 'guest']);
+Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:5,1');
+Route::get('/live/api/sessions/{session}', [\App\Http\Controllers\LiveController::class, 'session']);
+Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:120,1');
+Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:6,1');
 
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
