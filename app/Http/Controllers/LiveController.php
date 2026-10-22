@@ -17,7 +17,8 @@ use Inertia\Inertia;
 class LiveController extends Controller {
     private function liveModerator(Request $request): ?LiveModerator {
         $id = $request->session()->get('live_moderator_id');
-        return $id ? LiveModerator::whereKey($id)->where('is_active', true)->first() : null;
+        return $id ? LiveModerator::whereKey($id)->where('is_active', true)
+            ->where('access_token_hash', $request->session()->get('live_moderator_token_hash'))->first() : null;
     }
 
     private function admin(Request $request): bool {
@@ -58,7 +59,7 @@ class LiveController extends Controller {
             'status' => $session->status, 'chat_enabled' => $session->chat_enabled,
             'youtube_id' => $this->youtubeId($session->youtube_url),
             'action_buttons' => LiveActionButton::query()->where('live_session_id', $session->id)
-                ->when(! $this->moderator($request), fn ($query) => $query->where('is_visible', true))
+                ->when(! $this->allowed($request, 'buttons'), fn ($query) => $query->where('is_visible', true))
                 ->orderBy('sort_order')->orderBy('id')
                 ->get(['id', 'label', 'url', 'style', 'is_visible', 'sort_order']),
             'pinned_message' => $session->pinned_message_id ? LiveMessage::query()
@@ -190,7 +191,8 @@ class LiveController extends Controller {
         $query = $session->messages();
         if (! $moderator) $query->where('is_hidden', false);
         $fields = ['id','author_name','body','is_host','is_highlighted','created_at'];
-        if ($moderator) $fields = array_merge($fields, ['is_hidden','ip_hash','live_guest_id']);
+        if ($moderator) $fields = array_merge($fields, ['is_hidden']);
+        if ($this->allowed($request, 'ban')) $fields = array_merge($fields, ['ip_hash','live_guest_id']);
         return response()->json($query->latest('id')->limit(100)->get($fields)->reverse()->values());
     }
 
