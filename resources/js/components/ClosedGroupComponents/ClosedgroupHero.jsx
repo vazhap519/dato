@@ -11,7 +11,7 @@ export default function ClosedGroupHero({ group }) {
                             {group.hero_badge}
                         </div>
                     )}
-                    <h1 className="order-2 lg:order-none max-w-[760px] text-[clamp(2.6rem,7vw,4.5rem)] font-display font-medium leading-[1.07] tracking-tight text-white">
+                    <h1 className="order-2 lg:order-none max-w-[760px] text-[clamp(2.6rem,7vw,4.5rem)] font-display font-medium leading-[1.07] tracking-tight text-white text-center lg:text-left mx-auto lg:mx-0">
                         {group.hero_title}
                         <span className="mt-1 block text-primary/95 italic">{group.hero_title_highlight}</span>
                     </h1>
