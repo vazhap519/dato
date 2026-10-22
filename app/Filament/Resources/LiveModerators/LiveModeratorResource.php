@@ -33,7 +33,7 @@ class LiveModeratorResource extends Resource {
             TextInput::make('password')->label('Пароль (оставьте пустым при редактировании, чтобы сохранить текущий)')
                 ->password()->revealable()->required(fn (string $operation): bool => $operation === 'create')
                 ->dehydrated(fn ($state): bool => filled($state))
-                ->dehydrateStateUsing(fn ($state) => Hash::make($state))->minLength(12),
+                ->dehydrateStateUsing(fn ($state) => Hash::make($state)),
             CheckboxList::make('permissions')->label('Разрешённые действия')->default(['messages', 'ban', 'pin', 'highlight'])->options(LiveModerator::PERMISSIONS)->columns(2)->required(),
             Toggle::make('is_active')->label('Активен')->default(true),
         ]);
@@ -41,6 +41,10 @@ class LiveModeratorResource extends Resource {
     public static function table(Table $table): Table {
         return $table->columns([
             TextColumn::make('login')->label('Логин')->searchable(),
+            TextColumn::make('access_link')->label('Уникальная ссылка')
+                ->state(fn (LiveModerator $record): ?string => $record->access_token_encrypted ? url('/moderator/'.$record->access_token_encrypted) : null)
+                ->placeholder('Создайте новую ссылку один раз')
+                ->copyable()->copyMessage('Ссылка скопирована')->wrap(),
             IconColumn::make('is_active')->label('Активен')->boolean(),
             TextColumn::make('permissions')->label('Права')->formatStateUsing(fn ($state) => is_array($state) ? count($state).' разрешений' : ''),
         ])->recordActions([\Filament\Actions\EditAction::make()]);
