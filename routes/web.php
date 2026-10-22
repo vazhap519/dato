@@ -29,9 +29,9 @@ RateLimiter::for('live-chat', function (\Illuminate\Http\Request $request) {
 });
 
 // Each live session belongs to one practice day; messages are isolated by session.
-Route::get('/moderator/{token}', [\\App\\Http\\Controllers\\LiveModeratorAuthController::class, 'show'])->name('live.moderator.show')->middleware('throttle:30,1');
-Route::post('/moderator/{token}', [\\App\\Http\\Controllers\\LiveModeratorAuthController::class, 'login'])->name('live.moderator.login')->middleware('throttle:10,1');
-Route::post('/moderator/logout', [\\App\\Http\\Controllers\\LiveModeratorAuthController::class, 'logout'])->name('live.moderator.logout');
+Route::get('/moderator/{token}', [\App\Http\Controllers\LiveModeratorAuthController::class, 'show'])->name('live.moderator.show')->middleware('throttle:30,1');
+Route::post('/moderator/{token}', [\App\Http\Controllers\LiveModeratorAuthController::class, 'login'])->name('live.moderator.login')->middleware('throttle:10,1');
+Route::post('/moderator/logout', [\App\Http\Controllers\LiveModeratorAuthController::class, 'logout'])->name('live.moderator.logout');
 Route::get('/live', [\App\Http\Controllers\LiveController::class, 'index'])->name('live');
 Route::get('/live/guest', [\App\Http\Controllers\LiveController::class, 'guest']);
 Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:5,1');
