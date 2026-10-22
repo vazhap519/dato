@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
@@ -26,7 +27,7 @@ class LiveMessageResource extends Resource {
             TextColumn::make('session.title')->label('Эфир'),
             TextColumn::make('author_name')->label('Участник')->searchable(),
             TextColumn::make('body')->label('Сообщение')->searchable()->wrap()->limit(160),
-            TextColumn::make('is_hidden')->label('Скрыто')->boolean(),
+            IconColumn::make('is_hidden')->label('Скрыто')->boolean(),
             TextColumn::make('created_at')->label('Время')->dateTime('d.m.Y H:i')->sortable(),
         ])->filters([
             SelectFilter::make('live_session_id')->label('Эфир')->relationship('session','title'),
