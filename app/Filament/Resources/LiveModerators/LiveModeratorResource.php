@@ -23,6 +23,8 @@ class LiveModeratorResource extends Resource {
     protected static ?string $modelLabel = 'модератор';
     protected static ?string $pluralModelLabel = 'модераторы эфира';
     protected static ?string $navigationLabel = 'Модераторы эфира';
+    protected static \UnitEnum|string|null $navigationGroup = 'Прямые эфиры';
+    protected static ?int $navigationSort = 2;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 
     public static function form(Schema $schema): Schema {
