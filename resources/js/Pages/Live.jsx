@@ -90,6 +90,10 @@ export default function Live() {
         return () => { active = false; clearInterval(timer); window.removeEventListener("focus", onFocus); };
     }, [sessionId]);
 
+    const editButton = button => {
+        setButtonDraft(button || {label:"",url:"",style:"gold",is_visible:false,sort_order:0});
+        setEditingButton(button ? button.id : "new");
+    };
     const toggleChat = async () => {
         if (!session) return;
         setError("");
