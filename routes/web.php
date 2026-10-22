@@ -42,6 +42,7 @@ Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Ht
 
 Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton'])->middleware('auth');
 Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controllers\LiveController::class, 'updateButton'])->middleware('auth');
+Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton'])->middleware('auth');
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
         ->toResponse(request())
