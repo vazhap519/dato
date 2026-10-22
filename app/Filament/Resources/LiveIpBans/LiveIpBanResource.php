@@ -14,6 +14,8 @@ use Filament\Actions\DeleteAction;
 class LiveIpBanResource extends Resource {
     protected static ?string $model = LiveIpBan::class;
     protected static ?string $navigationLabel = 'Блокировки чата';
+    protected static \UnitEnum|string|null $navigationGroup = 'Прямые эфиры';
+    protected static ?int $navigationSort = 4;
     protected static ?string $modelLabel = 'блокировка';
     protected static ?string $pluralModelLabel = 'блокировки чата';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldExclamation;
