@@ -107,6 +107,14 @@ export default function Live() {
             setEditingButton(null);
         } catch (e) { setError(e.message); }
     };
+    const removeButton = async button => {
+        if (!window.confirm("Удалить кнопку?")) return;
+        try {
+            await api("/live/api/sessions/" + sessionId + "/buttons/" + button.id + "/remove", {method:"POST"});
+            setSession(await api("/live/api/sessions/" + sessionId));
+            setEditingButton(null);
+        } catch (e) { setError(e.message); }
+    };
     const toggleChat = async () => {
         if (!session) return;
         setError("");
