@@ -29,13 +29,22 @@ RateLimiter::for('live-chat', function (\Illuminate\Http\Request $request) {
     return [Limit::perMinute(30)->by('minute:'.$key), Limit::perSecond(1, 2)->by('second:'.$key)];
 });
 
+// Limit chat registration per browser session, with a separate broad IP safeguard.
+RateLimiter::for('live-join', function (\Illuminate\Http\Request $request) {
+    $sessionKey = hash('sha256', $request->session()->getId());
+    return [
+        Limit::perMinute(15)->by('session:'.$sessionKey),
+        Limit::perMinute(120)->by('ip:'.$request->ip()),
+    ];
+});
+
 // Each live session belongs to one practice day; messages are isolated by session.
 Route::get('/moderator/{token}', [\App\Http\Controllers\LiveModeratorAuthController::class, 'show'])->name('live.moderator.show')->middleware('throttle:30,1');
 Route::post('/moderator/{token}', [\App\Http\Controllers\LiveModeratorAuthController::class, 'login'])->name('live.moderator.login')->middleware('throttle:10,1');
 Route::post('/moderator/logout', [\App\Http\Controllers\LiveModeratorAuthController::class, 'logout'])->name('live.moderator.logout');
 Route::get('/live', [\App\Http\Controllers\LiveController::class, 'index'])->name('live');
 Route::get('/live/guest', [\App\Http\Controllers\LiveController::class, 'guest']);
-Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:5,1');
+Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:live-join');
 Route::get('/live/api/sessions/{session}', [\App\Http\Controllers\LiveController::class, 'session']);
 Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:120,1');
 Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:live-chat');
