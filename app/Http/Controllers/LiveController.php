@@ -8,6 +8,7 @@ use App\Models\LiveMessage;
 use App\Models\LiveSession;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -39,6 +40,39 @@ class LiveController extends Controller {
                 ->whereKey($session->pinned_message_id)->where('is_hidden', false)
                 ->first(['id','author_name','body','is_host','is_highlighted']) : null,
         ]);
+    }
+
+    public function presence(Request $request, LiveSession $session) {
+        $token = hash_hmac('sha256', $request->session()->getId(), config('app.key'));
+        DB::table('live_presence')->upsert([[
+            'live_session_id' => $session->id,
+            'visitor_token' => $token,
+            'last_seen_at' => now(),
+        ]], ['live_session_id', 'visitor_token'], ['last_seen_at']);
+        $count = DB::table('live_presence')->where('live_session_id', $session->id)
+            ->where('last_seen_at', '>=', now()->subSeconds(45))->count();
+        return response()->json(['online' => $count]);
+    }
+
+    public function hostSend(Request $request, LiveSession $session) {
+        abort_unless($this->moderator($request), 403);
+        $data = $request->validate(['body' => ['required', 'string', 'max:500']]);
+        $body = trim(strip_tags($data['body']));
+        abort_if($body === '', 422, 'Введите текст сообщения.');
+        $message = LiveMessage::create([
+            'live_session_id' => $session->id,
+            'author_name' => 'Давид',
+            'body' => $body,
+            'is_host' => true,
+        ]);
+        return response()->json($message->only(['id','author_name','body','is_host','created_at']), 201);
+    }
+
+    public function chatControl(Request $request, LiveSession $session) {
+        abort_unless($this->moderator($request), 403);
+        $data = $request->validate(['chat_enabled' => ['required', 'boolean']]);
+        $session->update(['chat_enabled' => $data['chat_enabled']]);
+        return response()->json(['chat_enabled' => $session->chat_enabled]);
     }
 
     private function youtubeId(?string $url): ?string {
