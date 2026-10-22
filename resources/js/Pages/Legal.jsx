@@ -70,10 +70,10 @@ export default function Legal() {
 
                             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
                                 <aside className="w-full lg:w-64 print:hidden">
-                                    <nav className="lg:sticky lg:top-32 grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-3" aria-label="Разделы документов">
+                                    <nav className="lg:sticky lg:top-32 grid grid-cols-1 min-[390px]:grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-3" aria-label="Разделы документов">
                                         {sections.map((item) => (
                                             <a key={item.anchor} href={`#${item.anchor}`}
-                                                className="px-3 py-3 text-sm rounded-xl hover:bg-primary/10 hover:text-primary transition-all">
+                                                className="block min-w-0 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-3 text-sm leading-snug break-words [overflow-wrap:anywhere] hover:border-primary/30 hover:bg-primary/10 hover:text-primary transition-all lg:border-transparent lg:bg-transparent">
                                                 {item.label}
                                             </a>
                                         ))}
