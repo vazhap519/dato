@@ -55,6 +55,7 @@ function useEditoriaPixel() {
                 ? event.target.closest("[data-meta-event]")
                 : null;
             if (!target || !onEditoria() || !document.contains(target)) return;
+            if (target.hasAttribute("data-registration-required")) return;
             const name = target.getAttribute("data-meta-event");
             if (!name) return;
             pixelEvent(name, target.getAttribute("data-meta-label") || target.textContent.trim(), target.getAttribute("href") || window.location.href);
@@ -108,12 +109,13 @@ function useEditoriaPixel() {
     }, []);
 }
 
-function JoinLink({ href, children, secondary = false, className = "", eventName }) {
+function JoinLink({ href, children, secondary = false, className = "", eventName, onRegister }) {
     const base = "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 font-bold text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
     const colors = secondary ? "border border-primary/50 text-primary hover:bg-primary/10" : "bg-primary text-background-dark hover:brightness-110 shadow-lg shadow-primary/10";
     const destination = href || "#how-to-join";
 
     const handleClick = (event) => {
+        if (onRegister && href && href !== "#") { event.preventDefault(); onRegister(href, eventName); return; }
         if (!eventName) return;
         // The native capture listener sends exactly one event for this link.
 
@@ -131,7 +133,7 @@ function JoinLink({ href, children, secondary = false, className = "", eventName
         window.setTimeout(() => { window.location.assign(anchor.href); }, 120);
     };
 
-    return <a href={destination} data-meta-event={eventName} data-meta-label="Присоединиться бесплатно" onClick={handleClick} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
+    return <a href={destination} data-meta-event={eventName} data-registration-required={onRegister ? "true" : undefined} data-meta-label="Присоединиться бесплатно" onClick={handleClick} className={base + " " + colors + " " + className}>{children}<span aria-hidden="true">→</span></a>;
 }
 
 export default function Editoria() {
@@ -139,6 +141,30 @@ export default function Editoria() {
     useEditoriaPixel();
     const [openFaq, setOpenFaq] = useState(0);
     const [openDay, setOpenDay] = useState(-1);
+    const [registration, setRegistration] = useState(null);
+    const [form, setForm] = useState({ name: "", email: "", phone: "", practice_reminders: true, marketing_consent: false });
+    const [sending, setSending] = useState(false);
+    const [formError, setFormError] = useState("");
+    const register = (url, eventName) => { setFormError(""); setRegistration({ url, eventName }); };
+    const submitRegistration = async (event) => {
+        event.preventDefault();
+        if (!registration || sending) return;
+        setSending(true);
+        setFormError("");
+        try {
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+            const response = await fetch("/editoria/register", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: { "Content-Type": "application/json", "Accept": "application/json", ...(csrf ? { "X-CSRF-TOKEN": csrf } : {}) },
+                body: JSON.stringify(form),
+            });
+            if (!response.ok) throw new Error(response.status === 422 ? "Проверь имя, email и согласие на напоминания." : "Не удалось сохранить регистрацию. Попробуй ещё раз.");
+            // Preserve the existing single conversion event, fired only on the real Telegram transition.
+            pixelEvent("TelegramJoinClick", "Переход после регистрации", registration.url);
+            window.setTimeout(() => window.location.assign(registration.url), 120);
+        } catch (error) { setFormError(error.message); setSending(false); }
+    };
 
     if (!editoria) return <><Seo /><main className="min-h-screen flex items-center justify-center px-6 text-white text-center">Содержимое страницы пока не опубликовано</main></>;
 
@@ -167,6 +193,19 @@ export default function Editoria() {
     return (
         <>
             <Seo />
+            {registration && <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Регистрация на практикум">
+                <form onSubmit={submitRegistration} className="w-full max-w-md rounded-2xl border border-primary/30 bg-[#1c1914] p-6 text-white shadow-2xl space-y-4">
+                    <div className="flex justify-between items-center"><h2 className="text-xl font-bold">Напоминание о практикуме</h2><button type="button" onClick={() => setRegistration(null)} aria-label="Закрыть" className="text-gray-300 text-2xl">×</button></div>
+                    <p className="text-sm text-gray-300">Оставь контакты, чтобы получать напоминания перед началом. После регистрации откроется Telegram.</p>
+                    <label className="block text-sm">Имя *<input required maxLength={120} autoComplete="given-name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="block text-sm">Email *<input required type="email" maxLength={255} autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="block text-sm">Телефон (необязательно)<input type="tel" maxLength={40} autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.practice_reminders} onChange={e => setForm({ ...form, practice_reminders: e.target.checked })} required className="mt-1" />Согласен получать письма-напоминания о практикуме.</label>
+                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.marketing_consent} onChange={e => setForm({ ...form, marketing_consent: e.target.checked })} className="mt-1" />Хочу также получать новости о книгах, эфирах и проектах (необязательно).</label>
+                    {formError && <p role="alert" className="text-red-400 text-sm">{formError}</p>}
+                    <button disabled={sending} type="submit" className="w-full rounded-xl bg-primary text-background-dark font-bold p-3 disabled:opacity-50">{sending ? "Сохраняем..." : "Продолжить в Telegram →"}</button>
+                </form>
+            </div>}
             <header className="hidden md:block relative z-20 border-b border-white/10 bg-background-dark">
                 <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
                     <div className="flex items-center" aria-label={settings?.site_name || "Arutyun"}>
@@ -185,7 +224,7 @@ export default function Editoria() {
                         <div className="flex flex-wrap gap-2 md:gap-4 text-sm text-gray-300 mb-6 md:mb-7">
                             <span className="rounded-full bg-white/10 px-3 py-1">✦ 3 дня</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Бесплатно</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Онлайн</span>
                         </div>
-                        <JoinLink href={joinUrl} eventName="HeroJoinClick" className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={joinUrl} eventName="HeroJoinClick" onRegister={register} className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
                     <div className="hidden md:flex order-2 lg:order-2 relative z-0 items-center justify-center lg:justify-end lg:-mr-10 xl:-mr-16 pointer-events-none">
@@ -218,7 +257,7 @@ export default function Editoria() {
                             <p className={`${openDay === i ? "block" : "hidden"} md:block text-gray-400 leading-relaxed mt-3 md:mt-0`}>{day.description}</p>
                         </article>)}
                     </div>
-                    <div className="text-center mt-9"><JoinLink href={joinUrl} eventName="ProgramJoinClick">Присоединиться бесплатно</JoinLink></div>
+                    <div className="text-center mt-9"><JoinLink href={joinUrl} eventName="ProgramJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink></div>
                 </section>
 
                 <section className="bg-white/[0.025] border-y border-white/10 py-16 md:py-20">
@@ -271,7 +310,7 @@ export default function Editoria() {
                             </div>)}
                         </div>
                         <p className="text-gray-400 text-sm text-center mt-6">Telegram нужен для анонсов и доступа к практикуму. Участие бесплатное.</p>
-                        <div className="text-center mt-8"><JoinLink href={joinUrl} eventName="HowToJoinClick">Присоединиться бесплатно</JoinLink></div>
+                        <div className="text-center mt-8"><JoinLink href={joinUrl} eventName="HowToJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink></div>
                     </div>
                 </section>
 
@@ -292,7 +331,7 @@ export default function Editoria() {
                         <h2 className="text-white text-3xl md:text-5xl font-bold">{editoria.cta_title || "Возможно, пора выбрать себя"}</h2>
                         <p className="text-gray-300 max-w-2xl mx-auto mt-5 leading-relaxed">{editoria.cta_description}</p>
                         <p className="text-primary text-sm mt-6 mb-5 font-semibold">3 дня · Бесплатно · Онлайн</p>
-                        <JoinLink href={joinUrl} eventName="FinalJoinClick">Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={joinUrl} eventName="FinalJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink>
                     </div>
                 </section>
             </main>
@@ -304,7 +343,7 @@ export default function Editoria() {
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                <JoinLink href={joinUrl} eventName="MobileJoinClick" className="w-full py-3">Присоединиться бесплатно</JoinLink>
+                <JoinLink href={joinUrl} eventName="MobileJoinClick" onRegister={register} className="w-full py-3">Присоединиться бесплатно</JoinLink>
             </div>
         </>
     );
