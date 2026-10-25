@@ -29,6 +29,20 @@ class MailingContactResource extends Resource
             TextColumn::make('name')->label('Имя')->searchable(),
             TextColumn::make('email')->label('Email')->searchable()->copyable(),
             TextColumn::make('phone')->label('Телефон')->searchable(),
+            TextColumn::make('email_verification_status')->label('Статус email')->badge()
+                ->formatStateUsing(fn (?string $state) => match ($state) {
+                    'verified' => 'Подтверждён',
+                    'pending' => 'Ожидает',
+                    'send_failed' => 'Ошибка отправки',
+                    'bounced' => 'Недоставлен',
+                    default => 'Не проверен',
+                })
+                ->color(fn (?string $state) => match ($state) {
+                    'verified' => 'success',
+                    'pending' => 'warning',
+                    'send_failed', 'bounced' => 'danger',
+                    default => 'gray',
+                }),
             TextColumn::make('source')->label('Источник'),
             IconColumn::make('practice_reminders')->label('Напоминания')->boolean(),
             IconColumn::make('marketing_consent')->label('Новости')->boolean(),
