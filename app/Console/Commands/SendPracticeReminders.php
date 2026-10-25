@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\MailingContact;
 use App\Models\MailingDelivery;
+use App\Models\MailingFormSetting;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -16,6 +17,11 @@ class SendPracticeReminders extends Command
 
     public function handle(): int
     {
+        // Fail closed: no settings record, or disabled, means no email delivery.
+        if (! MailingFormSetting::query()->where('auto_reminders_enabled', true)->exists()) {
+            return self::SUCCESS;
+        }
+
         $now = CarbonImmutable::now('Europe/Moscow');
         $daysUntilFriday = (5 - $now->dayOfWeekIso + 7) % 7;
         $friday = $now->startOfDay()->addDays($daysUntilFriday)->setTime(19, 0);
@@ -31,6 +37,7 @@ class SendPracticeReminders extends Command
             MailingContact::query()->where('practice_reminders', true)->whereNull('unsubscribed_at')
                 ->where('created_at', '<=', $at->utc())->chunkById(100, function ($contacts) use ($type, $friday) {
                     foreach ($contacts as $contact) {
+                        if (! MailingFormSetting::query()->where('auto_reminders_enabled', true)->exists()) return;
                         $date = $friday->toDateString();
                         $delivery = MailingDelivery::firstOrCreate(
                             ['mailing_contact_id'=>$contact->id,'type'=>$type,'practice_date'=>$date],
