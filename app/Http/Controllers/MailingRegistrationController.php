@@ -14,7 +14,7 @@ class MailingRegistrationController extends Controller
         $data = $request->validate([
             'name' => ['required','string','max:120'],
             'email' => ['required','email','max:255'],
-            'phone' => ['nullable','string','max:40'],
+            'phone' => ['required','string','min:6','max:40'],
             'practice_reminders' => ['accepted'],
             'marketing_consent' => ['nullable','boolean'],
         ]);
