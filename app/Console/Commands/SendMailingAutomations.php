@@ -23,6 +23,7 @@ class SendMailingAutomations extends Command
             ->each(function (MailingAutomation $automation) {
                 MailingContact::query()
                     ->whereNotNull('email_verified_at')
+                    ->where('email_verified_at', '>=', $automation->created_at)
                     ->where('email_verified_at', '<=', now()->subMinutes($automation->delay_minutes))
                     ->whereNull('unsubscribed_at')
                     ->when($automation->audience === 'marketing', fn ($q) => $q->where('marketing_consent', true))
