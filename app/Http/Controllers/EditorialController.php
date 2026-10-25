@@ -14,10 +14,12 @@ class EditorialController extends Controller
         if (!$editoria) {
             return Inertia::render('Editoria', [
                 'editoria' => null,
+                'mailingForm' => \App\Models\MailingFormSetting::first(),
             ]);
         }
 
         return Inertia::render('Editoria', [
+            'mailingForm' => \App\Models\MailingFormSetting::first(),
             'editoria' => [
                 ...$editoria->toArray(),
 
