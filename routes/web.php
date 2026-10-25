@@ -67,6 +67,8 @@ Route::get('/personal', [PersonalController::class, 'index'])
 Route::get('/legal', [LegalController::class, 'index'])
     ->name('legal');
 Route::get('/shop',[PracticeController::class,'index'])->name('practice');
+Route::post('/editoria/register', [\App\Http\Controllers\MailingRegistrationController::class, 'store'])->middleware('throttle:10,1')->name('mailing.register');
+Route::get('/mailing/unsubscribe/{token}', [\App\Http\Controllers\MailingRegistrationController::class, 'unsubscribe'])->middleware('throttle:30,1')->name('mailing.unsubscribe');
 Route::get('/editoria', [\App\Http\Controllers\EditorialController::class, 'index'])
     ->name('editoria');
 
