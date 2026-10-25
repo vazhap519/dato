@@ -159,7 +159,7 @@ export default function Editoria() {
                 headers: { "Content-Type": "application/json", "Accept": "application/json", ...(csrf ? { "X-CSRF-TOKEN": csrf } : {}) },
                 body: JSON.stringify(form),
             });
-            if (!response.ok) throw new Error(response.status === 422 ? "Проверь имя, email и согласие на напоминания." : "Не удалось сохранить регистрацию. Попробуй ещё раз.");
+            if (!response.ok) throw new Error(response.status === 422 ? "Проверь имя, email, телефон и согласие на напоминания." : "Не удалось сохранить регистрацию. Попробуй ещё раз.");
             // Preserve the existing single conversion event, fired only on the real Telegram transition.
             pixelEvent("TelegramJoinClick", "Переход после регистрации", registration.url);
             setRegistration(null);
@@ -201,7 +201,7 @@ export default function Editoria() {
                     <p className="text-sm text-gray-300">{mailingForm?.description || "Оставь контакты, чтобы получать напоминания перед началом. После регистрации откроется Telegram."}</p>
                     <label className="block text-sm">{mailingForm?.name_label || "Имя"} *<input required maxLength={120} autoComplete="given-name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
                     <label className="block text-sm">{mailingForm?.email_label || "Email"} *<input required type="email" maxLength={255} autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
-                    <label className="block text-sm">{mailingForm?.phone_label || "Телефон (необязательно)"}<input type="tel" maxLength={40} autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="block text-sm">{(mailingForm?.phone_label || "Телефон").replace(/\s*\(необязательно\)/gi, "")} *<input required type="tel" minLength={6} maxLength={40} autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
                     <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.practice_reminders} onChange={e => setForm({ ...form, practice_reminders: e.target.checked })} required className="mt-1" />{mailingForm?.reminders_label || "Согласен получать письма-напоминания о практикуме."}</label>
                     <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.marketing_consent} onChange={e => setForm({ ...form, marketing_consent: e.target.checked })} className="mt-1" />{mailingForm?.marketing_label || "Хочу также получать новости о книгах, эфирах и проектах (необязательно)."}</label>
                     {formError && <p role="alert" className="text-red-400 text-sm">{formError}</p>}
