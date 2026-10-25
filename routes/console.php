@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 Schedule::command('sitemap:generate')->daily();
 
 Schedule::command('mailing:practice-reminders')->everyMinute()->withoutOverlapping();
+
+// Check event-triggered email automations every minute.
+\Illuminate\Support\Facades\Schedule::command('mailing:automations')->everyMinute()->withoutOverlapping();
