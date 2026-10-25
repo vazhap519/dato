@@ -137,7 +137,7 @@ function JoinLink({ href, children, secondary = false, className = "", eventName
 }
 
 export default function Editoria() {
-    const { editoria, settings } = usePage().props;
+    const { editoria, settings, mailingForm } = usePage().props;
     useEditoriaPixel();
     const [openFaq, setOpenFaq] = useState(0);
     const [openDay, setOpenDay] = useState(-1);
@@ -145,7 +145,7 @@ export default function Editoria() {
     const [form, setForm] = useState({ name: "", email: "", phone: "", practice_reminders: true, marketing_consent: false });
     const [sending, setSending] = useState(false);
     const [formError, setFormError] = useState("");
-    const register = (url, eventName) => { setFormError(""); setRegistration({ url, eventName }); };
+    const register = (url, eventName) => { setFormError(""); setRegistration({ url: mailingForm?.telegram_url || url, eventName }); };
     const submitRegistration = async (event) => {
         event.preventDefault();
         if (!registration || sending) return;
@@ -162,6 +162,8 @@ export default function Editoria() {
             if (!response.ok) throw new Error(response.status === 422 ? "Проверь имя, email и согласие на напоминания." : "Не удалось сохранить регистрацию. Попробуй ещё раз.");
             // Preserve the existing single conversion event, fired only on the real Telegram transition.
             pixelEvent("TelegramJoinClick", "Переход после регистрации", registration.url);
+            setRegistration(null);
+            setSending(false);
             window.setTimeout(() => window.location.assign(registration.url), 120);
         } catch (error) { setFormError(error.message); setSending(false); }
     };
@@ -195,15 +197,15 @@ export default function Editoria() {
             <Seo />
             {registration && <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Регистрация на практикум">
                 <form onSubmit={submitRegistration} className="w-full max-w-md rounded-2xl border border-primary/30 bg-[#1c1914] p-6 text-white shadow-2xl space-y-4">
-                    <div className="flex justify-between items-center"><h2 className="text-xl font-bold">Напоминание о практикуме</h2><button type="button" onClick={() => setRegistration(null)} aria-label="Закрыть" className="text-gray-300 text-2xl">×</button></div>
-                    <p className="text-sm text-gray-300">Оставь контакты, чтобы получать напоминания перед началом. После регистрации откроется Telegram.</p>
-                    <label className="block text-sm">Имя *<input required maxLength={120} autoComplete="given-name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
-                    <label className="block text-sm">Email *<input required type="email" maxLength={255} autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
-                    <label className="block text-sm">Телефон (необязательно)<input type="tel" maxLength={40} autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
-                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.practice_reminders} onChange={e => setForm({ ...form, practice_reminders: e.target.checked })} required className="mt-1" />Согласен получать письма-напоминания о практикуме.</label>
-                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.marketing_consent} onChange={e => setForm({ ...form, marketing_consent: e.target.checked })} className="mt-1" />Хочу также получать новости о книгах, эфирах и проектах (необязательно).</label>
+                    <div className="flex justify-between items-center"><h2 className="text-xl font-bold">{mailingForm?.title || "Напоминание о практикуме"}</h2><button type="button" onClick={() => setRegistration(null)} aria-label="Закрыть" className="text-gray-300 text-2xl">×</button></div>
+                    <p className="text-sm text-gray-300">{mailingForm?.description || "Оставь контакты, чтобы получать напоминания перед началом. После регистрации откроется Telegram."}</p>
+                    <label className="block text-sm">{mailingForm?.name_label || "Имя"} *<input required maxLength={120} autoComplete="given-name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="block text-sm">{mailingForm?.email_label || "Email"} *<input required type="email" maxLength={255} autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="block text-sm">{mailingForm?.phone_label || "Телефон (необязательно)"}<input type="tel" maxLength={40} autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="mt-1 w-full rounded-lg bg-black/30 border border-white/20 p-3 text-white" /></label>
+                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.practice_reminders} onChange={e => setForm({ ...form, practice_reminders: e.target.checked })} required className="mt-1" />{mailingForm?.reminders_label || "Согласен получать письма-напоминания о практикуме."}</label>
+                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={form.marketing_consent} onChange={e => setForm({ ...form, marketing_consent: e.target.checked })} className="mt-1" />{mailingForm?.marketing_label || "Хочу также получать новости о книгах, эфирах и проектах (необязательно)."}</label>
                     {formError && <p role="alert" className="text-red-400 text-sm">{formError}</p>}
-                    <button disabled={sending} type="submit" className="w-full rounded-xl bg-primary text-background-dark font-bold p-3 disabled:opacity-50">{sending ? "Сохраняем..." : "Продолжить в Telegram →"}</button>
+                    <button disabled={sending} type="submit" className="w-full rounded-xl bg-primary text-background-dark font-bold p-3 disabled:opacity-50">{sending ? "Сохраняем..." : (mailingForm?.button_text || "Продолжить в Telegram") + " →"}</button>
                 </form>
             </div>}
             <header className="hidden md:block relative z-20 border-b border-white/10 bg-background-dark">
