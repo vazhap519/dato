@@ -25,6 +25,7 @@ class MailingDeliveryResource extends Resource
         return $table->columns([
             TextColumn::make('contact.email')->label('Получатель')->searchable(),
             TextColumn::make('type')->label('Тип'),
+            TextColumn::make('mailing_automation_id')->label('Автописьмо'),
             TextColumn::make('practice_date')->label('Практикум')->date('d.m.Y'),
             TextColumn::make('status')->label('Статус')->badge(),
             TextColumn::make('error')->label('Ошибка')->limit(90)->wrap(),
