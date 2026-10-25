@@ -34,7 +34,7 @@ class SendPracticeReminders extends Command
         $due = collect($times)->filter(fn ($at) => abs($now->diffInMinutes($at, false)) < 2);
         if ($due->isEmpty()) return self::SUCCESS;
         foreach ($due as $type => $at) {
-            MailingContact::query()->where('practice_reminders', true)->whereNull('unsubscribed_at')
+            MailingContact::query()->where('practice_reminders', true)->whereNotNull('email_verified_at')->whereNull('unsubscribed_at')
                 ->where('created_at', '<=', $at->utc())->chunkById(100, function ($contacts) use ($type, $friday) {
                     foreach ($contacts as $contact) {
                         if (! MailingFormSetting::query()->where('auto_reminders_enabled', true)->exists()) return;
