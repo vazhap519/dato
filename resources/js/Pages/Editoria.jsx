@@ -39,9 +39,6 @@ const pixelEvent = (name, label, href) => {
         // Keep the individual events above for per-button reporting.
         if (["HeroJoinClick", "ProgramJoinClick", "HowToJoinClick", "FinalJoinClick", "MobileJoinClick"].includes(name)) {
             window.fbq("trackCustom", "TelegramJoinClick", { button_location: name });
-            // Standard Meta event for Ads Manager optimization. This records
-            // intent to open Telegram, not a verified channel subscription.
-            window.fbq("trackSingle", PIXEL_ID, "Lead", { content_name: "Telegram button click" });
         }
     } catch { /* Analytics must never interfere with navigation. */ }
 };
