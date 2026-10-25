@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
@@ -26,6 +27,7 @@ class MailingFormSettingResource extends Resource
     protected static ?int $navigationSort = 3;
     public static function form(Schema $schema): Schema {
         return $schema->components([
+            Toggle::make('auto_reminders_enabled')->label('Автоматические напоминания')->helperText('Выключено — никакие автоматические письма с напоминаниями не отправляются.')->default(false),
             TextInput::make('title')->label('Заголовок')->required()->maxLength(255),
             Textarea::make('description')->label('Описание')->required(),
             TextInput::make('name_label')->label('Подпись поля имени')->required(),
