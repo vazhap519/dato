@@ -145,7 +145,7 @@ export default function Editoria() {
     const [form, setForm] = useState({ name: "", email: "", phone: "", practice_reminders: true, marketing_consent: false });
     const [sending, setSending] = useState(false);
     const [formError, setFormError] = useState("");
-    const register = (url, eventName) => { setFormError(""); setRegistration({ url: mailingForm?.telegram_url || url, eventName }); };
+    const register = mailingForm?.registration_form_enabled === false ? null : (url, eventName) => { setFormError(""); setRegistration({ url: mailingForm?.telegram_url || url, eventName }); };
     const submitRegistration = async (event) => {
         event.preventDefault();
         if (!registration || sending) return;
@@ -178,6 +178,8 @@ export default function Editoria() {
         editoria.why_button_url,
         editoria.quote_button_url,
     ].find(url => typeof url === "string" && url.trim() && url.trim() !== "#")?.trim() || "";
+
+    const telegramJoinUrl = mailingForm?.telegram_url || joinUrl;
 
     const days = Array.isArray(editoria.program_days) && editoria.program_days.length ? editoria.program_days : fallbackDays;
     const items = Array.isArray(editoria.for_whom_list) && editoria.for_whom_list.length ? editoria.for_whom_list : [
@@ -226,7 +228,7 @@ export default function Editoria() {
                         <div className="flex flex-wrap gap-2 md:gap-4 text-sm text-gray-300 mb-6 md:mb-7">
                             <span className="rounded-full bg-white/10 px-3 py-1">✦ 3 дня</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Бесплатно</span><span className="rounded-full bg-white/10 px-3 py-1">✦ Онлайн</span>
                         </div>
-                        <JoinLink href={joinUrl} eventName="HeroJoinClick" onRegister={register} className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={telegramJoinUrl} eventName="HeroJoinClick" onRegister={register} className="w-full sm:w-auto">Присоединиться бесплатно</JoinLink>
                         <p className="text-gray-500 text-sm mt-3">Переход в Telegram-канал практикума</p>
                     </div>
                     <div className="hidden md:flex order-2 lg:order-2 relative z-0 items-center justify-center lg:justify-end lg:-mr-10 xl:-mr-16 pointer-events-none">
@@ -259,7 +261,7 @@ export default function Editoria() {
                             <p className={`${openDay === i ? "block" : "hidden"} md:block text-gray-400 leading-relaxed mt-3 md:mt-0`}>{day.description}</p>
                         </article>)}
                     </div>
-                    <div className="text-center mt-9"><JoinLink href={joinUrl} eventName="ProgramJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink></div>
+                    <div className="text-center mt-9"><JoinLink href={telegramJoinUrl} eventName="ProgramJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink></div>
                 </section>
 
                 <section className="bg-white/[0.025] border-y border-white/10 py-16 md:py-20">
@@ -312,7 +314,7 @@ export default function Editoria() {
                             </div>)}
                         </div>
                         <p className="text-gray-400 text-sm text-center mt-6">Telegram нужен для анонсов и доступа к практикуму. Участие бесплатное.</p>
-                        <div className="text-center mt-8"><JoinLink href={joinUrl} eventName="HowToJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink></div>
+                        <div className="text-center mt-8"><JoinLink href={telegramJoinUrl} eventName="HowToJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink></div>
                     </div>
                 </section>
 
@@ -333,7 +335,7 @@ export default function Editoria() {
                         <h2 className="text-white text-3xl md:text-5xl font-bold">{editoria.cta_title || "Возможно, пора выбрать себя"}</h2>
                         <p className="text-gray-300 max-w-2xl mx-auto mt-5 leading-relaxed">{editoria.cta_description}</p>
                         <p className="text-primary text-sm mt-6 mb-5 font-semibold">3 дня · Бесплатно · Онлайн</p>
-                        <JoinLink href={joinUrl} eventName="FinalJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink>
+                        <JoinLink href={telegramJoinUrl} eventName="FinalJoinClick" onRegister={register}>Присоединиться бесплатно</JoinLink>
                     </div>
                 </section>
             </main>
@@ -345,7 +347,7 @@ export default function Editoria() {
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                <JoinLink href={joinUrl} eventName="MobileJoinClick" onRegister={register} className="w-full py-3">Присоединиться бесплатно</JoinLink>
+                <JoinLink href={telegramJoinUrl} eventName="MobileJoinClick" onRegister={register} className="w-full py-3">Присоединиться бесплатно</JoinLink>
             </div>
         </>
     );
