@@ -27,6 +27,7 @@ class MailingFormSettingResource extends Resource
     protected static ?int $navigationSort = 3;
     public static function form(Schema $schema): Schema {
         return $schema->components([
+            Toggle::make('registration_form_enabled')->label('Показывать форму регистрации на /editoria')->helperText('Включено: кнопки сначала открывают форму, затем Telegram. Выключено: все кнопки сразу ведут в Telegram, без формы.')->default(true),
             Toggle::make('auto_reminders_enabled')->label('Автоматические напоминания')->helperText('Выключено — никакие автоматические письма с напоминаниями не отправляются.')->default(false),
             TextInput::make('title')->label('Заголовок')->required()->maxLength(255),
             Textarea::make('description')->label('Описание')->required(),
