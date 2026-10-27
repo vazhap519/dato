@@ -25,6 +25,8 @@ use UnitEnum;
 
 class UsefulLinkResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 50;
     protected static ?string $model = UsefulLink::class;
     protected static ?string $modelLabel = 'полезная ссылка';
     protected static ?string $pluralModelLabel = 'полезные ссылки';
