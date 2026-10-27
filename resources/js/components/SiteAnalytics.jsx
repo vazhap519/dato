@@ -71,7 +71,7 @@ export default function SiteAnalytics() {
                 FinalJoinClick: 'Практикум · запись внизу страницы',
                 MobileJoinClick: 'Практикум · мобильная кнопка записи',
             };
-            const visibleLabel = (target.getAttribute('aria-label') || target.getAttribute('title') || target.innerText || '').replace(/\\s+/g, ' ').trim().slice(0, 75);
+            const visibleLabel = (target.getAttribute('aria-label') || target.getAttribute('title') || target.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 75);
             const path = window.location.pathname;
             const section = target.closest('section[id], main section, header, footer, nav');
             const sectionName = section?.id || (section?.tagName === 'HEADER' ? 'шапка' : section?.tagName === 'FOOTER' ? 'подвал' : section?.tagName === 'NAV' ? 'меню' : null);
