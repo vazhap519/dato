@@ -122,8 +122,15 @@ export default function LegalDocument() {
                     </aside>
 
                     <div className="min-w-0 max-w-[800px] space-y-5">
+                    {introduction?.paragraphs?.length > 0 && <div className="rounded-2xl border border-primary/25 bg-primary/[0.055] px-5 py-6 sm:px-8 sm:py-7 print:border print:border-gray-300 print:bg-white">
+                        <div className="flex items-center gap-2.5 mb-3 text-primary print:text-black">
+                            <span className="material-symbols-outlined text-xl" aria-hidden="true">description</span>
+                            <span className="text-xs font-semibold uppercase tracking-[0.16em]">О документе</span>
+                        </div>
+                        <div className="space-y-3">{introduction.paragraphs.map((paragraph, i) => <p key={i} className="text-sm sm:text-base leading-relaxed text-white/80 print:text-black break-words">{renderLegalLinks(paragraph)}</p>)}</div>
+                    </div>}
                     <article className="rounded-2xl border border-white/10 bg-white/[0.018] px-5 py-7 sm:px-8 sm:py-10 md:px-11 md:py-12 print:border-0 print:p-0">
-                        {sections.length ? sections.map((section, index) => (
+                        {headings.length ? headings.map((section, index) => (
                             <section key={section.id + index} id={section.id} className="scroll-mt-32 mb-11 last:mb-0">
                                 {section.title && <h2 className="text-xl sm:text-2xl font-semibold leading-snug text-white print:text-black mb-5 pb-4 border-b border-primary/20">{section.title}</h2>}
                                 <div className="space-y-5">
