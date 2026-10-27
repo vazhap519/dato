@@ -121,7 +121,8 @@ export default function LegalDocument() {
                         </div>
                     </aside>
 
-                    <article className="min-w-0 max-w-[800px] rounded-2xl border border-white/10 bg-white/[0.018] px-5 py-7 sm:px-8 sm:py-10 md:px-11 md:py-12 print:border-0 print:p-0">
+                    <div className="min-w-0 max-w-[800px] space-y-5">
+                    <article className="rounded-2xl border border-white/10 bg-white/[0.018] px-5 py-7 sm:px-8 sm:py-10 md:px-11 md:py-12 print:border-0 print:p-0">
                         {sections.length ? sections.map((section, index) => (
                             <section key={section.id + index} id={section.id} className="scroll-mt-32 mb-11 last:mb-0">
                                 {section.title && <h2 className="text-xl sm:text-2xl font-semibold leading-snug text-white print:text-black mb-5 pb-4 border-b border-primary/20">{section.title}</h2>}
@@ -131,6 +132,7 @@ export default function LegalDocument() {
                             </section>
                         )) : <p className="text-white/60">Текст документа пока не добавлен.</p>}
                     </article>
+                    </div>
                 </div>
             </div>
         </main>
