@@ -18,13 +18,13 @@ class LandingPageResource extends Resource
 {
     protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
     protected static ?int $navigationSort = 80;
+
     protected static ?string $model = LandingPage::class;
     protected static ?string $modelLabel = 'посадочная страница';
     protected static ?string $pluralModelLabel = 'посадочные страницы';
     protected static ?string $navigationLabel = 'Посадочные страницы';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Основные настройки';
     public static function form(Schema $schema): Schema
     {
         return LandingPageForm::configure($schema);
