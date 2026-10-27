@@ -32,6 +32,51 @@ class SiteAnalytics extends Page
             ->groupBy('path')->orderByDesc('views')->limit(15)->get();
     }
 
+    public function getDailyViews(): array
+    {
+        $rows = DB::table('site_analytics_events')
+            ->selectRaw("DATE(occurred_at) as day, COUNT(*) as views")
+            ->where('event', 'page_view')
+            ->where('occurred_at', '>=', now()->subDays(29)->startOfDay())
+            ->groupByRaw('DATE(occurred_at)')
+            ->pluck('views', 'day');
+        $days = [];
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $days[] = ['date' => $date, 'label' => now()->subDays($i)->format('d.m'), 'views' => (int) ($rows[$date] ?? 0)];
+        }
+        return $days;
+    }
+
+    public function getDevices()
+    {
+        return DB::table('site_analytics_events')
+            ->select('device', DB::raw('COUNT(*) as total'))
+            ->where('event', 'page_view')
+            ->where('occurred_at', '>=', now()->subDays(30))
+            ->groupBy('device')->orderByDesc('total')->get();
+    }
+
+    public function getSources()
+    {
+        return DB::table('site_analytics_events')
+            ->selectRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен') as source, COUNT(*) as total")
+            ->where('event', 'page_view')
+            ->where('occurred_at', '>=', now()->subDays(30))
+            ->groupByRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен')")
+            ->orderByDesc('total')->limit(8)->get();
+    }
+
+    public function getTopClicks()
+    {
+        return DB::table('site_analytics_events')
+            ->select('element', DB::raw('COUNT(*) as total'))
+            ->whereIn('event', ['cta_click', 'link_click'])
+            ->where('occurred_at', '>=', now()->subDays(30))
+            ->whereNotNull('element')
+            ->groupBy('element')->orderByDesc('total')->limit(8)->get();
+    }
+
     public function getRecentEvents()
     {
         return DB::table('site_analytics_events')
