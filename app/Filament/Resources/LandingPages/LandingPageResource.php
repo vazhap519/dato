@@ -16,6 +16,8 @@ use Filament\Tables\Table;
 use UnitEnum;
 class LandingPageResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 80;
     protected static ?string $model = LandingPage::class;
     protected static ?string $modelLabel = 'посадочная страница';
     protected static ?string $pluralModelLabel = 'посадочные страницы';
