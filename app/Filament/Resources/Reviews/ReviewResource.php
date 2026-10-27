@@ -16,6 +16,8 @@ use Filament\Tables\Table;
 use UnitEnum;
 class ReviewResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 40;
     protected static ?string $model = Review::class;
     protected static ?string $modelLabel = 'отзыв';
     protected static ?string $pluralModelLabel = 'отзывы';
