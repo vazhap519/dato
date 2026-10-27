@@ -3,6 +3,9 @@
         .sa-dashboard{display:flex;flex-direction:column;gap:24px;color:var(--gray-950,#f8fafc)}
         .sa-dashboard .sa-period{background:#27272a;color:#fafafa;border:1px solid #52525b;border-radius:9px;padding:9px 13px;font-size:13px;cursor:pointer}
         .sa-dashboard .sa-period:focus{outline:2px solid #f59e0b}
+        .sa-dashboard .sa-tabs{display:flex;gap:8px;overflow-x:auto;padding:3px 0 6px}
+        .sa-dashboard .sa-tab{padding:10px 16px;border-radius:10px;border:1px solid #3f3f46;background:#202025;color:#d4d4d8;font-weight:600;font-size:13px;white-space:nowrap;cursor:pointer}
+        .sa-dashboard .sa-tab.active{background:rgba(245,158,11,.15);border-color:#f59e0b;color:#fbbf24}
         .sa-dashboard .sa-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
         .sa-dashboard .sa-title{font-size:20px;font-weight:750;line-height:1.4}
         .sa-dashboard .sa-muted{color:#9ca3af;font-size:13px;line-height:1.6}
@@ -87,6 +90,8 @@
         $events = $this->getRecentEvents();
         $funnel = $this->getFunnel();
         $conversions = $this->getPageConversions();
+        $comparison = $this->getComparison();
+        $deviceConversions = $this->getDeviceConversions();
         $maxPage = max(1, (int) ($pages->first()->views ?? 0));
         $maxSource = max(1, (int) ($sources->first()->total ?? 0));
         $maxClick = max(1, (int) ($clicks->first()->total ?? 0));
@@ -106,6 +111,13 @@
             </div>
         </div>
 
+        <nav class="sa-tabs" aria-label="Разделы аналитики">
+            @foreach (['overview'=>'Обзор','visitors'=>'Посетители','conversions'=>'Конверсии','sources'=>'Источники','history'=>'История'] as $key => $label)
+                <button type="button" wire:click="$set('tab', '{{ $key }}')" class="sa-tab {{ $this->tab === $key ? 'active' : '' }}">{{ $label }}</button>
+            @endforeach
+            <button type="button" wire:click="exportCsv" class="sa-tab" style="margin-left:auto">↓ Скачать CSV</button>
+        </nav>
+        @if ($this->tab === 'overview')
         <div class="sa-stats">
             @foreach ([
                 ['Просмотры страниц', $stats['views'], '◉', 'amber'],
@@ -144,6 +156,20 @@
         </div>
 
         <div class="sa-card">
+            <h3 class="sa-section-title">Сравнение с предыдущим периодом</h3>
+            <div class="sa-grid" style="margin-top:15px">
+                @foreach (['views'=>'Просмотры','visitors'=>'Сеансы вкладок','clicks'=>'Нажатия'] as $key => $label)
+                    <div>
+                        <div class="sa-stat-label">{{ $label }}</div>
+                        <div class="sa-stat-value">{{ $comparison[$key]['current'] }}</div>
+                        <div class="sa-muted">Ранее: {{ $comparison[$key]['previous'] }} · {{ $comparison[$key]['change'] === null ? 'нет базы для сравнения' : (($comparison[$key]['change'] > 0 ? '+' : '') . $comparison[$key]['change'] . '%') }}</div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+        @if ($this->tab === 'conversions')
+        <div class="sa-card">
             <h3 class="sa-section-title">Воронка практикума «Познай СЕБЯ»</h3>
             <p class="sa-muted">Измеряются сеансы вкладок, а не уникальные люди. Подписка и участие пока не подтверждаются сайтом.</p>
             <div class="sa-grid" style="margin-top:18px">
@@ -165,6 +191,8 @@
             </div>
         </div>
 
+        @endif
+        @if ($this->tab === 'sources' || $this->tab === 'visitors')
         <div class="sa-grid">
             <div class="sa-card">
                 <h3 class="sa-section-title">Популярные страницы</h3>
@@ -213,6 +241,26 @@
             </div>
         </div>
 
+        @endif
+        @if ($this->tab === 'visitors')
+        <div class="sa-card">
+            <h3 class="sa-section-title">Конверсия практикума по устройствам</h3>
+            <p class="sa-muted">Сеансы страницы /editoria и сеансы с нажатием кнопки записи.</p>
+            <div class="sa-list">
+                @forelse ($deviceConversions as $item)
+                    <div>
+                        <div class="sa-list-head"><span>{{ match($item['device']) {'mobile'=>'Телефоны','desktop'=>'Компьютеры','tablet'=>'Планшеты',default=>'Другие'} }}</span><span>{{ $item['clicks'] }} из {{ $item['views'] }} · {{ $item['rate'] }}%</span></div>
+                        <div class="sa-track"><div class="sa-fill green" style="width:{{ min(100,$item['rate']) }}%"></div></div>
+                    </div>
+                @empty <p class="sa-muted">Данных пока нет.</p> @endforelse
+            </div>
+        </div>
+        <div class="sa-card">
+            <h3 class="sa-section-title">Новые и вернувшиеся посетители</h3>
+            <p class="sa-muted">Недоступно без идентификатора между посещениями. Сейчас учитываются только сеансы вкладок; мы не создаём скрытый отпечаток устройства и не считаем новую вкладку новым человеком.</p>
+        </div>
+        @endif
+        @if ($this->tab === 'history')
         <details class="sa-card" open>
             <summary class="sa-history-summary">
                 <div>
@@ -238,6 +286,7 @@
                 </table>
             </div>
         </details>
+        @endif
         <p class="text-xs leading-relaxed text-gray-500 dark:text-gray-400">Сеансы вкладок учитываются без повторного подсчёта при обновлении страницы. Открытие новой вкладки или нового сеанса может учитываться отдельно: это не точное число уникальных людей. Для этого используется временный идентификатор в sessionStorage, без постоянных аналитических cookie. Источники переходов могут быть неизвестны, если браузер не передал адрес предыдущего сайта. Кнопка «Не учитывать мой браузер» открывает главную страницу и исключает дальнейшие события этого браузера; вернуть учёт можно по адресу /?analytics_ignore=0.</p>
     </div>
 </x-filament-panels::page>
