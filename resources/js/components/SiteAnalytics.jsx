@@ -15,6 +15,14 @@ export default function SiteAnalytics() {
     const [adsConsent, setAdsConsent] = useState(adsAllowed);
 
     useEffect(() => {
+        // A voluntary first-party opt-out for the site owner and testers.
+        const query = new URLSearchParams(window.location.search);
+        if (query.get("analytics_ignore") === "1") {
+            try { localStorage.setItem("site_analytics_opt_out", "1"); } catch {}
+        } else if (query.get("analytics_ignore") === "0") {
+            try { localStorage.removeItem("site_analytics_opt_out"); } catch {}
+        }
+        try { if (localStorage.getItem("site_analytics_opt_out") === "1") return; } catch {}
         // Per-tab IDs survive refreshes but disappear when the tab session ends.
         // No cross-tab or cross-day identity, no analytics cookies or IP fingerprinting.
         const tabId = (key) => {
