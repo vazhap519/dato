@@ -3,6 +3,8 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\DB;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 
 class SiteAnalytics extends Page
 {
@@ -11,6 +13,24 @@ class SiteAnalytics extends Page
     protected static ?string $title = 'Аналитика сайта';
     protected static string | \UnitEnum | null $navigationGroup = 'Аналитика';
     protected string $view = 'filament.pages.site-analytics';
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make("resetAnalytics")
+                ->label("Сбросить аналитику")
+                ->icon("heroicon-o-trash")
+                ->color("danger")
+                ->requiresConfirmation()
+                ->modalHeading("Удалить всю аналитику сайта?")
+                ->modalDescription("Все сохранённые события, просмотры, нажатия и история действий будут удалены без возможности восстановления. Новые события продолжат собираться.")
+                ->modalSubmitActionLabel("Да, удалить всё")
+                ->action(function (): void {
+                    $deleted = DB::table("site_analytics_events")->delete();
+                    Notification::make()->title("Аналитика сброшена")->body("Удалено событий: {$deleted}.")->success()->send();
+                }),
+        ];
+    }
 
     public function getStats(): array
     {
