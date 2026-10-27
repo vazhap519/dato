@@ -1,6 +1,8 @@
 <x-filament-panels::page>
     <style>
         .sa-dashboard{display:flex;flex-direction:column;gap:24px;color:var(--gray-950,#f8fafc)}
+        .sa-dashboard .sa-period{background:#27272a;color:#fafafa;border:1px solid #52525b;border-radius:9px;padding:9px 13px;font-size:13px;cursor:pointer}
+        .sa-dashboard .sa-period:focus{outline:2px solid #f59e0b}
         .sa-dashboard .sa-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
         .sa-dashboard .sa-title{font-size:20px;font-weight:750;line-height:1.4}
         .sa-dashboard .sa-muted{color:#9ca3af;font-size:13px;line-height:1.6}
@@ -83,6 +85,7 @@
         $sources = $this->getSources();
         $clicks = $this->getTopClicks();
         $events = $this->getRecentEvents();
+        $funnel = $this->getFunnel();
         $maxPage = max(1, (int) ($pages->first()->views ?? 0));
         $maxSource = max(1, (int) ($sources->first()->total ?? 0));
         $maxClick = max(1, (int) ($clicks->first()->total ?? 0));
@@ -92,9 +95,13 @@
         <div class="sa-header">
             <div>
                 <h2 class="sa-title">Обзор активности</h2>
-                <p class="sa-muted">Последние 30 дней · Обновляется при открытии страницы</p>
+                <p class="sa-muted">Период: {{ match($this->period) { "today" => "сегодня", "yesterday" => "вчера", "7" => "7 дней", default => "30 дней" } }} · Обновляется при открытии страницы</p>
             </div>
-            <div class="sa-tag">Собственная аналитика сайта</div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <label for="sa-period" style="font-size:13px;color:#d4d4d8">Период</label>
+                <select id="sa-period" class="sa-period" wire:model.live="period"><option value="today">Сегодня</option><option value="yesterday">Вчера</option><option value="7">7 дней</option><option value="30">30 дней</option></select>
+                <span class="sa-tag">Собственная аналитика сайта</span>
+            </div>
         </div>
 
         <div class="sa-stats">
@@ -131,7 +138,16 @@
                     </div>
                 @endforeach
             </div>
-            <div class="sa-axis"><span>{{ $daily[0]['label'] }}</span><span>{{ $daily[14]['label'] }}</span><span>{{ $daily[29]['label'] }}</span></div>
+            <div class="sa-axis"><span>{{ $daily[0]['label'] }}</span><span>{{ $daily[count($daily)-1]['label'] }}</span></div>
+        </div>
+
+        <div class="sa-card">
+            <h3 class="sa-section-title">Воронка практикума «Познай СЕБЯ»</h3>
+            <p class="sa-muted">Измеряются сеансы вкладок, а не уникальные люди. Подписка и участие пока не подтверждаются сайтом.</p>
+            <div class="sa-grid" style="margin-top:18px">
+                <div><div class="sa-stat-label">Посетили /editoria</div><div class="sa-stat-value">{{ $funnel['views'] }}</div></div>
+                <div><div class="sa-stat-label">Нажали кнопку записи</div><div class="sa-stat-value">{{ $funnel['clicks'] }} <span style="font-size:15px;color:#fbbf24">· {{ $funnel['rate'] }}%</span></div></div>
+            </div>
         </div>
 
         <div class="sa-grid">
