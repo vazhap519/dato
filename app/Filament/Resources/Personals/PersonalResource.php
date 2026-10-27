@@ -16,6 +16,9 @@ use Filament\Tables\Table;
 
 class PersonalResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Продукты и услуги';
+    protected static ?int $navigationSort = 30;
+
     protected static ?string $model = Personal::class;
     protected static ?string $modelLabel = 'персональная услуга';
     protected static ?string $pluralModelLabel = 'персональные услуги';
