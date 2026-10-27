@@ -29,8 +29,15 @@ class EditorialForm
                             ->label('Бейдж первого экрана'),
 
                         TextInput::make('hero_title')
-                            ->label('Заголовок первого экрана')
+                            ->label('Главный заголовок — обычный текст')
+                            ->placeholder('Устал жить')
+                            ->helperText('Первая часть заголовка, белым цветом.')
                             ->required(),
+
+                        TextInput::make('hero_title_accent')
+                            ->label('Главный заголовок — выделенный текст')
+                            ->placeholder('на автомате?')
+                            ->helperText('Вторая часть заголовка, золотым цветом и курсивом.'),
 
                         Textarea::make('hero_description')->label('Описание первого экрана')
                             ->rows(3),
