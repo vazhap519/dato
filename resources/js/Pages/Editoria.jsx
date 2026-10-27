@@ -358,7 +358,7 @@ export default function Editoria() {
             <footer className="border-t border-white/10 py-8 mb-20 md:mb-0">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
                     <span>© {new Date().getFullYear()} {settings?.site_name || "Arutyun"}</span>
-                    <a href="/legal" data-meta-event="FooterLegalClick" data-meta-label="Юридическая информация и конфиденциальность" className="hover:text-primary transition">Юридическая информация и конфиденциальность</a>
+                    <div className="flex flex-wrap gap-4"><a href="/legal" data-meta-event="FooterLegalClick" data-meta-label="Юридическая информация и конфиденциальность" className="hover:text-primary transition">Юридическая информация</a><button type="button" onClick={() => window.dispatchEvent(new Event("site:open-privacy-settings"))} className="hover:text-primary transition">Настройки конфиденциальности</button></div>
                 </div>
             </footer>
             <div className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-primary/20 bg-background-dark/95 backdrop-blur-md px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
