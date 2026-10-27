@@ -15,10 +15,21 @@ export default function SiteAnalytics() {
     const [adsConsent, setAdsConsent] = useState(adsAllowed);
 
     useEffect(() => {
-        // Ephemeral IDs exist only in this JavaScript instance; no analytics cookies
-        // or local/session storage, and no cross-visit identification.
-        const visitorId = crypto.randomUUID();
-        const sessionId = crypto.randomUUID();
+        // Per-tab IDs survive refreshes but disappear when the tab session ends.
+        // No cross-tab or cross-day identity, no analytics cookies or IP fingerprinting.
+        const tabId = (key) => {
+            try {
+                const existing = sessionStorage.getItem(key);
+                if (existing && /^[0-9a-f-]{36}$/i.test(existing)) return existing;
+                const id = crypto.randomUUID();
+                sessionStorage.setItem(key, id);
+                return id;
+            } catch {
+                return crypto.randomUUID();
+            }
+        };
+        const visitorId = tabId('site_analytics_tab_visitor');
+        const sessionId = tabId('site_analytics_tab_session');
         const send = (event, element) => {
             const params = new URLSearchParams(window.location.search);
             let referrer = null;
