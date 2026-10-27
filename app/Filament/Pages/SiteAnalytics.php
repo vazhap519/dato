@@ -228,6 +228,29 @@ class SiteAnalytics extends Page
         }, 'analytics-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 
+    public function getEditoriaDetails(): array
+    {
+        $base = $this->events()->where('path', '/editoria');
+        $visits = (clone $base)->where('event', 'page_view')->distinct()->count('session_id');
+        $clicks = (clone $base)->whereIn('event', ['link_click', 'cta_click'])
+            ->selectRaw("COALESCE(NULLIF(element, ''), 'Без названия') as label, COUNT(*) as total, COUNT(DISTINCT session_id) as sessions")
+            ->groupByRaw("COALESCE(NULLIF(element, ''), 'Без названия')")
+            ->orderByDesc('total')->get();
+        $scroll = [];
+        foreach ([25,50,75,90,100] as $mark) {
+            $count = (clone $base)->where('event', 'scroll_depth')->where('element', 'scroll_'.$mark)
+                ->distinct()->count('session_id');
+            $scroll[] = ['mark'=>$mark, 'count'=>$count, 'rate'=>$visits ? round($count / $visits * 100, 1) : 0];
+        }
+        $engagement = [];
+        foreach ([10,30,60,120,300] as $seconds) {
+            $count = (clone $base)->where('event', 'engagement')->where('element', 'active_'.$seconds)
+                ->distinct()->count('session_id');
+            $engagement[] = ['seconds'=>$seconds, 'count'=>$count, 'rate'=>$visits ? round($count / $visits * 100, 1) : 0];
+        }
+        return compact('visits', 'clicks', 'scroll', 'engagement');
+    }
+
     public function getRecentEvents()
     {
         return $this->events()
