@@ -18,7 +18,7 @@ export default function Footer() {
         <footer id="contacts" className="relative overflow-hidden bg-background-dark border-t border-primary/10 text-white">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90vw,800px)] h-64 rounded-full bg-primary/[0.055] blur-[100px] pointer-events-none" aria-hidden="true" />
             <div className="relative max-w-7xl mx-auto px-6 pt-10 md:pt-20 pb-8">
-                {footer?.cta_enabled !== false && <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.09] via-white/[0.025] to-transparent px-5 py-8 sm:px-10 md:py-14 text-center mb-9 md:mb-16">
+                {footer?.cta_enabled !== false && !["/legal","/terms","/privacy","/offer"].includes(window.location.pathname) && <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.09] via-white/[0.025] to-transparent px-5 py-8 sm:px-10 md:py-14 text-center mb-9 md:mb-16">
                     <span className="text-primary text-xs font-bold uppercase tracking-[0.22em]">{footer?.cta_badge || "Пространство для себя"}</span>
                     <h2 className="text-2xl md:text-4xl font-bold mt-4 mb-4 leading-tight">{footer?.cta_title || "Иногда один шаг меняет многое."}</h2>
                     <p className="text-white/65 max-w-xl mx-auto leading-relaxed mb-5 md:mb-7 text-sm md:text-base">{footer?.cta_description || "Начни с простого знакомства с собой — на бесплатном трёхдневном практикуме."}</p>
@@ -53,10 +53,10 @@ export default function Footer() {
                     <nav aria-label="Юридическая информация">
                         <h3 className="text-white font-bold text-xs uppercase tracking-[0.18em] mb-4 md:mb-6">{footer?.support_title || "Документы"}</h3>
                         <ul className="space-y-2.5 md:space-y-3.5">
-                            <li><a href="/legal" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_faq || "Юридическая информация"}</a></li>
-                            <li><a href="/legal#offer" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_offer || "Публичная оферта"}</a></li>
-                            <li><a href="/legal#agreement" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_payment || "Условия использования"}</a></li>
-                            <li><a href="/legal#privacy" className="text-white/65 text-sm hover:text-primary transition-colors">{footer?.support_privacy || "Политика конфиденциальности"}</a></li>
+                            <li><a href="/legal" className="text-white/65 text-sm hover:text-primary transition-colors">{"Юридическая информация"}</a></li>
+                            <li><a href="/offer" className="text-white/65 text-sm hover:text-primary transition-colors">{"Публичная оферта"}</a></li>
+                            <li><a href="/terms" className="text-white/65 text-sm hover:text-primary transition-colors">{"Условия использования"}</a></li>
+                            <li><a href="/privacy" className="text-white/65 text-sm hover:text-primary transition-colors">{"Политика конфиденциальности"}</a></li>
                         </ul>
                     </nav>
 
