@@ -100,6 +100,7 @@
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
                 <label for="sa-period" style="font-size:13px;color:#d4d4d8">Период</label>
                 <select id="sa-period" class="sa-period" wire:model.live="period"><option value="today">Сегодня</option><option value="yesterday">Вчера</option><option value="7">7 дней</option><option value="30">30 дней</option></select>
+                <a href="/?analytics_ignore=1" target="_blank" rel="noopener noreferrer" class="sa-period" style="text-decoration:none">Не учитывать мой браузер</a>
                 <span class="sa-tag">Собственная аналитика сайта</span>
             </div>
         </div>
@@ -223,6 +224,6 @@
                 </table>
             </div>
         </details>
-        <p class="text-xs leading-relaxed text-gray-500 dark:text-gray-400">Сеансы вкладок учитываются без повторного подсчёта при обновлении страницы. Открытие новой вкладки или нового сеанса может учитываться отдельно: это не точное число уникальных людей. Для этого используется временный идентификатор в sessionStorage, без постоянных аналитических cookie. Источники переходов могут быть неизвестны, если браузер не передал адрес предыдущего сайта.</p>
+        <p class="text-xs leading-relaxed text-gray-500 dark:text-gray-400">Сеансы вкладок учитываются без повторного подсчёта при обновлении страницы. Открытие новой вкладки или нового сеанса может учитываться отдельно: это не точное число уникальных людей. Для этого используется временный идентификатор в sessionStorage, без постоянных аналитических cookie. Источники переходов могут быть неизвестны, если браузер не передал адрес предыдущего сайта. Кнопка «Не учитывать мой браузер» открывает главную страницу и исключает дальнейшие события этого браузера; вернуть учёт можно по адресу /?analytics_ignore=0.</p>
     </div>
 </x-filament-panels::page>
