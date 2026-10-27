@@ -1,6 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import ScrollToTop from './components/ScrollToTop.jsx'
+import SiteAnalytics from './components/SiteAnalytics.jsx'
 
 createInertiaApp({
     resolve: name => {
@@ -8,6 +9,6 @@ createInertiaApp({
         return pages[`./Pages/${name}.jsx`]
     },
     setup({ el, App, props }) {
-        createRoot(el).render(<><App {...props} /><ScrollToTop /></>)
+        createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /></>)
     },
 })
