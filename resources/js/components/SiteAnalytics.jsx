@@ -60,13 +60,23 @@ export default function SiteAnalytics() {
         const click = (e) => {
             const target = e.target instanceof Element ? e.target.closest('a, button') : null;
             if (!target || target.closest('[data-no-analytics]')) return;
-            const name = target.dataset.analytics || target.getAttribute('data-meta-event')
-                || (target.tagName === 'A' ? (() => {
-                    try {
-                        const url = new URL(target.href);
-                        return url.origin === location.origin ? url.pathname : 'external_link';
-                    } catch { return null; }
-                })() : null);
+            const href = target.tagName === 'A' ? target.getAttribute('href') : null;
+            let destination = null;
+            try { if (href) destination = new URL(href, window.location.href); } catch {}
+            const metaEvent = target.getAttribute('data-meta-event');
+            const knownLabels = {
+                HeroJoinClick: 'Практикум · запись в первом экране',
+                ProgramJoinClick: 'Практикум · запись в программе',
+                HowToJoinClick: 'Практикум · запись в инструкции',
+                FinalJoinClick: 'Практикум · запись внизу страницы',
+                MobileJoinClick: 'Практикум · мобильная кнопка записи',
+            };
+            const name = target.dataset.analytics
+                || (metaEvent ? (knownLabels[metaEvent] || metaEvent) : null)
+                || (destination?.hostname === 't.me' || destination?.hostname === 'telegram.me' ? 'Переход в Telegram' : null)
+                || (destination && destination.origin !== window.location.origin ? 'Внешняя ссылка · ' + destination.hostname : null)
+                || (destination ? 'Переход на ' + (destination.pathname === '/' ? 'главную' : destination.pathname) : null)
+                || (target.tagName === 'BUTTON' ? target.textContent?.trim().slice(0, 100) : null);
             if (name) send(target.tagName === 'A' ? 'link_click' : 'cta_click', name);
         };
         page();
