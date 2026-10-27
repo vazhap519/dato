@@ -21,6 +21,13 @@ class StageLegalDrafts extends Command
                 return self::FAILURE;
             }
         }
+        if (! $this->option('publish')) {
+            $this->info('Drafts are available in legal-drafts/. No database records changed.');
+            return self::SUCCESS;
+        }
+        if (! $this->confirm('Publish all three documents now? Confirm legal identity, data processing, and payment terms first.', false)) {
+            return self::SUCCESS;
+        }
         DB::transaction(function () use ($files) {
             foreach ($files as $slug => $file) {
                 $record = LegalDocument::query()->where('slug', $slug)->lockForUpdate()->firstOrFail();
@@ -39,9 +46,9 @@ class StageLegalDrafts extends Command
                     'offer' => 'Публичная оферта',
                 };
                 $record->content = file_get_contents(base_path('legal-drafts/'.$file));
-                $record->version = '2.0-draft';
+                $record->version = '2.0';
                 $record->effective_at = null;
-                $record->is_published = (bool) $this->option('publish');
+                $record->is_published = true;
                 $record->save();
                 $this->line("Staged /{$slug}: ".($record->is_published ? 'published' : 'unpublished'));
             }
