@@ -19,6 +19,7 @@ class HomeAboutSectionResource extends Resource
 {
     protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
     protected static ?int $navigationSort = 20;
+
     protected static ?string $model = HomeAboutSection::class;
     protected static ?string $modelLabel = 'блок «О нас»';
     protected static ?string $pluralModelLabel = 'блоки «О нас»';
@@ -26,7 +27,6 @@ class HomeAboutSectionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
 
-    protected static string | UnitEnum | null $navigationGroup = 'Главная';
     public static function form(Schema $schema): Schema
     {
         return HomeAboutSectionForm::configure($schema);
