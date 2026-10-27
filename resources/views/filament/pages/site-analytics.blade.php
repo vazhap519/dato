@@ -92,6 +92,7 @@
         $conversions = $this->getPageConversions();
         $comparison = $this->getComparison();
         $deviceConversions = $this->getDeviceConversions();
+        $editoria = $this->tab === 'editoria' ? $this->getEditoriaDetails() : null;
         $maxPage = max(1, (int) ($pages->first()->views ?? 0));
         $maxSource = max(1, (int) ($sources->first()->total ?? 0));
         $maxClick = max(1, (int) ($clicks->first()->total ?? 0));
@@ -112,7 +113,7 @@
         </div>
 
         <nav class="sa-tabs" aria-label="Разделы аналитики">
-            @foreach (['overview'=>'Обзор','visitors'=>'Посетители','conversions'=>'Конверсии','sources'=>'Источники','history'=>'История'] as $key => $label)
+            @foreach (['overview'=>'Обзор','visitors'=>'Посетители','conversions'=>'Конверсии','editoria'=>'Практикум /editoria','sources'=>'Источники','history'=>'История'] as $key => $label)
                 <button type="button" wire:click="$set('tab', '{{ $key }}')" class="sa-tab {{ $this->tab === $key ? 'active' : '' }}">{{ $label }}</button>
             @endforeach
             <button type="button" wire:click="exportCsv" class="sa-tab" style="margin-left:auto">↓ Скачать CSV</button>
@@ -258,6 +259,54 @@
         <div class="sa-card">
             <h3 class="sa-section-title">Новые и вернувшиеся посетители</h3>
             <p class="sa-muted">Недоступно без идентификатора между посещениями. Сейчас учитываются только сеансы вкладок; мы не создаём скрытый отпечаток устройства и не считаем новую вкладку новым человеком.</p>
+        </div>
+        @endif
+        @if ($this->tab === 'editoria')
+        <div class="sa-card">
+            <h3 class="sa-section-title">Подробная аналитика /editoria</h3>
+            <p class="sa-muted">За выбранный период · {{ $editoria['visits'] }} сеансов страницы. Нажатия считаются отдельно по каждому названию кнопки. Прокрутка и активное время собираются только после обновления сайта.</p>
+        </div>
+        <div class="sa-grid">
+            <div class="sa-card">
+                <h3 class="sa-section-title">Нажатия на кнопки и ссылки</h3>
+                <div class="sa-list">
+                    @forelse ($editoria['clicks'] as $click)
+                        <div>
+                            <div class="sa-list-head"><span title="{{ $click->label }}">{{ $click->label }}</span><span>{{ $click->total }} нажатий · {{ $click->sessions }} сеансов</span></div>
+                            <div class="sa-track"><div class="sa-fill purple" style="width:{{ min(100, $editoria['visits'] ? $click->sessions / $editoria['visits'] * 100 : 0) }}%"></div></div>
+                        </div>
+                    @empty <p class="sa-muted">Пока нет нажатий.</p> @endforelse
+                </div>
+            </div>
+            <div class="sa-card">
+                <h3 class="sa-section-title">Глубина прокрутки</h3>
+                <p class="sa-muted">Сеансы, достигшие указанной глубины страницы.</p>
+                <div class="sa-list">
+                    @foreach ($editoria['scroll'] as $item)
+                        <div>
+                            <div class="sa-list-head"><span>{{ $item['mark'] }}% страницы</span><span>{{ $item['count'] }} сеансов · {{ $item['rate'] }}%</span></div>
+                            <div class="sa-track"><div class="sa-fill blue" style="width:{{ min(100,$item['rate']) }}%"></div></div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="sa-card">
+                <h3 class="sa-section-title">Активное время на странице</h3>
+                <p class="sa-muted">Учитывается только время открытой, видимой вкладки. Это не гарантирует, что человек читал текст.</p>
+                <div class="sa-list">
+                    @foreach ($editoria['engagement'] as $item)
+                        <div>
+                            <div class="sa-list-head"><span>Не менее {{ $item['seconds'] }} секунд</span><span>{{ $item['count'] }} сеансов · {{ $item['rate'] }}%</span></div>
+                            <div class="sa-track"><div class="sa-fill green" style="width:{{ min(100,$item['rate']) }}%"></div></div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="sa-card">
+                <h3 class="sa-section-title">Как читать результаты</h3>
+                <p class="sa-muted">Сравнивай глубину прокрутки с нажатием кнопок. Если до 50% страницы доходят немногие, проверь первый экран и длину текста. Если страницу читают, но не нажимают запись, проверь предложение и призыв к действию.</p>
+                <p class="sa-muted" style="margin-top:12px">Показатели основаны на сеансах вкладок, а не на уникальных людях. Старые события без метрик прокрутки не восстанавливаются.</p>
+            </div>
         </div>
         @endif
         @if ($this->tab === 'history')
