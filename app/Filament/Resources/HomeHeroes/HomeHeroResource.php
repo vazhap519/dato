@@ -17,6 +17,8 @@ use UnitEnum;
 
 class HomeHeroResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 10;
     protected static ?string $model = HomeHero::class;
     protected static ?string $modelLabel = 'первый экран';
     protected static ?string $pluralModelLabel = 'первые экраны';
