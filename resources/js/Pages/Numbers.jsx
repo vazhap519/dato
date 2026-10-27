@@ -4,8 +4,8 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 const digitsOnly = value => value.replace(/[^0-9]/g, '').slice(0, 12);
 
 export default function Numbers() {
-    const { featured = [], selected = null } = usePage().props;
-    const [value, setValue] = useState(selected?.number || '');
+    const { featured = [], selected = null, searched = null } = usePage().props;
+    const [value, setValue] = useState(selected?.number || searched || '');
     const submit = e => {
         e.preventDefault();
         if (!value) return;
@@ -66,6 +66,7 @@ export default function Numbers() {
                         </div>
                     </section>
                 )}
+                {searched && !selected && <div className="max-w-3xl mx-auto px-5 pb-12 text-center"><div className="rounded-2xl border border-[#c6a049]/30 bg-[#201c14] p-7"><h2 className="text-2xl text-[#f0c453] mb-3">Число {searched} пока не описано</h2><p className="text-[#bcb2a0]">Для него ещё нет авторского толкования. Выбери одно из опубликованных чисел ниже или попробуй другое сочетание.</p></div></div>}
                 {!selected && (
                     <section className="max-w-5xl mx-auto px-5 pb-14">
                         <div className="border-t border-[#d9b65c]/15 pt-10 text-center">
