@@ -9,6 +9,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
+use Filament\Navigation\NavigationGroup;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
@@ -31,6 +32,15 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()->label('Аналитика'),
+                NavigationGroup::make()->label('Управление сайтом'),
+                NavigationGroup::make()->label('Продукты и услуги'),
+                NavigationGroup::make()->label('Контент'),
+                NavigationGroup::make()->label('Юридический раздел'),
+                NavigationGroup::make()->label('Прямые эфиры')->collapsed(),
+                NavigationGroup::make()->label('Рассылка')->collapsed(),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
