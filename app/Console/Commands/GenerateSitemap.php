@@ -25,7 +25,9 @@ class GenerateSitemap extends Command
         $sitemap->add(Url::create('/legal')->setPriority(0.3));
 
         foreach (['terms', 'privacy', 'offer'] as $slug) {
-            $sitemap->add(Url::create('/'.$slug)->setPriority(0.3));
+            if (\App\Models\LegalDocument::where('slug', $slug)->where('is_published', true)->exists()) {
+                $sitemap->add(Url::create('/'.$slug)->setPriority(0.3));
+            }
         }
 
         // Dynamic Closed Groups
