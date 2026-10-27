@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
-import { usePage } from "@inertiajs/react";
+
 
 export default function ScrollToTop() {
     const [visible, setVisible] = useState(false);
-    const { url } = usePage();
-    const isPractice = url?.split("?")[0]?.replace(/\/$/, "") === "/editoria";
+    const [isPractice, setIsPractice] = useState(false);
+
+    useEffect(() => {
+        const checkPath = () => setIsPractice(window.location.pathname.replace(/\/$/, "") === "/editoria");
+        checkPath();
+        window.addEventListener("popstate", checkPath);
+        document.addEventListener("inertia:navigate", checkPath);
+        return () => {
+            window.removeEventListener("popstate", checkPath);
+            document.removeEventListener("inertia:navigate", checkPath);
+        };
+    }, []);
 
     useEffect(() => {
         const update = () => setVisible(window.scrollY > 450);
