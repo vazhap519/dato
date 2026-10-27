@@ -57,6 +57,7 @@ export default function Footer() {
                             <li><a href="/offer" className="text-white/65 text-sm hover:text-primary transition-colors">{"Публичная оферта"}</a></li>
                             <li><a href="/terms" className="text-white/65 text-sm hover:text-primary transition-colors">{"Условия использования"}</a></li>
                             <li><a href="/privacy" className="text-white/65 text-sm hover:text-primary transition-colors">{"Политика конфиденциальности"}</a></li>
+                            <li><button type="button" onClick={() => window.dispatchEvent(new Event("site:open-privacy-settings"))} className="text-left text-white/65 text-sm hover:text-primary transition-colors">Настройки конфиденциальности</button></li>
                         </ul>
                     </nav>
 
