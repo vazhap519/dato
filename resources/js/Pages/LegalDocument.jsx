@@ -38,11 +38,11 @@ function parseDocument(text) {
 }
 
 function renderLegalLinks(text) {
-    const pattern = /\[Служба Заботы\]\(https:\/\/t\.me\/arutyunsupport\)/g;
-    return String(text).split(pattern).flatMap((part, index, parts) =>
-        index < parts.length - 1
-            ? [part, <a key={index} href="https://t.me/arutyunsupport" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-4 hover:opacity-80">Служба Заботы</a>]
-            : [part]
+    const pattern = /\[(Служба Заботы|Службу Заботы)\]\(https:\/\/t\.me\/arutyunsupport\)/g;
+    return String(text).split(pattern).flatMap((part, index) =>
+        index % 2 === 0
+            ? [part]
+            : [<a key={index} href="https://t.me/arutyunsupport" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-4 hover:opacity-80">{part}</a>]
     );
 }
 
