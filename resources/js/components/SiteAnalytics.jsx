@@ -11,6 +11,7 @@ function identifier(key, storage) {
 
 export default function SiteAnalytics() {
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [analyticsChoice, setAnalyticsChoice] = useState(() => { try { return localStorage.getItem('site_analytics_consent') === 'granted'; } catch { return false; } });
     const [adsChoice, setAdsChoice] = useState(() => { try { return localStorage.getItem('site_ads_consent') === 'granted'; } catch { return false; } });
     const [choice, setChoice] = useState(() => {
         try { return localStorage.getItem('site_analytics_consent'); }
@@ -77,6 +78,7 @@ export default function SiteAnalytics() {
         try { localStorage.setItem('site_analytics_consent', value); } catch {}
         try { localStorage.setItem('site_ads_consent', ads ? 'granted' : 'denied'); } catch {}
         setAdsChoice(ads);
+        setAnalyticsChoice(value === 'granted');
         setChoice(value);
         setSettingsOpen(false);
         window.dispatchEvent(new Event('site:consent-changed'));
@@ -85,8 +87,9 @@ export default function SiteAnalytics() {
     return (
         <aside role="dialog" aria-label="Настройки аналитики" className="fixed bottom-4 left-4 right-4 z-[100] mx-auto max-w-lg rounded-xl border border-amber-500/40 bg-[#201b13] p-4 text-sm text-white shadow-2xl">
             <p>Вы можете отдельно разрешить аналитику посещений и рекламные технологии Meta Pixel. Без вашего согласия необязательное отслеживание отключено. <a href="/privacy" className="text-amber-400 underline">Политика конфиденциальности</a></p>
+            <label className="mt-3 flex items-center gap-2"><input type="checkbox" checked={analyticsChoice} onChange={e => setAnalyticsChoice(e.target.checked)} /> Разрешить аналитику посещений</label>
             <label className="mt-3 flex items-center gap-2"><input type="checkbox" checked={adsChoice} onChange={e => setAdsChoice(e.target.checked)} /> Разрешить рекламное отслеживание Meta</label>
-            <div className="mt-3 flex flex-wrap gap-3"><button type="button" onClick={() => decide('denied', false)} className="rounded-lg border border-white/30 px-4 py-2">Отклонить всё</button><button type="button" onClick={() => decide('granted', adsChoice)} className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-black">Сохранить выбор и разрешить аналитику</button></div>
+            <div className="mt-3 flex flex-wrap gap-3"><button type="button" onClick={() => decide('denied', false)} className="rounded-lg border border-white/30 px-4 py-2">Отклонить всё</button><button type="button" onClick={() => decide(analyticsChoice ? 'granted' : 'denied', adsChoice)} className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-black">Сохранить выбор</button></div>
         </aside>
     );
 }
