@@ -17,6 +17,8 @@ use UnitEnum;
 
 class HomeAboutSectionResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 20;
     protected static ?string $model = HomeAboutSection::class;
     protected static ?string $modelLabel = 'блок «О нас»';
     protected static ?string $pluralModelLabel = 'блоки «О нас»';
