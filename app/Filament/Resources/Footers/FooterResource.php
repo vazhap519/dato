@@ -16,6 +16,8 @@ use \App\Models\Footer;
 use UnitEnum;
 class FooterResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 70;
     protected static ?string $model = Footer::class;
     protected static ?string $modelLabel = 'подвал сайта';
     protected static ?string $pluralModelLabel = 'подвалы сайта';
