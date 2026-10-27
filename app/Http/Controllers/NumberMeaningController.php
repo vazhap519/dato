@@ -10,10 +10,11 @@ class NumberMeaningController extends Controller {
         ]);
     }
     public function show(string $number) {
-        $meaning = NumberMeaning::query()->where('number',$number)->where('is_published',true)->firstOrFail();
+        $meaning = NumberMeaning::query()->where('number',$number)->where('is_published',true)->first();
         return Inertia::render('Numbers', [
             'featured' => NumberMeaning::query()->where('is_published',true)->orderBy('number')->get(['number','title']),
             'selected' => $meaning,
+            'searched' => $number,
         ]);
     }
 }
