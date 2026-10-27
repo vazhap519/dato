@@ -56,6 +56,7 @@ Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Ht
 Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton']);
 Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controllers\LiveController::class, 'updateButton']);
 Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton']);
+Route::post('/analytics/event', [\App\Http\Controllers\SiteAnalyticsController::class, 'store'])->middleware('throttle:120,1');
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
         ->toResponse(request())
