@@ -38,8 +38,8 @@ function parseDocument(text) {
 }
 
 export default function LegalDocument() {
-    const { document } = usePage().props;
-    const sections = useMemo(() => parseDocument(document.content), [document.content]);
+    const { document: legalDoc } = usePage().props;
+    const sections = useMemo(() => parseDocument(legalDoc?.content), [legalDoc?.content]);
     const headings = sections.filter(s => s.title);
     const [active, setActive] = useState(headings[0]?.id || "");
     useEffect(() => {
@@ -49,16 +49,16 @@ export default function LegalDocument() {
             if (visible[0]) setActive(visible[0].target.id);
         }, { rootMargin: "-115px 0px -65% 0px", threshold: 0 });
         headings.forEach(s => {
-            const el = window.document.getElementById(s.id);
+            const el = globalThis.document.getElementById(s.id);
             if (el) observer.observe(el);
         });
         return () => observer.disconnect();
-    }, [document.content]);
+    }, [legalDoc?.content]);
 
     return <>
         <Head>
-            <title>{document.title} — arutyun.me</title>
-            <meta name="description" content={document.title + " — юридический документ arutyun.me"} />
+            <title>{legalDoc?.title} — arutyun.me</title>
+            <meta name="description" content={legalDoc?.title + " — юридический документ arutyun.me"} />
         </Head>
         <Header />
         <main className="min-h-screen bg-background-dark text-white px-5 sm:px-8 pt-28 md:pt-36 pb-20 print:bg-white print:text-black print:p-0">
@@ -68,7 +68,7 @@ export default function LegalDocument() {
                     <span aria-hidden="true">/</span>
                     <a href="/legal" className="hover:text-primary">Документы</a>
                     <span aria-hidden="true">/</span>
-                    <span className="text-white/80">{document.title}</span>
+                    <span className="text-white/80">{legalDoc?.title}</span>
                 </nav>
 
                 <div className="mt-9 mb-10 md:mb-14 border-b border-white/10 pb-9">
@@ -76,10 +76,10 @@ export default function LegalDocument() {
                         <span className="w-8 h-px bg-primary" />
                         <span className="text-primary text-xs uppercase tracking-[0.2em] font-semibold">Юридический документ</span>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight tracking-tight max-w-3xl">{document.title}</h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight tracking-tight max-w-3xl">{legalDoc?.title}</h1>
                     <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/50">
-                        <span>Редакция {document.version}</span>
-                        {document.effective_at && <span>Действует с {document.effective_at}</span>}
+                        <span>Редакция {legalDoc?.version}</span>
+                        {legalDoc?.effective_at && <span>Действует с {legalDoc?.effective_at}</span>}
                         <button onClick={() => window.print()} type="button" className="inline-flex items-center gap-2 hover:text-primary transition print:hidden">
                             <span className="material-symbols-outlined text-lg" aria-hidden="true">print</span>Распечатать
                         </button>
@@ -104,7 +104,7 @@ export default function LegalDocument() {
                         <div className="mt-5 rounded-2xl border border-white/10 p-4 sm:p-5">
                             <h2 className="text-xs uppercase tracking-[0.15em] font-semibold text-white/50 mb-3">Другие документы</h2>
                             <nav aria-label="Другие юридические документы" className="flex flex-col gap-1">
-                                {related.filter(item => item.slug !== document.slug).map(item => <a href={"/" + item.slug} key={item.slug}
+                                {related.filter(item => item.slug !== legalDoc?.slug).map(item => <a href={"/" + item.slug} key={item.slug}
                                     className="group flex items-center justify-between gap-3 rounded-lg px-3 py-3 hover:bg-white/5 transition">
                                     <span><span className="block text-sm text-white/85 group-hover:text-primary transition">{item.title}</span><span className="block text-xs text-white/40 mt-1">{item.description}</span></span>
                                     <span className="material-symbols-outlined text-white/35 group-hover:text-primary text-lg" aria-hidden="true">arrow_outward</span>
