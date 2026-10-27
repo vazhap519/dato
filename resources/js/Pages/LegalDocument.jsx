@@ -56,10 +56,7 @@ export default function LegalDocument() {
     }, [legalDoc?.content]);
 
     return <>
-        <Head>
-            <title>{legalDoc?.title} — arutyun.me</title>
-            <meta name="description" content={legalDoc?.title + " — юридический документ arutyun.me"} />
-        </Head>
+        <Head title={(legalDoc?.title || "Юридический документ") + " — arutyun.me"} />
         <Header />
         <main className="min-h-screen bg-background-dark text-white px-5 sm:px-8 pt-28 md:pt-36 pb-20 print:bg-white print:text-black print:p-0">
             <div className="max-w-6xl mx-auto">
