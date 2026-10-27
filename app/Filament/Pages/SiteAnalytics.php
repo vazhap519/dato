@@ -15,6 +15,7 @@ class SiteAnalytics extends Page
     protected string $view = 'filament.pages.site-analytics';
 
     public string $period = '30';
+    public string $tab = 'overview';
 
     private function since(): \Illuminate\Support\Carbon
     {
@@ -158,6 +159,73 @@ class SiteAnalytics extends Page
             $clicks = $clickQuery->distinct()->count('session_id');
             return ['label' => $page['label'], 'path' => $page['path'], 'views' => $views, 'clicks' => $clicks, 'rate' => $views ? round($clicks / $views * 100, 1) : 0];
         }, $pages);
+    }
+
+    public function getDeviceConversions(): array
+    {
+        $devices = (clone $this->events())->where('event', 'page_view')->where('path', '/editoria')
+            ->select('device')->distinct()->pluck('device');
+        $result = [];
+        foreach ($devices as $device) {
+            $views = (clone $this->events())->where('event', 'page_view')->where('path', '/editoria')
+                ->where('device', $device)->distinct()->count('session_id');
+            $clicks = (clone $this->events())->where('path', '/editoria')->where('device', $device)
+                ->whereIn('event', ['cta_click', 'link_click'])
+                ->where(function ($query) {
+                    $query->whereIn('element', ['HeroJoinClick','ProgramJoinClick','HowToJoinClick','FinalJoinClick','MobileJoinClick'])
+                        ->orWhere('element', 'like', 'Практикум · запись%');
+                })->distinct()->count('session_id');
+            $result[] = ['device' => $device ?: 'unknown', 'views' => $views, 'clicks' => $clicks,
+                'rate' => $views ? round($clicks / $views * 100, 1) : 0];
+        }
+        return $result;
+    }
+
+    public function getComparison(): array
+    {
+        $from = $this->since();
+        $to = $this->until();
+        $seconds = $from->diffInSeconds($to) + 1;
+        $previousTo = $from->copy()->subSecond();
+        $previousFrom = $previousTo->copy()->subSeconds($seconds - 1);
+        $current = $this->getStats();
+        $previousQuery = DB::table('site_analytics_events')->whereBetween('occurred_at', [$previousFrom, $previousTo]);
+        $previous = [
+            'views' => (clone $previousQuery)->where('event', 'page_view')->count(),
+            'visitors' => (clone $previousQuery)->distinct()->count('session_id'),
+            'clicks' => (clone $previousQuery)->whereIn('event', ['cta_click', 'link_click'])->count(),
+        ];
+        $result = [];
+        foreach (['views', 'visitors', 'clicks'] as $key) {
+            $old = $previous[$key];
+            $result[$key] = ['current' => $current[$key], 'previous' => $old,
+                'change' => $old > 0 ? round(($current[$key] - $old) / $old * 100, 1) : null];
+        }
+        return $result;
+    }
+
+    public function exportCsv()
+    {
+        $rows = $this->events()->orderBy('occurred_at')->get([
+            'occurred_at', 'event', 'path', 'element', 'device', 'browser',
+            'referrer_host', 'utm_source', 'utm_medium', 'utm_campaign'
+        ]);
+        return response()->streamDownload(function () use ($rows) {
+            $out = fopen('php://output', 'w');
+            fwrite($out, "\xEF\xBB\xBF");
+            fputcsv($out, ['Время', 'Событие', 'Страница', 'Элемент', 'Устройство', 'Браузер',
+                'Источник', 'UTM source', 'UTM medium', 'UTM campaign']);
+            foreach ($rows as $row) {
+                $values = array_values((array) $row);
+                // Prevent CSV formula execution when opened in spreadsheet programs.
+                $values = array_map(function ($value) {
+                    $value = (string) ($value ?? '');
+                    return preg_match('/^[=+@\\-\\t\\r]/u', $value) ? "'" . $value : $value;
+                }, $values);
+                fputcsv($out, $values);
+            }
+            fclose($out);
+        }, 'analytics-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 
     public function getRecentEvents()
