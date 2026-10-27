@@ -79,6 +79,41 @@ export default function LegalDocument() {
         return () => observer.disconnect();
     }, [legalDoc?.content]);
 
+    const downloadPdf = async () => {
+        if (pdfLoading) return;
+        setPdfLoading(true);
+        try {
+            await loadPdfScript("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.20/pdfmake.min.js");
+            await loadPdfScript("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.20/vfs_fonts.js");
+            const pdf = window.pdfMake;
+            if (!pdf?.createPdf) throw new Error("PDF недоступен");
+            const blocks = [
+                { text: legalDoc?.title || "Юридический документ", style: "title" },
+                { text: "Редакция " + (legalDoc?.version || "") + (legalDoc?.effective_at ? "  •  Действует с " + legalDoc.effective_at : ""), style: "meta" },
+            ];
+            for (const section of headings) {
+                blocks.push({ text: section.title, style: "heading" });
+                for (const paragraph of section.paragraphs) blocks.push({ text: paragraph, style: "body" });
+            }
+            pdf.createPdf({
+                info: { title: legalDoc?.title || "Документ", author: "arutyun.me" },
+                content: blocks,
+                defaultStyle: { font: "Roboto", fontSize: 10.5, color: "#222222" },
+                styles: {
+                    title: { fontSize: 20, bold: true, margin: [0, 0, 0, 10] },
+                    meta: { fontSize: 9, color: "#666666", margin: [0, 0, 0, 22] },
+                    heading: { fontSize: 13, bold: true, margin: [0, 16, 0, 9] },
+                    body: { fontSize: 10.5, lineHeight: 1.45, margin: [0, 0, 0, 12] },
+                },
+                pageSize: "A4",
+                pageMargins: [45, 48, 45, 48],
+            }).download("arutyun-" + (legalDoc?.slug || "document") + "-v" + (legalDoc?.version || "latest") + ".pdf");
+        } catch (error) {
+            console.error(error);
+            window.alert("Не удалось создать PDF. Попробуйте ещё раз.");
+        } finally { setPdfLoading(false); }
+    };
+
     return <>
         <Head title={(legalDoc?.title || "Юридический документ") + " — arutyun.me"} />
         <Header />
