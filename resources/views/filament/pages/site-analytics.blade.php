@@ -33,6 +33,45 @@
         @media(max-width:760px){.sa-dashboard .sa-grid{grid-template-columns:1fr}.sa-dashboard .sa-card{padding:16px}.sa-dashboard .sa-chart{height:160px}}
         @media(max-width:420px){.sa-dashboard .sa-stats{gap:8px}.sa-dashboard .sa-stat-value{font-size:26px}.sa-dashboard .sa-stat-label{font-size:12px}}
         @media(prefers-color-scheme:light){.sa-dashboard .sa-card{background:#fff;border-color:#e5e7eb}.sa-dashboard .sa-section-title,.sa-dashboard .sa-stat-value{color:#18181b}.sa-dashboard .sa-track{background:#e5e7eb}.sa-dashboard .sa-table td{border-color:#e5e7eb}.sa-dashboard .sa-table th{border-color:#d1d5db}.sa-dashboard .sa-pill{background:#f3f4f6}}
+        /* High-contrast palette independent of Filament's uncompiled utility classes */
+        .sa-dashboard{color:#e4e4e7}
+        .sa-dashboard .sa-card{color:#e4e4e7}
+        .sa-dashboard .sa-card .sa-section-title{color:#fafafa}
+        .sa-dashboard .sa-card .sa-list-head{color:#e4e4e7}
+        .sa-dashboard .sa-card .sa-list-head span:last-child{color:#d4d4d8;font-variant-numeric:tabular-nums}
+        .sa-dashboard .sa-card .sa-muted,.sa-dashboard .sa-card p{color:#a1a1aa}
+        .sa-dashboard .sa-stat-label{color:#d4d4d8}
+        .sa-dashboard .sa-table{color:#e4e4e7;table-layout:auto}
+        .sa-dashboard .sa-table th{color:#d4d4d8;background:#222228;position:sticky;top:0;z-index:2}
+        .sa-dashboard .sa-table td{color:#e4e4e7}
+        .sa-dashboard .sa-table td.sa-dim{color:#b4b4be}
+        .sa-dashboard .sa-table td.sa-time{font-variant-numeric:tabular-nums;white-space:nowrap;color:#d4d4d8}
+        .sa-dashboard .sa-table tr:nth-child(even) td{background:rgba(255,255,255,.025)}
+        .sa-dashboard .sa-table tr:hover td{background:rgba(245,158,11,.07)}
+        .sa-dashboard .sa-pill{font-weight:600;color:#e4e4e7;background:#33333d}
+        .sa-dashboard .sa-pill.view{background:rgba(56,189,248,.13);color:#7dd3fc}
+        .sa-dashboard .sa-pill.link{background:rgba(167,139,250,.15);color:#c4b5fd}
+        .sa-dashboard .sa-pill.cta{background:rgba(52,211,153,.14);color:#6ee7b7}
+        .sa-dashboard .sa-history{max-height:390px;overflow:auto;overscroll-behavior:contain;scrollbar-color:#52525b transparent}
+        .sa-dashboard .sa-table th,.sa-dashboard .sa-table td{padding:8px 10px;line-height:1.3}
+        .sa-dashboard .sa-history-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;list-style:none}
+        .sa-dashboard .sa-history-summary::-webkit-details-marker{display:none}
+        .sa-dashboard .sa-history-summary .sa-chevron{color:#fbbf24;font-size:12px}
+        .sa-dashboard details[open] .sa-history-summary .sa-chevron{transform:rotate(180deg)}
+        .sa-dashboard .sa-history-note{margin-top:5px;font-size:12px;color:#a1a1aa}
+        .sa-dashboard .sa-history{margin-top:16px}
+        .sa-dashboard .sa-history-summary:focus-visible{outline:2px solid #f59e0b;outline-offset:5px;border-radius:4px}
+        @media(prefers-color-scheme:light){
+          .sa-dashboard{color:#27272a}
+          .sa-dashboard .sa-card{color:#27272a}
+          .sa-dashboard .sa-card .sa-section-title,.sa-dashboard .sa-card .sa-list-head{color:#18181b}
+          .sa-dashboard .sa-card .sa-list-head span:last-child,.sa-dashboard .sa-stat-label{color:#52525b}
+          .sa-dashboard .sa-table,.sa-dashboard .sa-table td{color:#27272a}
+          .sa-dashboard .sa-table th{background:#f4f4f5;color:#52525b}
+          .sa-dashboard .sa-table td.sa-dim,.sa-dashboard .sa-table td.sa-time{color:#52525b}
+          .sa-dashboard .sa-table tr:nth-child(even) td{background:#fafafa}
+          .sa-dashboard .sa-pill{background:#e4e4e7;color:#27272a}
+        }
     </style>
 
     @php
