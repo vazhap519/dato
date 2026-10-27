@@ -46,15 +46,6 @@ function renderLegalLinks(text) {
     );
 }
 
-const loadPdfScript = (url) => new Promise((resolve, reject) => {
-    const existing = document.querySelector('script[src="' + url + '"]');
-    if (existing?.dataset.loaded === "true") { resolve(); return; }
-    const script = existing || document.createElement("script");
-    script.addEventListener("load", () => { script.dataset.loaded = "true"; resolve(); }, { once: true });
-    script.addEventListener("error", () => reject(new Error("Не удалось загрузить библиотеку PDF")), { once: true });
-    if (!existing) { script.src = url; document.head.appendChild(script); }
-});
-
 export default function LegalDocument() {
     const { document: legalDoc } = usePage().props;
     const sections = useMemo(() => parseDocument(legalDoc?.content), [legalDoc?.content]);
