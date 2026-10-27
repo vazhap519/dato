@@ -12,11 +12,6 @@
 @theme {
     --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
-    /* Keep narrow desktop-mode mobile viewports in the single-column layout. */
-    --breakpoint-sm: 64rem;
-    --breakpoint-md: 68rem;
-    --breakpoint-lg: 80rem;
-    --breakpoint-xl: 96rem;
 
     --color-primary: #FAC638;
     --color-background-light: #f8f8f5;
