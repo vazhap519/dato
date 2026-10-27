@@ -37,6 +37,15 @@ function parseDocument(text) {
     return sections;
 }
 
+function renderLegalLinks(text) {
+    const pattern = /\[Служба Заботы\]\(https:\/\/t\.me\/arutyunsupport\)/g;
+    return String(text).split(pattern).flatMap((part, index, parts) =>
+        index < parts.length - 1
+            ? [part, <a key={index} href="https://t.me/arutyunsupport" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-4 hover:opacity-80">Служба Заботы</a>]
+            : [part]
+    );
+}
+
 export default function LegalDocument() {
     const { document: legalDoc } = usePage().props;
     const sections = useMemo(() => parseDocument(legalDoc?.content), [legalDoc?.content]);
@@ -116,7 +125,7 @@ export default function LegalDocument() {
                             <section key={section.id + index} id={section.id} className="scroll-mt-32 mb-11 last:mb-0">
                                 {section.title && <h2 className="text-xl sm:text-2xl font-semibold leading-snug text-white print:text-black mb-5 pb-4 border-b border-primary/20">{section.title}</h2>}
                                 <div className="space-y-5">
-                                    {section.paragraphs.map((paragraph, i) => <p key={i} className="text-[15px] sm:text-base text-white/75 print:text-black leading-[1.95] whitespace-pre-wrap break-words">{paragraph}</p>)}
+                                    {section.paragraphs.map((paragraph, i) => <p key={i} className="text-[15px] sm:text-base text-white/75 print:text-black leading-[1.95] whitespace-pre-wrap break-words">{renderLegalLinks(paragraph)}</p>)}
                                 </div>
                             </section>
                         )) : <p className="text-white/60">Текст документа пока не добавлен.</p>}
