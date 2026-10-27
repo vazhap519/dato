@@ -49,7 +49,11 @@ function renderLegalLinks(text) {
 export default function LegalDocument() {
     const { document: legalDoc } = usePage().props;
     const sections = useMemo(() => parseDocument(legalDoc?.content), [legalDoc?.content]);
-    const introduction = sections.find(s => s.id === "introduction");
+    const introDescriptions = {
+        privacy: "Как мы обрабатываем данные посетителей и защищаем их конфиденциальность.",
+        terms: "Правила использования сайта, материалов и участия в наших проектах.",
+        offer: "Условия приобретения услуг, подписок и цифровых материалов.",
+    };
     const headings = sections.filter(s => s.title);
     const [active, setActive] = useState(headings[0]?.id || "");
     useEffect(() => {
@@ -122,12 +126,12 @@ export default function LegalDocument() {
                     </aside>
 
                     <div className="min-w-0 max-w-[800px] space-y-5">
-                    {introduction?.paragraphs?.length > 0 && <div className="rounded-2xl border border-primary/25 bg-primary/[0.055] px-5 py-6 sm:px-8 sm:py-7 print:border print:border-gray-300 print:bg-white">
+                    {introDescriptions[legalDoc?.slug] && <div className="rounded-2xl border border-primary/25 bg-primary/[0.055] px-5 py-6 sm:px-8 sm:py-7 print:border print:border-gray-300 print:bg-white">
                         <div className="flex items-center gap-2.5 mb-3 text-primary print:text-black">
                             <span className="material-symbols-outlined text-xl" aria-hidden="true">description</span>
                             <span className="text-xs font-semibold uppercase tracking-[0.16em]">О документе</span>
                         </div>
-                        <div className="space-y-3">{introduction.paragraphs.map((paragraph, i) => <p key={i} className="text-sm sm:text-base leading-relaxed text-white/80 print:text-black break-words">{renderLegalLinks(paragraph)}</p>)}</div>
+                        <p className="text-sm sm:text-base leading-relaxed text-white/80 print:text-black">{introDescriptions[legalDoc?.slug]}</p>
                     </div>}
                     <article className="rounded-2xl border border-white/10 bg-white/[0.018] px-5 py-7 sm:px-8 sm:py-10 md:px-11 md:py-12 print:border-0 print:p-0">
                         {headings.length ? headings.map((section, index) => (
