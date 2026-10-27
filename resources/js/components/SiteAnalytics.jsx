@@ -71,13 +71,24 @@ export default function SiteAnalytics() {
                 FinalJoinClick: 'Практикум · запись внизу страницы',
                 MobileJoinClick: 'Практикум · мобильная кнопка записи',
             };
+            const visibleLabel = (target.getAttribute('aria-label') || target.getAttribute('title') || target.innerText || '').replace(/\\s+/g, ' ').trim().slice(0, 75);
+            const path = window.location.pathname;
+            const section = target.closest('section[id], main section, header, footer, nav');
+            const sectionName = section?.id || (section?.tagName === 'HEADER' ? 'шапка' : section?.tagName === 'FOOTER' ? 'подвал' : section?.tagName === 'NAV' ? 'меню' : null);
+            const destinationLabel = destination
+                ? (destination.origin === window.location.origin
+                    ? (destination.pathname === '/' ? 'главная' : destination.pathname)
+                    : (destination.hostname === 't.me' || destination.hostname === 'telegram.me' ? 'Telegram' : destination.hostname))
+                : null;
+            // Use explicit event names first. Otherwise combine the visible button
+            // label with its destination, so multiple CTAs to the same URL are distinct.
+            // Never collect text entered into inputs or form fields.
             const name = target.dataset.analytics
                 || (metaEvent ? (knownLabels[metaEvent] || metaEvent) : null)
-                || (destination?.hostname === 't.me' || destination?.hostname === 'telegram.me' ? 'Переход в Telegram' : null)
-                || (destination && destination.origin !== window.location.origin ? 'Внешняя ссылка · ' + destination.hostname : null)
-                || (destination ? 'Переход на ' + (destination.pathname === '/' ? 'главную' : destination.pathname) : null)
-                || (target.tagName === 'BUTTON' ? target.textContent?.trim().slice(0, 100) : null);
-            if (name) send(target.tagName === 'A' ? 'link_click' : 'cta_click', name);
+                || (visibleLabel
+                    ? visibleLabel + (destinationLabel ? ' → ' + destinationLabel : '') + (sectionName ? ' · ' + sectionName : '')
+                    : (destinationLabel ? 'Переход → ' + destinationLabel + (sectionName ? ' · ' + sectionName : '') : null));
+            if (name) send(target.tagName === 'A' ? 'link_click' : 'cta_click', name.slice(0, 120));
         };
         page();
         document.addEventListener('inertia:navigate', page);
