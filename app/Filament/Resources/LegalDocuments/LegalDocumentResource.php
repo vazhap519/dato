@@ -20,6 +20,9 @@ use Filament\Support\Icons\Heroicon;
 
 class LegalDocumentResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Юридический раздел';
+    protected static ?int $navigationSort = 10;
+
     protected static ?string $model = LegalDocument::class;
     protected static ?string $navigationLabel = 'Юридические документы';
     protected static ?string $pluralModelLabel = 'Юридические документы';
