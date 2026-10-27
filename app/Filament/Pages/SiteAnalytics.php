@@ -14,6 +14,29 @@ class SiteAnalytics extends Page
     protected static string | \UnitEnum | null $navigationGroup = 'Аналитика';
     protected string $view = 'filament.pages.site-analytics';
 
+    public string $period = '30';
+
+    private function since(): \Illuminate\Support\Carbon
+    {
+        return match ($this->period) {
+            'today' => now()->startOfDay(),
+            'yesterday' => now()->subDay()->startOfDay(),
+            '7' => now()->subDays(6)->startOfDay(),
+            default => now()->subDays(29)->startOfDay(),
+        };
+    }
+
+    private function until(): \Illuminate\Support\Carbon
+    {
+        return $this->period === 'yesterday' ? now()->subDay()->endOfDay() : now();
+    }
+
+    private function events()
+    {
+        return DB::table('site_analytics_events')->whereBetween('occurred_at', [$this->since(), $this->until()]);
+    }
+
+
     protected function getHeaderActions(): array
     {
         return [
@@ -34,7 +57,7 @@ class SiteAnalytics extends Page
 
     public function getStats(): array
     {
-        $query = DB::table('site_analytics_events')->where('occurred_at', '>=', now()->subDays(30));
+        $query = $this->events();
         return [
             'events' => (clone $query)->count(),
             'views' => (clone $query)->where('event', 'page_view')->count(),
@@ -45,25 +68,25 @@ class SiteAnalytics extends Page
 
     public function getPopularPages()
     {
-        return DB::table('site_analytics_events')
+        return $this->events()
             ->select('path', DB::raw('COUNT(*) as views'))
             ->where('event', 'page_view')
-            ->where('occurred_at', '>=', now()->subDays(30))
             ->groupBy('path')->orderByDesc('views')->limit(15)->get();
     }
 
     public function getDailyViews(): array
     {
-        $rows = DB::table('site_analytics_events')
+        $rows = $this->events()
             ->selectRaw("DATE(occurred_at) as day, COUNT(*) as views")
             ->where('event', 'page_view')
-            ->where('occurred_at', '>=', now()->subDays(29)->startOfDay())
+            
             ->groupByRaw('DATE(occurred_at)')
             ->pluck('views', 'day');
         $days = [];
-        for ($i = 29; $i >= 0; $i--) {
-            $date = now()->subDays($i)->toDateString();
-            $days[] = ['date' => $date, 'label' => now()->subDays($i)->format('d.m'), 'views' => (int) ($rows[$date] ?? 0)];
+        $count = match ($this->period) { 'today', 'yesterday' => 1, '7' => 7, default => 30 };
+        for ($i = $count - 1; $i >= 0; $i--) {
+            $date = $this->until()->copy()->subDays($i)->toDateString();
+            $days[] = ['date' => $date, 'label' => $this->until()->copy()->subDays($i)->format('d.m'), 'views' => (int) ($rows[$date] ?? 0)];
         }
         return $days;
     }
@@ -73,7 +96,6 @@ class SiteAnalytics extends Page
         return DB::table('site_analytics_events')
             ->select('device', DB::raw('COUNT(*) as total'))
             ->where('event', 'page_view')
-            ->where('occurred_at', '>=', now()->subDays(30))
             ->groupBy('device')->orderByDesc('total')->get();
     }
 
@@ -82,7 +104,6 @@ class SiteAnalytics extends Page
         return DB::table('site_analytics_events')
             ->selectRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен') as source, COUNT(*) as total")
             ->where('event', 'page_view')
-            ->where('occurred_at', '>=', now()->subDays(30))
             ->groupByRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен')")
             ->orderByDesc('total')->limit(8)->get();
     }
@@ -92,14 +113,22 @@ class SiteAnalytics extends Page
         return DB::table('site_analytics_events')
             ->select('element', DB::raw('COUNT(*) as total'))
             ->whereIn('event', ['cta_click', 'link_click'])
-            ->where('occurred_at', '>=', now()->subDays(30))
             ->whereNotNull('element')
             ->groupBy('element')->orderByDesc('total')->limit(8)->get();
     }
 
+    public function getFunnel(): array
+    {
+        $views = (clone $this->events())->where('event', 'page_view')->where('path', '/editoria')->distinct('session_id')->count('session_id');
+        $clicks = (clone $this->events())->where('path', '/editoria')->whereIn('event', ['cta_click','link_click'])->where(function ($query) {
+            $query->where('element', 'ilike', '%telegram%')->orWhere('element', 'ilike', '%join%')->orWhere('element', 'ilike', '%register%')->orWhere('element', 'ilike', '%присоедин%');
+        })->distinct('session_id')->count('session_id');
+        return ['views' => $views, 'clicks' => $clicks, 'rate' => $views ? round($clicks / $views * 100, 1) : 0];
+    }
+
     public function getRecentEvents()
     {
-        return DB::table('site_analytics_events')
+        return $this->events()
             ->orderByDesc('occurred_at')->limit(80)
             ->get(['occurred_at', 'event', 'path', 'element', 'device', 'browser', 'visitor_id']);
     }
