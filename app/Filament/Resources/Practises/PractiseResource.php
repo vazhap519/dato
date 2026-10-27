@@ -18,12 +18,12 @@ class PractiseResource extends Resource
 {
     protected static string | \UnitEnum | null $navigationGroup = 'Продукты и услуги';
     protected static ?int $navigationSort = 10;
+
     protected static ?string $model = Practice::class;
     protected static ?string $modelLabel = 'практика';
     protected static ?string $pluralModelLabel = 'практики';
 protected static ?string $navigationLabel = 'Практики';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-    protected static string | UnitEnum | null $navigationGroup = 'Главная';
 
 
     public static function form(Schema $schema): Schema
