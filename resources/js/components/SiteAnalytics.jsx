@@ -11,8 +11,6 @@ function identifier(key, storage) {
 
 export default function SiteAnalytics() {
     const [settingsOpen, setSettingsOpen] = useState(false);
-    const [analyticsChoice, setAnalyticsChoice] = useState(() => { try { return localStorage.getItem('site_analytics_consent') === 'granted'; } catch { return false; } });
-    const [adsChoice, setAdsChoice] = useState(() => { try { return localStorage.getItem('site_ads_consent') === 'granted'; } catch { return false; } });
     const [choice, setChoice] = useState(() => {
         try { return localStorage.getItem('site_analytics_consent'); }
         catch { return 'denied'; }
@@ -77,19 +75,26 @@ export default function SiteAnalytics() {
     const decide = (value, ads = false) => {
         try { localStorage.setItem('site_analytics_consent', value); } catch {}
         try { localStorage.setItem('site_ads_consent', ads ? 'granted' : 'denied'); } catch {}
-        setAdsChoice(ads);
-        setAnalyticsChoice(value === 'granted');
         setChoice(value);
         setSettingsOpen(false);
         window.dispatchEvent(new Event('site:consent-changed'));
     };
-    if (choice && !settingsOpen) return <button type="button" onClick={() => setSettingsOpen(true)} className="fixed bottom-3 left-3 z-[90] rounded-full border border-amber-500/30 bg-[#201b13] px-3 py-2 text-xs text-white shadow-lg" aria-label="Настройки конфиденциальности">Конфиденциальность</button>;
+    if (choice && !settingsOpen) return null;
+    const onWorkshop = window.location.pathname === '/editoria' || window.location.pathname === '/editoria/';
     return (
-        <aside role="dialog" aria-label="Настройки аналитики" className="fixed bottom-4 left-4 right-4 z-[100] mx-auto max-w-lg rounded-xl border border-amber-500/40 bg-[#201b13] p-4 text-sm text-white shadow-2xl">
-            <p>Вы можете отдельно разрешить аналитику посещений и рекламные технологии Meta Pixel. Без вашего согласия необязательное отслеживание отключено. <a href="/privacy" className="text-amber-400 underline">Политика конфиденциальности</a></p>
-            <label className="mt-3 flex items-center gap-2"><input type="checkbox" checked={analyticsChoice} onChange={e => setAnalyticsChoice(e.target.checked)} /> Разрешить аналитику посещений</label>
-            <label className="mt-3 flex items-center gap-2"><input type="checkbox" checked={adsChoice} onChange={e => setAdsChoice(e.target.checked)} /> Разрешить рекламное отслеживание Meta</label>
-            <div className="mt-3 flex flex-wrap gap-3"><button type="button" onClick={() => decide('denied', false)} className="rounded-lg border border-white/30 px-4 py-2">Отклонить всё</button><button type="button" onClick={() => decide(analyticsChoice ? 'granted' : 'denied', adsChoice)} className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-black">Сохранить выбор</button></div>
+        <aside
+            role="dialog"
+            aria-label="Согласие на аналитику"
+            className={`fixed left-3 right-3 z-[80] mx-auto max-w-[390px] rounded-2xl border border-amber-500/20 bg-[#201b13]/95 px-4 py-3 text-white shadow-xl backdrop-blur-md sm:left-auto sm:right-5 sm:max-w-[360px] ${onWorkshop ? 'bottom-[calc(6.5rem+env(safe-area-inset-bottom))] md:bottom-5' : 'bottom-4'}`}
+        >
+            <p className="text-xs leading-relaxed text-white/85">
+                Мы используем аналитику и рекламные технологии Meta, чтобы улучшать сайт. Нажимая «ОК», вы соглашаетесь с их использованием.{' '}
+                <a href="/privacy" className="text-amber-300 underline underline-offset-2">Подробнее</a>
+            </p>
+            <div className="mt-3 flex items-center justify-end gap-2">
+                <button type="button" onClick={() => decide('denied', false)} className="rounded-lg px-3 py-2 text-xs text-white/75 hover:text-white">Не сейчас</button>
+                <button type="button" onClick={() => decide('granted', true)} className="rounded-lg bg-amber-400 px-5 py-2 text-xs font-bold text-black hover:bg-amber-300">ОК</button>
+            </div>
         </aside>
     );
 }
