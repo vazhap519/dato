@@ -93,7 +93,7 @@ class SiteAnalytics extends Page
 
     public function getDevices()
     {
-        return DB::table('site_analytics_events')
+        return $this->events()
             ->select('device', DB::raw('COUNT(*) as total'))
             ->where('event', 'page_view')
             ->groupBy('device')->orderByDesc('total')->get();
@@ -101,8 +101,8 @@ class SiteAnalytics extends Page
 
     public function getSources()
     {
-        return DB::table('site_analytics_events')
-            ->selectRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен') as source, COUNT(*) as total")
+        return $this->events()
+            ->selectRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(NULLIF(referrer_host, 'arutyun.me'), ''), 'Прямой / неизвестен') as source, COUNT(*) as total")
             ->where('event', 'page_view')
             ->groupByRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен')")
             ->orderByDesc('total')->limit(8)->get();
@@ -110,7 +110,7 @@ class SiteAnalytics extends Page
 
     public function getTopClicks()
     {
-        return DB::table('site_analytics_events')
+        return $this->events()
             ->select('element', DB::raw('COUNT(*) as total'))
             ->whereIn('event', ['cta_click', 'link_click'])
             ->whereNotNull('element')
