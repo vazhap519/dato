@@ -90,11 +90,57 @@ export default function SiteAnalytics() {
                     : (destinationLabel ? 'Переход → ' + destinationLabel + (sectionName ? ' · ' + sectionName : '') : null));
             if (name) send(target.tagName === 'A' ? 'link_click' : 'cta_click', name.slice(0, 120));
         };
-        page();
-        document.addEventListener('inertia:navigate', page);
+        // Lightweight editoria diagnostics: one event per scroll milestone and
+        // active-time milestone, no raw cursor positions or personal input.
+        let editoriaCleanup = () => {};
+        const editoriaMetrics = () => {
+            editoriaCleanup();
+            if (window.location.pathname !== '/editoria') return;
+            const scrolled = new Set();
+            const engaged = new Set();
+            let activeSeconds = 0;
+            let lastTick = Date.now();
+            let visible = document.visibilityState === 'visible';
+            const onScroll = () => {
+                const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+                const depth = Math.min(100, Math.round(window.scrollY / total * 100));
+                [25, 50, 75, 90, 100].forEach(mark => {
+                    if (depth >= mark && !scrolled.has(mark)) {
+                        scrolled.add(mark);
+                        send('scroll_depth', 'scroll_' + mark);
+                    }
+                });
+            };
+            const onVisibility = () => {
+                if (visible) activeSeconds += Math.min(5, (Date.now() - lastTick) / 1000);
+                lastTick = Date.now();
+                visible = document.visibilityState === 'visible';
+            };
+            const interval = window.setInterval(() => {
+                onVisibility();
+                [10, 30, 60, 120, 300].forEach(mark => {
+                    if (activeSeconds >= mark && !engaged.has(mark)) {
+                        engaged.add(mark);
+                        send('engagement', 'active_' + mark);
+                    }
+                });
+            }, 1000);
+            window.addEventListener('scroll', onScroll, { passive: true });
+            document.addEventListener('visibilitychange', onVisibility);
+            onScroll();
+            editoriaCleanup = () => {
+                window.clearInterval(interval);
+                window.removeEventListener('scroll', onScroll);
+                document.removeEventListener('visibilitychange', onVisibility);
+            };
+        };
+        editoriaMetrics();
+        const onNavigate = () => { page(); editoriaMetrics(); };
+        document.addEventListener('inertia:navigate', onNavigate);
         document.addEventListener('click', click, true);
         return () => {
-            document.removeEventListener('inertia:navigate', page);
+            document.removeEventListener('inertia:navigate', onNavigate);
+            editoriaCleanup();
             document.removeEventListener('click', click, true);
         };
     }, []);
