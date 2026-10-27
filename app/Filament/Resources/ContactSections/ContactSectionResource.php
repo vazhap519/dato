@@ -16,6 +16,8 @@ use Filament\Tables\Table;
 use UnitEnum;
 class ContactSectionResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Управление сайтом';
+    protected static ?int $navigationSort = 30;
     protected static ?string $model = ContactSection::class;
     protected static ?string $modelLabel = 'контактный раздел';
     protected static ?string $pluralModelLabel = 'контактные разделы';
