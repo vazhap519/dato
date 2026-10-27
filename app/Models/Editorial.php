@@ -16,6 +16,7 @@ class Editorial extends Model implements HasMedia
 
         'hero_badge',
         'hero_title',
+        'hero_title_accent',
         'hero_description',
         'hero_button_text',
         'hero_button_url',
