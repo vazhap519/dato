@@ -81,7 +81,7 @@ export default function SiteAnalytics() {
             className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-3 right-3 z-[80] mx-auto max-w-[390px] rounded-2xl border border-amber-500/20 bg-[#201b13]/95 px-4 py-3 text-white shadow-xl backdrop-blur-md sm:left-auto sm:right-5 sm:max-w-[360px]">
             <div className="text-sm font-semibold text-amber-100">Немного о конфиденциальности</div>
             <p className="mt-2 text-xs leading-relaxed text-white/85">
-                Мы используем базовую статистику без аналитических cookie. С вашего разрешения мы также используем рекламные технологии, чтобы делать сайт удобнее и полезнее. Нажимая «ОК», вы соглашаетесь на рекламное отслеживание.
+                Мы используем аналитику для улучшения сайта, а с вашего согласия — рекламные технологии. Нажимая «ОК», вы разрешаете их использование.
                 {' '}<a href="/privacy" className="text-amber-300 underline">Подробнее</a>
             </p>
             <div className="mt-3 flex justify-end gap-2">
