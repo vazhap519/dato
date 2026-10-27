@@ -101,10 +101,24 @@ class SiteAnalytics extends Page
 
     public function getSources()
     {
+        $source = "CASE
+            WHEN lower(coalesce(utm_source, '')) ~ '(facebook|instagram|meta|fb)' THEN 'Meta'
+            WHEN lower(coalesce(utm_source, '')) ~ '(google|adwords)' THEN 'Google'
+            WHEN lower(coalesce(utm_source, '')) ~ '(tiktok)' THEN 'TikTok'
+            WHEN lower(coalesce(utm_source, '')) ~ '(youtube)' THEN 'YouTube'
+            WHEN lower(coalesce(utm_source, '')) ~ '(telegram|^tg$)' THEN 'Telegram'
+            WHEN NULLIF(utm_source, '') IS NOT NULL THEN utm_source
+            WHEN lower(coalesce(referrer_host, '')) ~ '(facebook|instagram|fb\\.com)' THEN 'Meta'
+            WHEN lower(coalesce(referrer_host, '')) ~ '(google\\.)' THEN 'Google'
+            WHEN lower(coalesce(referrer_host, '')) ~ '(tiktok)' THEN 'TikTok'
+            WHEN lower(coalesce(referrer_host, '')) ~ '(youtube|youtu\\.be)' THEN 'YouTube'
+            WHEN lower(coalesce(referrer_host, '')) ~ '(telegram|t\\.me)' THEN 'Telegram'
+            WHEN referrer_host IS NULL OR referrer_host = '' OR lower(referrer_host) IN ('arutyun.me', 'www.arutyun.me') THEN 'Прямой / неизвестен'
+            ELSE referrer_host END";
         return $this->events()
-            ->selectRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(NULLIF(referrer_host, 'arutyun.me'), ''), 'Прямой / неизвестен') as source, COUNT(*) as total")
+            ->selectRaw("{$source} as source, COUNT(*) as total")
             ->where('event', 'page_view')
-            ->groupByRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(NULLIF(referrer_host, 'arutyun.me'), ''), 'Прямой / неизвестен')")
+            ->groupByRaw($source)
             ->orderByDesc('total')->limit(8)->get();
     }
 
@@ -119,11 +133,31 @@ class SiteAnalytics extends Page
 
     public function getFunnel(): array
     {
-        $views = (clone $this->events())->where('event', 'page_view')->where('path', '/editoria')->distinct('session_id')->count('session_id');
-        $clicks = (clone $this->events())->where('path', '/editoria')->whereIn('event', ['cta_click','link_click'])->where(function ($query) {
-            $query->where('element', 'ilike', '%telegram%')->orWhere('element', 'ilike', '%join%')->orWhere('element', 'ilike', '%register%')->orWhere('element', 'ilike', '%присоедин%');
-        })->distinct('session_id')->count('session_id');
+        $views = (clone $this->events())->where('event', 'page_view')
+            ->where('path', '/editoria')->distinct()->count('session_id');
+        $names = ['HeroJoinClick', 'ProgramJoinClick', 'HowToJoinClick', 'FinalJoinClick', 'MobileJoinClick',
+            'Практикум · запись в первом экране', 'Практикум · запись в программе',
+            'Практикум · запись в инструкции', 'Практикум · запись внизу страницы',
+            'Практикум · мобильная кнопка записи'];
+        $clicks = (clone $this->events())->where('path', '/editoria')
+            ->whereIn('event', ['cta_click', 'link_click'])
+            ->whereIn('element', $names)->distinct()->count('session_id');
         return ['views' => $views, 'clicks' => $clicks, 'rate' => $views ? round($clicks / $views * 100, 1) : 0];
+    }
+
+    public function getPageConversions(): array
+    {
+        $pages = [
+            ['path' => '/editoria', 'label' => 'Практикум', 'elements' => ['HeroJoinClick','ProgramJoinClick','HowToJoinClick','FinalJoinClick','MobileJoinClick','Практикум · запись в первом экране','Практикум · запись в программе','Практикум · запись в инструкции','Практикум · запись внизу страницы','Практикум · мобильная кнопка записи']],
+            ['path' => '/personal', 'label' => 'Консультации', 'elements' => []],
+        ];
+        return array_map(function ($page) {
+            $views = (clone $this->events())->where('event', 'page_view')->where('path', $page['path'])->distinct()->count('session_id');
+            $clickQuery = (clone $this->events())->where('path', $page['path'])->whereIn('event', ['link_click', 'cta_click']);
+            if ($page['elements']) $clickQuery->whereIn('element', $page['elements']);
+            $clicks = $clickQuery->distinct()->count('session_id');
+            return ['label' => $page['label'], 'path' => $page['path'], 'views' => $views, 'clicks' => $clicks, 'rate' => $views ? round($clicks / $views * 100, 1) : 0];
+        }, $pages);
     }
 
     public function getRecentEvents()
