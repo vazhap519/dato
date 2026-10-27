@@ -74,9 +74,11 @@ export default function LegalDocument() {
         if (pdfLoading) return;
         setPdfLoading(true);
         try {
-            await loadPdfScript("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.20/pdfmake.min.js");
-            await loadPdfScript("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.20/vfs_fonts.js");
-            const pdf = window.pdfMake;
+            const pdfModule = await import("pdfmake/build/pdfmake");
+            const fontModule = await import("pdfmake/build/vfs_fonts");
+            const pdf = pdfModule.default || pdfModule;
+            const fonts = fontModule.default || fontModule;
+            pdf.vfs = fonts.pdfMake?.vfs || fonts.vfs || fonts;
             if (!pdf?.createPdf) throw new Error("PDF недоступен");
             const blocks = [
                 { text: legalDoc?.title || "Юридический документ", style: "title" },
