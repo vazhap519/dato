@@ -22,9 +22,10 @@ const PIXEL_ID = "1435515278787720";
 const onEditoria = () => window.location.pathname === "/editoria" || window.location.pathname === "/editoria/";
 let pixelMounted = false;
 let pixelInitialized = false;
+const hasAdsConsent = () => { try { return localStorage.getItem("site_ads_consent") === "granted"; } catch { return false; } };
 
 const pixelEvent = (name, label, href) => {
-    if (!pixelMounted || !onEditoria() || typeof window.fbq !== "function") return;
+    if (!pixelMounted || !onEditoria() || !hasAdsConsent() || typeof window.fbq !== "function") return;
     const data = { button_name: label };
     try {
         const destination = new URL(href || "", window.location.origin);
@@ -46,7 +47,7 @@ const pixelEvent = (name, label, href) => {
 function useEditoriaPixel() {
     useEffect(() => {
         if (!onEditoria()) return;
-        pixelMounted = true;
+        pixelMounted = hasAdsConsent();
 
         // Capture native clicks before React's synthetic event handlers and
         // external navigation. The delegated handler survives React re-renders.
@@ -64,6 +65,9 @@ function useEditoriaPixel() {
 
         // Meta's standard queue/bootstrap pattern; never add it to the global layout.
         // Guard against duplicate injection when the page is mounted again.
+        const startPixel = () => {
+        if (!hasAdsConsent()) return;
+        pixelMounted = true;
         if (!window.fbq) {
             const fbq = function () {
                 if (fbq.callMethod) fbq.callMethod.apply(fbq, arguments);
@@ -95,12 +99,23 @@ function useEditoriaPixel() {
             document.head.appendChild(script);
         }
 
+        };
+        const onConsentChange = () => {
+            if (hasAdsConsent()) { startPixel(); return; }
+            pixelMounted = false;
+            document.querySelector('script[data-editoria-pixel="true"]')?.remove();
+            if (window._fbq === window.fbq) { delete window.fbq; delete window._fbq; }
+            pixelInitialized = false;
+        };
+        startPixel();
+        window.addEventListener("site:consent-changed", onConsentChange);
         return () => {
+            window.removeEventListener("site:consent-changed", onConsentChange);
             document.removeEventListener("click", handleTrackedClick, true);
             pixelMounted = false;
             pixelInitialized = false;
             // An Inertia route change must not leave an active tracker behind.
-            script?.remove();
+            document.querySelector('script[data-editoria-pixel="true"]')?.remove();
             if (window._fbq === window.fbq) {
                 delete window.fbq;
                 delete window._fbq;
