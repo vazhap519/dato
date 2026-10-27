@@ -19,7 +19,8 @@ class LegalResource extends Resource
     protected static ?string $model = Legal::class;
     protected static ?string $modelLabel = 'юридическая страница';
     protected static ?string $pluralModelLabel = 'юридические страницы';
-    protected static ?string $navigationLabel = 'Юридические страницы';
+    protected static ?string $navigationLabel = 'Старый редактор (архив)';
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
