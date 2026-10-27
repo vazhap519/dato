@@ -24,6 +24,10 @@ class GenerateSitemap extends Command
         $sitemap->add(Url::create('/links')->setPriority(0.7));
         $sitemap->add(Url::create('/legal')->setPriority(0.3));
 
+        foreach (['terms', 'privacy', 'offer'] as $slug) {
+            $sitemap->add(Url::create('/'.$slug)->setPriority(0.3));
+        }
+
         // Dynamic Closed Groups
         ClosedGroup::whereNotNull('slug')->where('slug', '<>', '')->get()->each(function ($group) use ($sitemap) {
             $sitemap->add(
