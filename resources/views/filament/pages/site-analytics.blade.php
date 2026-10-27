@@ -182,28 +182,31 @@
             </div>
         </div>
 
-        <div class="sa-card">
-            <div class="mb-4">
-                <h3 class="sa-section-title">Журнал активности</h3>
-                <p class="mt-1 text-xs text-gray-500">Последние 80 событий · Для технической проверки</p>
-            </div>
-            <div class="sa-table-wrap">
+        <details class="sa-card" open>
+            <summary class="sa-history-summary">
+                <div>
+                    <h3 class="sa-section-title">История действий</h3>
+                    <p class="sa-history-note">Последние {{ $events->count() }} событий · прокручиваемый журнал</p>
+                </div>
+                <span class="sa-chevron" aria-hidden="true">▼</span>
+            </summary>
+            <div class="sa-table-wrap sa-history">
                 <table class="sa-table">
-                    <thead class="text-xs uppercase tracking-wide text-gray-500"><tr><th class="px-3 py-3">Время</th><th class="px-3 py-3">Событие</th><th class="px-3 py-3">Страница</th><th class="px-3 py-3">Элемент</th><th class="px-3 py-3">Устройство</th></tr></thead>
-                    <tbody class="divide-y divide-gray-100 dark:divide-white/10">
+                    <thead><tr><th>Время</th><th>Действие</th><th>Страница</th><th>Элемент</th><th>Устройство</th></tr></thead>
+                    <tbody>
                         @forelse ($events as $event)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.03]">
-                                <td class="whitespace-nowrap px-3 py-3 text-gray-500">{{ $event->occurred_at }}</td>
-                                <td class="px-3 py-3"><span class="sa-pill">{{ match($event->event) {'page_view'=>'Просмотр', 'link_click'=>'Ссылка', 'cta_click'=>'Кнопка', default=>$event->event} }}</span></td>
-                                <td class="px-3 py-3">{{ $event->path }}</td>
-                                <td class="px-3 py-3 text-gray-500">{{ $event->element ?: '—' }}</td>
-                                <td class="whitespace-nowrap px-3 py-3 text-gray-500">{{ $event->device }} / {{ $event->browser }}</td>
+                            <tr>
+                                <td class="sa-time">{{ \Illuminate\Support\Carbon::parse($event->occurred_at)->format('d.m H:i:s') }}</td>
+                                <td><span class="sa-pill {{ match($event->event) {'page_view'=>'view','link_click'=>'link','cta_click'=>'cta',default=>''} }}">{{ match($event->event) {'page_view'=>'Просмотр','link_click'=>'Ссылка','cta_click'=>'Кнопка',default=>$event->event} }}</span></td>
+                                <td>{{ $event->path }}</td>
+                                <td class="sa-dim">{{ $event->element ?: '—' }}</td>
+                                <td class="sa-dim">{{ $event->device }} / {{ $event->browser }}</td>
                             </tr>
-                        @empty <tr><td colspan="5" class="px-3 py-8 text-center text-gray-500">Событий пока нет.</td></tr> @endforelse
+                        @empty <tr><td colspan="5">Событий пока нет.</td></tr> @endforelse
                     </tbody>
                 </table>
             </div>
-        </div>
+        </details>
         <p class="text-xs leading-relaxed text-gray-500 dark:text-gray-400">Показатель сеансов отражает временные идентификаторы загрузок страниц, а не уникальных людей. Собственная аналитика работает без постоянных аналитических cookie. Источники переходов могут быть неизвестны, если браузер не передал адрес предыдущего сайта.</p>
     </div>
 </x-filament-panels::page>
