@@ -284,8 +284,8 @@ export default function Editoria() {
                     <div className="grid grid-cols-1 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] gap-8 md:gap-12 items-center">
                         {editoria.author_image_url && (
                             <div className="relative w-full max-w-[470px] mx-auto md:mx-0 overflow-hidden">
-                                <div aria-hidden="true" className="absolute inset-x-[12%] top-[18%] bottom-[12%] rounded-full bg-primary/10 blur-[70px] pointer-events-none" />
-                                <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="relative block w-full h-auto max-h-[550px] object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)]" />
+                                <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(174,104,24,0.22),transparent_72%)] pointer-events-none" />
+                                <img src={editoria.author_image_url} alt={editoria.author_name || "Автор практикума"} loading="lazy" className="relative block w-full h-auto max-h-[550px] object-contain object-bottom [mask-image:linear-gradient(to_right,transparent_0%,black_12%,black_88%,transparent_100%),linear-gradient(to_bottom,transparent_0%,black_12%,black_75%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in]" />
                             </div>
                         )}
                         <div>
