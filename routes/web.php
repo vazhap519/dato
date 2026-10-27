@@ -64,6 +64,7 @@ Route::fallback(function () {
 
 Route::get('/personal', [PersonalController::class, 'index'])
     ->name('personal');
+Route::get('/{slug}', [\App\Http\Controllers\LegalDocumentController::class, 'show'])->where('slug', 'terms|privacy|offer')->name('legal.document');
 Route::get('/legal', [LegalController::class, 'index'])
     ->name('legal');
 Route::get('/shop',[PracticeController::class,'index'])->name('practice');
