@@ -55,7 +55,7 @@ export default function SiteAnalytics() {
         const click = (e) => {
             const target = e.target.closest('a, button');
             if (!target) return;
-            const name = target.dataset.analytics || target.getAttribute('aria-label') || target.textContent?.trim().slice(0, 100);
+            const name = target.dataset.analytics || target.getAttribute('aria-label') || (target.tagName === 'A' ? (() => { try { return new URL(target.href).pathname; } catch { return null; } })() : null);
             if (name) send(target.tagName === 'A' ? 'link_click' : 'cta_click', name);
         };
         page();
