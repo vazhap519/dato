@@ -86,6 +86,7 @@
         $clicks = $this->getTopClicks();
         $events = $this->getRecentEvents();
         $funnel = $this->getFunnel();
+        $conversions = $this->getPageConversions();
         $maxPage = max(1, (int) ($pages->first()->views ?? 0));
         $maxSource = max(1, (int) ($sources->first()->total ?? 0));
         $maxClick = max(1, (int) ($clicks->first()->total ?? 0));
@@ -107,15 +108,15 @@
 
         <div class="sa-stats">
             @foreach ([
-                ['Просмотры страниц', $stats['views'], 'visibility', 'amber'],
-                ['Сеансы вкладок', $stats['visitors'], 'group', 'blue'],
-                ['Нажатия', $stats['clicks'], 'ads_click', 'emerald'],
-                ['Все события', $stats['events'], 'bolt', 'violet'],
+                ['Просмотры страниц', $stats['views'], '◉', 'amber'],
+                ['Сеансы вкладок', $stats['visitors'], '▣', 'blue'],
+                ['Нажатия', $stats['clicks'], '↗', 'emerald'],
+                ['Все события', $stats['events'], '✦', 'violet'],
             ] as [$label, $value, $icon, $color])
                 <div class="sa-card">
                     <div class="sa-header">
                         <span class="sa-stat-label">{{ $label }}</span>
-                        <span class="material-symbols-outlined text-xl text-amber-500">{{ $icon }}</span>
+                        <span style="font-size:21px;color:#fbbf24;font-weight:700">{{ $icon }}</span>
                     </div>
                     <div class="sa-stat-value">{{ number_format($value, 0, ',', ' ') }}</div>
                     <div class="mt-2 text-xs text-gray-400">За выбранный период</div>
@@ -129,7 +130,7 @@
                     <h3 class="sa-section-title">Динамика посещений</h3>
                     <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Просмотры страниц по дням</p>
                 </div>
-                <span class="rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-600 dark:text-amber-400">30 дней</span>
+                <span class="rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-600 dark:text-amber-400">{{ match($this->period) { "today"=>"Сегодня", "yesterday"=>"Вчера", "7"=>"7 дней", default=>"30 дней" } }}</span>
             </div>
             <div class="sa-chart">
                 @foreach ($daily as $day)
@@ -148,6 +149,19 @@
             <div class="sa-grid" style="margin-top:18px">
                 <div><div class="sa-stat-label">Посетили /editoria</div><div class="sa-stat-value">{{ $funnel['views'] }}</div></div>
                 <div><div class="sa-stat-label">Нажали кнопку записи</div><div class="sa-stat-value">{{ $funnel['clicks'] }} <span style="font-size:15px;color:#fbbf24">· {{ $funnel['rate'] }}%</span></div></div>
+            </div>
+        </div>
+
+        <div class="sa-card">
+            <h3 class="sa-section-title">Конверсия ключевых страниц</h3>
+            <p class="sa-muted">Доля сеансов с нажатием отслеживаемых элементов. Это не подтверждённые заявки или оплаты.</p>
+            <div class="sa-list">
+                @foreach ($conversions as $conversion)
+                    <div>
+                        <div class="sa-list-head"><span>{{ $conversion['label'] }} · {{ $conversion['path'] }}</span><span>{{ $conversion['clicks'] }} из {{ $conversion['views'] }} · {{ $conversion['rate'] }}%</span></div>
+                        <div class="sa-track"><div class="sa-fill green" style="width: {{ min(100, $conversion['rate']) }}%"></div></div>
+                    </div>
+                @endforeach
             </div>
         </div>
 
