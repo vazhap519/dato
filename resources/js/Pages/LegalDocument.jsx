@@ -136,8 +136,8 @@ export default function LegalDocument() {
                     <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/50">
                         <span>Редакция {legalDoc?.version}</span>
                         {legalDoc?.effective_at && <span>Действует с {legalDoc?.effective_at}</span>}
-                        <button onClick={() => window.print()} type="button" className="inline-flex items-center gap-2 hover:text-primary transition print:hidden">
-                            <span className="material-symbols-outlined text-lg" aria-hidden="true">print</span>Распечатать
+                        <button onClick={downloadPdf} disabled={pdfLoading} type="button" className="inline-flex items-center gap-2 hover:text-primary transition print:hidden disabled:opacity-50">
+                            <span className="material-symbols-outlined text-lg" aria-hidden="true">download</span>{pdfLoading ? "Создаём PDF…" : "Скачать PDF"}
                         </button>
                     </div>
                 </div>
