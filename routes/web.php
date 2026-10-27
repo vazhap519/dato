@@ -57,6 +57,9 @@ Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveCo
 Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controllers\LiveController::class, 'updateButton']);
 Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton']);
 Route::post('/analytics/event', [\App\Http\Controllers\SiteAnalyticsController::class, 'store'])->middleware('throttle:120,1');
+Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
+Route::get('/numbers/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'show'])
+    ->where('number', '[0-9]{1,12}')->name('numbers.show');
 Route::fallback(function () {
     return Inertia::render('Error/NotFound')
         ->toResponse(request())
