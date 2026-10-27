@@ -16,6 +16,8 @@ use App\Models\Practice;
 use UnitEnum;
 class PractiseResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Продукты и услуги';
+    protected static ?int $navigationSort = 10;
     protected static ?string $model = Practice::class;
     protected static ?string $modelLabel = 'практика';
     protected static ?string $pluralModelLabel = 'практики';
