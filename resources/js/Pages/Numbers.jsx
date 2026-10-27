@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link, router, usePage } from '@inertiajs/react';
-import Seo from '@/components/Seo.jsx';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 
 const digitsOnly = value => value.replace(/[^0-9]/g, '').slice(0, 12);
 
@@ -21,8 +20,7 @@ export default function Numbers() {
     ];
     return (
         <div className="min-h-screen bg-[#14120d] text-[#f8f4e9] selection:bg-[#e7b945]/30">
-            <Seo title={selected ? selected.number + ' — ' + selected.title + ' | Язык чисел' : 'Язык чисел — символы для самопознания'}
-                description="Авторские символические интерпретации чисел, вопросы к себе и практики внимания. Без предсказаний и утверждений о посланиях свыше." />
+            <Head title={selected ? selected.number + ' — ' + selected.title + ' | Язык чисел' : 'Язык чисел — символы для самопознания'}><meta name="description" content="Авторские символические интерпретации чисел, вопросы к себе и практики внимания. Без предсказаний." /></Head>
             <header className="border-b border-[#d9b65c]/15">
                 <div className="max-w-6xl mx-auto px-5 py-6 flex items-center justify-between gap-4">
                     <Link href="/" className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</Link>
