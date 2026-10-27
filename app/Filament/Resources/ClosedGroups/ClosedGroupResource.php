@@ -16,6 +16,9 @@ use Filament\Tables\Table;
 
 class ClosedGroupResource extends Resource
 {
+    protected static string | \UnitEnum | null $navigationGroup = 'Продукты и услуги';
+    protected static ?int $navigationSort = 20;
+
     protected static ?string $model = ClosedGroup::class;
     protected static ?string $modelLabel = 'закрытая группа';
     protected static ?string $pluralModelLabel = 'закрытые группы';
