@@ -49,7 +49,7 @@ export default function LegalDocument() {
             if (visible[0]) setActive(visible[0].target.id);
         }, { rootMargin: "-115px 0px -65% 0px", threshold: 0 });
         headings.forEach(s => {
-            const el = document.getElementById(s.id);
+            const el = window.document.getElementById(s.id);
             if (el) observer.observe(el);
         });
         return () => observer.disconnect();
