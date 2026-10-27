@@ -104,7 +104,7 @@ class SiteAnalytics extends Page
         return $this->events()
             ->selectRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(NULLIF(referrer_host, 'arutyun.me'), ''), 'Прямой / неизвестен') as source, COUNT(*) as total")
             ->where('event', 'page_view')
-            ->groupByRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Прямой / неизвестен')")
+            ->groupByRaw("COALESCE(NULLIF(utm_source, ''), NULLIF(NULLIF(referrer_host, 'arutyun.me'), ''), 'Прямой / неизвестен')")
             ->orderByDesc('total')->limit(8)->get();
     }
 
