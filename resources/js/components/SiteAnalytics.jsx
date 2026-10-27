@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 
+const adsChoice = () => {
+    try { return localStorage.getItem('site_ads_consent'); } catch { return null; }
+};
+
 const adsAllowed = () => {
     try { return localStorage.getItem('site_ads_consent') === 'granted'; }
     catch { return false; }
@@ -7,6 +11,7 @@ const adsAllowed = () => {
 
 export default function SiteAnalytics() {
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [hasChoice, setHasChoice] = useState(() => adsChoice() !== null);
     const [adsConsent, setAdsConsent] = useState(adsAllowed);
 
     useEffect(() => {
@@ -63,25 +68,25 @@ export default function SiteAnalytics() {
     const chooseAds = (allow) => {
         try { localStorage.setItem('site_ads_consent', allow ? 'granted' : 'denied'); } catch {}
         setAdsConsent(allow);
+        setHasChoice(true);
         setSettingsOpen(false);
         window.dispatchEvent(new Event('site:consent-changed'));
         // Stop an already loaded third-party tracker by clearing the document.
         if (!allow && adsConsent) window.location.reload();
     };
 
-    if (!settingsOpen) return null;
+    if (hasChoice && !settingsOpen) return null;
     return (
-        <aside data-no-analytics role="dialog" aria-label="Настройки конфиденциальности"
-            className="fixed bottom-4 left-3 right-3 z-[80] mx-auto max-w-[390px] rounded-2xl border border-amber-500/20 bg-[#201b13]/95 px-4 py-3 text-white shadow-xl backdrop-blur-md sm:left-auto sm:right-5 sm:max-w-[360px]">
-            <div className="text-sm font-semibold text-amber-100">Настройки конфиденциальности</div>
+        <aside data-no-analytics role="dialog" aria-label="Немного о конфиденциальности"
+            className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-3 right-3 z-[80] mx-auto max-w-[390px] rounded-2xl border border-amber-500/20 bg-[#201b13]/95 px-4 py-3 text-white shadow-xl backdrop-blur-md sm:left-auto sm:right-5 sm:max-w-[360px]">
+            <div className="text-sm font-semibold text-amber-100">Немного о конфиденциальности</div>
             <p className="mt-2 text-xs leading-relaxed text-white/85">
-                Сайт собирает базовую статистику без аналитических cookie и постоянного идентификатора.
-                Рекламные технологии включаются только с вашего разрешения.
+                Мы используем базовую статистику без аналитических cookie. С вашего разрешения мы также используем рекламные технологии, чтобы делать сайт удобнее и полезнее. Нажимая «ОК», вы соглашаетесь на рекламное отслеживание.
                 {' '}<a href="/privacy" className="text-amber-300 underline">Подробнее</a>
             </p>
             <div className="mt-3 flex justify-end gap-2">
-                <button type="button" onClick={() => chooseAds(false)} className="rounded-lg px-3 py-2 text-xs text-white/75">Отклонить рекламу</button>
-                <button type="button" onClick={() => chooseAds(true)} className="rounded-lg bg-amber-400 px-4 py-2 text-xs font-bold text-black">Разрешить рекламу</button>
+                <button type="button" onClick={() => chooseAds(false)} className="rounded-lg px-3 py-2 text-xs text-white/75">Не сейчас</button>
+                <button type="button" onClick={() => chooseAds(true)} className="rounded-lg bg-amber-400 px-4 py-2 text-xs font-bold text-black">ОК</button>
             </div>
         </aside>
     );
