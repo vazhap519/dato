@@ -79,8 +79,9 @@ export default function SiteAnalytics() {
         setSettingsOpen(false);
         window.dispatchEvent(new Event('site:consent-changed'));
     };
-    if (choice && !settingsOpen) return null;
     const onWorkshop = window.location.pathname === '/editoria' || window.location.pathname === '/editoria/';
+    if (onWorkshop && !settingsOpen) return null;
+    if (choice && !settingsOpen) return null;
     return (
         <aside
             role="dialog"
