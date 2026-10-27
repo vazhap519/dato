@@ -49,6 +49,7 @@ function renderLegalLinks(text) {
 export default function LegalDocument() {
     const { document: legalDoc } = usePage().props;
     const sections = useMemo(() => parseDocument(legalDoc?.content), [legalDoc?.content]);
+    const introduction = sections.find(s => s.id === "introduction");
     const headings = sections.filter(s => s.title);
     const [active, setActive] = useState(headings[0]?.id || "");
     useEffect(() => {
