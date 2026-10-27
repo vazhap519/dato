@@ -56,6 +56,7 @@ export default function LegalDocument() {
     };
     const headings = sections.filter(s => s.title);
     const [active, setActive] = useState(headings[0]?.id || "");
+    const [pdfLoading, setPdfLoading] = useState(false);
     useEffect(() => {
         if (typeof IntersectionObserver === "undefined") return;
         const observer = new IntersectionObserver(entries => {
