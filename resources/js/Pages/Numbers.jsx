@@ -4,7 +4,7 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 const digitsOnly = value => value.replace(/[^0-9]/g, '').slice(0, 12);
 
 export default function Numbers() {
-    const { featured = [], selected = null, searched = null } = usePage().props;
+    const { special = [], ordinary = [], catalogPage = 1, catalogPages = 10, selected = null, searched = null } = usePage().props;
     const [value, setValue] = useState(selected?.number || searched || '');
     const submit = e => {
         e.preventDefault();
@@ -68,21 +68,52 @@ export default function Numbers() {
                 )}
                 {searched && !selected && <div className="max-w-3xl mx-auto px-5 pb-12 text-center"><div className="rounded-2xl border border-[#c6a049]/30 bg-[#201c14] p-7"><h2 className="text-2xl text-[#f0c453] mb-3">Число {searched} пока не описано</h2><p className="text-[#bcb2a0]">Для него ещё нет авторского толкования. Выбери одно из опубликованных чисел ниже или попробуй другое сочетание.</p></div></div>}
                 {!selected && (
-                    <section className="max-w-5xl mx-auto px-5 pb-14">
-                        <div className="border-t border-[#d9b65c]/15 pt-10 text-center">
-                            <h2 className="text-2xl md:text-3xl font-semibold mb-3">Начни с числа, которое заметил</h2>
-                            <p className="text-[#a9a293] mb-8">Популярные сочетания и их символические темы</p>
+                    <div className="max-w-5xl mx-auto px-5 pb-14 space-y-14">
+                        <section className="border-t border-[#d9b65c]/15 pt-10">
+                            <div className="text-center mb-8">
+                                <p className="text-[#d5ab4a] text-xs tracking-[0.2em] uppercase mb-3">Особые сочетания</p>
+                                <h2 className="text-2xl md:text-3xl font-semibold mb-3">Повторяющиеся и зеркальные числа</h2>
+                                <p className="text-[#a9a293]">Популярные комбинации с отдельными авторскими толкованиями</p>
+                            </div>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {featured.map(item=>(
-                                    <Link key={item.number} href={'/numbers/'+item.number} data-analytics={'Числа · '+item.number}
-                                        className="group rounded-2xl border border-[#c6a049]/20 bg-[#201c14] px-4 py-6 hover:border-[#f0c453]/70 hover:-translate-y-1 transition-all">
-                                        <div className="text-3xl md:text-4xl text-[#f0c453] font-serif mb-2 group-hover:text-[#ffdf86]">{item.number}</div>
+                                {special.map(item => (
+                                    <Link key={item.number} href={'/numbers/' + item.number} data-analytics={'Числа · особое ' + item.number}
+                                        className="group rounded-2xl border border-[#d3aa4a]/35 bg-gradient-to-br from-[#292216] to-[#1d1a14] px-4 py-6 hover:border-[#f0c453]/80 hover:-translate-y-1 transition-all">
+                                        <div className="text-3xl md:text-4xl text-[#f0c453] font-serif mb-2">{item.number}</div>
                                         <div className="text-sm text-[#bcb2a0]">{item.title}</div>
                                     </Link>
                                 ))}
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                        <section id="catalog" className="border-t border-[#d9b65c]/15 pt-10">
+                            <div className="text-center mb-8">
+                                <p className="text-[#d5ab4a] text-xs tracking-[0.2em] uppercase mb-3">Полный справочник</p>
+                                <h2 className="text-2xl md:text-3xl font-semibold mb-3">Все остальные числа от 1 до 999</h2>
+                                <p className="text-[#a9a293]">Символические размышления на основе сочетания цифр. Уже представленные выше числа не повторяются.</p>
+                            </div>
+                            <nav aria-label="Диапазоны чисел" className="flex flex-wrap justify-center gap-2 mb-7">
+                                {Array.from({length:catalogPages},(_,i)=>i+1).map(page=>(
+                                    <Link key={page} href={'/numbers?page='+page+'#catalog'} preserveScroll={false}
+                                        className={'rounded-lg border px-3 py-2 text-sm transition-colors '+(page===catalogPage?'border-[#f0c453] bg-[#f0c453] text-[#17130c]':'border-[#c6a049]/25 text-[#e1d2af] hover:border-[#f0c453]')}>
+                                        {(page-1)*100+1}–{Math.min(999,page*100)}
+                                    </Link>
+                                ))}
+                            </nav>
+                            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                                {ordinary.map(item=>(
+                                    <Link key={item.number} href={'/numbers/'+item.number} data-analytics={'Числа · каталог '+item.number}
+                                        className="group rounded-xl border border-[#c6a049]/15 bg-[#201c14] px-3 py-4 text-center hover:border-[#f0c453]/70 hover:bg-[#2a2317] transition-all">
+                                        <div className="text-2xl md:text-3xl text-[#e9bd51] font-serif group-hover:text-[#ffdf86]">{item.number}</div>
+                                    </Link>
+                                ))}
+                            </div>
+                            <div className="mt-7 flex items-center justify-center gap-4 text-sm">
+                                {catalogPage>1 && <Link href={'/numbers?page='+(catalogPage-1)+'#catalog'} className="text-[#f0c453] hover:underline">← Предыдущие</Link>}
+                                <span className="text-[#a9a293]">{catalogPage} из {catalogPages}</span>
+                                {catalogPage<catalogPages && <Link href={'/numbers?page='+(catalogPage+1)+'#catalog'} className="text-[#f0c453] hover:underline">Следующие →</Link>}
+                            </div>
+                        </section>
+                    </div>
                 )}
                 <section className="max-w-3xl mx-auto px-5 pb-20 text-center">
                     <div className="rounded-2xl border border-[#d9b65c]/15 bg-white/[0.025] p-7">
