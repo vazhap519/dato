@@ -26,7 +26,7 @@ class SiteAnalyticsController extends Controller
             'path' => strtok($data['path'], '?') ?: '/',
             'browser' => $browser,
             'device' => $device,
-            'ip_hash' => hash_hmac('sha256', $request->ip() ?? '', config('app.key')),
+            'ip_hash' => null,
             'occurred_at' => now(),
         ]);
         return response()->noContent();
