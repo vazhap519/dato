@@ -10,6 +10,8 @@ function identifier(key, storage) {
 }
 
 export default function SiteAnalytics() {
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const [adsChoice, setAdsChoice] = useState(() => { try { return localStorage.getItem('site_ads_consent') === 'granted'; } catch { return false; } });
     const [choice, setChoice] = useState(() => {
         try { return localStorage.getItem('site_analytics_consent'); }
         catch { return 'denied'; }
@@ -66,15 +68,25 @@ export default function SiteAnalytics() {
             document.removeEventListener('click', click, true);
         };
     }, [choice]);
-    const decide = (value) => {
+    useEffect(() => {
+        const open = () => setSettingsOpen(true);
+        window.addEventListener('site:open-privacy-settings', open);
+        return () => window.removeEventListener('site:open-privacy-settings', open);
+    }, []);
+    const decide = (value, ads = false) => {
         try { localStorage.setItem('site_analytics_consent', value); } catch {}
+        try { localStorage.setItem('site_ads_consent', ads ? 'granted' : 'denied'); } catch {}
+        setAdsChoice(ads);
         setChoice(value);
+        setSettingsOpen(false);
+        window.dispatchEvent(new Event('site:consent-changed'));
     };
-    if (choice) return null;
+    if (choice && !settingsOpen) return <button type="button" onClick={() => setSettingsOpen(true)} className="fixed bottom-3 left-3 z-[90] rounded-full border border-amber-500/30 bg-[#201b13] px-3 py-2 text-xs text-white shadow-lg" aria-label="Настройки конфиденциальности">Конфиденциальность</button>;
     return (
         <aside role="dialog" aria-label="Настройки аналитики" className="fixed bottom-4 left-4 right-4 z-[100] mx-auto max-w-lg rounded-xl border border-amber-500/40 bg-[#201b13] p-4 text-sm text-white shadow-2xl">
-            <p>Мы используем необязательную аналитику, чтобы улучшать сайт. С вашего согласия фиксируются просмотры страниц и нажатия. <a href="/privacy" className="text-amber-400 underline">Подробнее</a></p>
-            <div className="mt-3 flex gap-3"><button type="button" onClick={() => decide('denied')} className="rounded-lg border border-white/30 px-4 py-2">Отказаться</button><button type="button" onClick={() => decide('granted')} className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-black">Разрешить аналитику</button></div>
+            <p>Вы можете отдельно разрешить аналитику посещений и рекламные технологии Meta Pixel. Без вашего согласия необязательное отслеживание отключено. <a href="/privacy" className="text-amber-400 underline">Политика конфиденциальности</a></p>
+            <label className="mt-3 flex items-center gap-2"><input type="checkbox" checked={adsChoice} onChange={e => setAdsChoice(e.target.checked)} /> Разрешить рекламное отслеживание Meta</label>
+            <div className="mt-3 flex flex-wrap gap-3"><button type="button" onClick={() => decide('denied', false)} className="rounded-lg border border-white/30 px-4 py-2">Отклонить всё</button><button type="button" onClick={() => decide('granted', adsChoice)} className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-black">Сохранить выбор и разрешить аналитику</button></div>
         </aside>
     );
 }
