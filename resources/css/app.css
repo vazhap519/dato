@@ -12,6 +12,11 @@
 @theme {
     --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
+    /* Chrome mobile "Desktop site" typically exposes a ~980px CSS viewport.
+       Activate the actual desktop compositions at that width, rather than
+       leaving the 980px viewport in the tablet breakpoint between md and lg. */
+    --breakpoint-lg: 60rem;
+
 
     --color-primary: #FAC638;
     --color-background-light: #f8f8f5;
