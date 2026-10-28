@@ -60,6 +60,19 @@ foreach ($files as $file) {
         $records[$n][] = ['file'=>$file,'fields'=>$fields];
     }
 }
+// Verify every editorial source is registered in the production coordinator.
+$coordinatorPath = __DIR__ . '/../database/seeders/AllEditorialNumberMeaningsSeeder.php';
+if (!is_file($coordinatorPath)) {
+    $errors[] = 'Missing editorial coordinator seeder';
+} else {
+    $coordinator = file_get_contents($coordinatorPath);
+    foreach ($files as $file) {
+        $class = basename($file, '.php');
+        if (!str_contains($coordinator, $class . '::class')) {
+            $errors[] = "Editorial seeder not registered: $class";
+        }
+    }
+}
 $missing = [];
 $overlap = [];
 for ($n=1; $n<=999; $n++) {
