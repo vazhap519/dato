@@ -21,7 +21,9 @@ jobs:
           find database/seeders -maxdepth 1 -name '*.php' -print0 | xargs -0 -n1 php -l
           php -l scripts/audit_number_meanings.php
       - name: Check number coverage and duplicated editorial text
-        run: php scripts/audit_number_meanings.php | tee number-meanings-audit.json
+        run: |
+          set -o pipefail
+          php scripts/audit_number_meanings.php | tee number-meanings-audit.json
       - name: Save report
         if: always()
         uses: actions/upload-artifact@v4
