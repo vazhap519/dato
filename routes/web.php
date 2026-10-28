@@ -58,6 +58,8 @@ Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controller
 Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton']);
 Route::post('/analytics/event', [\App\Http\Controllers\SiteAnalyticsController::class, 'store'])->middleware('throttle:120,1');
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
+Route::get('/numbers/lookup/{number}', [\\App\\Http\\Controllers\\NumberMeaningController::class, 'lookup'])
+    ->where('number', '[0-9]{1,12}')->middleware('throttle:120,1')->name('numbers.lookup');
 Route::get('/numbers/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'show'])
     ->where('number', '[0-9]{1,12}')->name('numbers.show');
 Route::fallback(function () {
