@@ -69,6 +69,17 @@ export default function Numbers() {
     }, [timeMode, clockFormat]);
 
     const visibleGroups = result?.input === value ? result.groups : [];
+    const uniqueGroups = visibleGroups.reduce((acc, group) => {
+        const key = group.meaning?.number ?? String(Number(group.digits));
+        const existing = acc.find(item => item.key === key);
+        if (existing) {
+            existing.count += 1;
+            existing.variants.push(group.digits);
+        } else {
+            acc.push({ ...group, key, count: 1, variants: [group.digits] });
+        }
+        return acc;
+    }, []);
     const copyLink = async () => {
         const link = window.location.origin + '/numbers/' + encodeURIComponent(value);
         try { await navigator.clipboard.writeText(link); setCopied(true); } catch (_) { setCopied(false); }
@@ -119,9 +130,9 @@ export default function Numbers() {
                             {error && <p role="alert" className="text-sm text-[#f1a7a7]">{error}</p>}
                             {!loading && !error && visibleGroups.length > 0 && (
                                 <div className="space-y-8" aria-live="polite">
-                                    {visibleGroups.map((group, index) => (
+                                    {uniqueGroups.map((group, index) => (
                                         <article key={index} className="border-b border-[#d9b65c]/15 pb-7 last:border-0">
-                                            <h3 className="text-3xl font-serif font-bold text-[#f0c453] mb-1">{group.digits}</h3>
+                                            <div className="flex flex-wrap items-baseline gap-3 mb-1"><h3 className="text-3xl font-serif font-bold text-[#f0c453]">{group.digits}</h3>{group.count > 1 && <span className="text-xs text-[#c8b894]">Повторяется {group.count} раза</span>}</div>
                                             {group.meaning ? (
                                                 <>
                                                     <p className="font-semibold text-lg text-[#f8f4e9] mb-4">{group.meaning.title}</p>
