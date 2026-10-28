@@ -6,6 +6,9 @@ on:
       - 'scripts/audit_number_meanings.php'
       - '.github/workflows/number-meanings-audit.yml'
   workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
 jobs:
   audit:
     runs-on: ubuntu-latest
@@ -66,3 +69,52 @@ jobs:
           name: number-meanings-audit
           path: number-meanings-audit.json
           if-no-files-found: ignore
+
+      - name: Sync audit result to a single GitHub issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="[AUTO] Number meanings 1-999 audit status"
+          report="/tmp/number-meanings-issue.md"
+          {
+            echo "Automatically updated by the editorial audit workflow."
+            echo
+            echo "Commit: \`${GITHUB_SHA}\`"
+            echo "Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo
+            if [ -s number-meanings-audit.json ]; then
+              echo "| Metric | Count |"
+              echo "|---|---:|"
+              echo "| Distinct numbers | $(jq '.distinct_numbers' number-meanings-audit.json) |"
+              echo "| Missing | $(jq '.missing | length' number-meanings-audit.json) |"
+              echo "| Overlapping definitions | $(jq '.overlapping_definitions | length' number-meanings-audit.json) |"
+              echo "| Exact duplicate groups | $(jq '[.exact_duplicate_text[][]] | length' number-meanings-audit.json) |"
+              echo "| Near duplicate candidates | $(jq '[.near_duplicate_candidates[][]] | length' number-meanings-audit.json) |"
+              echo "| Errors | $(jq '.errors | length' number-meanings-audit.json) |"
+              echo
+              echo "### Exact duplicates"
+              echo '```json'
+              jq -c '.exact_duplicate_text' number-meanings-audit.json
+              echo '```'
+              echo "### Near duplicates"
+              echo '```json'
+              jq -c '.near_duplicate_candidates | with_entries(.value |= .[:100])' number-meanings-audit.json
+              echo '```'
+              echo "### Errors and missing"
+              echo '```json'
+              jq -c '{errors,missing,overlapping_definitions}' number-meanings-audit.json
+              echo '```'
+            else
+              echo "Audit JSON was not generated; inspect workflow logs."
+            fi
+          } > "$report"
+          issue_number=$(gh issue list --state all --limit 100 --json number,title --jq ".[] | select(.title == \"${title}\") | .number" | head -n 1)
+          if [ -n "$issue_number" ]; then
+            gh issue edit "$issue_number" --body-file "$report"
+          else
+            gh issue create --title "$title" --body-file "$report"
+          fi
