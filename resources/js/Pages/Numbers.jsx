@@ -7,6 +7,8 @@ export default function Numbers() {
     const { special = [], ordinary = [], catalogPage = 1, catalogPages = 10, selected = null, searched = null } = usePage().props;
     const [value, setValue] = useState(selected?.number || searched || '');
     const [timeMode, setTimeMode] = useState(false);
+    const [clockFormat, setClockFormat] = useState('24');
+    const [copied, setCopied] = useState(false);
     const [localTime, setLocalTime] = useState('');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -18,13 +20,14 @@ export default function Numbers() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            setLocalTime(hours + ':' + minutes);
-            setValue(hours + minutes);
+            const hour12 = String((now.getHours() % 12) || 12).padStart(2, '0');
+            setLocalTime(clockFormat === '12' ? hour12 + ':' + minutes + (now.getHours() >= 12 ? ' PM' : ' AM') : hours + ':' + minutes);
+            setValue((clockFormat === '12' ? hour12 : hours) + minutes);
         };
         update();
         const timer = setInterval(update, 1000);
         return () => clearInterval(timer);
-    }, [timeMode]);
+    }, [timeMode, clockFormat]);
 
     useEffect(() => {
         if (!value) {
@@ -53,7 +56,24 @@ export default function Numbers() {
         return () => { clearTimeout(timer); controller.abort(); };
     }, [value]);
 
+    useEffect(() => {
+        if (timeMode) return undefined;
+        const updateClock = () => {
+            const now = new Date();
+            const hour = clockFormat === '12' ? String((now.getHours() % 12) || 12).padStart(2, '0') : String(now.getHours()).padStart(2, '0');
+            setLocalTime(hour + ':' + String(now.getMinutes()).padStart(2, '0') + (clockFormat === '12' ? (now.getHours() >= 12 ? ' PM' : ' AM') : ''));
+        };
+        updateClock();
+        const timer = setInterval(updateClock, 1000);
+        return () => clearInterval(timer);
+    }, [timeMode, clockFormat]);
+
     const visibleGroups = result?.input === value ? result.groups : [];
+    const copyLink = async () => {
+        const link = window.location.origin + '/numbers/' + encodeURIComponent(value);
+        try { await navigator.clipboard.writeText(link); setCopied(true); } catch (_) { setCopied(false); }
+    };
+    useEffect(() => { setCopied(false); }, [value]);
     const parts = meaning => [
         ['Символика', meaning?.symbolism],
         ['Светлая сторона', meaning?.light_side],
@@ -71,74 +91,70 @@ export default function Numbers() {
                 </div>
             </header>
             <main>
-                <section className="relative overflow-hidden px-5 pt-20 pb-14 text-center">
-                    <div aria-hidden="true" className="absolute w-[420px] h-[420px] rounded-full bg-[#b68b28]/10 blur-[110px] left-1/2 -translate-x-1/2 -top-36 pointer-events-none" />
-                    <div className="relative max-w-3xl mx-auto">
-                        <p className="text-xs uppercase tracking-[0.28em] text-[#d5ab4a] mb-6">Пространство самопознания</p>
-                        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight mb-6">Язык <span className="text-[#f0c453] italic font-serif">чисел</span></h1>
-                        <p className="text-xl md:text-2xl text-[#e4dccb] leading-relaxed mb-4">Иногда число — не ответ, а повод задать себе вопрос.</p>
-                        <p className="text-[#a9a293] max-w-xl mx-auto leading-relaxed">Числа не предсказывают твоё будущее. Но их символика может помочь остановиться, заметить свои мысли и посмотреть на привычное по-новому.</p>
-                        <div className="max-w-lg mx-auto mt-10 space-y-4">
-                            <div className="flex flex-wrap justify-center gap-3">
-                                <button type="button" onClick={() => { setTimeMode(false); setValue(''); }} aria-pressed={!timeMode}
-                                    className={'rounded-xl border px-5 py-3 text-sm transition-colors ' + (!timeMode ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/40 text-[#e9d5a4]')}>Ввести число</button>
-                                <button type="button" onClick={() => setTimeMode(true)} aria-pressed={timeMode}
-                                    className={'rounded-xl border px-5 py-3 text-sm transition-colors ' + (timeMode ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/40 text-[#e9d5a4]')}>По моему времени</button>
+                <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-8">
+                    <div className="mb-7">
+                        <p className="text-xs tracking-[0.22em] uppercase text-[#d5ab4a] mb-2">Пространство самопознания</p>
+                        <h1 className="text-3xl sm:text-5xl font-serif font-semibold mb-2">Язык <span className="italic text-[#f0c453]">чисел</span></h1>
+                        <p className="text-sm sm:text-base text-[#bdb4a3]">Число — повод остановиться и задать себе вопрос, а не предсказание.</p>
+                    </div>
+                    <div className="grid lg:grid-cols-[minmax(0,1fr)_240px] gap-5 items-start">
+                        <div className="space-y-4">
+                            <div className="relative">
+                                <label htmlFor="number-search" className="sr-only">Введите число</label>
+                                <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d5ab4a] text-xl">⌕</span>
+                                <input id="number-search" inputMode="numeric" pattern="[0-9]*" value={value}
+                                    onChange={e => { setTimeMode(false); setValue(digitsOnly(e.target.value)); }}
+                                    placeholder="Введите число, например 1234567"
+                                    className="w-full rounded-xl border border-[#b88f37]/35 bg-[#201c14] pl-12 pr-12 py-3.5 text-lg text-white placeholder:text-[#8e877a] focus:outline-none focus:ring-2 focus:ring-[#eac04f]" />
+                                {value && <button type="button" aria-label="Очистить поиск" onClick={() => { setTimeMode(false); setValue(''); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a9a293] hover:text-white">×</button>}
                             </div>
-                            {timeMode ? (
-                                <div className="rounded-xl border border-[#b88f37]/40 bg-white/5 px-5 py-4">
-                                    <div className="text-4xl font-serif text-[#f0c453] tabular-nums">{localTime || '—:—'}</div>
-                                    <p className="mt-2 text-xs text-[#a9a293]">Локальное время твоего устройства · обновляется автоматически</p>
+                            {value && (
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <h2 className="text-3xl sm:text-4xl font-serif font-semibold break-all">{value}</h2>
+                                    <button type="button" onClick={copyLink} className="text-sm text-[#d5ab4a] hover:text-[#ffdb70]">{copied ? 'Ссылка скопирована ✓' : 'Поделиться ↗'}</button>
                                 </div>
-                            ) : (
-                                <>
-                                    <label htmlFor="number-search" className="sr-only">Введите число</label>
-                                    <input id="number-search" inputMode="numeric" pattern="[0-9]*" value={value}
-                                        onChange={e => setValue(digitsOnly(e.target.value))}
-                                        placeholder="Например, 111, 1212, 123456"
-                                        className="w-full min-w-0 rounded-xl border border-[#b88f37]/40 bg-white/5 px-5 py-4 text-lg text-white placeholder:text-[#8e877a] focus:outline-none focus:ring-2 focus:ring-[#eac04f]" />
-                                </>
                             )}
-                            <p className="text-xs text-[#a9a293]">Толкование появляется автоматически. Длинные числа делятся на группы по 2–3 цифры.</p>
+                            {!value && <p className="text-sm text-[#a9a293]">Толкование появится сразу при вводе числа.</p>}
+                            {loading && <p role="status" className="text-sm text-[#d5ab4a]">Подбираем толкование…</p>}
+                            {error && <p role="alert" className="text-sm text-[#f1a7a7]">{error}</p>}
+                            {!loading && !error && visibleGroups.length > 0 && (
+                                <div className="space-y-8" aria-live="polite">
+                                    {visibleGroups.map((group, index) => (
+                                        <article key={index} className="border-b border-[#d9b65c]/15 pb-7 last:border-0">
+                                            <h3 className="text-3xl font-serif font-bold text-[#f0c453] mb-1">{group.digits}</h3>
+                                            {group.meaning ? (
+                                                <>
+                                                    <p className="font-semibold text-lg text-[#f8f4e9] mb-4">{group.meaning.title}</p>
+                                                    <div className="space-y-4">
+                                                        {parts(group.meaning).filter(([, body]) => body).map(([title, body]) => (
+                                                            <div key={title}>
+                                                                <h4 className="text-xs uppercase tracking-wider text-[#d5ab4a] font-semibold mb-1">{title}</h4>
+                                                                <p className="text-[#e0d9cc] leading-7 whitespace-pre-line">{body}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            ) : <p className="text-[#bcb2a0]">Для этого фрагмента пока нет опубликованного толкования.</p>}
+                                        </article>
+                                    ))}
+                                </div>
+                            )}
                         </div>
+                        <aside className="rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
+                            <p className="text-xs uppercase tracking-[0.14em] text-[#d5ab4a] mb-3">Числа на часах</p>
+                            <div className="text-3xl font-serif tabular-nums text-[#f0c453] mb-3">{localTime || '—:—'}</div>
+                            <div className="flex gap-2 mb-4">
+                                <button type="button" aria-pressed={clockFormat === '24'} onClick={() => setClockFormat('24')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '24' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>24 часа</button>
+                                <button type="button" aria-pressed={clockFormat === '12'} onClick={() => setClockFormat('12')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '12' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>12 часов</button>
+                            </div>
+                            <button type="button" onClick={() => setTimeMode(!timeMode)} aria-pressed={timeMode}
+                                className={'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors ' + (timeMode ? 'bg-[#f0c54e] text-[#19140b]' : 'border border-[#b88f37]/40 text-[#f0c453] hover:bg-white/5')}>
+                                {timeMode ? '● Время отслеживается' : 'Показать толкование времени'}
+                            </button>
+                            <p className="text-xs text-[#a9a293] mt-3 leading-5">Время определяется по устройству и обновляется автоматически. Для ручного ввода нажми на поле поиска.</p>
+                        </aside>
                     </div>
                 </section>
-                {value && (
-                    <section className="max-w-5xl mx-auto px-5 pb-16" aria-live="polite">
-                        {loading && <p className="text-center text-[#d5ab4a] mb-4">Подбираем толкование…</p>}
-                        {error && <p role="alert" className="text-center text-[#f1a7a7] mb-4">{error}</p>}
-                        {!loading && !error && visibleGroups.length > 0 && (
-                            <div className="space-y-6">
-                                {visibleGroups.length > 1 && <div className="text-center text-[#d5ab4a] text-lg">
-                                    {visibleGroups.map(group => group.digits).join(' · ')}
-                                </div>}
-                                {visibleGroups.map((group, index) => (
-                                    <div key={index} className="rounded-3xl border border-[#c6a049]/25 bg-[#1d1a13] p-7 md:p-12">
-                                        <p className="text-center text-[#d5ab4a] text-xs uppercase tracking-[0.2em] mb-3">
-                                            {visibleGroups.length > 1 ? 'Часть ' + (index + 1) + ' из ' + visibleGroups.length : 'Символическое толкование'}
-                                        </p>
-                                        <div className="text-center text-6xl md:text-8xl font-serif text-[#f0c453] mb-3 break-all">{group.digits}</div>
-                                        {group.meaning ? (
-                                            <>
-                                                <h2 className="text-center text-2xl md:text-3xl font-semibold mb-10">{group.meaning.title}</h2>
-                                                <div className="grid md:grid-cols-2 gap-5">
-                                                    {parts(group.meaning).filter(([, body]) => body).map(([title, body], i) => (
-                                                        <article key={title} className={(i === 0 ? 'md:col-span-2 ' : '') + 'rounded-2xl border border-white/10 bg-white/[0.035] p-6'}>
-                                                            <h3 className="text-[#f0c453] text-sm uppercase tracking-wider font-semibold mb-3">{title}</h3>
-                                                            <p className="text-[#e0d9cc] leading-7 whitespace-pre-line">{body}</p>
-                                                        </article>
-                                                    ))}
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <p className="text-center text-[#bcb2a0]">Для этого фрагмента пока нет опубликованного толкования.</p>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </section>
-                )}
                 {!value && (
                     <div className="max-w-5xl mx-auto px-5 pb-14 space-y-14">
                         <section className="border-t border-[#d9b65c]/15 pt-10">
