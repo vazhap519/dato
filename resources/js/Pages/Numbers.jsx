@@ -166,7 +166,6 @@ export default function Numbers() {
                                 </div>
                             )}
                         </div>
-                        </div>
                     </div>
                 </section>
                 {!value && (
