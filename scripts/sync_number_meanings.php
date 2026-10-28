@@ -69,7 +69,9 @@ try {
             }
             $old = $snapshot[$n];
             foreach (['id', 'number', 'title', 'symbolism', 'light_side', 'shadow_side', 'reflection_question', 'practice', 'is_published', 'created_at', 'updated_at'] as $field) {
-                if ((string) ($row->{$field} ?? '') !== (string) ($old[$field] ?? '')) {
+                $liveValue = in_array($field, ['created_at', 'updated_at'], true) ? ($row->{$field}?->toISOString() ?? '') : (string) ($row->{$field} ?? '');
+                $backupValue = in_array($field, ['created_at', 'updated_at'], true) ? (isset($old[$field]) ? \Carbon\Carbon::parse($old[$field])->toISOString() : '') : (string) ($old[$field] ?? '');
+                if ($liveValue !== $backupValue) {
                     throw new RuntimeException("Live row $n changed since backup ($field). Aborting.");
                 }
             }
