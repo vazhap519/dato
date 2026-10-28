@@ -68,8 +68,8 @@ for ($n=1; $n<=999; $n++) {
 }
 function normalizeText(string $text): string {
     $text = mb_strtolower($text, 'UTF-8');
-    $text = preg_replace('/[^\\p{L}\\p{N}]+/u', ' ', $text);
-    return trim(preg_replace('/\\s+/u', ' ', $text));
+    $text = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text);
+    return trim(preg_replace('/\s+/u', ' ', $text));
 }
 $fields = [1=>'title',2=>'symbolism',3=>'light_side',4=>'shadow_side',5=>'reflection_question',6=>'practice'];
 $duplicates = [];
@@ -83,7 +83,7 @@ foreach ($fields as $index=>$name) {
             if ($value === '') { continue; }
             $seen[$value][] = $number;
             if (in_array($index, [2,5,6], true)) {
-                $tokens = array_values(array_unique(preg_split('/\\s+/u', $value)));
+                $tokens = array_values(array_unique(preg_split('/\s+/u', $value)));
                 if (count($tokens) >= 9) { $sets[$number] = array_fill_keys($tokens, true); }
             }
         }
