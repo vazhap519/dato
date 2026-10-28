@@ -4,7 +4,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 const digitsOnly = value => value.replace(/[^0-9]/g, '').slice(0, 12);
 
 export default function Numbers() {
-    const { special = [], ordinary = [], catalogPage = 1, catalogPages = 10, selected = null, searched = null } = usePage().props;
+    const { special = [], ordinary = [], catalogPage = 1, catalogPages = 10, selected = null, searched = null, settings = null } = usePage().props;
     const [value, setValue] = useState(selected?.number || searched || '');
     const [timeMode, setTimeMode] = useState(false);
     const [clockFormat, setClockFormat] = useState('24');
@@ -97,7 +97,7 @@ export default function Numbers() {
             <Head title={selected ? selected.number + ' — ' + selected.title + ' | Язык чисел' : 'Язык чисел — символы для самопознания'}><meta name="description" content="Авторские символические интерпретации чисел, вопросы к себе и практики внимания. Без предсказаний." /></Head>
             <header className="border-b border-[#d9b65c]/15">
                 <div className="max-w-6xl mx-auto px-5 py-6 flex items-center justify-between gap-4">
-                    <Link href="/" className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</Link>
+                    <Link href="/" className="flex items-center gap-3" aria-label="На главную"><span className="sr-only">{settings?.site_name || "На главную"}</span>{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Логотип сайта"} className="h-10 w-auto max-w-[180px] object-contain" /> : <span className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</span>}</Link>
                     <Link href="/editoria" className="text-sm text-[#e9d5a4] hover:text-[#f4c74c] transition-colors">Бесплатный практикум →</Link>
                 </div>
             </header>
