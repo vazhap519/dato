@@ -108,8 +108,8 @@ export default function Numbers() {
                         <h1 className="text-3xl sm:text-5xl font-serif font-semibold mb-2">Язык <span className="italic text-[#f0c453]">чисел</span></h1>
                         <p className="text-sm sm:text-base text-[#bdb4a3]">Число — повод остановиться и задать себе вопрос, а не предсказание.</p>
                     </div>
-                    <div className="grid lg:grid-cols-[minmax(0,1fr)_240px] gap-5 items-start">
-                        <div className="space-y-4">
+                    <div className="grid lg:grid-cols-[minmax(0,1fr)_240px] gap-4 lg:gap-x-5 items-start">
+                        <div className="min-w-0 lg:col-start-1 lg:row-start-1">
                             <div className="relative">
                                 <label htmlFor="number-search" className="sr-only">Введите число</label>
                                 <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d5ab4a] text-xl">⌕</span>
@@ -119,6 +119,21 @@ export default function Numbers() {
                                     className="w-full rounded-xl border border-[#b88f37]/35 bg-[#201c14] pl-12 pr-12 py-3.5 text-lg text-white placeholder:text-[#8e877a] focus:outline-none focus:ring-2 focus:ring-[#eac04f]" />
                                 {value && <button type="button" aria-label="Очистить поиск" onClick={() => { setTimeMode(false); setValue(''); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a9a293] hover:text-white">×</button>}
                             </div>
+                        </div>
+                        <aside className="lg:col-start-2 lg:row-start-1 rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
+                            <p className="text-xs uppercase tracking-[0.14em] text-[#d5ab4a] mb-3">Числа на часах</p>
+                            <div className="text-3xl font-serif tabular-nums text-[#f0c453] mb-3">{localTime || '—:—'}</div>
+                            <div className="flex gap-2 mb-4">
+                                <button type="button" aria-pressed={clockFormat === '24'} onClick={() => setClockFormat('24')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '24' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>24 часа</button>
+                                <button type="button" aria-pressed={clockFormat === '12'} onClick={() => setClockFormat('12')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '12' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>12 часов</button>
+                            </div>
+                            <button type="button" onClick={() => setTimeMode(!timeMode)} aria-pressed={timeMode}
+                                className={'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors ' + (timeMode ? 'bg-[#f0c54e] text-[#19140b]' : 'border border-[#b88f37]/40 text-[#f0c453] hover:bg-white/5')}>
+                                {timeMode ? '● Время отслеживается' : 'Показать толкование времени'}
+                            </button>
+                            <p className="text-xs text-[#a9a293] mt-3 leading-5">Время определяется по устройству и обновляется автоматически. Для ручного ввода нажми на поле поиска.</p>
+                        </aside>
+                        <div className="min-w-0 lg:col-start-1 lg:row-start-2 space-y-4">
                             {value && (
                                 <div className="flex flex-wrap items-center gap-3">
                                     <h2 className="text-3xl sm:text-4xl font-serif font-semibold break-all">{value}</h2>
@@ -151,19 +166,7 @@ export default function Numbers() {
                                 </div>
                             )}
                         </div>
-                        <aside className="rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
-                            <p className="text-xs uppercase tracking-[0.14em] text-[#d5ab4a] mb-3">Числа на часах</p>
-                            <div className="text-3xl font-serif tabular-nums text-[#f0c453] mb-3">{localTime || '—:—'}</div>
-                            <div className="flex gap-2 mb-4">
-                                <button type="button" aria-pressed={clockFormat === '24'} onClick={() => setClockFormat('24')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '24' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>24 часа</button>
-                                <button type="button" aria-pressed={clockFormat === '12'} onClick={() => setClockFormat('12')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '12' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>12 часов</button>
-                            </div>
-                            <button type="button" onClick={() => setTimeMode(!timeMode)} aria-pressed={timeMode}
-                                className={'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors ' + (timeMode ? 'bg-[#f0c54e] text-[#19140b]' : 'border border-[#b88f37]/40 text-[#f0c453] hover:bg-white/5')}>
-                                {timeMode ? '● Время отслеживается' : 'Показать толкование времени'}
-                            </button>
-                            <p className="text-xs text-[#a9a293] mt-3 leading-5">Время определяется по устройству и обновляется автоматически. Для ручного ввода нажми на поле поиска.</p>
-                        </aside>
+                        </div>
                     </div>
                 </section>
                 {!value && (
