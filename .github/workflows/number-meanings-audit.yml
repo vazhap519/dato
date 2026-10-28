@@ -1,0 +1,31 @@
+name: Number meanings editorial audit
+on:
+  push:
+    paths:
+      - 'database/seeders/**'
+      - 'scripts/audit_number_meanings.php'
+      - '.github/workflows/number-meanings-audit.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring
+      - name: PHP syntax validation
+        run: |
+          find database/seeders -maxdepth 1 -name '*.php' -print0 | xargs -0 -n1 php -l
+          php -l scripts/audit_number_meanings.php
+      - name: Check number coverage and duplicated editorial text
+        run: php scripts/audit_number_meanings.php | tee number-meanings-audit.json
+      - name: Save report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: number-meanings-audit
+          path: number-meanings-audit.json
+          if-no-files-found: ignore
