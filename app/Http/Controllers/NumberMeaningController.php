@@ -34,6 +34,49 @@ class NumberMeaningController extends Controller
         return ['special' => $special, 'ordinary' => $ordinary, 'catalogPage' => $page, 'catalogPages' => 10];
     }
 
+
+    /**
+     * Lightweight JSON endpoint for instant lookup. Preserve leading zeroes
+     * in the displayed input, but resolve each group to its numeric meaning.
+     */
+    public function lookup(string $number)
+    {
+        $length = strlen($number);
+        if ($length < 1 || $length > 12 || !ctype_digit($number)) {
+            return response()->json(['message' => 'Некорректная последовательность'], 422);
+        }
+
+        $groups = [];
+        $offset = 0;
+        while ($offset < $length) {
+            $remaining = $length - $offset;
+            $size = $remaining <= 3 ? $remaining : ($remaining === 4 ? 2 : 3);
+            $groups[] = substr($number, $offset, $size);
+            $offset += $size;
+        }
+
+        $keys = array_values(array_unique(array_map(
+            static fn (string $group): string => (string) (int) $group,
+            $groups
+        )));
+        $meanings = NumberMeaning::query()
+            ->where('is_published', true)
+            ->whereIn('number', $keys)
+            ->get(['number', 'title', 'symbolism', 'light_side', 'shadow_side', 'reflection_question', 'practice'])
+            ->keyBy('number');
+
+        return response()->json([
+            'input' => $number,
+            'groups' => array_map(static function (string $group) use ($meanings): array {
+                $key = (string) (int) $group;
+                return [
+                    'digits' => $group,
+                    'meaning' => $meanings->get($key),
+                ];
+            }, $groups),
+        ]);
+    }
+
     public function index(Request $request)
     {
         return Inertia::render('Numbers', [
