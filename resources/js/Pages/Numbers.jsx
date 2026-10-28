@@ -120,7 +120,7 @@ export default function Numbers() {
                                 {value && <button type="button" aria-label="Очистить поиск" onClick={() => { setTimeMode(false); setValue(''); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a9a293] hover:text-white">×</button>}
                             </div>
                         </div>
-                        <aside className="lg:col-start-2 lg:row-start-1 rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
+                        <aside className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
                             <p className="text-xs uppercase tracking-[0.14em] text-[#d5ab4a] mb-3">Числа на часах</p>
                             <div className="text-3xl font-serif tabular-nums text-[#f0c453] mb-3">{localTime || '—:—'}</div>
                             <div className="flex gap-2 mb-4">
