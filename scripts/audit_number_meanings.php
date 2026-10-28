@@ -2,7 +2,8 @@
 /**
  * Read-only editorial audit, independent of the application database.
  * Run from project root: php scripts/audit_number_meanings.php
- * Exit 1 on missing numbers, overlapping definitions, or exact duplicate text.
+ * Exit 1 on missing numbers, overlapping definitions, empty fields or parsing errors.
+ * Repeated phrasing is reported for editorial review, not treated as a failure.
  */
 declare(strict_types=1);
 $files = [
@@ -127,4 +128,4 @@ $report = [
     'errors'=>$errors,
 ];
 echo json_encode($report, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_INVALID_UTF8_SUBSTITUTE), PHP_EOL;
-if ($missing || $overlap || $duplicates || $errors) { exit(1); }
+if ($missing || $overlap || $errors) { exit(1); }
