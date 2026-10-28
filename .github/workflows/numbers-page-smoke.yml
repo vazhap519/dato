@@ -1,0 +1,66 @@
+name: Numbers page smoke tests
+on:
+  push:
+    paths:
+      - 'resources/js/Pages/Numbers.jsx'
+      - 'app/Http/Controllers/NumberMeaningController.php'
+      - 'routes/web.php'
+      - '.github/workflows/numbers-page-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_sqlite, sqlite3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          npm ci
+      - name: Validate PHP and routes
+        run: |
+          php -l app/Http/Controllers/NumberMeaningController.php
+          php -l routes/web.php
+          cp .env.example .env
+          php artisan key:generate --force
+          php artisan route:list --path=numbers
+      - name: Build React frontend
+        run: npm run build
+      - name: Verify API grouping and database lookup
+        run: |
+          set -euo pipefail
+          touch database/numbers-smoke.sqlite
+          export DB_CONNECTION=sqlite
+          export DB_DATABASE="$PWD/database/numbers-smoke.sqlite"
+          export SESSION_DRIVER=array
+          export CACHE_STORE=array
+          export QUEUE_CONNECTION=sync
+          php artisan migrate --force
+          php artisan db:seed --class=AllEditorialNumberMeaningsSeeder --force
+          php artisan serve --host=127.0.0.1 --port=8181 > /tmp/numbers-smoke-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8181/numbers/lookup/1212 > /tmp/numbers-1212.json; then break; fi
+            sleep 1
+          done
+          for number in 1212 12345 123456 1234567 12345678 2147 0001; do
+            curl -fsS "http://127.0.0.1:8181/numbers/lookup/$number" > "/tmp/numbers-$number.json"
+          done
+          jq -e '[.groups[].digits] == ["12","12"] and all(.groups[]; .meaning != null)' /tmp/numbers-1212.json
+          jq -e '[.groups[].digits] == ["123","45"] and all(.groups[]; .meaning != null)' /tmp/numbers-12345.json
+          jq -e '[.groups[].digits] == ["123","456"] and all(.groups[]; .meaning != null)' /tmp/numbers-123456.json
+          jq -e '[.groups[].digits] == ["123","45","67"]' /tmp/numbers-1234567.json
+          jq -e '[.groups[].digits] == ["123","456","78"]' /tmp/numbers-12345678.json
+          jq -e '[.groups[].digits] == ["21","47"]' /tmp/numbers-2147.json
+          jq -e '[.groups[].digits] == ["00","01"]' /tmp/numbers-0001.json
+          curl -fsS http://127.0.0.1:8181/numbers > /dev/null
