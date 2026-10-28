@@ -18,7 +18,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring
+          extensions: mbstring, pdo_sqlite, sqlite3
       - name: PHP syntax validation
         run: |
           find database/seeders -maxdepth 1 -name '*.php' -print0 | xargs -0 -n1 php -l
@@ -27,6 +27,24 @@ jobs:
         run: |
           set -o pipefail
           php scripts/audit_number_meanings.php | tee number-meanings-audit.json
+      - name: Test complete import on disposable SQLite database
+        run: |
+          set -euo pipefail
+          composer install --no-interaction --prefer-dist --no-progress
+          cp .env.example .env
+          php artisan key:generate --force
+          mkdir -p database
+          touch database/number-meanings-ci.sqlite
+          export DB_CONNECTION=sqlite
+          export DB_DATABASE="$PWD/database/number-meanings-ci.sqlite"
+          export SESSION_DRIVER=array
+          export CACHE_STORE=array
+          export QUEUE_CONNECTION=sync
+          php artisan migrate --force
+          php artisan db:seed --class=AllEditorialNumberMeaningsSeeder --force
+          php scripts/verify_number_meanings.php | tee number-meanings-db-verification.json
+          php artisan db:seed --class=AllEditorialNumberMeaningsSeeder --force
+          php scripts/verify_number_meanings.php
       - name: Publish readable audit summary
         if: always()
         shell: bash
@@ -67,7 +85,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: number-meanings-audit
-          path: number-meanings-audit.json
+          path: |
+            number-meanings-audit.json
+            number-meanings-db-verification.json
           if-no-files-found: ignore
 
       - name: Sync audit result to a single GitHub issue
