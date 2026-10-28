@@ -24,6 +24,41 @@ jobs:
         run: |
           set -o pipefail
           php scripts/audit_number_meanings.php | tee number-meanings-audit.json
+      - name: Publish readable audit summary
+        if: always()
+        shell: bash
+        run: |
+          if [ ! -s number-meanings-audit.json ]; then
+            echo '## Number meanings audit' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Audit report not generated. Inspect preceding job logs.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          {
+            echo '## Number meanings audit — 1–999'
+            echo
+            echo "| Metric | Result |"
+            echo "|---|---:|"
+            echo "| Distinct numbers | $(jq '.distinct_numbers' number-meanings-audit.json) / 999 |"
+            echo "| Missing numbers | $(jq '.missing | length' number-meanings-audit.json) |"
+            echo "| Overlapping definitions | $(jq '.overlapping_definitions | length' number-meanings-audit.json) |"
+            echo "| Exact duplicate groups | $(jq '[.exact_duplicate_text[][]] | length' number-meanings-audit.json) |"
+            echo "| Near-duplicate candidates | $(jq '[.near_duplicate_candidates[][]] | length' number-meanings-audit.json) |"
+            echo "| Parsing / empty-field errors | $(jq '.errors | length' number-meanings-audit.json) |"
+            echo
+            echo '### Missing numbers'
+            echo '```json'
+            jq -c '.missing' number-meanings-audit.json
+            echo '```'
+            echo '### Exact duplicate groups'
+            echo '```json'
+            jq -c '.exact_duplicate_text' number-meanings-audit.json
+            echo '```'
+            echo '### Near-duplicate candidates (first 100 per field)'
+            echo '```json'
+            jq -c '.near_duplicate_candidates | with_entries(.value |= .[:100])' number-meanings-audit.json
+            echo '```'
+            echo 'Full JSON is available in the workflow artifact.'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Save report
         if: always()
         uses: actions/upload-artifact@v4
