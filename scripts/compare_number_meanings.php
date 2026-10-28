@@ -64,6 +64,22 @@ if ($missingSource || $conflicts || $sourceErrors) {
     exit(1);
 }
 
+// Export is opt-in and writes only a local JSON file; never modifies the database.
+if (($argv[1] ?? '') === '--export-expected') {
+    $path = $argv[2] ?? '';
+    if ($path === '' || !str_starts_with($path, '/tmp/')) {
+        fwrite(STDERR, "Provide an absolute output path under /tmp/\n");
+        exit(2);
+    }
+    if (file_put_contents($path, json_encode($expected, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR), LOCK_EX) === false) {
+        fwrite(STDERR, "Cannot write expected snapshot\n");
+        exit(2);
+    }
+    chmod($path, 0600);
+    echo "Expected editorial snapshot written: $path\n";
+    exit(0);
+}
+
 $actual = NumberMeaning::query()
     ->whereIn('number', array_map('strval', range(1, 999)))
     ->get()
