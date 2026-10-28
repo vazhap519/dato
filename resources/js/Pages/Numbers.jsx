@@ -1,22 +1,65 @@
-import React, { useState } from 'react';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 const digitsOnly = value => value.replace(/[^0-9]/g, '').slice(0, 12);
 
 export default function Numbers() {
     const { special = [], ordinary = [], catalogPage = 1, catalogPages = 10, selected = null, searched = null } = usePage().props;
     const [value, setValue] = useState(selected?.number || searched || '');
-    const submit = e => {
-        e.preventDefault();
-        if (!value) return;
-        router.visit('/numbers/' + encodeURIComponent(value));
-    };
-    const parts = [
-        ['Символика', selected?.symbolism],
-        ['Светлая сторона', selected?.light_side],
-        ['Теневая сторона', selected?.shadow_side],
-        ['Вопрос к себе', selected?.reflection_question],
-        ['Практика', selected?.practice],
+    const [timeMode, setTimeMode] = useState(false);
+    const [localTime, setLocalTime] = useState('');
+    const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (!timeMode) return undefined;
+        const update = () => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            setLocalTime(hours + ':' + minutes);
+            setValue(hours + minutes);
+        };
+        update();
+        const timer = setInterval(update, 1000);
+        return () => clearInterval(timer);
+    }, [timeMode]);
+
+    useEffect(() => {
+        if (!value) {
+            setResult(null);
+            setLoading(false);
+            setError('');
+            return undefined;
+        }
+        const controller = new AbortController();
+        setLoading(true);
+        setError('');
+        const timer = setTimeout(async () => {
+            try {
+                const response = await fetch('/numbers/lookup/' + encodeURIComponent(value), {
+                    headers: { Accept: 'application/json' },
+                    signal: controller.signal,
+                });
+                if (!response.ok) throw new Error('Не удалось получить толкование');
+                setResult(await response.json());
+            } catch (err) {
+                if (err.name !== 'AbortError') setError('Не удалось загрузить толкование. Попробуй ещё раз.');
+            } finally {
+                if (!controller.signal.aborted) setLoading(false);
+            }
+        }, 250);
+        return () => { clearTimeout(timer); controller.abort(); };
+    }, [value]);
+
+    const visibleGroups = result?.input === value ? result.groups : [];
+    const parts = meaning => [
+        ['Символика', meaning?.symbolism],
+        ['Светлая сторона', meaning?.light_side],
+        ['Теневая сторона', meaning?.shadow_side],
+        ['Вопрос к себе', meaning?.reflection_question],
+        ['Практика', meaning?.practice],
     ];
     return (
         <div className="min-h-screen bg-[#14120d] text-[#f8f4e9] selection:bg-[#e7b945]/30">
@@ -35,39 +78,68 @@ export default function Numbers() {
                         <h1 className="text-5xl md:text-7xl font-semibold tracking-tight mb-6">Язык <span className="text-[#f0c453] italic font-serif">чисел</span></h1>
                         <p className="text-xl md:text-2xl text-[#e4dccb] leading-relaxed mb-4">Иногда число — не ответ, а повод задать себе вопрос.</p>
                         <p className="text-[#a9a293] max-w-xl mx-auto leading-relaxed">Числа не предсказывают твоё будущее. Но их символика может помочь остановиться, заметить свои мысли и посмотреть на привычное по-новому.</p>
-                        <form onSubmit={submit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mt-10">
-                            <label htmlFor="number-search" className="sr-only">Введите число</label>
-                            <input id="number-search" inputMode="numeric" pattern="[0-9]*" value={value} onChange={e=>setValue(digitsOnly(e.target.value))}
-                                placeholder="Например, 111, 777, 1212" className="w-full min-w-0 rounded-xl border border-[#b88f37]/40 bg-white/5 px-5 py-4 text-lg text-white placeholder:text-[#8e877a] focus:outline-none focus:ring-2 focus:ring-[#eac04f]" />
-                            <button type="submit" disabled={!value} data-analytics="Числа · исследовать число"
-                                className="shrink-0 rounded-xl bg-[#f0c54e] px-7 py-4 font-semibold text-[#19140b] hover:bg-[#ffdb70] disabled:opacity-40 transition-colors">Исследовать число</button>
-                        </form>
-                        <p className="mt-4 text-xs text-[#8e877a]">Можно ввести любое число до 12 цифр. Для опубликованных чисел доступно полное толкование.</p>
+                        <div className="max-w-lg mx-auto mt-10 space-y-4">
+                            <div className="flex flex-wrap justify-center gap-3">
+                                <button type="button" onClick={() => { setTimeMode(false); setValue(''); }} aria-pressed={!timeMode}
+                                    className={'rounded-xl border px-5 py-3 text-sm transition-colors ' + (!timeMode ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/40 text-[#e9d5a4]')}>Ввести число</button>
+                                <button type="button" onClick={() => setTimeMode(true)} aria-pressed={timeMode}
+                                    className={'rounded-xl border px-5 py-3 text-sm transition-colors ' + (timeMode ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/40 text-[#e9d5a4]')}>По моему времени</button>
+                            </div>
+                            {timeMode ? (
+                                <div className="rounded-xl border border-[#b88f37]/40 bg-white/5 px-5 py-4">
+                                    <div className="text-4xl font-serif text-[#f0c453] tabular-nums">{localTime || '—:—'}</div>
+                                    <p className="mt-2 text-xs text-[#a9a293]">Локальное время твоего устройства · обновляется автоматически</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <label htmlFor="number-search" className="sr-only">Введите число</label>
+                                    <input id="number-search" inputMode="numeric" pattern="[0-9]*" value={value}
+                                        onChange={e => setValue(digitsOnly(e.target.value))}
+                                        placeholder="Например, 111, 1212, 123456"
+                                        className="w-full min-w-0 rounded-xl border border-[#b88f37]/40 bg-white/5 px-5 py-4 text-lg text-white placeholder:text-[#8e877a] focus:outline-none focus:ring-2 focus:ring-[#eac04f]" />
+                                </>
+                            )}
+                            <p className="text-xs text-[#a9a293]">Толкование появляется автоматически. Длинные числа делятся на группы по 2–3 цифры.</p>
+                        </div>
                     </div>
                 </section>
-                {selected && (
-                    <section className="max-w-5xl mx-auto px-5 pb-16">
-                        <div className="rounded-3xl border border-[#c6a049]/25 bg-[#1d1a13] p-7 md:p-12">
-                            <p className="text-center text-[#d5ab4a] text-xs uppercase tracking-[0.2em] mb-3">Символическое толкование</p>
-                            <div className="text-center text-7xl md:text-8xl font-serif text-[#f0c453] mb-3 break-all">{selected.number}</div>
-                            <h2 className="text-center text-2xl md:text-3xl font-semibold mb-12">{selected.title}</h2>
-                            <div className="grid md:grid-cols-2 gap-5">
-                                {parts.filter(([,body])=>body).map(([title,body],i)=>(
-                                    <article key={title} className={i===0 ? 'md:col-span-2 rounded-2xl border border-white/10 bg-white/[0.035] p-6' : 'rounded-2xl border border-white/10 bg-white/[0.035] p-6'}>
-                                        <h3 className="text-[#f0c453] text-sm uppercase tracking-wider font-semibold mb-3">{title}</h3>
-                                        <p className="text-[#e0d9cc] leading-7 whitespace-pre-line">{body}</p>
-                                    </article>
+                {value && (
+                    <section className="max-w-5xl mx-auto px-5 pb-16" aria-live="polite">
+                        {loading && <p className="text-center text-[#d5ab4a] mb-4">Подбираем толкование…</p>}
+                        {error && <p role="alert" className="text-center text-[#f1a7a7] mb-4">{error}</p>}
+                        {!loading && !error && visibleGroups.length > 0 && (
+                            <div className="space-y-6">
+                                {visibleGroups.length > 1 && <div className="text-center text-[#d5ab4a] text-lg">
+                                    {visibleGroups.map(group => group.digits).join(' · ')}
+                                </div>}
+                                {visibleGroups.map((group, index) => (
+                                    <div key={index} className="rounded-3xl border border-[#c6a049]/25 bg-[#1d1a13] p-7 md:p-12">
+                                        <p className="text-center text-[#d5ab4a] text-xs uppercase tracking-[0.2em] mb-3">
+                                            {visibleGroups.length > 1 ? 'Часть ' + (index + 1) + ' из ' + visibleGroups.length : 'Символическое толкование'}
+                                        </p>
+                                        <div className="text-center text-6xl md:text-8xl font-serif text-[#f0c453] mb-3 break-all">{group.digits}</div>
+                                        {group.meaning ? (
+                                            <>
+                                                <h2 className="text-center text-2xl md:text-3xl font-semibold mb-10">{group.meaning.title}</h2>
+                                                <div className="grid md:grid-cols-2 gap-5">
+                                                    {parts(group.meaning).filter(([, body]) => body).map(([title, body], i) => (
+                                                        <article key={title} className={(i === 0 ? 'md:col-span-2 ' : '') + 'rounded-2xl border border-white/10 bg-white/[0.035] p-6'}>
+                                                            <h3 className="text-[#f0c453] text-sm uppercase tracking-wider font-semibold mb-3">{title}</h3>
+                                                            <p className="text-[#e0d9cc] leading-7 whitespace-pre-line">{body}</p>
+                                                        </article>
+                                                    ))}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <p className="text-center text-[#bcb2a0]">Для этого фрагмента пока нет опубликованного толкования.</p>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
-                            <div className="mt-8 flex flex-wrap justify-center gap-3">
-                                <button type="button" onClick={()=>navigator.clipboard?.writeText(window.location.href)} className="border border-[#c6a049]/50 rounded-lg px-5 py-3 text-sm text-[#f0c453] hover:bg-white/5">Скопировать ссылку</button>
-                                <Link href="/numbers" className="border border-white/20 rounded-lg px-5 py-3 text-sm hover:bg-white/5">Другое число</Link>
-                            </div>
-                        </div>
+                        )}
                     </section>
                 )}
-                {searched && !selected && <div className="max-w-3xl mx-auto px-5 pb-12 text-center"><div className="rounded-2xl border border-[#c6a049]/30 bg-[#201c14] p-7"><h2 className="text-2xl text-[#f0c453] mb-3">Число {searched} пока не описано</h2><p className="text-[#bcb2a0]">Для него ещё нет авторского толкования. Выбери одно из опубликованных чисел ниже или попробуй другое сочетание.</p></div></div>}
-                {!selected && (
+                {!value && (
                     <div className="max-w-5xl mx-auto px-5 pb-14 space-y-14">
                         <section className="border-t border-[#d9b65c]/15 pt-10">
                             <div className="text-center mb-8">
