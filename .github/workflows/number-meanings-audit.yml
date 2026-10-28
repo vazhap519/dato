@@ -23,6 +23,7 @@ jobs:
         run: |
           find database/seeders -maxdepth 1 -name '*.php' -print0 | xargs -0 -n1 php -l
           php -l scripts/audit_number_meanings.php
+          php -l scripts/preflight_number_meanings.php
       - name: Check number coverage and duplicated editorial text
         run: |
           set -o pipefail
@@ -41,6 +42,7 @@ jobs:
           export CACHE_STORE=array
           export QUEUE_CONNECTION=sync
           php artisan migrate --force
+          php scripts/preflight_number_meanings.php
           php artisan db:seed --class=AllEditorialNumberMeaningsSeeder --force
           php scripts/verify_number_meanings.php | tee number-meanings-db-verification.json
           php artisan db:seed --class=AllEditorialNumberMeaningsSeeder --force
