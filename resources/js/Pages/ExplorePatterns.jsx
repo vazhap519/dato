@@ -26,7 +26,7 @@ export default function ExplorePatterns() {
  return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
   <Head title="Язык повторений — замечай привычные сценарии — Arutyun"><meta name="description" content="18 повторяющихся сценариев и интерактивная карта реакции, последствия и нового выбора. Без предсказаний, регистрации и личного журнала."/></Head>
   <header className="relative z-40 border-b border-[#b99347]/25"><div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
-   <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
+   <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[110px] sm:max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
    <ExploreSectionNavigation items={[
                     { label: 'Карта сценария', href: '#map', icon: 'route' },
                     { label: 'Повторения', href: '#library', icon: 'repeat' },
