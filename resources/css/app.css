@@ -158,3 +158,47 @@ html.light .numbers-page .number-special-card__title {
 html.light .numbers-page [class*="text-[#e1d2af]"] { color: #65513a !important; }
 html.light .numbers-page [class*="text-[#aaa393]"],
 html.light .numbers-page [class*="text-[#8f887a]"] { color: #685f51 !important; }
+
+/* Refined editorial daylight palette — richer contrast and restrained bronze. */
+html.light body { background: #f3f2ee; color: #262a2a; }
+html.light .numbers-page { background: #f3f2ee !important; color: #262a2a !important; }
+html.light .numbers-page header { background: #ffffff !important; border-color: #d9d9d4 !important; }
+html.light .numbers-page h1,
+html.light .numbers-page h2,
+html.light .numbers-page h3:not([class*="text-[#"]),
+html.light .numbers-page .font-semibold:not([class*="text-[#"]) { color: #25292b; }
+html.light .numbers-page [class*="text-[#f0c453]"],
+html.light .numbers-page [class*="text-[#d5ab4a]"],
+html.light .numbers-page [class*="text-[#f4c74c]"],
+html.light .numbers-page [class*="text-[#e9bd51]"] { color: #8c5b19 !important; }
+html.light .numbers-page [class*="text-[#a9a293]"],
+html.light .numbers-page [class*="text-[#bdb4a3]"],
+html.light .numbers-page [class*="text-[#bcb2a0]"],
+html.light .numbers-page [class*="text-[#aaa393]"],
+html.light .numbers-page [class*="text-[#8f887a]"] { color: #596063 !important; }
+html.light .numbers-page .number-special-card {
+    background: #ffffff !important;
+    border: 1px solid #dedfdb !important;
+    box-shadow: 0 2px 8px rgba(31, 38, 39, .035);
+}
+html.light .numbers-page .number-special-card:hover,
+html.light .numbers-page .number-special-card:focus-visible {
+    background: #f9f6ef !important;
+    border-color: #9d7134 !important;
+    box-shadow: 0 7px 20px rgba(31, 38, 39, .09);
+}
+html.light .numbers-page .number-special-card__number { color: #8c5b19 !important; }
+html.light .numbers-page .number-special-card__title { color: #424a4b !important; }
+html.light .numbers-page input,
+html.light .numbers-page [class*="bg-[#201c14]"],
+html.light .numbers-page [class*="bg-[#241f16]"],
+html.light .numbers-page [class*="bg-[#1d1a13]"] {
+    background: #ffffff !important;
+    border-color: #d6d7d2 !important;
+}
+html.light .numbers-page [class*="border-[#"] { border-color: #dedfdb !important; }
+html.light .numbers-page input:focus { border-color: #a47633 !important; }
+html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #c99b45 !important; }
+html.light .numbers-page [class*="text-[#19140b]"] { color: #211b12 !important; }
+html.light .arutyun-theme-switcher { background: #ffffff; color: #343a3b; border-color: #d9d9d4; }
+html.light .arutyun-theme-switcher option { background: #ffffff; color: #343a3b; }
