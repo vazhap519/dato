@@ -6,6 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class SiteSettingForm
@@ -25,6 +26,14 @@ class SiteSettingForm
 
                     ])
                     ->columns(2),
+
+                Section::make('Оформление страницы чисел')
+                    ->schema([
+                        Toggle::make('numbers_light_theme_enabled')
+                            ->label('Разрешить светлую тему на странице чисел')
+                            ->helperText('Включено: страница «Язык чисел» использует тему устройства. Выключено: только тёмная тема. Остальной сайт всегда остаётся тёмным.')
+                            ->default(true),
+                    ]),
 
                 Section::make('Логотипы и иконки')
                     ->schema([
