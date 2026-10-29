@@ -85,6 +85,21 @@ Route::get('/explore/archetypes/mirror', function () {
         'archetypes' => \App\Models\Archetype::query()->where('is_published', true)->orderBy('sort')->orderBy('id')->get(['id','slug','title','description','strength','shadow','question']),
     ]);
 })->name('explore.archetypes.mirror');
+Route::get('/explore/archetypes/journal', fn () => Inertia::render('ExploreArchetypeJournal'))
+    ->name('explore.archetypes.journal');
+Route::get('/explore/archetypes/{slug}', function (string $slug) {
+    $archetype = \App\Models\Archetype::query()
+        ->where('is_published', true)
+        ->where('slug', $slug)
+        ->firstOrFail();
+
+    return Inertia::render('ExploreArchetypeDetail', [
+        'archetype' => $archetype->only([
+            'id', 'slug', 'title', 'subtitle', 'icon', 'description',
+            'strength', 'shadow', 'question', 'practice',
+        ]),
+    ]);
+})->where('slug', '[a-z0-9-]+')->name('explore.archetypes.detail');
 Route::get('/explore/emotions', fn () => Inertia::render('ExploreEmotions'))->name('explore.emotions');
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
 Route::get('/numbers/lookup/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'lookup'])
