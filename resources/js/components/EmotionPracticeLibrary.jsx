@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import data from '../../data/emotion-practices.json';
+import dataBase from '../../data/emotion-practices.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const data = liveExploreDocument('emotion-practices', dataBase);
 
 function PracticeInstructions({ practice, compact = false }) {
     return <div>
