@@ -13,7 +13,10 @@ class SiteSetting extends Model implements HasMedia
 
     protected $fillable = [
         'site_name',
+        'numbers_light_theme_enabled',
     ];
+
+    protected $casts = ['numbers_light_theme_enabled' => 'boolean'];
 
     public function registerMediaCollections(): void
     {
