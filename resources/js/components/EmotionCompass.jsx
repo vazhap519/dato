@@ -6,10 +6,7 @@ const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
 const emotions = atlas.emotions;
 const groups = atlas.groups;
-const starts = [
-    { id: 'any', title: 'Все состояния' },
-    ...groups.map(group => ({ id: group.id, title: group.title })),
-];
+
 const stress = new Set(['protection', 'vulnerability', 'self']);
 const sensations = ['Напряжение', 'Тяжесть или сжатие', 'Тепло или лёгкость', 'Изменение дыхания', 'Оцепенение', 'Не замечаю явно выраженных ощущений'];
 const triggers = ['Разговор или отношения', 'Мысли о будущем', 'Воспоминание', 'Работа или обязанности', 'Приятное событие', 'Пока не понимаю'];
@@ -18,6 +15,7 @@ const button = (active) => 'rounded-xl border px-4 py-3 text-left text-sm leadin
     (active ? 'border-[#f0c453] bg-[#463219] text-[#fff7e6]' : 'border-[#806638]/70 bg-[#18150f] text-[#d4c6b0] hover:border-[#f0c453]');
 
 export default function EmotionCompass({ onExploreEmotion }) {
+    const starts = [{ id: 'any', title: 'Все состояния' }, ...groups.map(group => ({ id: group.id, title: group.title }))];
     const [phase, setPhase] = useState(0);
     const [group, setGroup] = useState('any');
     const [emotionSlug, setEmotionSlug] = useState('');
