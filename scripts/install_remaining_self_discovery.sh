@@ -8,14 +8,13 @@ BACKUP="/root/backups/self-discovery-remaining-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$BACKUP/staged" "$BACKUP/existing"
 FILES=(
   "routes/web.php"
-  "database/seeders/SelfDiscoveryToolsSeeder.php"
+  "database/seeders/PublishRemainingExploreToolsSeeder.php"
   "resources/js/Pages/ExploreDreams.jsx"
   "resources/js/Pages/ExploreDreamSymbol.jsx"
   "resources/js/Pages/ExplorePatterns.jsx"
   "resources/js/Pages/ExplorePatternDetail.jsx"
   "resources/js/Pages/ExplorePersonalityMirror.jsx"
-  "resources/js/components/EmotionPracticeLibrary.jsx"
-  "resources/data/dream-atlas.json"
+    "resources/data/dream-atlas.json"
   "resources/data/pattern-atlas.json"
   "resources/data/personality-mirror.json"
 )
@@ -26,10 +25,7 @@ for f in "${FILES[@]}"; do
   git show "$REF:$f" > "$BACKUP/staged/$f"
 done
 php -l "$BACKUP/staged/routes/web.php"
-php -l "$BACKUP/staged/database/seeders/SelfDiscoveryToolsSeeder.php"
-grep -q 'aria-expanded={expanded}' "$BACKUP/staged/resources/js/components/EmotionPracticeLibrary.jsx"
-grep -q 'lg:hidden' "$BACKUP/staged/resources/js/components/EmotionPracticeLibrary.jsx"
-grep -q 'lg:grid' "$BACKUP/staged/resources/js/components/EmotionPracticeLibrary.jsx"
+php -l "$BACKUP/staged/database/seeders/PublishRemainingExploreToolsSeeder.php"
 python3 - "$BACKUP/staged" <<'PY'
 import json, pathlib, sys
 root=pathlib.Path(sys.argv[1])/'resources'/'data'
@@ -127,9 +123,9 @@ php artisan route:list --path=explore/patterns
 php artisan route:list --path=explore/mirror
 
 echo "Публикуем ровно три новых направления в каталоге..."
-php artisan db:seed --class=SelfDiscoveryToolsSeeder --force
+php artisan db:seed --class=PublishRemainingExploreToolsSeeder --force
 
 trap - ERR
 echo "Новые направления опубликованы."
 echo "Резервная копия: $BACKUP"
-echo "Проверь: /explore, /explore/dreams, /explore/patterns, /explore/mirror и /explore/emotions#practices"
+echo "Проверь: /explore, /explore/dreams, /explore/patterns и /explore/mirror"
