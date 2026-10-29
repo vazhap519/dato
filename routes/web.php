@@ -77,6 +77,9 @@ Route::get('/explore/archetypes', function () {
             ->get(['id','slug','title','subtitle','icon','description','strength','shadow','question','practice']),
     ]);
 })->name('explore.archetypes');
+Route::post('/explore/archetypes/mirror/statistics', [\App\Http\Controllers\ArchetypeMirrorStatisticsController::class, 'store'])
+    ->middleware('throttle:12,1')
+    ->name('explore.archetypes.mirror.statistics');
 Route::get('/explore/archetypes/mirror', function () {
     return Inertia::render('ExploreArchetypeMirror', [
         'archetypes' => \App\Models\Archetype::query()->where('is_published', true)->orderBy('sort')->orderBy('id')->get(['id','slug','title','description','strength','shadow','question']),
