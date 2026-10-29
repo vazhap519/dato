@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import data from '../../data/pattern-atlas.json';
+import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
 
 const patterns=data.patterns;
 const categories=data.categories;
@@ -24,15 +25,15 @@ export default function ExplorePatterns() {
  const reset=()=>{setStep(0);setChosen('');setOutcome('');};
  return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
   <Head title="Язык повторений — замечай привычные сценарии — Arutyun"><meta name="description" content="18 повторяющихся сценариев и интерактивная карта реакции, последствия и нового выбора. Без предсказаний, регистрации и личного журнала."/></Head>
-  <header className="border-b border-[#b99347]/25"><div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+  <header className="relative z-40 border-b border-[#b99347]/25"><div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
    <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
-   <nav className="flex flex-wrap items-center gap-4 text-sm" aria-label="Навигация по странице">
-    <a href="#map" className="text-[#e4c88c] hover:text-white">Карта сценария</a>
-    <a href="#library" className="text-[#e4c88c] hover:text-white">Повторения</a>
-    <a href="#daily" className="text-[#e4c88c] hover:text-white">Эксперимент дня</a>
-    <a href="#understand" className="text-[#e4c88c] hover:text-white">Как замечать</a>
-    <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
-   </nav>
+   <ExploreSectionNavigation items={[
+                    { label: 'Карта сценария', href: '#map', icon: 'route' },
+                    { label: 'Повторения', href: '#library', icon: 'repeat' },
+                    { label: 'Эксперимент дня', href: '#daily', icon: 'lightbulb' },
+                    { label: 'Как замечать', href: '#understand', icon: 'visibility' },
+                    { label: 'Все направления', href: '/explore', icon: 'apps', catalog: true },
+                ]} />
   </div></header>
   <main className="mx-auto max-w-6xl px-5 pb-20 pt-12 sm:pt-16">
    <section className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
