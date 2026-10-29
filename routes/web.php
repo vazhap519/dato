@@ -99,6 +99,17 @@ Route::get('/explore/archetypes/{slug}', function (string $slug) {
     ]);
 })->where('slug', '[a-z0-9-]+')->name('explore.archetypes.detail');
 Route::get('/explore/emotions', fn () => Inertia::render('ExploreEmotions'))->name('explore.emotions');
+Route::get('/explore/emotions/{slug}', function (string $slug) {
+    $path = resource_path('data/emotion-atlas.json');
+    if (! is_file($path)) {
+        abort(404);
+    }
+    $atlas = json_decode((string) file_get_contents($path), true);
+    $slugs = array_column($atlas['emotions'] ?? [], 'slug');
+    abort_unless(in_array($slug, $slugs, true), 404);
+
+    return Inertia::render('ExploreEmotionDetail', ['emotionSlug' => $slug]);
+})->where('slug', '[a-z0-9-]+')->name('explore.emotions.detail');
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
 Route::get('/numbers/lookup/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'lookup'])
     ->where('number', '[0-9]{1,12}')->middleware('throttle:120,1')->name('numbers.lookup');
