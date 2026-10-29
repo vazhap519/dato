@@ -136,3 +136,25 @@ html.light .numbers-page input::placeholder { color: #776c5c !important; }
 html.light .numbers-page [class*="border-[#"] { border-color: #dfccaa !important; }
 html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #edc55c !important; }
 html.light .numbers-page [class*="text-[#19140b]"] { color: #211b12 !important; }
+
+/* Featured number cards: readable in both themes without affecting photos. */
+html.light .numbers-page .number-special-card {
+    background: linear-gradient(135deg, #fffdf8, #f5ecd9) !important;
+    border-color: #d9c59d !important;
+    box-shadow: 0 3px 14px rgba(79, 56, 24, .055);
+}
+html.light .numbers-page .number-special-card:hover,
+html.light .numbers-page .number-special-card:focus-visible {
+    background: linear-gradient(135deg, #fffaf0, #efe0c0) !important;
+    border-color: #ad7b2d !important;
+    box-shadow: 0 7px 20px rgba(79, 56, 24, .12);
+}
+html.light .numbers-page .number-special-card__number {
+    color: #895a12 !important;
+}
+html.light .numbers-page .number-special-card__title {
+    color: #514638 !important;
+}
+html.light .numbers-page [class*="text-[#e1d2af]"] { color: #65513a !important; }
+html.light .numbers-page [class*="text-[#aaa393]"],
+html.light .numbers-page [class*="text-[#8f887a]"] { color: #685f51 !important; }
