@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import atlas from '../../data/emotion-atlas.json';
+import atlasBase from '../../data/emotion-atlas.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
 const emotions = atlas.emotions;
 const groups = atlas.groups;
