@@ -1,0 +1,423 @@
+{
+  "version": "emotion-situations-v1",
+  "intro": "Одна ситуация может вызывать несколько эмоций — все предложенные ответы возможны и не являются верными или неверными.",
+  "categories": [
+    {
+      "id": "relations",
+      "title": "Отношения",
+      "icon": "favorite"
+    },
+    {
+      "id": "work",
+      "title": "Работа и дела",
+      "icon": "work"
+    },
+    {
+      "id": "family",
+      "title": "Семья и близкие",
+      "icon": "groups"
+    },
+    {
+      "id": "changes",
+      "title": "Перемены",
+      "icon": "autorenew"
+    },
+    {
+      "id": "inner",
+      "title": "Внутренний мир",
+      "icon": "psychology"
+    }
+  ],
+  "situations": [
+    {
+      "id": "emotion-scene-01",
+      "category": "relations",
+      "title": "Не ответили на сообщение",
+      "scene": "Ты написал важное сообщение, но ответа нет уже несколько часов.",
+      "options": [
+        "anxiety",
+        "hurt",
+        "loneliness",
+        "irritation"
+      ],
+      "question": "Чего ты сейчас ждёшь: ответа, ясности или подтверждения связи?"
+    },
+    {
+      "id": "emotion-scene-02",
+      "category": "relations",
+      "title": "Неожиданная похвала",
+      "scene": "Близкий человек сказал, как сильно ценит то, что ты делаешь.",
+      "options": [
+        "joy",
+        "gratitude",
+        "tenderness",
+        "shame"
+      ],
+      "question": "Какая часть услышанного откликнулась сильнее всего?"
+    },
+    {
+      "id": "emotion-scene-03",
+      "category": "relations",
+      "title": "Отменённая встреча",
+      "scene": "В последний момент человек отменил вашу давно запланированную встречу.",
+      "options": [
+        "disappointment",
+        "hurt",
+        "anger",
+        "sadness"
+      ],
+      "question": "Что для тебя оказалось важнее: встреча, уважение или предсказуемость?"
+    },
+    {
+      "id": "emotion-scene-04",
+      "category": "relations",
+      "title": "Чужой успех",
+      "scene": "Друг рассказал о результате, к которому ты сам давно стремишься.",
+      "options": [
+        "envy",
+        "joy",
+        "pride",
+        "insecurity"
+      ],
+      "question": "Можно ли заметить одновременно несколько чувств и не осуждать себя?"
+    },
+    {
+      "id": "emotion-scene-05",
+      "category": "relations",
+      "title": "Разговор по душам",
+      "scene": "Тебе неожиданно удалось честно поговорить с близким человеком.",
+      "options": [
+        "tenderness",
+        "calm",
+        "gratitude",
+        "fear"
+      ],
+      "question": "Чего ты боялся до разговора и что изменилось после?"
+    },
+    {
+      "id": "emotion-scene-06",
+      "category": "relations",
+      "title": "Чужое молчание",
+      "scene": "Во время ссоры собеседник замолчал и ушёл в другую комнату.",
+      "options": [
+        "hurt",
+        "anger",
+        "anxiety",
+        "confusion"
+      ],
+      "question": "Какие факты ты знаешь о молчании, а какие значения приписываешь сам?"
+    },
+    {
+      "id": "emotion-scene-07",
+      "category": "work",
+      "title": "Ошибка при всех",
+      "scene": "Во время обсуждения проекта ты обнаружил свою ошибку перед командой.",
+      "options": [
+        "shame",
+        "guilt",
+        "fear",
+        "confusion"
+      ],
+      "question": "Что здесь факт, а что — представление о том, как тебя оценили?"
+    },
+    {
+      "id": "emotion-scene-08",
+      "category": "work",
+      "title": "Проект завершён",
+      "scene": "Ты закончил дело, над которым трудился несколько месяцев.",
+      "options": [
+        "pride",
+        "joy",
+        "calm",
+        "disappointment"
+      ],
+      "question": "С чем связано твоё чувство: результатом, усилием или реакцией других?"
+    },
+    {
+      "id": "emotion-scene-09",
+      "category": "work",
+      "title": "Новые обязанности",
+      "scene": "Тебе предложили роль, которой ты раньше не занимался.",
+      "options": [
+        "interest",
+        "inspiration",
+        "anxiety",
+        "insecurity"
+      ],
+      "question": "Что в этой возможности привлекает, а что остаётся неизвестным?"
+    },
+    {
+      "id": "emotion-scene-10",
+      "category": "work",
+      "title": "Не заметили вклад",
+      "scene": "Общий результат похвалили, но о твоей работе никто не упомянул.",
+      "options": [
+        "hurt",
+        "anger",
+        "envy",
+        "sadness"
+      ],
+      "question": "Какого признания ты ожидал и можно ли попросить о нём прямо?"
+    },
+    {
+      "id": "emotion-scene-11",
+      "category": "work",
+      "title": "Работы больше, чем сил",
+      "scene": "Планы постоянно меняются, а задачи продолжают прибывать.",
+      "options": [
+        "irritation",
+        "helplessness",
+        "anxiety",
+        "despair"
+      ],
+      "question": "Какой один предел нагрузки ты можешь назвать сейчас?"
+    },
+    {
+      "id": "emotion-scene-12",
+      "category": "work",
+      "title": "Свобода выбрать подход",
+      "scene": "Тебе разрешили самому предложить способ решить задачу.",
+      "options": [
+        "inspiration",
+        "interest",
+        "joy",
+        "fear"
+      ],
+      "question": "Что помогает отличить живой интерес от давления сделать идеально?"
+    },
+    {
+      "id": "emotion-scene-13",
+      "category": "family",
+      "title": "Непрошенный совет",
+      "scene": "Родственник объясняет, как тебе следует строить свою жизнь.",
+      "options": [
+        "anger",
+        "irritation",
+        "hurt",
+        "guilt"
+      ],
+      "question": "Какую границу можно сформулировать без борьбы?"
+    },
+    {
+      "id": "emotion-scene-14",
+      "category": "family",
+      "title": "Разлука",
+      "scene": "Близкий уехал надолго, и привычные дни стали другими.",
+      "options": [
+        "longing",
+        "sadness",
+        "loneliness",
+        "gratitude"
+      ],
+      "question": "По чему ты скучаешь больше всего — по человеку, ритму или близости?"
+    },
+    {
+      "id": "emotion-scene-15",
+      "category": "family",
+      "title": "Помощь без просьбы",
+      "scene": "Кто-то из семьи увидел твою усталость и взял часть дел на себя.",
+      "options": [
+        "gratitude",
+        "tenderness",
+        "joy",
+        "guilt"
+      ],
+      "question": "Легко ли тебе принимать поддержку, не пытаясь тут же её заслужить?"
+    },
+    {
+      "id": "emotion-scene-16",
+      "category": "family",
+      "title": "Обещание нарушено",
+      "scene": "Человек снова не сделал того, о чём вы договаривались.",
+      "options": [
+        "anger",
+        "disappointment",
+        "hurt",
+        "helplessness"
+      ],
+      "question": "Что важнее всего сейчас — объяснение, новый договор или граница?"
+    },
+    {
+      "id": "emotion-scene-17",
+      "category": "family",
+      "title": "Сравнение с другими",
+      "scene": "Тебя сравнили с человеком, чья жизнь выглядит успешнее.",
+      "options": [
+        "shame",
+        "anger",
+        "envy",
+        "insecurity"
+      ],
+      "question": "Чей стандарт успеха ты сейчас используешь?"
+    },
+    {
+      "id": "emotion-scene-18",
+      "category": "family",
+      "title": "Тёплый вечер",
+      "scene": "Все собрались вместе, и тебе хорошо в этой простой близости.",
+      "options": [
+        "calm",
+        "joy",
+        "tenderness",
+        "gratitude"
+      ],
+      "question": "Как заметить этот момент, не пытаясь сделать его идеальным?"
+    },
+    {
+      "id": "emotion-scene-19",
+      "category": "changes",
+      "title": "Переезд",
+      "scene": "Ты оказался в новом городе, где почти ничего не знакомо.",
+      "options": [
+        "interest",
+        "fear",
+        "loneliness",
+        "inspiration"
+      ],
+      "question": "Какую часть нового хочется исследовать, а где нужна опора?"
+    },
+    {
+      "id": "emotion-scene-20",
+      "category": "changes",
+      "title": "План сорвался",
+      "scene": "Долгожданное событие отменили по причинам, от тебя не зависящим.",
+      "options": [
+        "disappointment",
+        "anger",
+        "helplessness",
+        "sadness"
+      ],
+      "question": "Что здесь действительно потеряно, а что ещё возможно?"
+    },
+    {
+      "id": "emotion-scene-21",
+      "category": "changes",
+      "title": "Новый шанс",
+      "scene": "Тебе предложили участие в интересном, но неизвестном проекте.",
+      "options": [
+        "inspiration",
+        "anxiety",
+        "interest",
+        "confusion"
+      ],
+      "question": "Какую информацию стоит собрать до решения?"
+    },
+    {
+      "id": "emotion-scene-22",
+      "category": "changes",
+      "title": "Конец этапа",
+      "scene": "Ты закрываешь дело, которое долго было частью твоей жизни.",
+      "options": [
+        "sadness",
+        "pride",
+        "longing",
+        "calm"
+      ],
+      "question": "Что ты хочешь сохранить из пройденного пути?"
+    },
+    {
+      "id": "emotion-scene-23",
+      "category": "changes",
+      "title": "Перемены без выбора",
+      "scene": "Решение других людей неожиданно меняет твою повседневную жизнь.",
+      "options": [
+        "fear",
+        "anger",
+        "helplessness",
+        "confusion"
+      ],
+      "question": "Где заканчивается твоя ответственность и остаётся доступный выбор?"
+    },
+    {
+      "id": "emotion-scene-24",
+      "category": "changes",
+      "title": "Неожиданная свобода",
+      "scene": "Впервые за долгое время у тебя нет срочных обязательств.",
+      "options": [
+        "calm",
+        "joy",
+        "confusion",
+        "interest"
+      ],
+      "question": "Умеешь ли ты отдыхать без необходимости оправдывать отдых?"
+    },
+    {
+      "id": "emotion-scene-25",
+      "category": "inner",
+      "title": "Прокручиваешь разговор",
+      "scene": "Ты возвращаешься мыслями к сказанным вчера словам.",
+      "options": [
+        "guilt",
+        "shame",
+        "hurt",
+        "anxiety"
+      ],
+      "question": "Что можно сделать сейчас, а что уже осталось в прошлом?"
+    },
+    {
+      "id": "emotion-scene-26",
+      "category": "inner",
+      "title": "Непонятное состояние",
+      "scene": "С утра трудно объяснить, что происходит внутри, хотя ничего особенного не случилось.",
+      "options": [
+        "confusion",
+        "sadness",
+        "irritation",
+        "calm"
+      ],
+      "question": "Обязательно ли давать этому состоянию точное название прямо сейчас?"
+    },
+    {
+      "id": "emotion-scene-27",
+      "category": "inner",
+      "title": "Важный выбор",
+      "scene": "Два варианта кажутся равно значимыми, и решение не приходит.",
+      "options": [
+        "insecurity",
+        "anxiety",
+        "interest",
+        "helplessness"
+      ],
+      "question": "Какая информация действительно нужна, а какая не устранит неопределённость?"
+    },
+    {
+      "id": "emotion-scene-28",
+      "category": "inner",
+      "title": "Маленькая победа",
+      "scene": "Сегодня тебе удалось сделать то, что долго откладывал.",
+      "options": [
+        "pride",
+        "joy",
+        "gratitude",
+        "calm"
+      ],
+      "question": "Можешь ли ты признать свой шаг без сравнения с чужим темпом?"
+    },
+    {
+      "id": "emotion-scene-29",
+      "category": "inner",
+      "title": "Устал от сравнения",
+      "scene": "Ты провёл вечер в соцсетях и стал недоволен собой.",
+      "options": [
+        "envy",
+        "shame",
+        "sadness",
+        "irritation"
+      ],
+      "question": "Что в твоём восприятии изменилось после просмотра и что в действительности известно?"
+    },
+    {
+      "id": "emotion-scene-30",
+      "category": "inner",
+      "title": "Есть желание начать",
+      "scene": "Ты проснулся с идеей, которая кажется очень живой.",
+      "options": [
+        "inspiration",
+        "interest",
+        "joy",
+        "fear"
+      ],
+      "question": "Какое маленькое действие позволит проверить идею без поспешных обязательств?"
+    }
+  ]
+}
