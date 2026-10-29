@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\SelfDiscoveryTool;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SelfDiscoveryToolsSeeder extends Seeder
 {
@@ -17,8 +18,9 @@ class SelfDiscoveryToolsSeeder extends Seeder
             ['patterns','Язык повторений','Замечай сценарии','Взгляни на повторяющиеся ситуации и собственные решения.','repeat',50,true],
             ['mirror','Зеркало личности','Встречайся с собой','Вопросы для исследования привычек, потребностей и внутренних противоречий.','psychology',60,true],
         ];
-        foreach ($items as [$slug,$title,$subtitle,$description,$icon,$sort,$published]) {
-            $attributes = [
+        DB::transaction(function () use ($items): void {
+            foreach ($items as [$slug,$title,$subtitle,$description,$icon,$sort,$published]) {
+                $attributes = [
                 'title'=>$title,'subtitle'=>$subtitle,'description'=>$description,'icon'=>$icon,
                 'url'=>match ($slug) { 'numbers'=>'/numbers', 'emotions'=>'/explore/emotions', 'archetypes'=>'/explore/archetypes', 'dreams'=>'/explore/dreams', 'patterns'=>'/explore/patterns', 'mirror'=>'/explore/mirror', default=>null },
                 'sort'=>$sort,'is_published'=>$published,
@@ -30,6 +32,7 @@ class SelfDiscoveryToolsSeeder extends Seeder
             } else {
                 SelfDiscoveryTool::firstOrCreate(['slug' => $slug], $attributes);
             }
-        }
+            }
+        });
     }
 }
