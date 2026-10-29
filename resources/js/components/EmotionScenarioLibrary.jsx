@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@inertiajs/react';
 import atlas from '../../data/emotion-atlas.json';
 import scenarioData from '../../data/emotion-situations.json';
@@ -10,6 +10,10 @@ export default function EmotionScenarioLibrary() {
     const [expanded,setExpanded] = useState(false);
     const [selectedId,setSelectedId] = useState('');
     const [feelingSlug,setFeelingSlug] = useState('');
+    const selectedRef = useRef(null);
+    useEffect(() => {
+        if (selectedId) selectedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [selectedId]);
     const situations = useMemo(() => scenarioData.situations.filter(s => category === 'all' || s.category === category),[category]);
     const shown = expanded ? situations : situations.slice(0,9);
     const selected = situations.find(s => s.id === selectedId) || null;
@@ -32,7 +36,7 @@ export default function EmotionScenarioLibrary() {
         {situations.length>9 && <div className="mt-5 text-center">
             <button type="button" onClick={() => setExpanded(v=>!v)} className="rounded-xl border border-[#8c7247] px-5 py-3 text-sm text-[#f0c453] hover:border-[#f0c453]">{expanded?'Свернуть':'Показать все ('+situations.length+')'} →</button>
         </div>}
-        {selected && <div className="mt-7 rounded-3xl border border-[#b49351]/70 bg-[#211d15] p-5 sm:p-8" aria-live="polite">
+        {selected && <div ref={selectedRef} className="mt-7 scroll-mt-6 rounded-3xl border border-[#b49351]/70 bg-[#211d15] p-5 sm:p-8" aria-live="polite">
             <p className="text-xs uppercase tracking-widest text-[#f0c453]">Жизненная ситуация</p>
             <h4 className="mt-3 font-serif text-3xl">{selected.title}</h4>
             <p className="mt-4 text-lg leading-8 text-[#e2d6c4]">{selected.scene}</p>
