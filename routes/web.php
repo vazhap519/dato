@@ -58,7 +58,17 @@ Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controller
 Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton']);
 Route::post('/analytics/event', [\App\Http\Controllers\SiteAnalyticsController::class, 'store'])->middleware('throttle:120,1');
 Route::get('/explore', function () {
+    $copy = \App\Models\ExploreContentPage::query()->where('slug', 'shared')->value('copy') ?? [];
+    $images = [];
+    foreach (['numbers', 'emotions', 'dreams', 'archetypes', 'patterns', 'mirror'] as $slug) {
+        $path = $copy['card_image_'.$slug] ?? null;
+        if (is_string($path) && str_starts_with($path, 'explore/cards/')
+            && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            $images[$slug] = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+        }
+    }
     return Inertia::render('Explore', [
+        'cardImages' => $images,
         'tools' => \App\Models\SelfDiscoveryTool::query()
             ->where('is_published', true)
             ->whereNotNull('url')
