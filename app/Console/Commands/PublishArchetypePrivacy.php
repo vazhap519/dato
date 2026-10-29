@@ -45,9 +45,9 @@ class PublishArchetypePrivacy extends Command
             }
 
             $updated = str_replace($anchor, $notice."\n\n".$anchor, $doc->content);
-            $updated = preg_replace('/^Редакция 3\.0 · 28 октября 2026 года/mu',
-                'Редакция 3.1 · '.now()->translatedFormat('j F Y').' года', $updated, 1);
-            if (! str_contains($updated, $notice)) {
+            $updated = preg_replace('/^Редакция 3\\.0.*$/mu',
+                'Редакция 3.1 · '.now()->format('d.m.Y'), $updated, 1, $changed);
+            if ($changed !== 1 || ! str_contains($updated, $notice)) {
                 $this->error('Не удалось подготовить обновление. Политика не изменена.');
                 return self::FAILURE;
             }
