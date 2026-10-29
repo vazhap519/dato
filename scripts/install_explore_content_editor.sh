@@ -125,7 +125,7 @@ test -s public/build/manifest.json
 node scripts/verify-explore-cms.cjs
 
 echo "Создаём только две новые таблицы контента..."
-php artisan migrate --force
+php artisan migrate --path=database/migrations/2026_10_30_210000_create_explore_content_editor_tables.php --force
 
 echo "Заполняем редактор исходными текстами. Ранее внесённые изменения сохраняются..."
 php artisan db:seed --class=ExploreContentSeeder --force
