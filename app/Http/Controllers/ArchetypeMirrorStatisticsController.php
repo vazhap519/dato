@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 class ArchetypeMirrorStatisticsController extends Controller
 {
     /**
-     * Record only a voluntarily shared, completed 20-question survey.
+     * Automatically aggregate a completed 20-question survey.
      * Store aggregate counters, not individual responses or Telegram/site IDs.
      */
     public function store(Request $request)
@@ -20,7 +20,6 @@ class ArchetypeMirrorStatisticsController extends Controller
         $data = $request->validate([
             'version' => ['required', 'in:'.ArchetypeMirrorSurvey::VERSION],
             'submission_id' => ['required', 'uuid'],
-            'consent' => ['required', 'accepted'],
             'answers' => ['required', 'array', 'size:20'],
             'answers.*' => ['required', 'integer', 'between:0,3'],
         ]);
