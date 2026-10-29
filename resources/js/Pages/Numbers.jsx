@@ -86,10 +86,18 @@ export default function Numbers() {
     return (
         <div className="numbers-page min-h-screen bg-[#14120d] text-[#f8f4e9] selection:bg-[#e7b945]/30">
             <Head title={selected ? selected.number + ' — ' + selected.title + ' | Язык чисел' : 'Язык чисел — символы для самопознания'}><meta name="description" content="Авторские символические интерпретации чисел, вопросы к себе и практики внимания. Без предсказаний." /></Head>
-            <header className="border-b border-[#d9b65c]/15">
-                <div className="max-w-6xl mx-auto px-5 py-6 flex items-center justify-between gap-4">
+            <header className="border-b border-[#b99347]/25">
+                <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
                     <Link href="/" className="flex items-center gap-3" aria-label="На главную"><span className="sr-only">{settings?.site_name || "На главную"}</span>{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Логотип сайта"} className="h-10 w-auto max-w-[180px] object-contain" /> : <span className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</span>}</Link>
-                    <div className="flex items-center gap-3 sm:gap-6"><Link href="/explore" className="text-xs sm:text-sm text-[#e9d5a4] hover:text-[#f4c74c] transition-colors whitespace-nowrap">Исследуй себя</Link><Link href="/editoria" className="hidden sm:inline text-sm text-[#e9d5a4] hover:text-[#f4c74c] transition-colors whitespace-nowrap">Бесплатный практикум →</Link></div>
+                    <nav aria-label="Навигация по странице" className="flex flex-wrap items-center gap-4 text-sm">
+                        <a href="#number-search" className="text-[#e4c88c] hover:text-white">Поиск</a>
+                        <a href="#number-clock" className="text-[#e4c88c] hover:text-white">Часы</a>
+                        {!value ? <>
+                            <a href="#special" className="text-[#e4c88c] hover:text-white">Особые числа</a>
+                            <a href="#catalog" className="text-[#e4c88c] hover:text-white">Справочник</a>
+                        </> : <Link href="/numbers#catalog" className="text-[#e4c88c] hover:text-white">Все числа</Link>}
+                        <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
+                    </nav>
                 </div>
             </header>
             <main>
@@ -101,7 +109,7 @@ export default function Numbers() {
                     </div>
                     <div className="grid lg:grid-cols-[minmax(0,1fr)_240px] gap-4 lg:gap-x-5 items-start">
                         <div className="min-w-0 lg:col-start-1 lg:row-start-1">
-                            <div className="relative">
+                            <div className="relative scroll-mt-6">
                                 <label htmlFor="number-search" className="sr-only">Введите число</label>
                                 <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d5ab4a] text-xl">⌕</span>
                                 <input id="number-search" inputMode="numeric" pattern="[0-9]*" value={value}
@@ -111,7 +119,7 @@ export default function Numbers() {
                                 {value && <button type="button" aria-label="Очистить поиск" onClick={() => setValue('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a9a293] hover:text-white">×</button>}
                             </div>
                         </div>
-                        <aside className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
+                        <aside id="number-clock" className="scroll-mt-6 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
                             <p className="text-xs uppercase tracking-[0.14em] text-[#d5ab4a] mb-3">Числа на часах</p>
                             <div className="grid grid-cols-2 gap-2">
                                 {['24', '12'].map(format => (
@@ -162,7 +170,7 @@ export default function Numbers() {
                 </section>
                 {!value && (
                     <div className="max-w-5xl mx-auto px-5 pb-14 space-y-14">
-                        <section className="border-t border-[#d9b65c]/15 pt-10">
+                        <section id="special" className="scroll-mt-6 border-t border-[#d9b65c]/15 pt-10">
                             <div className="text-center mb-8">
                                 <p className="text-[#d5ab4a] text-xs tracking-[0.2em] uppercase mb-3">Особые сочетания</p>
                                 <h2 className="text-2xl md:text-3xl font-semibold mb-3">Повторяющиеся и зеркальные числа</h2>
@@ -178,7 +186,7 @@ export default function Numbers() {
                                 ))}
                             </div>
                         </section>
-                        <section id="catalog" className="border-t border-[#d9b65c]/15 pt-10">
+                        <section id="catalog" className="scroll-mt-6 border-t border-[#d9b65c]/15 pt-10">
                             <div className="text-center mb-8">
                                 <p className="text-[#d5ab4a] text-xs tracking-[0.2em] uppercase mb-3">Полный справочник</p>
                                 <h2 className="text-2xl md:text-3xl font-semibold mb-3">Все остальные числа от 1 до 999</h2>
