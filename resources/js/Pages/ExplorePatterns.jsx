@@ -118,6 +118,7 @@ export default function ExplorePatterns() {
             </div>
           </div>
           <p className="mt-6 text-sm leading-7 text-[#b6a88f]">Это варианты для самонаблюдения, а не установленные причины поведения. Хороший исход не нужно объявлять проблемой. При угрозе и принуждении приоритет — безопасность.</p>
+          <div className="mt-7"><ExplorePracticeInvitation tool="patterns" compact /></div>
           <div className="mt-7 flex flex-wrap gap-3"><button type="button" onClick={()=>setStep(1)} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">← Выбрать другой итог</button><button type="button" onClick={reset} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">Начать заново</button><Link href={'/explore/patterns/'+picked.slug} className="rounded-xl bg-[#f0c453] px-5 py-3 text-sm font-semibold text-[#21180b]">Изучить подробнее →</Link></div>
         </>}
        </div>
