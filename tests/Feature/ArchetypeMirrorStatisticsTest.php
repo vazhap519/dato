@@ -13,6 +13,8 @@ class ArchetypeMirrorStatisticsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // The shared Inertia middleware queries unrelated site content tables.
+        $this->withoutMiddleware(\App\Http\Middleware\HandleInertiaRequests::class);
 
         // Isolate only the new tables; no full production migrations are needed.
         Schema::create('archetypes', function (Blueprint $table) {
@@ -66,11 +68,11 @@ class ArchetypeMirrorStatisticsTest extends TestCase
     public function test_consent_is_required_and_invalid_responses_are_never_counted(): void
     {
         $endpoint = '/explore/archetypes/mirror/statistics';
-        $this->postJson($endpoint, $this->payload(['consent' => false]))->assertUnprocessable();
-        $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 19, 0)]))->assertUnprocessable();
-        $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, 4)]))->assertUnprocessable();
-        $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, true)]))->assertUnprocessable();
-        $this->postJson($endpoint, $this->payload(['version' => 'mirror-v2']))->assertUnprocessable();
+        $this->postJson($endpoint, $this->payload(['consent' => false]))->assertStatus(422);
+        $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 19, 0)]))->assertStatus(422);
+        $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, 4)]))->assertStatus(422);
+        $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, true)]))->assertStatus(422);
+        $this->postJson($endpoint, $this->payload(['version' => 'mirror-v2']))->assertStatus(422);
 
         $this->assertSame(0, DB::table('archetype_mirror_daily_totals')->count());
         $this->assertSame(0, DB::table('archetype_mirror_receipts')->count());
