@@ -93,6 +93,7 @@
         $comparison = $this->getComparison();
         $deviceConversions = $this->getDeviceConversions();
         $editoria = $this->tab === 'editoria' ? $this->getEditoriaDetails() : null;
+        $explore = $this->tab === 'explore' ? $this->getExploreFunnel() : null;
         $maxPage = max(1, (int) ($pages->first()->views ?? 0));
         $maxSource = max(1, (int) ($sources->first()->total ?? 0));
         $maxClick = max(1, (int) ($clicks->first()->total ?? 0));
@@ -113,7 +114,7 @@
         </div>
 
         <nav class="sa-tabs" aria-label="Разделы аналитики">
-            @foreach (['overview'=>'Обзор','visitors'=>'Посетители','conversions'=>'Конверсии','editoria'=>'Практикум /editoria','sources'=>'Источники','history'=>'История'] as $key => $label)
+            @foreach (['overview'=>'Обзор','visitors'=>'Посетители','conversions'=>'Конверсии','explore'=>'Самопознание','editoria'=>'Практикум /editoria','sources'=>'Источники','history'=>'История'] as $key => $label)
                 <button type="button" wire:click="$set('tab', '{{ $key }}')" class="sa-tab {{ $this->tab === $key ? 'active' : '' }}">{{ $label }}</button>
             @endforeach
             <button type="button" wire:click="exportCsv" class="sa-tab" style="margin-left:auto">↓ Скачать CSV</button>
@@ -166,6 +167,38 @@
                         <div class="sa-muted">Ранее: {{ $comparison[$key]['previous'] }} · {{ $comparison[$key]['change'] === null ? 'нет базы для сравнения' : (($comparison[$key]['change'] > 0 ? '+' : '') . $comparison[$key]['change'] . '%') }}</div>
                     </div>
                 @endforeach
+            </div>
+        </div>
+        @endif
+        @if ($this->tab === 'explore')
+        <div class="sa-card">
+            <h3 class="sa-section-title">Исследуй себя — воронка взаимодействия</h3>
+            <p class="sa-muted">Подсчитываются сеансы вкладок. Ответы, результаты и другие личные данные исследований не сохраняются в аналитике. Переход на практикум не означает регистрацию.</p>
+            <div class="sa-stats" style="margin-top:18px">
+                <div><div class="sa-stat-label">Посетили страницы самопознания</div><div class="sa-stat-value">{{ $explore['views'] }}</div></div>
+                <div><div class="sa-stat-label">Начали исследование</div><div class="sa-stat-value">{{ collect($explore['tools'])->sum('started') }}</div></div>
+                <div><div class="sa-stat-label">Завершили исследование</div><div class="sa-stat-value">{{ collect($explore['tools'])->sum('completed') }}</div></div>
+                <div><div class="sa-stat-label">Перешли к практикуму</div><div class="sa-stat-value">{{ collect($explore['tools'])->sum('practice') }}</div></div>
+            </div>
+        </div>
+        <div class="sa-card">
+            <h3 class="sa-section-title">По направлениям</h3>
+            <p class="sa-muted">Начало, завершение и переход фиксируются по событиям взаимодействия. Один сеанс может исследовать несколько направлений.</p>
+            <div class="sa-table-wrap">
+                <table class="sa-table">
+                    <thead><tr><th>Инструмент</th><th>Начали</th><th>Завершили</th><th>Завершение</th><th>Практикум</th></tr></thead>
+                    <tbody>
+                    @foreach ($explore['tools'] as $tool)
+                        <tr>
+                            <td>{{ $tool['title'] }}</td>
+                            <td>{{ $tool['started'] }}</td>
+                            <td>{{ $tool['completed'] }}</td>
+                            <td>{{ $tool['completion_rate'] }}%</td>
+                            <td>{{ $tool['practice'] }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
         @endif
