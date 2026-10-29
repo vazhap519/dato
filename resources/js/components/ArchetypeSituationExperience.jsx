@@ -53,6 +53,7 @@ export default function ArchetypeSituationExperience({ situation, archetypes = [
                 <p className="mt-2 text-sm leading-7 text-[#e7dbca]">{guide?.questions?.[0] || role?.question || 'Что именно эта реакция помогает мне получить или избежать?'}</p>
                 <p className="mt-3 text-xs leading-6 text-[#a99d88]">Можно выбрать другой вариант и сравнить реакции. Ответы здесь не сохраняются.</p>
             </div>
+            {featured && <div className="mt-6"><ExplorePracticeInvitation tool="archetypes" compact /></div>}
         </div> : <p className="px-5 pb-6 text-sm text-[#a99d88] sm:px-8">После выбора появится небольшое объяснение — не оценка и не диагноз, а вопрос к собственному опыту.</p>}
     </section>;
 }
