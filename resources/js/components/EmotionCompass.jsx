@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import atlasBase from '../../data/emotion-atlas.json'
 import { liveExploreDocument } from '../lib/exploreCms.js';
+import { useExploreJourney, ExplorePracticeInvitation } from './ExploreJourney.jsx';
 
 const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
@@ -17,6 +18,7 @@ const button = (active) => 'rounded-xl border px-4 py-3 text-left text-sm leadin
 export default function EmotionCompass({ onExploreEmotion }) {
     const starts = [{ id: 'any', title: 'Все состояния' }, ...groups.map(group => ({ id: group.id, title: group.title }))];
     const [phase, setPhase] = useState(0);
+    useExploreJourney('emotions', phase > 0, phase === 2);
     const [group, setGroup] = useState('any');
     const [emotionSlug, setEmotionSlug] = useState('');
     const [intensity, setIntensity] = useState(5);
@@ -121,6 +123,7 @@ export default function EmotionCompass({ onExploreEmotion }) {
                     <p>Ты отметил: {[trigger, ...sensationsSelected].filter(Boolean).join(' · ')}.</p>
                     <p>Эти наблюдения помогают задать вопросы, но не позволяют установить причину чувства по одному признаку.</p>
                 </div>}
+                <div className="mt-7"><ExplorePracticeInvitation tool="emotions" compact /></div>
                 <div className="mt-7 flex flex-wrap gap-3">
                     <button type="button" onClick={() => setPhase(1)} className="rounded-xl border border-[#9c7d4b] px-5 py-3 text-sm text-[#f0c453]">← Вернуться к ощущениям</button>
                     <button type="button" onClick={reset} className="rounded-xl border border-[#9c7d4b] px-5 py-3 text-sm text-[#f0c453]">Исследовать другое чувство</button>
