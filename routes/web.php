@@ -85,8 +85,6 @@ Route::get('/explore/archetypes/mirror', function () {
         'archetypes' => \App\Models\Archetype::query()->where('is_published', true)->orderBy('sort')->orderBy('id')->get(['id','slug','title','description','strength','shadow','question']),
     ]);
 })->name('explore.archetypes.mirror');
-Route::get('/explore/archetypes/journal', fn () => Inertia::render('ExploreArchetypeJournal'))
-    ->name('explore.archetypes.journal');
 Route::get('/explore/archetypes/{slug}', function (string $slug) {
     $archetype = \App\Models\Archetype::query()
         ->where('is_published', true)
