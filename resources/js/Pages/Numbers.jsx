@@ -95,7 +95,7 @@ export default function Numbers() {
                         {!value ? <>
                             <a href="#special" className="text-[#e4c88c] hover:text-white">Особые числа</a>
                             <a href="#catalog" className="text-[#e4c88c] hover:text-white">Справочник</a>
-                        </> : <Link href="/numbers#catalog" className="text-[#e4c88c] hover:text-white">Все числа</Link>}
+                        </> : <Link href="/numbers#catalog" onClick={() => setValue('')} className="text-[#e4c88c] hover:text-white">Все числа</Link>}
                         <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
                     </nav>
                 </div>
