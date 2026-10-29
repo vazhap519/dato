@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import guidesDefinition from '../../data/archetype-guides.json';
+import guidesDefinitionBase from '../../data/archetype-guides.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const guidesDefinition = liveExploreDocument('archetype-guides', guidesDefinitionBase);
 
 const guides = guidesDefinition.guides;
 const eyebrow = 'text-xs font-semibold uppercase tracking-[.18em] text-[#e5bc62]';
