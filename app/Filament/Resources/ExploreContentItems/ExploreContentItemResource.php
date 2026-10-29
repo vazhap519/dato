@@ -47,7 +47,7 @@ class ExploreContentItemResource extends Resource
     {
         $fields = [];
         foreach ($data as $key => $value) {
-            $path = $prefix . '.' . $key;
+            $path = $prefix === '' ? (string) $key : $prefix . '.' . $key;
             $label = (string) $key;
             if (is_array($value)) {
                 if (array_is_list($value)) {
