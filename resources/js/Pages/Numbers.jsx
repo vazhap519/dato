@@ -84,7 +84,7 @@ export default function Numbers() {
         ['Практика', meaning?.practice],
     ];
     return (
-        <div className="min-h-screen bg-[#14120d] text-[#f8f4e9] selection:bg-[#e7b945]/30">
+        <div className="numbers-page min-h-screen bg-[#14120d] text-[#f8f4e9] selection:bg-[#e7b945]/30">
             <Head title={selected ? selected.number + ' — ' + selected.title + ' | Язык чисел' : 'Язык чисел — символы для самопознания'}><meta name="description" content="Авторские символические интерпретации чисел, вопросы к себе и практики внимания. Без предсказаний." /></Head>
             <header className="border-b border-[#d9b65c]/15">
                 <div className="max-w-6xl mx-auto px-5 py-6 flex items-center justify-between gap-4">
