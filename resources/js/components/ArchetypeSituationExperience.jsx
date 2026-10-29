@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import guidesDefinitionBase from '../../data/archetype-guides.json'
 import { liveExploreDocument } from '../lib/exploreCms.js';
+import { useExploreJourney, ExplorePracticeInvitation } from './ExploreJourney.jsx';
 
 const guidesDefinition = liveExploreDocument('archetype-guides', guidesDefinitionBase);
 
@@ -9,6 +10,7 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[.18em] text-[#e5bc62]
 
 export default function ArchetypeSituationExperience({ situation, archetypes = [], featured = false }) {
     const [choice, setChoice] = useState(null);
+    useExploreJourney('archetypes', choice !== null, choice !== null);
     const option = choice === null ? null : situation.options[choice];
     const role = option && archetypes.find(item => item.slug === option.slug);
     const guide = option && guides[option.slug];
