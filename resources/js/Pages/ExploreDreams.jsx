@@ -33,7 +33,7 @@ export default function ExploreDreams() {
         </Head>
         <header className="relative z-40 border-b border-[#b99347]/25">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
-                <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt={settings?.site_name||'Arutyun'} className="h-10 max-w-[160px] object-contain" />:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
+                <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt={settings?.site_name||'Arutyun'} className="h-10 max-w-[110px] sm:max-w-[160px] object-contain" />:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
                 <ExploreSectionNavigation items={[
                     { label: 'Исследовать сон', href: '#explorer', icon: 'bedtime' },
                     { label: 'Образы', href: '#symbols', icon: 'auto_stories' },
