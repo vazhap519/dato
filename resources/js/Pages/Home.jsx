@@ -52,6 +52,7 @@ import HomeAbout from "@/components/HomePageComponents/HomeAbout.jsx";
 import HomeReviews from "@/components/HomePageComponents/HomeReviews.jsx";
 import HomeEnd from "@/components/HomePageComponents/HomeEnd.jsx";
 import HomePractice from "@/components/HomePageComponents/HomePractice.jsx";
+import ExploreInvitation from "@/components/ExploreInvitation.jsx";
 import { usePage } from "@inertiajs/react";
 import Seo from "@/components/Seo.jsx";
 
@@ -89,6 +90,8 @@ export default function Home() {
                 <section id={getId(2, "about")} className="scroll-mt-24">
                     <HomeAbout about={about} />
                 </section>
+
+                <ExploreInvitation />
 
                 {practiceSection?.start_enabled !== false && <section id="start" className="scroll-mt-24 py-10 md:py-24 px-6">
                     <div className="max-w-5xl mx-auto rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/10 via-card-dark to-background-dark px-5 py-8 md:px-16 md:py-16 text-center">
