@@ -3,6 +3,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import SiteAnalytics from './components/SiteAnalytics.jsx'
+import { setExploreCms } from './lib/exploreCms.js'
 
 function applyPageTheme(page) {
     const isNumbers = page?.component === 'Numbers';
@@ -19,6 +20,7 @@ function applyPageTheme(page) {
 try {
     const page = JSON.parse(document.getElementById('app')?.dataset?.page || '{}');
     applyPageTheme(page);
+    setExploreCms(page);
 } catch (_) {
     document.documentElement.classList.add('dark');
 }
@@ -30,6 +32,7 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         applyPageTheme(props.initialPage);
+        setExploreCms(props.initialPage);
         const media = window.matchMedia?.('(prefers-color-scheme: light)');
         const onSystemChange = () => applyPageTheme(window.__arutyunCurrentPage);
         window.__arutyunCurrentPage = props.initialPage;
@@ -37,6 +40,7 @@ createInertiaApp({
         router.on('navigate', event => {
             window.__arutyunCurrentPage = event.detail.page;
             applyPageTheme(event.detail.page);
+            setExploreCms(event.detail.page);
         });
         createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /></>);
     },
