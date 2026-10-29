@@ -10,7 +10,7 @@ class SiteAnalyticsController extends Controller
         $data = $request->validate([
             'visitor_id' => ['required', 'uuid'],
             'session_id' => ['required', 'uuid'],
-            'event' => ['required', 'in:page_view,cta_click,link_click,scroll_depth,engagement'],
+            'event' => ['required', 'in:page_view,cta_click,link_click,scroll_depth,engagement,explore_start,explore_complete,explore_practice'],
             'path' => ['required', 'string', 'max:500', 'starts_with:/'],
             'element' => ['nullable', 'string', 'max:120'],
             'referrer_host' => ['nullable', 'string', 'max:255'],
@@ -18,6 +18,10 @@ class SiteAnalyticsController extends Controller
             'utm_medium' => ['nullable', 'string', 'max:120'],
             'utm_campaign' => ['nullable', 'string', 'max:120'],
         ]);
+        if (str_starts_with($data['event'], 'explore_')
+            && ! (str_starts_with($data['path'], '/explore/') || $data['path'] === '/numbers')) {
+            return response()->noContent();
+        }
         $agent = Str::lower($request->userAgent() ?? '');
         $browser = str_contains($agent, 'edg/') ? 'Edge' : (str_contains($agent, 'firefox/') ? 'Firefox' : (str_contains($agent, 'chrome/') ? 'Chrome' : (str_contains($agent, 'safari/') ? 'Safari' : 'Other')));
         $device = preg_match('/mobile|android|iphone/', $agent) ? 'mobile' : (str_contains($agent, 'ipad') || str_contains($agent, 'tablet') ? 'tablet' : 'desktop');
