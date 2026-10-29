@@ -1,6 +1,9 @@
 import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import data from '../../data/dream-atlas.json';
+import dataBase from '../../data/dream-atlas.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const data = liveExploreDocument('dream-atlas', dataBase);
 
 const symbolMap=Object.fromEntries(data.symbols.map(x=>[x.slug,x]));
 const kicker='text-xs font-semibold uppercase tracking-[.17em] text-[#f0c453]';
