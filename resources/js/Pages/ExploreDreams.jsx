@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import dataBase from '../../data/dream-atlas.json'
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { useExploreJourney, ExplorePracticeInvitation } from '../components/ExploreJourney.jsx';
 import { liveExploreDocument } from '../lib/exploreCms.js';
 
 const data = liveExploreDocument('dream-atlas', dataBase);
@@ -19,6 +20,7 @@ export default function ExploreDreams() {
     const [felt,setFelt] = useState('');
     const [connection,setConnection] = useState('');
     const [stage,setStage] = useState(0);
+    useExploreJourney('dreams', stage > 0, stage === 2);
     const [group,setGroup] = useState('all');
     const [query,setQuery] = useState('');
     const [expanded,setExpanded] = useState(false);
