@@ -8,6 +8,7 @@ import EmotionNamingHelper from '../components/EmotionNamingHelper';
 import EmotionLayersExplorer from '../components/EmotionLayersExplorer';
 import EmotionScenarioLibrary from '../components/EmotionScenarioLibrary';
 import EmotionPracticeLibrary from '../components/EmotionPracticeLibrary';
+import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
 
 const groups = atlas.groups;
 const emotions = atlas.emotions;
@@ -39,16 +40,18 @@ export default function ExploreEmotions() {
         <Head title="Язык эмоций — исследуй чувства, ситуации и внимание — Arutyun">
             <meta name="description" content="24 эмоции, эмоциональный компас, 30 жизненных ситуаций и 12 коротких практик. Исследуй своё состояние без регистрации и сохранения ответов." />
         </Head>
-        <header className="border-b border-[#b99347]/25">
-            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+        <header className="relative z-40 border-b border-[#b99347]/25">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
                 <Link href="/" aria-label="На главную">{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || 'Arutyun'} className="h-10 max-w-[160px] object-contain" /> : <span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
-                <nav aria-label="Навигация по странице" className="flex flex-wrap gap-4 text-sm">
-                    <a className="text-[#e4c88c] hover:text-white" href="#compass">Компас</a>
-                    <a className="text-[#e4c88c] hover:text-white" href="#dictionary">Словарь</a>
-                    <a className="text-[#e4c88c] hover:text-white" href="#situations">Ситуации</a>
-                    <a className="text-[#e4c88c] hover:text-white" href="#practices">Практики</a>
-                    <Link className="text-[#b2a38b] hover:text-white" href="/explore">Все направления →</Link>
-                </nav>
+                <ExploreSectionNavigation items={[
+                    { label: 'Компас', href: '#compass', icon: 'explore' },
+                    { label: 'Словарь эмоций', href: '#dictionary', icon: 'menu_book' },
+                    { label: 'Когда чувство непонятно', href: '#naming', icon: 'help_outline' },
+                    { label: 'Смешанные чувства', href: '#layers', icon: 'layers' },
+                    { label: 'Ситуации', href: '#situations', icon: 'forum' },
+                    { label: 'Практики', href: '#practices', icon: 'spa' },
+                    { label: 'Все направления', href: '/explore', icon: 'apps', catalog: true },
+                ]} />
             </div>
         </header>
         <main className="mx-auto max-w-6xl px-5 pb-20 pt-12 sm:pt-16">
