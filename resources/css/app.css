@@ -202,3 +202,75 @@ html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #c99b45 !importan
 html.light .numbers-page [class*="text-[#19140b]"] { color: #211b12 !important; }
 html.light .arutyun-theme-switcher { background: #ffffff; color: #343a3b; border-color: #d9d9d4; }
 html.light .arutyun-theme-switcher option { background: #ffffff; color: #343a3b; }
+
+/* Daylight contrast: clear affordances matching the dark theme's hierarchy. */
+html.light .numbers-page {
+    --day-border: #b8a27f;
+    --day-ink: #202524;
+    --day-muted: #454e4d;
+    --day-accent: #765016;
+}
+html.light .numbers-page .number-special-card {
+    background: #fffefa !important;
+    border: 1.5px solid var(--day-border) !important;
+    box-shadow: 0 2px 0 rgba(74, 53, 26, .055), 0 4px 14px rgba(40, 38, 30, .055);
+}
+html.light .numbers-page .number-special-card__number { color: var(--day-accent) !important; }
+html.light .numbers-page .number-special-card__title { color: var(--day-ink) !important; font-weight: 500; }
+html.light .numbers-page .number-catalog-card {
+    background: #fffefa !important;
+    border: 1.5px solid #c1af91 !important;
+    box-shadow: 0 1px 2px rgba(40, 38, 30, .06);
+}
+html.light .numbers-page .number-catalog-card:hover,
+html.light .numbers-page .number-catalog-card:focus-visible,
+html.light .numbers-page .number-special-card:hover,
+html.light .numbers-page .number-special-card:focus-visible {
+    background: #f6ead4 !important;
+    border-color: #815a21 !important;
+    box-shadow: 0 5px 18px rgba(65, 45, 20, .14);
+}
+html.light .numbers-page .number-catalog-card .font-serif { color: #765016 !important; font-weight: 600; }
+html.light .numbers-page .number-range-link {
+    border: 1px solid #b7a482 !important;
+    background: #fffefa;
+    color: #624718 !important;
+    font-weight: 600;
+}
+html.light .numbers-page .number-range-link:hover,
+html.light .numbers-page .number-range-link:focus-visible {
+    border-color: #765016 !important;
+    background: #f3e5c9 !important;
+}
+html.light .numbers-page .number-range-link[class*="bg-[#f0c453]"] {
+    background: #765016 !important;
+    color: #fff !important;
+    border-color: #765016 !important;
+}
+html.light .numbers-page .number-clock-button {
+    background: #fdf9f1 !important;
+    border: 1.5px solid #b9a27d !important;
+}
+html.light .numbers-page .number-clock-button:hover,
+html.light .numbers-page .number-clock-button:focus-visible {
+    background: #f1e2c5 !important;
+    border-color: #765016 !important;
+}
+html.light .numbers-page .numbers-cta {
+    background: #fffefa !important;
+    border: 1.5px solid #b8a27f !important;
+}
+html.light .numbers-page .numbers-cta-button {
+    background: #765016 !important;
+    color: #fff !important;
+}
+html.light .numbers-page .numbers-cta-button:hover,
+html.light .numbers-page .numbers-cta-button:focus-visible { background: #55380f !important; }
+html.light .numbers-page [class*="text-[#a9a293]"],
+html.light .numbers-page [class*="text-[#bdb4a3]"],
+html.light .numbers-page [class*="text-[#bcb2a0]"],
+html.light .numbers-page [class*="text-[#aaa393]"],
+html.light .numbers-page [class*="text-[#8f887a]"] { color: var(--day-muted) !important; }
+html.light .numbers-page [class*="border-[#d9b65c]"] { border-color: #b7aa94 !important; }
+html.light .numbers-page input { border: 1.5px solid #aa946e !important; }
+html.light .numbers-page input:focus-visible { outline: 2px solid #956a2a; outline-offset: 1px; }
