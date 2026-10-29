@@ -18,11 +18,18 @@ class SelfDiscoveryToolsSeeder extends Seeder
             ['mirror','Зеркало личности','Встречайся с собой','Вопросы для исследования привычек, потребностей и внутренних противоречий.','psychology',60,false],
         ];
         foreach ($items as [$slug,$title,$subtitle,$description,$icon,$sort,$published]) {
-            SelfDiscoveryTool::firstOrCreate(['slug' => $slug], [
+            $attributes = [
                 'title'=>$title,'subtitle'=>$subtitle,'description'=>$description,'icon'=>$icon,
                 'url'=>match ($slug) { 'numbers'=>'/numbers', 'emotions'=>'/explore/emotions', 'archetypes'=>'/explore/archetypes', default=>null },
                 'sort'=>$sort,'is_published'=>$published,
-            ]);
+            ];
+            if ($slug === 'archetypes') {
+                // Activate the new working route even when the directory was seeded earlier.
+                $tool = SelfDiscoveryTool::firstOrCreate(['slug' => $slug], $attributes);
+                $tool->update(['url' => '/explore/archetypes', 'is_published' => true]);
+            } else {
+                SelfDiscoveryTool::firstOrCreate(['slug' => $slug], $attributes);
+            }
         }
     }
 }
