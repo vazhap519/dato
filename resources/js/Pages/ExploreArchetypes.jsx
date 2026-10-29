@@ -21,6 +21,15 @@ export default function ExploreArchetypes() {
             <p className="text-xs tracking-[.2em] uppercase text-[#f0c453]">Пространство самопознания</p>
             <h1 className="mt-3 font-serif text-4xl sm:text-5xl">Язык <span className="italic text-[#f0c453]">архетипов</span></h1>
             <p className="mt-5 max-w-3xl leading-7 text-[#c4b9a6]">В разных ситуациях мы становимся защитниками, искателями, спасателями или наблюдателями. Это не неизменные типы личности, а образы привычных способов действовать. Выбери роль, которую замечаешь в себе сейчас.</p>
+            <section className="mt-10 rounded-3xl border border-[#c9a04b]/70 bg-gradient-to-br from-[#30251a] to-[#1d1913] p-6 sm:p-9">
+                <p className="text-xs uppercase tracking-[.2em] text-[#f0c453]">Начни с себя</p>
+                <h2 className="mt-3 font-serif text-3xl sm:text-4xl">Зеркало архетипов</h2>
+                <p className="mt-4 max-w-2xl leading-7 text-[#e0d5c3]">20 жизненных ситуаций, в которых проявляются наши привычные роли. Выбери реакции, которые действительно тебе близки, и увидь свою персональную карту восьми архетипов.</p>
+                <div className="mt-6 flex flex-wrap items-center gap-4">
+                    <Link href="/explore/archetypes/mirror" className="inline-block rounded-xl bg-[#f0c453] px-6 py-3 font-semibold text-[#21180b] transition hover:bg-[#ffda7b]">Пройти исследование →</Link>
+                    <span className="text-sm text-[#c4b9a6]">20 ситуаций · около 7 минут · бесплатно</span>
+                </div>
+            </section>
             <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Выбери внутреннюю роль">
                 {archetypes.map(item => <button key={item.id} type="button" aria-pressed={selected === item.id} onClick={() => setSelected(item.id)}
                     className={`min-h-[160px] rounded-2xl border p-5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] ${selected === item.id ? 'bg-[#392b17] border-[#f0c453]' : 'bg-[#211d15] border-[#876b3b]/60 hover:border-[#f0c453] hover:bg-[#2b2419]'}`}>
