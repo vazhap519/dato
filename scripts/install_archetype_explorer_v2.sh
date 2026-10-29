@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Safe selective deploy for the expanded archetype explorer.
+# Safe selective deploy for the expanded archetype explorer without a personal journal.
 # Does not touch .env, the database, the bot or unrelated local files.
 set -Eeuo pipefail
 
@@ -12,12 +12,14 @@ FILES=(
     "resources/js/Pages/ExploreArchetypes.jsx"
     "resources/js/Pages/ExploreArchetypeMirror.jsx"
     "resources/js/Pages/ExploreArchetypeDetail.jsx"
-    "resources/js/Pages/ExploreArchetypeJournal.jsx"
     "resources/js/components/ArchetypeSituationExperience.jsx"
-    "resources/js/components/ArchetypeJournalPanel.jsx"
-    "resources/js/lib/archetypeJournal.js"
     "resources/data/archetype-guides.json"
     "resources/data/archetype-situations.json"
+)
+REMOVE_FILES=(
+    "resources/js/Pages/ExploreArchetypeJournal.jsx"
+    "resources/js/components/ArchetypeJournalPanel.jsx"
+    "resources/js/lib/archetypeJournal.js"
 )
 printf 'Резервная копия: %s\n' "$BACKUP"
 printf 'Подготавливаем файлы из %s...\n' "$REF"
@@ -51,6 +53,12 @@ for file in "${FILES[@]}"; do
         printf '%s\n' "$file" >> "$BACKUP/new-files.txt"
     fi
 done
+for file in "${REMOVE_FILES[@]}"; do
+    if [ -f "$file" ]; then
+        mkdir -p "$BACKUP/existing/$(dirname "$file")"
+        cp -a "$file" "$BACKUP/existing/$file"
+    fi
+done
 if [ -d public/build ]; then
     cp -a public/build "$BACKUP/build"
 fi
@@ -64,6 +72,12 @@ rollback() {
             cp -a "$BACKUP/existing/$file" "$file"
         else
             rm -f -- "$file"
+        fi
+    done
+    for file in "${REMOVE_FILES[@]}"; do
+        if [ -f "$BACKUP/existing/$file" ]; then
+            mkdir -p "$(dirname "$file")"
+            cp -a "$BACKUP/existing/$file" "$file"
         fi
     done
     if [ -d "$BACKUP/build" ]; then
@@ -83,6 +97,10 @@ for file in "${FILES[@]}"; do
     cp -a "$BACKUP/staged/$file" "$file"
 done
 
+for file in "${REMOVE_FILES[@]}"; do
+    rm -f -- "$file"
+done
+
 echo 'Собираем интерфейс (при отключении SSH продолжается в tmux)...'
 NODE_OPTIONS="--max-old-space-size=768" npm run build
 php artisan optimize:clear
@@ -90,4 +108,4 @@ php artisan route:list --path=explore/archetypes
 
 trap - ERR
 printf '\nУстановка завершена. Копия старой версии: %s\n' "$BACKUP"
-printf 'Проверьте /explore/archetypes, /explore/archetypes/journal и карточки архетипов.\n'
+printf 'Проверьте /explore/archetypes, /explore/archetypes/mirror и страницы архетипов.\n'
