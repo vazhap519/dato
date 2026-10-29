@@ -258,7 +258,7 @@ class SiteAnalytics extends Page
         $views = $this->events()
             ->where('event', 'page_view')
             ->where(function ($query) {
-                $query->where('path', '/explore')->orWhere('path', '/numbers')
+                $query->where('path', '/explore')->orWhere('path', '/numbers')->orWhere('path', 'like', '/numbers/%')
                     ->orWhere('path', 'like', '/explore/%');
             })->distinct()->count('session_id');
         return ['views' => $views, 'tools' => $rows];
