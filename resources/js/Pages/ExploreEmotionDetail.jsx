@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import atlas from '../../data/emotion-atlas.json';
+import atlasBase from '../../data/emotion-atlas.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
 const all = atlas.emotions;
 const bySlug = Object.fromEntries(all.map(item => [item.slug,item]));
