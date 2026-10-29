@@ -24,8 +24,9 @@ export default function Navigation() {
             if (path === "/" || label.includes("главная")) return 0;
             if (label.includes("консультац") || path.includes("personal")) return 1;
             if (label.includes("сообществ") || label.includes("групп")) return 2;
-            if (label.includes("услови") || label.includes("правов")) return 3;
-            return 4;
+            if (path.includes("/explore") || label.includes("исследуй себя")) return 3;
+            if (label.includes("услови") || label.includes("правов")) return 4;
+            return 5;
         };
         return rank(a) - rank(b);
     });
@@ -43,7 +44,7 @@ export default function Navigation() {
 
     return (
         <>
-        <nav aria-label="Основная навигация" className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.035] px-2 py-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md">
+        <nav aria-label="Основная навигация" className="hidden xl:flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.035] px-2 py-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md">
             {orderedNavigation.map((item) => {
                 const path = new URL(item.href, "https://arutyun.me").pathname.replace(/\/$/, "") || "/";
                 const currentPath = typeof window !== "undefined" ? (window.location.pathname.replace(/\/$/, "") || "/") : "";
@@ -61,7 +62,7 @@ export default function Navigation() {
                 );
             })}
         </nav>
-        <div className="relative md:hidden" ref={menuRef}>
+        <div className="relative xl:hidden" ref={menuRef}>
             <button type="button" aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={mobileOpen} aria-controls="mobile-site-navigation" onClick={() => setMobileOpen(!mobileOpen)} className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
                 <span className="material-symbols-outlined text-[25px]" aria-hidden="true">{mobileOpen ? "close" : "menu"}</span>
             </button>
