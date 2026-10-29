@@ -1,14 +1,19 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import atlas from '../../data/emotion-atlas.json';
-import sceneData from '../../data/emotion-situations.json';
-import practiceData from '../../data/emotion-practices.json';
+import atlasBase from '../../data/emotion-atlas.json'
+import sceneDataBase from '../../data/emotion-situations.json'
+import practiceDataBase from '../../data/emotion-practices.json'
 import EmotionCompass from '../components/EmotionCompass';
 import EmotionNamingHelper from '../components/EmotionNamingHelper';
 import EmotionLayersExplorer from '../components/EmotionLayersExplorer';
 import EmotionScenarioLibrary from '../components/EmotionScenarioLibrary';
 import EmotionPracticeLibrary from '../components/EmotionPracticeLibrary';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const atlas = liveExploreDocument('emotion-atlas', atlasBase);
+const sceneData = liveExploreDocument('emotion-situations', sceneDataBase);
+const practiceData = liveExploreDocument('emotion-practices', practiceDataBase);
 
 const groups = atlas.groups;
 const emotions = atlas.emotions;
