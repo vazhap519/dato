@@ -54,7 +54,7 @@ export default function EmotionCompass({ onExploreEmotion }) {
                 <h4 className="font-serif text-2xl">Какое состояние ближе всего?</h4>
                 <p className="mt-2 text-sm text-[#a99d88]">Можно выбрать приблизительное название. Чувства могут смешиваться.</p>
                 <div className="mt-5 flex flex-wrap gap-2" aria-label="Группы эмоций">
-                    {starts.map(item => <button key={item.id} type="button" aria-pressed={group === item.id} onClick={() => setGroup(item.id)}
+                    {starts.map(item => <button key={item.id} type="button" aria-pressed={group === item.id} onClick={() => { setGroup(item.id); setEmotionSlug(''); }}
                         className={'rounded-full border px-3 py-2 text-xs transition ' + (group === item.id ? 'border-[#f0c453] bg-[#3c2c18] text-[#fff4d5]' : 'border-[#806638]/60 text-[#c4b9a6] hover:border-[#f0c453]')}>{item.title}</button>)}
                 </div>
                 <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
