@@ -10,6 +10,7 @@ FILES=(
   "app/Http/Middleware/HandleInertiaRequests.php"
   "app/Http/Controllers/SiteAnalyticsController.php"
   "app/Filament/Pages/SiteAnalytics.php"
+  "app/Console/Commands/RemapExploreCopy.php"
   "resources/views/filament/pages/site-analytics.blade.php"
   "resources/js/components/headerComponents/Navigation.jsx"
   "resources/js/components/SiteAnalytics.jsx"
@@ -45,6 +46,10 @@ done
 if [ -d public/build ]; then
   cp -a public/build "$BACKUP/build"
 fi
+if [ -f resources/data/explore-copy-manifest.json ]; then
+  mkdir -p "$BACKUP/original/resources/data"
+  cp -a resources/data/explore-copy-manifest.json "$BACKUP/original/resources/data/explore-copy-manifest.json"
+fi
 
 rollback() {
   status=$?
@@ -57,6 +62,9 @@ rollback() {
       rm -f "$file"
     fi
   done
+  if [ -f "$BACKUP/original/resources/data/explore-copy-manifest.json" ]; then
+    cp -a "$BACKUP/original/resources/data/explore-copy-manifest.json" resources/data/explore-copy-manifest.json
+  fi
   if [ -d "$BACKUP/build" ]; then
     rm -rf public/build
     cp -a "$BACKUP/build" public/build
@@ -72,9 +80,17 @@ for file in "${FILES[@]}"; do
   cp -a "$BACKUP/staged/$file" "$file"
 done
 
+echo "Проверяем ключи контент-редактора..."
+node scripts/generate-explore-copy-manifest.cjs
+node scripts/verify-explore-cms.cjs
 echo "Собираем новую версию..."
 NODE_OPTIONS="--max-old-space-size=768" npm run build
 test -s public/build/manifest.json
+if [ -f "$BACKUP/original/resources/data/explore-copy-manifest.json" ]; then
+  echo "Сохраняем уже отредактированные тексты..."
+  php artisan explore:remap-copy "$BACKUP/original/resources/data/explore-copy-manifest.json" resources/data/explore-copy-manifest.json
+fi
+php artisan db:seed --class=ExploreContentSeeder --force
 echo "Очищаем кеш Laravel..."
 php artisan optimize:clear
 
