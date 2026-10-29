@@ -1,30 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import guidesDefinition from '../../data/archetype-guides.json';
 import situationsDefinition from '../../data/archetype-situations.json';
 import ArchetypeSituationExperience from '../components/ArchetypeSituationExperience';
-import ArchetypeJournalPanel from '../components/ArchetypeJournalPanel';
-import { dailySituationIndex, readJournal } from '../lib/archetypeJournal';
+
 
 const guides = guidesDefinition.guides;
 const situations = situationsDefinition.situations;
 const categories = ['все', ...situationsDefinition.categories];
 const frame = 'rounded-3xl border border-[#806638]/70 bg-[#211d15]';
 const kicker = 'text-xs font-semibold uppercase tracking-[.19em] text-[#f0c453]';
+const dailySituationIndex = total => {
+    const date = new Date();
+    const day = Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
+    return total ? ((day % total) + total) % total : 0;
+};
 
 export default function ExploreArchetypes() {
     const { archetypes = [], settings = {} } = usePage().props;
-    const [journal, setJournal] = useState(readJournal);
     const [category, setCategory] = useState('все');
     const [expanded, setExpanded] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [search, setSearch] = useState('');
-    useEffect(() => {
-        const refresh = () => setJournal(readJournal());
-        window.addEventListener('storage', refresh);
-        window.addEventListener('pageshow', refresh);
-        return () => { window.removeEventListener('storage', refresh); window.removeEventListener('pageshow', refresh); };
-    }, []);
     const daily = situations[dailySituationIndex(situations.length)];
     const others = useMemo(() => situations.filter(s => s.id !== daily.id && (category === 'все' || s.category === category)), [daily.id, category]);
     const selected = others.find(s => s.id === selectedId) || others[0];
@@ -37,7 +34,7 @@ export default function ExploreArchetypes() {
     };
     return <div className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
         <Head title="Язык архетипов — пространство наблюдения за собой — Arutyun">
-            <meta name="description" content="Исследуй восемь архетипов, ситуации дня, реакции в отношениях и на работе. Веди личный журнал наблюдений и открой свою карту реакций." />
+            <meta name="description" content="Исследуй восемь архетипов, ситуации дня, реакции в отношениях и на работе. Исследуй привычные реакции и открой свою карту архетипов." />
         </Head>
         <header className="border-b border-[#b99347]/25">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
@@ -45,7 +42,6 @@ export default function ExploreArchetypes() {
                 <div className="flex flex-wrap items-center gap-4 text-sm">
                     <a href="#daily" className="text-[#e4c88c] hover:text-white">Зеркало дня</a>
                     <a href="#roles" className="text-[#e4c88c] hover:text-white">Архетипы</a>
-                    <Link href="/explore/archetypes/journal" className="text-[#e4c88c] hover:text-white">Мой журнал</Link>
                     <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
                 </div>
             </div>
@@ -56,7 +52,7 @@ export default function ExploreArchetypes() {
                     <p className={kicker}>Пространство самопознания</p>
                     <h1 className="mt-4 font-serif text-5xl leading-tight sm:text-6xl">Язык <span className="italic text-[#f0c453]">архетипов</span></h1>
                     <p className="mt-6 max-w-2xl text-lg leading-8 text-[#d6c9b4]">Внутри нас звучат разные голоса: один хочет защитить, другой — исследовать, третий — всё упорядочить. Замечая их, мы получаем возможность выбирать, а не только реагировать.</p>
-                    <p className="mt-4 max-w-2xl leading-7 text-[#a99d88]">Это язык для наблюдения, а не ярлык личности. Здесь можно возвращаться к новым ситуациям, узнавать знакомые реакции и записывать собственные открытия.</p>
+                    <p className="mt-4 max-w-2xl leading-7 text-[#a99d88]">Это язык для наблюдения, а не ярлык личности. Здесь можно возвращаться к новым ситуациям и узнавать знакомые реакции без необходимости вести записи.</p>
                     <div className="mt-7 flex flex-wrap items-center gap-3">
                         <a href="#daily" className="rounded-xl bg-[#f0c453] px-6 py-3 font-semibold text-[#21180b] transition hover:bg-[#ffda7b]">Начать с сегодняшней ситуации →</a>
                         <Link href="/explore/archetypes/mirror" className="rounded-xl border border-[#b08b49]/70 px-6 py-3 font-semibold text-[#f0c453] transition hover:bg-[#302518]">Полная карта · 20 вопросов</Link>
@@ -74,15 +70,14 @@ export default function ExploreArchetypes() {
                             </div>
                         )}
                     </div>
-                    <p className="mt-5 text-xs leading-6 text-[#a99d88]">Каждый день новая рекомендация из библиотеки. Личные заметки остаются только в твоём браузере.</p>
+                    <p className="mt-5 text-xs leading-6 text-[#a99d88]">Каждый день — новая ситуация из библиотеки. Выбирай реакцию и смотри, какой привычный образ за ней стоит.</p>
                 </div>
             </section>
-            <section className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Способы исследования">
+            <section className="mt-12 grid gap-3 sm:grid-cols-3" aria-label="Способы исследования">
                 {[
                     ['Зеркало дня','Новая ситуация для наблюдения','#daily','today'],
                     ['Ситуации жизни','Отношения, конфликты, работа','#situations','view_list'],
                     ['Восемь образов','Сильные стороны, ловушки, примеры','#roles','psychology'],
-                    ['Мой журнал','Сохраняй открытия и замечай повторения','#journal','auto_stories'],
                 ].map(([title,caption,href,icon]) => <a key={title} href={href} className="group rounded-2xl border border-[#876b3b]/60 bg-[#211d15] p-5 transition hover:border-[#f0c453] hover:bg-[#2c2419]">
                     <span aria-hidden="true" className="material-symbols-outlined text-3xl text-[#f0c453]">{icon}</span>
                     <h3 className="mt-4 font-serif text-xl">{title}</h3>
@@ -99,7 +94,7 @@ export default function ExploreArchetypes() {
                     </div>
                     <a href="#situations" className="text-sm text-[#f0c453] underline underline-offset-4 hover:text-white">Исследовать другие ситуации →</a>
                 </div>
-                <ArchetypeSituationExperience key={'daily-' + daily.id} situation={daily} archetypes={archetypes} featured onSaved={setJournal} />
+                <ArchetypeSituationExperience key={'daily-' + daily.id} situation={daily} archetypes={archetypes} featured />
             </section>
             <section id="situations" className="mt-20 scroll-mt-8">
                 <p className={kicker}>Библиотека реакций</p>
@@ -120,7 +115,7 @@ export default function ExploreArchetypes() {
                 {others.length > 9 && <div className="mt-5 text-center"><button type="button" onClick={() => setExpanded(value => !value)}
                     className="rounded-xl border border-[#8c7247] px-5 py-3 text-sm text-[#f0c453] hover:border-[#f0c453]">{expanded ? 'Свернуть список ↑' : 'Показать все ситуации (' + others.length + ') ↓'}</button></div>}
                 {selected && <div id="chosen-situation" className="mt-6 scroll-mt-6">
-                    <ArchetypeSituationExperience key={'library-' + selected.id} situation={selected} archetypes={archetypes} onSaved={setJournal} />
+                    <ArchetypeSituationExperience key={'library-' + selected.id} situation={selected} archetypes={archetypes} />
                 </div>}
             </section>
             <section id="roles" className="mt-20 scroll-mt-8">
@@ -150,12 +145,6 @@ export default function ExploreArchetypes() {
                         <p className="mt-5 text-sm text-[#f0c453]">Исследовать глубже →</p>
                     </Link>)}
                 </div>
-            </section>
-            <section id="journal" className="mt-20 scroll-mt-8">
-                <p className={kicker}>Личная практика</p>
-                <h2 className="mt-2 font-serif text-4xl sm:text-5xl">Журнал <span className="italic text-[#f0c453]">наблюдений</span></h2>
-                <p className="mb-7 mt-4 max-w-3xl leading-7 text-[#c4b9a6]">Со временем важнее не «какой я архетип», а какие реакции я начинаю узнавать раньше, чем они управляют моими действиями. Сохраняй моменты ясности здесь.</p>
-                <ArchetypeJournalPanel entries={journal} onChanged={setJournal} />
             </section>
             <div className="mt-20 border-t border-[#9b7b3f]/40 pt-10 text-center">
                 <p className="font-serif text-2xl">Ты больше любой роли, которую играешь.</p>
