@@ -32,7 +32,7 @@ export default function ExploreEmotions() {
     const pickGroup = value => {setGroup(value);setShowAll(false);};
     const goToEmotion = slug => router.visit('/explore/emotions/' + encodeURIComponent(slug));
 
-    return <div className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
+    return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
         <Head title="Язык эмоций — исследуй чувства, ситуации и внимание — Arutyun">
             <meta name="description" content="24 эмоции, эмоциональный компас, 30 жизненных ситуаций и 12 коротких практик. Исследуй своё состояние без регистрации и сохранения ответов." />
         </Head>
