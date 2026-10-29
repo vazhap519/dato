@@ -6,7 +6,7 @@ import { liveExploreDocument } from '../lib/exploreCms.js';
 const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
 const all = atlas.emotions;
-const bySlug = Object.fromEntries(all.map(item => [item.slug,item]));
+const bySlug = new Proxy({}, { get: (_target, slug) => all.find(item => item.slug === slug) });
 const kicker = 'text-xs font-semibold uppercase tracking-[.18em] text-[#f0c453]';
 const panel = 'rounded-3xl border border-[#84683e]/70 bg-[#211d15] p-6 sm:p-8';
 
