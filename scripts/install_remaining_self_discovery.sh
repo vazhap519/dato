@@ -14,7 +14,7 @@ FILES=(
   "resources/js/Pages/ExplorePatterns.jsx"
   "resources/js/Pages/ExplorePatternDetail.jsx"
   "resources/js/Pages/ExplorePersonalityMirror.jsx"
-    "resources/data/dream-atlas.json"
+  "resources/data/dream-atlas.json"
   "resources/data/pattern-atlas.json"
   "resources/data/personality-mirror.json"
 )
