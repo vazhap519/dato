@@ -43,17 +43,17 @@ class ArchetypeMirrorStatisticsTest extends TestCase
         return array_replace([
             'version' => ArchetypeMirrorSurvey::VERSION,
             'submission_id' => '1b24b0ee-92df-4cee-988e-567ca15175db',
-            'consent' => true,
             'answers' => array_fill(0, 20, 0),
         ], $overrides);
     }
 
-    public function test_consented_completion_is_counted_once_and_not_stored_as_questionnaire(): void
+    public function test_completed_survey_is_aggregated_once_without_personal_response_records(): void
     {
         $endpoint = '/explore/archetypes/mirror/statistics';
         $this->postJson($endpoint, $this->payload())->assertNoContent();
         $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, 1)]))->assertNoContent();
 
+        // No consent field is sent, yet the completed response is recorded once.
         $this->assertSame(1, (int) DB::table('archetype_mirror_daily_totals')->sum('completions'));
         $this->assertSame(20, (int) DB::table('archetype_mirror_daily_answers')->sum('votes'));
         $this->assertSame(20, (int) DB::table('archetype_mirror_daily_roles')->sum('votes'));
@@ -65,10 +65,9 @@ class ArchetypeMirrorStatisticsTest extends TestCase
         $this->assertSame(64, strlen(DB::table('archetype_mirror_receipts')->value('token_hash')));
     }
 
-    public function test_consent_is_required_and_invalid_responses_are_never_counted(): void
+    public function test_no_consent_flag_is_needed_and_invalid_responses_are_not_counted(): void
     {
         $endpoint = '/explore/archetypes/mirror/statistics';
-        $this->postJson($endpoint, $this->payload(['consent' => false]))->assertStatus(422);
         $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 19, 0)]))->assertStatus(422);
         $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, 4)]))->assertStatus(422);
         $this->postJson($endpoint, $this->payload(['answers' => array_fill(0, 20, true)]))->assertStatus(422);
