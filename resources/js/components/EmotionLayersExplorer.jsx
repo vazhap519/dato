@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import atlas from '../../data/emotion-atlas.json';
+import atlasBase from '../../data/emotion-atlas.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
 const bySlug = Object.fromEntries(atlas.emotions.map(e => [e.slug, e]));
 const examples = [
