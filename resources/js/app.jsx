@@ -2,7 +2,6 @@ import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import SiteAnalytics from './components/SiteAnalytics.jsx'
-import ThemeSwitcher from './components/ThemeSwitcher.jsx'
 
 // Apply the saved/system theme before React mounts, including on page transitions.
 try {
@@ -21,6 +20,6 @@ createInertiaApp({
         return pages[`./Pages/${name}.jsx`]
     },
     setup({ el, App, props }) {
-        createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /><ThemeSwitcher /></>)
+        createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /></>)
     },
 })
