@@ -89,7 +89,7 @@ export default function Numbers() {
             <header className="border-b border-[#d9b65c]/15">
                 <div className="max-w-6xl mx-auto px-5 py-6 flex items-center justify-between gap-4">
                     <Link href="/" className="flex items-center gap-3" aria-label="На главную"><span className="sr-only">{settings?.site_name || "На главную"}</span>{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Логотип сайта"} className="h-10 w-auto max-w-[180px] object-contain" /> : <span className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</span>}</Link>
-                    <Link href="/editoria" className="text-sm text-[#e9d5a4] hover:text-[#f4c74c] transition-colors whitespace-nowrap">Бесплатный практикум →</Link>
+                    <div className="flex items-center gap-3 sm:gap-6"><Link href="/explore" className="text-xs sm:text-sm text-[#e9d5a4] hover:text-[#f4c74c] transition-colors whitespace-nowrap">Исследуй себя</Link><Link href="/editoria" className="hidden sm:inline text-sm text-[#e9d5a4] hover:text-[#f4c74c] transition-colors whitespace-nowrap">Бесплатный практикум →</Link></div>
                 </div>
             </header>
             <main>
