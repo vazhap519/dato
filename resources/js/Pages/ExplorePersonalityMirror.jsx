@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import data from '../../data/personality-mirror.json';
+import dataBase from '../../data/personality-mirror.json';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const data = liveExploreDocument('personality-mirror', dataBase);
 
 const axes=data.axes;
 const questions=data.questions;
