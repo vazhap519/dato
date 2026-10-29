@@ -71,3 +71,68 @@
 html {
     scroll-behavior: smooth;
 }
+
+
+/* Theme control: available on every public Inertia page. */
+.arutyun-theme-switcher {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    border: 1px solid rgba(191, 153, 66, .4);
+    border-radius: 999px;
+    padding: .5rem .7rem;
+    background: #252016;
+    color: #f7e8bd;
+    box-shadow: 0 5px 24px rgba(0,0,0,.2);
+}
+.arutyun-theme-switcher select {
+    min-width: 7.5rem;
+    max-width: 11rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: .75rem;
+    outline-offset: 3px;
+    cursor: pointer;
+}
+.arutyun-theme-switcher option { background: #252016; color: #f7e8bd; }
+html.light .arutyun-theme-switcher {
+    background: #fffaf0;
+    color: #49381d;
+    border-color: #d5ba7c;
+}
+html.light .arutyun-theme-switcher option { background: #fffaf0; color: #49381d; }
+html.light body { background: #faf7f0; color: #29251e; }
+html.light .glass-nav { background: rgba(255, 251, 243, .94); border-color: #e9ddc7; }
+
+/* Pilot light palette for the numbers page. No image filters or inversions. */
+html.light .numbers-page { background: #faf7f0 !important; color: #2b261f !important; }
+html.light .numbers-page header { border-color: #e6d9c0 !important; }
+html.light .numbers-page [class*="bg-[#201c14]"],
+html.light .numbers-page [class*="bg-[#241f16]"],
+html.light .numbers-page [class*="bg-[#1d1a13]"] {
+    background: #fffdf8 !important;
+}
+html.light .numbers-page [class*="text-[#f8f4e9]"],
+html.light .numbers-page [class*="text-[#f0c453]"],
+html.light .numbers-page [class*="text-[#d5ab4a]"],
+html.light .numbers-page [class*="text-[#e0d9cc]"],
+html.light .numbers-page [class*="text-[#f4c74c]"] {
+    color: #77521b !important;
+}
+html.light .numbers-page [class*="text-[#bdb4a3]"],
+html.light .numbers-page [class*="text-[#a9a293]"],
+html.light .numbers-page [class*="text-[#bcb2a0]"] { color: #655d50 !important; }
+html.light .numbers-page input {
+    background: #fffdf8 !important;
+    color: #29251e !important;
+    border-color: #d8bd7f !important;
+}
+html.light .numbers-page input::placeholder { color: #776c5c !important; }
+html.light .numbers-page [class*="border-[#"] { border-color: #dfccaa !important; }
+html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #edc55c !important; }
+html.light .numbers-page [class*="text-[#19140b]"] { color: #211b12 !important; }
