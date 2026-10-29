@@ -8,6 +8,7 @@ use App\Models\ExploreContentPage;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -32,6 +33,19 @@ class ExploreContentPageResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
+            Section::make('Изображения карточек — «Исследуй себя»')
+                ->description('Загрузи свою картинку для каждого направления. Рекомендуемое соотношение 16:9, размер от 1200 × 675 px, JPG, PNG или WebP. После сохранения картинка появится на /explore автоматически. Если удалить изображение, вернётся исходная иллюстрация.')
+                ->schema([
+                    FileUpload::make('copy.card_image_numbers')->label('Язык чисел'),
+                    FileUpload::make('copy.card_image_emotions')->label('Язык эмоций'),
+                    FileUpload::make('copy.card_image_dreams')->label('Язык снов'),
+                    FileUpload::make('copy.card_image_archetypes')->label('Язык архетипов'),
+                    FileUpload::make('copy.card_image_patterns')->label('Язык повторений'),
+                    FileUpload::make('copy.card_image_mirror')->label('Зеркало личности'),
+                ])
+                ->visible(fn (?ExploreContentPage $record): bool => $record?->slug === 'shared')
+                ->columns(2)
+                ->columnSpanFull(),
             Section::make('Тексты и блоки')
                 ->description('Здесь редактируются заголовки, описания, кнопки и другие фразы страницы. Открывайте блоки по очереди. Тексты самих эмоций, снов, сценариев и вопросов находятся рядом: «Материалы и вопросы». После сохранения достаточно обновить страницу сайта.')
                 ->schema(fn (?ExploreContentPage $record): array => static::fieldsForPage($record?->slug))
