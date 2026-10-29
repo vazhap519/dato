@@ -22,7 +22,9 @@ export default function ExplorePersonalityMirror(){
  const [showResults,setShowResults]=useState(false);
  const [selectedDilemma,setSelectedDilemma]=useState(null);
  const [dilemmaChoice,setDilemmaChoice]=useState(null);
- const daily=data.prompts[Math.floor(Date.now()/86400000)%data.prompts.length];
+ const now=new Date();
+ const day=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000);
+ const daily=data.prompts[day%data.prompts.length];
  const currentAxis=axes[section];
  const currentQuestions=questions.filter(q=>q.axis===currentAxis.slug);
  const answered=Object.keys(answers).length;
