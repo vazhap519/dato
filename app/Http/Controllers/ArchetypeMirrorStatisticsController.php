@@ -44,7 +44,7 @@ class ArchetypeMirrorStatisticsController extends Controller
 
         // Resolve first-place ties exactly like the public result map.
         $ordered = Archetype::query()->where('is_published', true)
-            ->orderBy('sort')->orderBy('id')->pluck('slug')->all();
+            ->orderBy('id')->pluck('slug')->all();
         foreach (array_keys($scores) as $slug) {
             if (!in_array($slug, $ordered, true)) {
                 $ordered[] = $slug;
