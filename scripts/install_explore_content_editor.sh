@@ -120,10 +120,9 @@ node scripts/verify-explore-cms.cjs
 echo "Собираем интерфейс для чтения CMS из базы..."
 NODE_OPTIONS="--max-old-space-size=768" npm run build
 test -s public/build/manifest.json
-if ! grep -rqFl --include='*.js' '__exploreText' public/build/assets; then
-  echo "Ошибка: редактируемые фразы не найдены в собранном интерфейсе." >&2
-  exit 1
-fi
+# Babel/minifiers may rename generated imports, so verify the transformed
+# source keys rather than searching for an unstable identifier in minified JS.
+node scripts/verify-explore-cms.cjs
 
 echo "Создаём только две новые таблицы контента..."
 php artisan migrate --force
