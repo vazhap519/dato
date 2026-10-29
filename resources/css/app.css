@@ -73,204 +73,142 @@ html {
 }
 
 
-/* Theme control: available on every public Inertia page. */
+
+/* Site-wide theme preference control */
 .arutyun-theme-switcher {
-    position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    z-index: 80;
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-    border: 1px solid rgba(191, 153, 66, .4);
-    border-radius: 999px;
-    padding: .5rem .7rem;
-    background: #252016;
-    color: #f7e8bd;
+    position: fixed; right: 1rem; bottom: 1rem; z-index: 80;
+    display: flex; align-items: center; gap: .4rem;
+    padding: .5rem .7rem; border-radius: 999px;
+    border: 1px solid #8e713b; background: #252016; color: #f7e8bd;
     box-shadow: 0 5px 24px rgba(0,0,0,.2);
 }
 .arutyun-theme-switcher select {
-    min-width: 7.5rem;
-    max-width: 11rem;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    font-size: .75rem;
-    outline-offset: 3px;
-    cursor: pointer;
+    min-width: 7.5rem; max-width: 11rem;
+    background: transparent; color: inherit; font: inherit;
+    font-size: .75rem; outline-offset: 3px; cursor: pointer;
 }
 .arutyun-theme-switcher option { background: #252016; color: #f7e8bd; }
 html.light .arutyun-theme-switcher {
-    background: #fffaf0;
-    color: #49381d;
-    border-color: #d5ba7c;
+    background: #fff8e9; color: #382a18;
+    border-color: #9b7845;
 }
-html.light .arutyun-theme-switcher option { background: #fffaf0; color: #49381d; }
-html.light body { background: #faf7f0; color: #29251e; }
-html.light .glass-nav { background: rgba(255, 251, 243, .94); border-color: #e9ddc7; }
+html.light .arutyun-theme-switcher option { background: #fff8e9; color: #382a18; }
+html.light body { background: #eae7e0; color: #26221c; }
+html.light .glass-nav { background: rgba(255,250,239,.96); border-color: #c8b89c; }
 
-/* Pilot light palette for the numbers page. No image filters or inversions. */
-html.light .numbers-page { background: #faf7f0 !important; color: #2b261f !important; }
-html.light .numbers-page header { border-color: #e6d9c0 !important; }
-html.light .numbers-page [class*="bg-[#201c14]"],
-html.light .numbers-page [class*="bg-[#241f16]"],
-html.light .numbers-page [class*="bg-[#1d1a13]"] {
-    background: #fffdf8 !important;
+/* Numbers page — one coherent, higher-contrast daylight palette. */
+html.light .numbers-page {
+    --day-paper: #eae7e0;
+    --day-card: #faf6ec;
+    --day-border: #a68b61;
+    --day-ink: #25211b;
+    --day-muted: #4d463c;
+    --day-bronze: #76501b;
+    background: var(--day-paper) !important;
+    color: var(--day-ink) !important;
 }
-html.light .numbers-page [class*="text-[#f8f4e9]"],
-html.light .numbers-page [class*="text-[#f0c453]"],
-html.light .numbers-page [class*="text-[#d5ab4a]"],
-html.light .numbers-page [class*="text-[#e0d9cc]"],
-html.light .numbers-page [class*="text-[#f4c74c]"] {
-    color: #77521b !important;
+html.light .numbers-page header {
+    background: #faf6ec !important;
+    border-color: #b8a487 !important;
 }
-html.light .numbers-page [class*="text-[#bdb4a3]"],
-html.light .numbers-page [class*="text-[#a9a293]"],
-html.light .numbers-page [class*="text-[#bcb2a0]"] { color: #655d50 !important; }
-html.light .numbers-page input {
-    background: #fffdf8 !important;
-    color: #29251e !important;
-    border-color: #d8bd7f !important;
-}
-html.light .numbers-page input::placeholder { color: #776c5c !important; }
-html.light .numbers-page [class*="border-[#"] { border-color: #dfccaa !important; }
-html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #edc55c !important; }
-html.light .numbers-page [class*="text-[#19140b]"] { color: #211b12 !important; }
-
-/* Featured number cards: readable in both themes without affecting photos. */
-html.light .numbers-page .number-special-card {
-    background: linear-gradient(135deg, #fffdf8, #f5ecd9) !important;
-    border-color: #d9c59d !important;
-    box-shadow: 0 3px 14px rgba(79, 56, 24, .055);
-}
-html.light .numbers-page .number-special-card:hover,
-html.light .numbers-page .number-special-card:focus-visible {
-    background: linear-gradient(135deg, #fffaf0, #efe0c0) !important;
-    border-color: #ad7b2d !important;
-    box-shadow: 0 7px 20px rgba(79, 56, 24, .12);
-}
-html.light .numbers-page .number-special-card__number {
-    color: #895a12 !important;
-}
-html.light .numbers-page .number-special-card__title {
-    color: #514638 !important;
-}
-html.light .numbers-page [class*="text-[#e1d2af]"] { color: #65513a !important; }
-html.light .numbers-page [class*="text-[#aaa393]"],
-html.light .numbers-page [class*="text-[#8f887a]"] { color: #685f51 !important; }
-
-/* Refined editorial daylight palette — richer contrast and restrained bronze. */
-html.light body { background: #f3f2ee; color: #262a2a; }
-html.light .numbers-page { background: #f3f2ee !important; color: #262a2a !important; }
-html.light .numbers-page header { background: #ffffff !important; border-color: #d9d9d4 !important; }
 html.light .numbers-page h1,
 html.light .numbers-page h2,
-html.light .numbers-page h3:not([class*="text-[#"]),
-html.light .numbers-page .font-semibold:not([class*="text-[#"]) { color: #25292b; }
+html.light .numbers-page h3,
+html.light .numbers-page .font-semibold:not([class*="text-[#"]) {
+    color: var(--day-ink);
+}
+html.light .numbers-page [class*="text-[#f8f4e9]"],
+html.light .numbers-page [class*="text-[#e0d9cc]"] { color: var(--day-ink) !important; }
 html.light .numbers-page [class*="text-[#f0c453]"],
 html.light .numbers-page [class*="text-[#d5ab4a]"],
 html.light .numbers-page [class*="text-[#f4c74c]"],
-html.light .numbers-page [class*="text-[#e9bd51]"] { color: #8c5b19 !important; }
+html.light .numbers-page [class*="text-[#e9bd51]"] { color: var(--day-bronze) !important; }
 html.light .numbers-page [class*="text-[#a9a293]"],
 html.light .numbers-page [class*="text-[#bdb4a3]"],
 html.light .numbers-page [class*="text-[#bcb2a0]"],
 html.light .numbers-page [class*="text-[#aaa393]"],
-html.light .numbers-page [class*="text-[#8f887a]"] { color: #596063 !important; }
-html.light .numbers-page .number-special-card {
-    background: #ffffff !important;
-    border: 1px solid #dedfdb !important;
-    box-shadow: 0 2px 8px rgba(31, 38, 39, .035);
-}
-html.light .numbers-page .number-special-card:hover,
-html.light .numbers-page .number-special-card:focus-visible {
-    background: #f9f6ef !important;
-    border-color: #9d7134 !important;
-    box-shadow: 0 7px 20px rgba(31, 38, 39, .09);
-}
-html.light .numbers-page .number-special-card__number { color: #8c5b19 !important; }
-html.light .numbers-page .number-special-card__title { color: #424a4b !important; }
-html.light .numbers-page input,
+html.light .numbers-page [class*="text-[#8f887a]"],
+html.light .numbers-page [class*="text-[#e1d2af]"],
+html.light .numbers-page [class*="text-[#c8b894]"] { color: var(--day-muted) !important; }
+html.light .numbers-page [class*="border-[#d9b65c]"] { border-color: #b7a383 !important; }
+html.light .numbers-page [class*="border-[#"] { border-color: var(--day-border) !important; }
 html.light .numbers-page [class*="bg-[#201c14]"],
 html.light .numbers-page [class*="bg-[#241f16]"],
 html.light .numbers-page [class*="bg-[#1d1a13]"] {
-    background: #ffffff !important;
-    border-color: #d6d7d2 !important;
+    background: var(--day-card) !important;
 }
-html.light .numbers-page [class*="border-[#"] { border-color: #dedfdb !important; }
-html.light .numbers-page input:focus { border-color: #a47633 !important; }
-html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #c99b45 !important; }
-html.light .numbers-page [class*="text-[#19140b]"] { color: #211b12 !important; }
-html.light .arutyun-theme-switcher { background: #ffffff; color: #343a3b; border-color: #d9d9d4; }
-html.light .arutyun-theme-switcher option { background: #ffffff; color: #343a3b; }
-
-/* Daylight contrast: clear affordances matching the dark theme's hierarchy. */
-html.light .numbers-page {
-    --day-border: #b8a27f;
-    --day-ink: #202524;
-    --day-muted: #454e4d;
-    --day-accent: #765016;
+html.light .numbers-page input {
+    background: #fffdf7 !important;
+    color: var(--day-ink) !important;
+    border: 1.5px solid #92764f !important;
+}
+html.light .numbers-page input::placeholder { color: #615748 !important; }
+html.light .numbers-page input:focus-visible {
+    outline: 2px solid #83591c; outline-offset: 1px;
 }
 html.light .numbers-page .number-special-card {
-    background: #fffefa !important;
-    border: 1.5px solid var(--day-border) !important;
-    box-shadow: 0 2px 0 rgba(74, 53, 26, .055), 0 4px 14px rgba(40, 38, 30, .055);
+    background: linear-gradient(135deg, #fffaf0, #eee2cd) !important;
+    border: 1.5px solid #a98b5b !important;
+    box-shadow: 0 2px 0 rgba(67,48,24,.12), 0 5px 14px rgba(67,48,24,.09);
 }
-html.light .numbers-page .number-special-card__number { color: var(--day-accent) !important; }
-html.light .numbers-page .number-special-card__title { color: var(--day-ink) !important; font-weight: 500; }
+html.light .numbers-page .number-special-card__number {
+    color: #694411 !important; font-weight: 700;
+}
+html.light .numbers-page .number-special-card__title {
+    color: #2f2a23 !important; font-weight: 600;
+}
 html.light .numbers-page .number-catalog-card {
-    background: #fffefa !important;
-    border: 1.5px solid #c1af91 !important;
-    box-shadow: 0 1px 2px rgba(40, 38, 30, .06);
+    background: #fffaf0 !important;
+    border: 1.5px solid #a98b5b !important;
+    box-shadow: 0 2px 0 rgba(67,48,24,.08);
 }
-html.light .numbers-page .number-catalog-card:hover,
-html.light .numbers-page .number-catalog-card:focus-visible,
+html.light .numbers-page .number-catalog-card .font-serif {
+    color: #694411 !important; font-weight: 700;
+}
 html.light .numbers-page .number-special-card:hover,
-html.light .numbers-page .number-special-card:focus-visible {
-    background: #f6ead4 !important;
-    border-color: #815a21 !important;
-    box-shadow: 0 5px 18px rgba(65, 45, 20, .14);
+html.light .numbers-page .number-special-card:focus-visible,
+html.light .numbers-page .number-catalog-card:hover,
+html.light .numbers-page .number-catalog-card:focus-visible {
+    background: #e8d3ab !important;
+    border-color: #6c4919 !important;
+    box-shadow: 0 6px 18px rgba(67,48,24,.18);
 }
-html.light .numbers-page .number-catalog-card .font-serif { color: #765016 !important; font-weight: 600; }
 html.light .numbers-page .number-range-link {
-    border: 1px solid #b7a482 !important;
-    background: #fffefa;
-    color: #624718 !important;
+    background: #fffaf0 !important;
+    color: #563910 !important;
+    border: 1px solid #9d7c4b !important;
     font-weight: 600;
 }
 html.light .numbers-page .number-range-link:hover,
 html.light .numbers-page .number-range-link:focus-visible {
-    border-color: #765016 !important;
-    background: #f3e5c9 !important;
+    background: #e9d6b2 !important;
+    border-color: #654416 !important;
 }
 html.light .numbers-page .number-range-link[class*="bg-[#f0c453]"] {
-    background: #765016 !important;
-    color: #fff !important;
-    border-color: #765016 !important;
+    background: #6e4918 !important;
+    border-color: #6e4918 !important;
+    color: #ffffff !important;
 }
 html.light .numbers-page .number-clock-button {
-    background: #fdf9f1 !important;
-    border: 1.5px solid #b9a27d !important;
+    background: #fffaf0 !important;
+    border: 1.5px solid #9f8051 !important;
 }
 html.light .numbers-page .number-clock-button:hover,
 html.light .numbers-page .number-clock-button:focus-visible {
-    background: #f1e2c5 !important;
-    border-color: #765016 !important;
+    background: #e9d6b2 !important;
+    border-color: #654416 !important;
 }
 html.light .numbers-page .numbers-cta {
-    background: #fffefa !important;
-    border: 1.5px solid #b8a27f !important;
+    background: #faf6ec !important;
+    border: 1.5px solid #a98b5b !important;
+    box-shadow: 0 3px 12px rgba(67,48,24,.07);
 }
 html.light .numbers-page .numbers-cta-button {
-    background: #765016 !important;
-    color: #fff !important;
+    background: #6e4918 !important; color: #fff !important;
 }
 html.light .numbers-page .numbers-cta-button:hover,
-html.light .numbers-page .numbers-cta-button:focus-visible { background: #55380f !important; }
-html.light .numbers-page [class*="text-[#a9a293]"],
-html.light .numbers-page [class*="text-[#bdb4a3]"],
-html.light .numbers-page [class*="text-[#bcb2a0]"],
-html.light .numbers-page [class*="text-[#aaa393]"],
-html.light .numbers-page [class*="text-[#8f887a]"] { color: var(--day-muted) !important; }
-html.light .numbers-page [class*="border-[#d9b65c]"] { border-color: #b7aa94 !important; }
-html.light .numbers-page input { border: 1.5px solid #aa946e !important; }
-html.light .numbers-page input:focus-visible { outline: 2px solid #956a2a; outline-offset: 1px; }
+html.light .numbers-page .numbers-cta-button:focus-visible {
+    background: #4e310e !important;
+}
+html.light .numbers-page [class*="bg-[#f0c54e]"] { background: #b68b40 !important; }
+html.light .numbers-page [class*="text-[#19140b]"] { color: #241b10 !important; }
