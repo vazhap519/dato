@@ -6,12 +6,6 @@ const patterns=data.patterns;
 const categories=data.categories;
 const kicker='text-xs font-semibold uppercase tracking-[.18em] text-[#f0c453]';
 const panel='rounded-2xl border border-[#84683f]/70 bg-[#211d15] p-5 sm:p-7';
-const outcomes=[
-{slug:"tension",title:"Снова напряжение",summary:"Реакция могла защитить от неприятного момента, но оставила нерешённый вопрос."},
-{slug:"distance",title:"Отдаление или молчание",summary:"Возможно, важная потребность так и осталась невыраженной."},
-{slug:"relief",title:"Короткое облегчение",summary:"Иногда привычная реакция помогает сейчас, но через время возвращает прежнюю сложность."},
-{slug:"choice",title:"Появилась ясность",summary:"Иногда привычный сценарий работает — важно заметить и это, не искать проблему любой ценой."}
-];
 export default function ExplorePatterns() {
  const {settings={}}=usePage().props;
  const [category,setCategory]=useState('all');
@@ -20,11 +14,10 @@ export default function ExplorePatterns() {
  const [chosen,setChosen]=useState('');
  const [outcome,setOutcome]=useState('');
  const [step,setStep]=useState(0);
- const [openPattern,setOpenPattern]=useState(null);
  const filtered=useMemo(()=>patterns.filter(p=>(category==='all'||p.category===category)&&[p.title,p.pattern,p.scene].join(' ').toLowerCase().includes(query.toLowerCase().trim())),[category,query]);
  const listed=expanded||category!=='all'||query.trim()?filtered:filtered.slice(0,9);
  const picked=patterns.find(p=>p.slug===chosen);
- const result=outcomes.find(o=>o.slug===outcome);
+ const result=picked?.outcomes?.find(o=>o.id===outcome) || null;
  const now=new Date();
  const day=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000);
  const daily=patterns[day%patterns.length];
@@ -85,20 +78,41 @@ export default function ExplorePatterns() {
           <h4 className="mt-3 font-serif text-3xl">{picked.title}</h4>
           <p className="mt-4 text-lg leading-8 text-[#e4d7c3]">{picked.scene}</p>
           <div className="mt-5 rounded-xl border border-[#866a41] bg-[#17140f] p-5"><p className={kicker}>Знакомый внутренний голос</p><p className="mt-2 leading-7">{picked.automatic}</p></div>
-          <h5 className="mt-7 font-serif text-xl">Как чаще всего заканчивается похожая ситуация?</h5>
-          <p className="mt-2 text-sm leading-6 text-[#ad9e88]">Это не тест и не факт о тебе: выбери то, что ближе, или вернись к другому сценарию.</p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">{outcomes.map(o=><button key={o.slug} type="button" aria-pressed={outcome===o.slug} onClick={()=>setOutcome(o.slug)} className={'rounded-xl border p-4 text-left text-sm transition hover:border-[#f0c453] '+(outcome===o.slug?'border-[#f0c453] bg-[#40301b]':'border-[#77613c] bg-[#17140f]')}>{o.title}</button>)}</div>
+          <h5 className="mt-7 font-serif text-xl">Чем чаще всего заканчивается похожая ситуация?</h5>
+          <p className="mt-2 text-sm leading-6 text-[#ad9e88]">Для каждого сценария четыре своих исхода. Выбранный вариант меняет объяснение, вопрос и следующий шаг. Выбери наиболее похожий, не пытаясь угадать «правильный».</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {picked.outcomes.map(o=><button key={o.id} type="button" aria-pressed={outcome===o.id} onClick={()=>setOutcome(o.id)} className={'min-h-[72px] rounded-xl border p-4 text-left text-sm leading-6 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] hover:border-[#f0c453] '+(outcome===o.id?'border-[#f0c453] bg-[#40301b]':'border-[#77613c] bg-[#17140f]')}>{o.title}</button>)}
+          </div>
           <div className="mt-7 flex flex-wrap justify-between gap-3"><button type="button" onClick={()=>setStep(0)} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#e5bc62]">← Другой сценарий</button><button type="button" disabled={!outcome} onClick={()=>setStep(2)} className="rounded-xl bg-[#f0c453] px-6 py-3 font-semibold text-[#21180b] disabled:opacity-40">Посмотреть разбор →</button></div>
         </>}
         {step===2&&picked&&result&&<>
-          <p className={kicker}>Карта одного возможного повторения</p>
+          <p className={kicker}>Разбор выбранного исхода</p>
           <h4 className="mt-3 font-serif text-3xl">{picked.title}</h4>
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {[["01 · Ситуация",picked.scene],["02 · Привычный ответ",picked.automatic],["03 · Возможный итог",result.summary],["04 · Мягкий эксперимент",picked.experiment]].map(([title,body])=><div key={title} className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5"><p className={kicker}>{title}</p><p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{body}</p></div>)}
+          <div className="mt-5 rounded-2xl border border-[#b08a49]/75 bg-[#38291a] p-5 sm:p-6" aria-live="polite">
+            <p className={kicker}>Ты выбрал этот итог</p>
+            <h5 className="mt-2 font-serif text-2xl text-[#fff1d1]">{result.title}</h5>
+            <p className="mt-3 text-sm leading-7 text-[#e3d2b8]">{result.impact}</p>
           </div>
-          <p className="mt-6 text-sm leading-7 text-[#b6a88f]">Каждый шаг здесь — гипотеза, а не вывод. В реальных отношениях и обстоятельствах реакция может быть полностью оправданной.</p>
-          <div className="mt-6 grid gap-3 md:grid-cols-3">{picked.questions.map((q,i)=><div key={i} className="rounded-xl border border-[#806638]/70 p-4"><p className="text-xs text-[#e5bc62]">Вопрос {i+1}</p><p className="mt-2 text-sm leading-7">{q}</p></div>)}</div>
-          <div className="mt-7 flex flex-wrap gap-3"><button type="button" onClick={()=>setStep(1)} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">← Назад</button><button type="button" onClick={reset} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">Начать заново</button><Link href={'/explore/patterns/'+picked.slug} className="rounded-xl bg-[#f0c453] px-5 py-3 text-sm font-semibold text-[#21180b]">Изучить подробнее →</Link></div>
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            <div className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5">
+              <p className={kicker}>01 · Исходная ситуация</p>
+              <p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{picked.scene}</p>
+            </div>
+            <div className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5">
+              <p className={kicker}>02 · Что можно заметить</p>
+              <p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{result.insight}</p>
+            </div>
+            <div className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5">
+              <p className={kicker}>03 · Следующий шаг для этого исхода</p>
+              <p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{result.next}</p>
+            </div>
+            <div className="rounded-xl border border-[#a17f48]/70 bg-[#231d14] p-5">
+              <p className={kicker}>04 · Вопрос к выбранному итогу</p>
+              <p className="mt-3 font-serif text-lg leading-8 text-[#f0dfc2]">{result.question}</p>
+            </div>
+          </div>
+          <p className="mt-6 text-sm leading-7 text-[#b6a88f]">Это варианты для самонаблюдения, а не установленные причины поведения. Хороший исход не нужно объявлять проблемой. При угрозе и принуждении приоритет — безопасность.</p>
+          <div className="mt-7 flex flex-wrap gap-3"><button type="button" onClick={()=>setStep(1)} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">← Выбрать другой итог</button><button type="button" onClick={reset} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">Начать заново</button><Link href={'/explore/patterns/'+picked.slug} className="rounded-xl bg-[#f0c453] px-5 py-3 text-sm font-semibold text-[#21180b]">Изучить подробнее →</Link></div>
         </>}
        </div>
      </div>
