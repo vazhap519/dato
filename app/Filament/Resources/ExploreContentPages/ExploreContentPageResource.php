@@ -36,12 +36,12 @@ class ExploreContentPageResource extends Resource
             Section::make('Изображения карточек — «Исследуй себя»')
                 ->description('Загрузи свою картинку для каждого направления. Рекомендуемое соотношение 16:9, размер от 1200 × 675 px, JPG, PNG или WebP. После сохранения картинка появится на /explore автоматически. Если удалить изображение, вернётся исходная иллюстрация.')
                 ->schema([
-                    FileUpload::make('copy.card_image_numbers')->label('Язык чисел'),
-                    FileUpload::make('copy.card_image_emotions')->label('Язык эмоций'),
-                    FileUpload::make('copy.card_image_dreams')->label('Язык снов'),
-                    FileUpload::make('copy.card_image_archetypes')->label('Язык архетипов'),
-                    FileUpload::make('copy.card_image_patterns')->label('Язык повторений'),
-                    FileUpload::make('copy.card_image_mirror')->label('Зеркало личности'),
+                    FileUpload::make('copy.card_image_numbers')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык чисел'),
+                    FileUpload::make('copy.card_image_emotions')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык эмоций'),
+                    FileUpload::make('copy.card_image_dreams')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык снов'),
+                    FileUpload::make('copy.card_image_archetypes')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык архетипов'),
+                    FileUpload::make('copy.card_image_patterns')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык повторений'),
+                    FileUpload::make('copy.card_image_mirror')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Зеркало личности'),
                 ])
                 ->visible(fn (?ExploreContentPage $record): bool => $record?->slug === 'shared')
                 ->columns(2)
