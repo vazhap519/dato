@@ -3,6 +3,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import guidesDefinition from '../../data/archetype-guides.json';
 import situationsDefinition from '../../data/archetype-situations.json';
 import ArchetypeSituationExperience from '../components/ArchetypeSituationExperience';
+import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
 
 
 const guides = guidesDefinition.guides;
@@ -36,14 +37,15 @@ export default function ExploreArchetypes() {
         <Head title="Язык архетипов — пространство наблюдения за собой — Arutyun">
             <meta name="description" content="Исследуй восемь архетипов, ситуации дня, реакции в отношениях и на работе. Исследуй привычные реакции и открой свою карту архетипов." />
         </Head>
-        <header className="border-b border-[#b99347]/25">
-            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+        <header className="relative z-40 border-b border-[#b99347]/25">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
                 <Link href="/" aria-label="На главную">{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || 'Arutyun'} className="h-10 max-w-[160px] object-contain" /> : <span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
-                <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <a href="#daily" className="text-[#e4c88c] hover:text-white">Зеркало дня</a>
-                    <a href="#roles" className="text-[#e4c88c] hover:text-white">Архетипы</a>
-                    <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
-                </div>
+                <ExploreSectionNavigation items={[
+                    { label: 'Зеркало дня', href: '#daily', icon: 'wb_sunny' },
+                    { label: 'Жизненные ситуации', href: '#situations', icon: 'forum' },
+                    { label: 'Архетипы', href: '#roles', icon: 'psychology' },
+                    { label: 'Все направления', href: '/explore', icon: 'apps', catalog: true },
+                ]} />
             </div>
         </header>
         <main className="mx-auto max-w-6xl px-5 pb-16 pt-10 sm:pt-16">
