@@ -14,6 +14,7 @@ FILES=(
   "resources/js/Pages/ExplorePatterns.jsx"
   "resources/js/Pages/ExplorePatternDetail.jsx"
   "resources/js/Pages/ExplorePersonalityMirror.jsx"
+  "resources/js/components/EmotionPracticeLibrary.jsx"
   "resources/data/dream-atlas.json"
   "resources/data/pattern-atlas.json"
   "resources/data/personality-mirror.json"
@@ -26,6 +27,9 @@ for f in "${FILES[@]}"; do
 done
 php -l "$BACKUP/staged/routes/web.php"
 php -l "$BACKUP/staged/database/seeders/SelfDiscoveryToolsSeeder.php"
+grep -q 'aria-expanded={expanded}' "$BACKUP/staged/resources/js/components/EmotionPracticeLibrary.jsx"
+grep -q 'lg:hidden' "$BACKUP/staged/resources/js/components/EmotionPracticeLibrary.jsx"
+grep -q 'lg:grid' "$BACKUP/staged/resources/js/components/EmotionPracticeLibrary.jsx"
 python3 - "$BACKUP/staged" <<'PY'
 import json, pathlib, sys
 root=pathlib.Path(sys.argv[1])/'resources'/'data'
@@ -128,4 +132,4 @@ php artisan db:seed --class=SelfDiscoveryToolsSeeder --force
 trap - ERR
 echo "Новые направления опубликованы."
 echo "Резервная копия: $BACKUP"
-echo "Проверь: /explore, /explore/dreams, /explore/patterns и /explore/mirror"
+echo "Проверь: /explore, /explore/dreams, /explore/patterns, /explore/mirror и /explore/emotions#practices"
