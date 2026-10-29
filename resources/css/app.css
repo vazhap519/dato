@@ -74,28 +74,66 @@ html {
 
 
 
-/* Site-wide theme preference control */
+/* Shared header theme selector — light, dark, or system preference. */
 .arutyun-theme-switcher {
-    position: fixed; right: 1rem; bottom: 1rem; z-index: 80;
-    display: flex; align-items: center; gap: .4rem;
-    padding: .5rem .7rem; border-radius: 999px;
-    border: 1px solid #8e713b; background: #252016; color: #f7e8bd;
-    box-shadow: 0 5px 24px rgba(0,0,0,.2);
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 3px;
+    padding: 4px;
+    border: 1px solid rgba(196,153,71,.48);
+    border-radius: 999px;
+    background: #262016;
+    color: #e9d9b9;
 }
-.arutyun-theme-switcher select {
-    min-width: 7.5rem; max-width: 11rem;
-    background: transparent; color: inherit; font: inherit;
-    font-size: .75rem; outline-offset: 3px; cursor: pointer;
+.arutyun-theme-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    font-size: 17px;
+    line-height: 1;
+    color: inherit;
+    transition: background .18s ease, border-color .18s ease, color .18s ease;
 }
-.arutyun-theme-switcher option { background: #252016; color: #f7e8bd; }
+.arutyun-theme-option:hover { background: rgba(240,197,83,.14); }
+.arutyun-theme-option[aria-pressed="true"] {
+    background: #f0c453;
+    border-color: #f0c453;
+    color: #241b0c;
+}
+.arutyun-theme-option:focus-visible {
+    outline: 2px solid #e6b849;
+    outline-offset: 2px;
+}
 html.light .arutyun-theme-switcher {
-    background: #fff8e9; color: #382a18;
-    border-color: #9b7845;
+    background: #f7f0e2;
+    border-color: #aa8b5b;
+    color: #5d421d;
 }
-html.light .arutyun-theme-switcher option { background: #fff8e9; color: #382a18; }
+html.light .arutyun-theme-option:hover { background: #e7d7b8; }
+html.light .arutyun-theme-option[aria-pressed="true"] {
+    background: #76501b;
+    border-color: #76501b;
+    color: #fffaf0;
+}
 html.light body { background: #eae7e0; color: #26221c; }
 html.light .glass-nav { background: rgba(255,250,239,.96); border-color: #c8b89c; }
-
+html.light .glass-nav nav { border-color: #bca884; background: rgba(255,255,255,.65); }
+html.light .glass-nav nav a { color: #4d3921; }
+html.light .glass-nav nav a:hover,
+html.light .glass-nav nav a[aria-current="page"] { color: #76501b; background: #e9dcc5; }
+html.light .glass-nav button[aria-controls="mobile-site-navigation"] {
+    color: #76501b; border-color: #bca884; background: #f6ead5;
+}
+html.light #mobile-site-navigation { background: #fffaf0; border-color: #bca884; }
+@media (max-width: 400px) {
+    .arutyun-theme-switcher { gap: 1px; padding: 3px; }
+    .arutyun-theme-option { width: 25px; height: 25px; font-size: 15px; }
+}
 /* Numbers page — one coherent, higher-contrast daylight palette. */
 html.light .numbers-page {
     --day-paper: #eae7e0;
