@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import dataBase from '../../data/personality-mirror.json';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { useExploreJourney, ExplorePracticeInvitation } from '../components/ExploreJourney.jsx';
 import { liveExploreDocument } from '../lib/exploreCms.js';
 
 const data = liveExploreDocument('personality-mirror', dataBase);
@@ -33,6 +34,7 @@ export default function ExplorePersonalityMirror(){
  const currentQuestions=questions.filter(q=>q.axis===currentAxis.slug);
  const answered=Object.keys(answers).length;
  const allAnswered=answered===questions.length;
+ useExploreJourney('personality-mirror', answered > 0, showResults);
  const currentComplete=currentQuestions.every(q=>Number.isInteger(answers[q.id]));
  const scores=useMemo(()=>allAnswered?calculateScores(answers):[],[answers,allAnswered]);
  const next=()=>{
@@ -129,6 +131,7 @@ export default function ExplorePersonalityMirror(){
            <div className="mt-4 border-t border-[#725b39] pt-4"><p className={kicker}>Небольшой эксперимент</p><p className="mt-2 text-sm leading-7 text-[#d0bfa5]">{axis.practice}</p></div>
          </article>)}
         </div>
+        <div className="px-5 pt-6 sm:px-8"><ExplorePracticeInvitation tool="personality-mirror" compact /></div>
         <div className="flex flex-wrap gap-3 border-t border-[#806638]/60 p-5 sm:p-8">
           <button type="button" onClick={()=>{setShowResults(false);setSection(0);}} className="rounded-xl border border-[#957749] px-5 py-3 text-sm text-[#f0c453]">Пересмотреть ответы</button>
           <button type="button" onClick={reset} className="rounded-xl bg-[#f0c453] px-6 py-3 font-semibold text-[#21180b]">Пройти заново</button>
