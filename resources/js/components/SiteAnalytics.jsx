@@ -56,6 +56,16 @@ export default function SiteAnalytics() {
                 }),
             }).catch(() => {});
         };
+        // Only coarse milestones are recorded. Answers, prompts and result values
+        // are never sent to analytics.
+        const milestone = (e) => {
+            const event = e.detail?.event;
+            const allowed = ['explore_start', 'explore_complete', 'explore_practice'];
+            if (!allowed.includes(event)) return;
+            const name = String(e.detail?.tool || '').slice(0, 120);
+            if (name) send(event, name);
+        };
+        window.addEventListener('explore:milestone', milestone);
         const page = () => send('page_view', null);
         const click = (e) => {
             const target = e.target instanceof Element ? e.target.closest('a, button') : null;
@@ -139,6 +149,7 @@ export default function SiteAnalytics() {
         document.addEventListener('inertia:navigate', onNavigate);
         document.addEventListener('click', click, true);
         return () => {
+            window.removeEventListener('explore:milestone', milestone);
             document.removeEventListener('inertia:navigate', onNavigate);
             editoriaCleanup();
             document.removeEventListener('click', click, true);
