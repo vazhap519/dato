@@ -1,9 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import guidesDefinition from '../../data/archetype-guides.json';
-import situationsDefinition from '../../data/archetype-situations.json';
+import guidesDefinitionBase from '../../data/archetype-guides.json'
+import situationsDefinitionBase from '../../data/archetype-situations.json'
 import ArchetypeSituationExperience from '../components/ArchetypeSituationExperience';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const guidesDefinition = liveExploreDocument('archetype-guides', guidesDefinitionBase);
+const situationsDefinition = liveExploreDocument('archetype-situations', situationsDefinitionBase);
 
 
 const guides = guidesDefinition.guides;
