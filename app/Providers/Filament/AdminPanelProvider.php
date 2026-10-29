@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()->label('Аналитика'),
                 NavigationGroup::make()->label('Управление сайтом'),
                 NavigationGroup::make()->label('Продукты и услуги'),
+                NavigationGroup::make()->label('Самопознание'),
                 NavigationGroup::make()->label('Юридический раздел'),
                 NavigationGroup::make()->label('Прямые эфиры')->collapsed(),
                 NavigationGroup::make()->label('Рассылка')->collapsed(),
