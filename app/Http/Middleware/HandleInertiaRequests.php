@@ -25,6 +25,10 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
 
+            // Editable content for the six self-discovery directions.
+            // Returned only on the relevant public pages; empty for the rest.
+            'exploreCms' => fn () => \App\Support\ExploreContent::publicProps($request),
+
             /*
             |--------------------------------------------------------------------------
             | Navigation
