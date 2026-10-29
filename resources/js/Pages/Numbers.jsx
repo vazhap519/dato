@@ -117,7 +117,7 @@ export default function Numbers() {
                                 {['24', '12'].map(format => (
                                     <button key={format} type="button" onClick={() => selectCurrentTime(format)}
                                         aria-label={'Подставить текущее время в ' + format + '-часовом формате'}
-                                        className="min-w-0 rounded-xl border border-[#b88f37]/35 bg-[#241f16] px-2 py-3 text-center text-[#f0c453] hover:border-[#f0c453] hover:bg-[#302719] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] transition-colors">
+                                        className="number-clock-button min-w-0 rounded-xl border border-[#b88f37]/35 bg-[#241f16] px-2 py-3 text-center text-[#f0c453] hover:border-[#f0c453] hover:bg-[#302719] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] transition-colors">
                                         <span className="block text-[10px] text-[#bdb4a3] mb-1">{format === '24' ? '24 часа' : '12 часов'}</span>
                                         <span className="block text-lg sm:text-xl font-serif tabular-nums whitespace-nowrap">{formatTime(clockNow, format)}</span>
                                     </button>
@@ -187,7 +187,7 @@ export default function Numbers() {
                             <nav aria-label="Диапазоны чисел" className="flex flex-wrap justify-center gap-2 mb-7">
                                 {Array.from({length:catalogPages},(_,i)=>i+1).map(page=>(
                                     <Link key={page} href={'/numbers?page='+page+'#catalog'} preserveScroll={false}
-                                        className={'rounded-lg border px-3 py-2 text-sm transition-colors '+(page===catalogPage?'border-[#f0c453] bg-[#f0c453] text-[#17130c]':'border-[#c6a049]/25 text-[#e1d2af] hover:border-[#f0c453]')}>
+                                        className={'number-range-link rounded-lg border px-3 py-2 text-sm transition-colors '+(page===catalogPage?'border-[#f0c453] bg-[#f0c453] text-[#17130c]':'border-[#c6a049]/25 text-[#e1d2af] hover:border-[#f0c453]')}>
                                         {(page-1)*100+1}–{Math.min(999,page*100)}
                                     </Link>
                                 ))}
@@ -195,7 +195,7 @@ export default function Numbers() {
                             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                                 {ordinary.map(item=>(
                                     <Link key={item.number} href={'/numbers/'+item.number} data-analytics={'Числа · каталог '+item.number}
-                                        className="group rounded-xl border border-[#c6a049]/15 bg-[#201c14] px-3 py-4 text-center hover:border-[#f0c453]/70 hover:bg-[#2a2317] transition-all">
+                                        className="number-catalog-card group rounded-xl border border-[#c6a049]/15 bg-[#201c14] px-3 py-4 text-center hover:border-[#f0c453]/70 hover:bg-[#2a2317] transition-all">
                                         <div className="text-2xl md:text-3xl text-[#e9bd51] font-serif group-hover:text-[#ffdf86]">{item.number}</div>
                                     </Link>
                                 ))}
@@ -209,10 +209,10 @@ export default function Numbers() {
                     </div>
                 )}
                 <section className="max-w-3xl mx-auto px-5 pb-20 text-center">
-                    <div className="rounded-2xl border border-[#d9b65c]/15 bg-white/[0.025] p-7">
+                    <div className="numbers-cta rounded-2xl border border-[#d9b65c]/15 bg-white/[0.025] p-7">
                         <h2 className="text-xl font-semibold mb-3">Не ищи готового ответа. Замечай себя.</h2>
                         <p className="text-[#aaa393] leading-7 mb-6">На бесплатном трёхдневном практикуме «Познай СЕБЯ» мы исследуем внимание, привычные роли и внутренний выбор.</p>
-                        <Link href="/editoria" data-analytics="Числа · перейти к практикуму" className="inline-flex bg-[#f0c54e] text-[#17130c] font-semibold px-6 py-3 rounded-xl hover:bg-[#ffda73] transition-colors">Узнать о практикуме →</Link>
+                        <Link href="/editoria" data-analytics="Числа · перейти к практикуму" className="numbers-cta-button inline-flex bg-[#f0c54e] text-[#17130c] font-semibold px-6 py-3 rounded-xl hover:bg-[#ffda73] transition-colors">Узнать о практикуме →</Link>
                     </div>
                     <p className="mt-9 text-xs text-[#8f887a] leading-6">Толкования — авторские символические размышления, а не научные факты, предсказания или сообщения от сверхъестественных сил. Совпадения чисел могут возникать случайно.</p>
                 </section>
