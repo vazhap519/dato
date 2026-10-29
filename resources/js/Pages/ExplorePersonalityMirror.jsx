@@ -152,10 +152,11 @@ export default function ExplorePersonalityMirror(){
    <section id="dilemmas" className="mt-20 scroll-mt-6">
      <p className={kicker}>Разные решения — разные основания</p>
      <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Жизненные <span className="italic text-[#f0c453]">дилеммы</span></h2>
-     <p className="mt-4 max-w-3xl leading-7 text-[#c4b9a6]">В этих ситуациях нет правильного ответа. Выбери возможную реакцию, а затем посмотри на вопрос, который стоит за выбором.</p>
+     <p className="mt-4 max-w-3xl leading-7 text-[#c4b9a6]">В этих ситуациях нет правильного ответа. Выбери возможную реакцию: каждый вариант теперь раскрывает своё объяснение, ограничения, вопрос к себе и следующий шаг.</p>
      <div className="mt-7 grid gap-3 md:grid-cols-2">
       {data.dilemmas.map(d=>{
         const isOpen=selectedDilemma===d.id;
+        const feedback=dilemmaChoice===null?null:d.responses?.[dilemmaChoice];
         return <article key={d.id} className={'self-start overflow-hidden rounded-2xl border '+(isOpen?'border-[#c39a50] bg-[#2a2117]':'border-[#806638]/70 bg-[#211d15]')}>
          <button type="button" aria-expanded={isOpen} aria-controls={'dilemma-'+d.id} onClick={()=>{setSelectedDilemma(isOpen?null:d.id);setDilemmaChoice(null);}} className="flex w-full items-center justify-between gap-4 p-5 text-left transition hover:bg-[#302719]">
            <span className="font-serif text-xl">{d.title}</span><span className={'material-symbols-outlined shrink-0 text-[#f0c453] transition-transform '+(isOpen?'rotate-180':'')}>keyboard_arrow_down</span>
@@ -163,7 +164,21 @@ export default function ExplorePersonalityMirror(){
          {isOpen&&<div id={'dilemma-'+d.id} className="border-t border-[#84683f]/70 p-5">
           <p className="text-sm leading-7 text-[#d5c7b3]">{d.scene}</p>
           <div className="mt-4 grid gap-2">{d.options.map((o,i)=><button key={i} type="button" aria-pressed={dilemmaChoice===i} onClick={()=>setDilemmaChoice(i)} className={'rounded-xl border p-4 text-left text-sm leading-6 transition hover:border-[#f0c453] '+(dilemmaChoice===i?'border-[#f0c453] bg-[#44331c]':'border-[#806638]/70 bg-[#17140f]')}>{o}</button>)}</div>
-          {dilemmaChoice!==null&&<div aria-live="polite" className="mt-5 rounded-xl border border-[#9a7844]/70 bg-[#17140f] p-4"><p className={kicker}>Вопрос к выбору</p><p className="mt-3 text-sm leading-7">{d.question}</p><p className="mt-3 text-xs leading-6 text-[#ab9d88]">Это повод исследовать мотив, а не оценка выбранного варианта.</p></div>}
+          {feedback&&<section aria-live="polite" className="mt-5 rounded-xl border border-[#9a7844]/70 bg-[#17140f] p-4 sm:p-5">
+             <p className={kicker}>Разбор выбранного варианта</p>
+             <h4 className="mt-3 font-serif text-xl">{feedback.title}</h4>
+             <p className="mt-5 text-xs uppercase tracking-wider text-[#e5bc62]">Что поддерживает этот выбор</p>
+             <p className="mt-2 text-sm leading-7 text-[#e2d4c0]">{feedback.value}</p>
+             <p className="mt-5 text-xs uppercase tracking-wider text-[#e5bc62]">Что стоит проверить</p>
+             <p className="mt-2 text-sm leading-7 text-[#e2d4c0]">{feedback.risk}</p>
+             <div className="mt-5 rounded-xl border border-[#8b6c3d] bg-[#292117] p-4">
+               <p className={kicker}>Вопрос к выбору</p>
+               <p className="mt-3 font-serif text-lg leading-7">{feedback.question}</p>
+             </div>
+             <p className="mt-5 text-xs uppercase tracking-wider text-[#e5bc62]">Следующий шаг</p>
+             <p className="mt-2 text-sm leading-7 text-[#e2d4c0]">{feedback.next}</p>
+             <p className="mt-5 text-xs leading-6 text-[#ab9d88]">Это гипотеза для наблюдения, а не оценка правильности решения.</p>
+          </section>}
          </div>}
         </article>;
       })}
