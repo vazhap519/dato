@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import data from '../../data/personality-mirror.json';
+import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
 
 const axes=data.axes;
 const questions=data.questions;
@@ -41,14 +42,14 @@ export default function ExplorePersonalityMirror(){
   <Head title="Зеркало личности — наблюдай свои способы выбора — Arutyun">
    <meta name="description" content="24 вопроса о привычных реакциях, шесть осей наблюдения, вопрос дня и 12 жизненных дилемм. Без диагнозов, типов личности и хранения ответов."/>
   </Head>
-  <header className="border-b border-[#b99347]/25"><div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+  <header className="relative z-40 border-b border-[#b99347]/25"><div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
    <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
-   <nav aria-label="Навигация по странице" className="flex flex-wrap gap-4 text-sm">
-    <a href="#mirror" className="text-[#e4c88c] hover:text-white">Моя карта</a>
-    <a href="#question" className="text-[#e4c88c] hover:text-white">Вопрос дня</a>
-    <a href="#dilemmas" className="text-[#e4c88c] hover:text-white">Дилеммы</a>
-    <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
-   </nav>
+   <ExploreSectionNavigation items={[
+                    { label: 'Моя карта', href: '#mirror', icon: 'account_tree' },
+                    { label: 'Вопрос дня', href: '#question', icon: 'help_outline' },
+                    { label: 'Жизненные дилеммы', href: '#dilemmas', icon: 'balance' },
+                    { label: 'Все направления', href: '/explore', icon: 'apps', catalog: true },
+                ]} />
   </div></header>
   <main className="mx-auto max-w-6xl px-5 pb-20 pt-12 sm:pt-16">
    <section className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
