@@ -72,7 +72,7 @@ function Artwork({ theme, icon }) {
 }
 
 export default function Explore() {
-    const { tools = [], settings = {} } = usePage().props;
+    const { tools = [], settings = {}, cardImages = {} } = usePage().props;
 
     return <div className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
         <Head title="Исследуй себя — Arutyun">
@@ -105,8 +105,11 @@ export default function Explore() {
                     return <Link key={tool.id} href={tool.url} className="group flex min-w-0 flex-col overflow-hidden rounded-[26px] border border-[#8e713f]/50 bg-[#211c16] transition-all duration-300 hover:-translate-y-1 hover:border-[#e9c575]/80 hover:shadow-[0_22px_55px_rgba(0,0,0,.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]">
                         <div className={`relative h-48 overflow-hidden border-b border-[#b99347]/20 bg-gradient-to-br ${visual.palette} sm:h-52`}>
                             <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
-                                <Artwork theme={visual.theme} icon={visual.icon} />
+                                {cardImages[visual.theme]
+                                    ? <img src={cardImages[visual.theme]} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover object-center" />
+                                    : <Artwork theme={visual.theme} icon={visual.icon} />}
                             </div>
+                            {cardImages[visual.theme] && <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#100e0b]/70 via-transparent to-black/10" />}
                             <span className="absolute bottom-4 left-5 rounded-full border border-[#e8cb88]/25 bg-[#17130e]/55 px-3 py-1.5 text-[10px] uppercase tracking-[.15em] text-[#f4d998] backdrop-blur-sm">{visual.eyebrow}</span>
                             <span aria-hidden="true" className="material-symbols-outlined absolute right-5 bottom-4 text-[25px] text-[#f4d998]">{tool.icon || visual.icon}</span>
                         </div>
