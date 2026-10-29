@@ -1,5 +1,4 @@
 import Navigation from "@/components/headerComponents/Navigation.jsx";
-import ThemeSwitcher from "@/components/ThemeSwitcher.jsx";
 import { usePage, Link } from "@inertiajs/react";
 
 export default function Header() {
@@ -26,7 +25,7 @@ export default function Header() {
                     )}
                 </Link>
 
-                <div className="flex items-center gap-2 sm:gap-4 min-w-0"><Navigation /><ThemeSwitcher /></div>
+                <Navigation />
             </div>
         </header>
     );
