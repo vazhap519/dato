@@ -110,7 +110,17 @@ class HandleInertiaRequests extends Middleware
                         'label' => $item->label,
                         'href' => $path . '#' . ltrim($item->href, '#'),
                     ]);
-                })->values();
+                })->values()
+                    ->when(
+                        ! $pages->flatMap(fn ($page) => $page->navigationItems)->contains(
+                            fn ($item) => str_contains((string) $item->href, '/explore')
+                        ),
+                        fn ($links) => $links->push([
+                            'id' => 'explore-catalog',
+                            'label' => 'Исследуй себя',
+                            'href' => '/explore',
+                        ])
+                    );
             },
             /*
             |--------------------------------------------------------------------------
