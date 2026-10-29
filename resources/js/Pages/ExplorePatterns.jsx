@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import data from '../../data/pattern-atlas.json';
+import dataBase from '../../data/pattern-atlas.json';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const data = liveExploreDocument('pattern-atlas', dataBase);
 
 const patterns=data.patterns;
 const categories=data.categories;
