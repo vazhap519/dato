@@ -21,7 +21,8 @@ export default function ExploreDreams() {
     const chosen = S.find(s=>s.slug===picked) || S[0];
     const filtered = useMemo(()=>S.filter(x=>(group==='all'||x.group===group)&&[x.name,x.subtitle,x.description].join(' ').toLowerCase().includes(query.trim().toLowerCase())),[group,query]);
     const symbols = expanded || group!=='all' || query.trim() ? filtered : filtered.slice(0,12);
-    const idx = Math.floor(Date.now()/86400000)%S.length;
+    const now=new Date();
+    const idx=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000)%S.length;
     const today=S[idx];
     const reset=()=>{setStage(0);setFelt('');setConnection('');};
     const chooseSymbol=slug=>{setPicked(slug);setStage(1);setFelt('');setConnection('');};
