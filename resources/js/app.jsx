@@ -1,18 +1,27 @@
+import { router } from '@inertiajs/react'
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import SiteAnalytics from './components/SiteAnalytics.jsx'
 
-// Apply the saved/system theme before React mounts, including on page transitions.
+function applyPageTheme(page) {
+    const isNumbers = page?.component === 'Numbers';
+    const allowLight = isNumbers && page?.props?.settings?.numbers_light_theme_enabled === true;
+    const systemLight = window.matchMedia?.('(prefers-color-scheme: light)')?.matches ?? false;
+    const light = allowLight && systemLight;
+    document.documentElement.classList.toggle('light', light);
+    document.documentElement.classList.toggle('dark', !light);
+    document.documentElement.dataset.theme = light ? 'light' : 'dark';
+    document.documentElement.style.colorScheme = light ? 'light' : 'dark';
+}
+
+// Prevent a flash of the wrong theme while Inertia mounts.
 try {
-    const stored = window.localStorage.getItem('arutyun-theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const dark = stored === 'dark' || (stored !== 'light' && systemDark);
-    document.documentElement.classList.toggle('dark', dark);
-    document.documentElement.classList.toggle('light', !dark);
-    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
-} catch (_) {}
+    const page = JSON.parse(document.getElementById('app')?.dataset?.page || '{}');
+    applyPageTheme(page);
+} catch (_) {
+    document.documentElement.classList.add('dark');
+}
 
 createInertiaApp({
     resolve: name => {
@@ -20,6 +29,15 @@ createInertiaApp({
         return pages[`./Pages/${name}.jsx`]
     },
     setup({ el, App, props }) {
-        createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /></>)
+        applyPageTheme(props.initialPage);
+        const media = window.matchMedia?.('(prefers-color-scheme: light)');
+        const onSystemChange = () => applyPageTheme(window.__arutyunCurrentPage);
+        window.__arutyunCurrentPage = props.initialPage;
+        media?.addEventListener?.('change', onSystemChange);
+        router.on('navigate', event => {
+            window.__arutyunCurrentPage = event.detail.page;
+            applyPageTheme(event.detail.page);
+        });
+        createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /></>);
     },
 })
