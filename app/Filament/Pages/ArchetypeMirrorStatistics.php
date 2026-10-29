@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class ArchetypeMirrorStatistics extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar-square';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
     protected static ?string $navigationLabel = 'Статистика архетипов';
     protected static ?string $title = 'Статистика «Зеркала архетипов»';
     protected static string | \UnitEnum | null $navigationGroup = 'Самопознание';
