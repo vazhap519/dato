@@ -12,7 +12,7 @@ const situationsDefinition = liveExploreDocument('archetype-situations', situati
 
 const guides = guidesDefinition.guides;
 const situations = situationsDefinition.situations;
-const categories = ['все', ...situationsDefinition.categories];
+
 const frame = 'rounded-3xl border border-[#806638]/70 bg-[#211d15]';
 const kicker = 'text-xs font-semibold uppercase tracking-[.19em] text-[#f0c453]';
 const dailySituationIndex = total => {
@@ -22,6 +22,7 @@ const dailySituationIndex = total => {
 };
 
 export default function ExploreArchetypes() {
+    const categories = ['все', ...situationsDefinition.categories];
     const { archetypes = [], settings = {} } = usePage().props;
     const [category, setCategory] = useState('все');
     const [expanded, setExpanded] = useState(false);
