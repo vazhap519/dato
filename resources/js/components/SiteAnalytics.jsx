@@ -69,8 +69,29 @@ export default function SiteAnalytics() {
         const page = () => send('page_view', null);
         const click = (e) => {
             const target = e.target instanceof Element ? e.target.closest('a, button') : null;
-            if (!target || target.closest('[data-no-analytics]')) return;
-            const href = target.tagName === 'A' ? target.getAttribute('href') : null;
+            if (!target) return;
+            // Track all invitations from exploration pages, including legacy footer
+            // links inside data-no-analytics. Do not send quiz answers or text.
+            const destinationHref = target.tagName === 'A' ? target.getAttribute('href') : null;
+            if (destinationHref && !target.hasAttribute('data-explore-milestone')) {
+                try {
+                    const dest = new URL(destinationHref, window.location.href);
+                    const pathname = window.location.pathname;
+                    if (dest.origin === window.location.origin && dest.pathname === '/editoria'
+                        && (pathname === '/numbers' || pathname.startsWith('/explore/'))) {
+                        const key = pathname === '/numbers' ? 'numbers'
+                            : pathname.includes('/archetypes/mirror') ? 'archetype-mirror'
+                            : pathname.includes('/archetypes') ? 'archetypes'
+                            : pathname.includes('/emotions') ? 'emotions'
+                            : pathname.includes('/dreams') ? 'dreams'
+                            : pathname.includes('/patterns') ? 'patterns'
+                            : pathname.includes('/mirror') ? 'personality-mirror' : null;
+                        if (key) send('explore_practice', key);
+                    }
+                } catch {}
+            }
+            if (target.closest('[data-no-analytics]')) return;
+            const href = destinationHref;
             let destination = null;
             try { if (href) destination = new URL(href, window.location.href); } catch {}
             const metaEvent = target.getAttribute('data-meta-event');
