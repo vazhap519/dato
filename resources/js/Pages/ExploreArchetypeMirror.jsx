@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import mirrorDefinition from '../../data/archetype-mirror-questions.json';
+import mirrorDefinitionBase from '../../data/archetype-mirror-questions.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const mirrorDefinition = liveExploreDocument('archetype-mirror-questions', mirrorDefinitionBase);
 
 const QUESTIONS = mirrorDefinition.questions;
 const MIRROR_VERSION = mirrorDefinition.version;
