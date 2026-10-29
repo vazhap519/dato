@@ -68,6 +68,15 @@ Route::get('/explore', function () {
             ->get(['id','slug','title','subtitle','description','icon','url']),
     ]);
 })->name('explore.index');
+Route::get('/explore/archetypes', function () {
+    return Inertia::render('ExploreArchetypes', [
+        'archetypes' => \App\Models\Archetype::query()
+            ->where('is_published', true)
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get(['id','slug','title','subtitle','icon','description','strength','shadow','question','practice']),
+    ]);
+})->name('explore.archetypes');
 Route::get('/explore/emotions', fn () => Inertia::render('ExploreEmotions'))->name('explore.emotions');
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
 Route::get('/numbers/lookup/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'lookup'])
