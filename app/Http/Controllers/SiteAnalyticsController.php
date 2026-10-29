@@ -19,7 +19,7 @@ class SiteAnalyticsController extends Controller
             'utm_campaign' => ['nullable', 'string', 'max:120'],
         ]);
         if (str_starts_with($data['event'], 'explore_')
-            && ! (str_starts_with($data['path'], '/explore/') || $data['path'] === '/numbers')) {
+            && ! (str_starts_with($data['path'], '/explore/') || str_starts_with($data['path'], '/numbers'))) {
             return response()->noContent();
         }
         $agent = Str::lower($request->userAgent() ?? '');
