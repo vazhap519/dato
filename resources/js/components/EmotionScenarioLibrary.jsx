@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@inertiajs/react';
-import atlas from '../../data/emotion-atlas.json';
-import scenarioData from '../../data/emotion-situations.json';
+import atlasBase from '../../data/emotion-atlas.json'
+import scenarioDataBase from '../../data/emotion-situations.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const atlas = liveExploreDocument('emotion-atlas', atlasBase);
+const scenarioData = liveExploreDocument('emotion-situations', scenarioDataBase);
 
 const bySlug = Object.fromEntries(atlas.emotions.map(item => [item.slug,item]));
 const categories = [{ id: 'all', title: 'Все темы' }, ...scenarioData.categories];
