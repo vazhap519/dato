@@ -78,7 +78,10 @@ export function liveExploreDocument(name, fallback) {
             ownKeys() {
                 return Reflect.ownKeys(current(path) ?? original);
             },
-            getOwnPropertyDescriptor(_target, property) {
+            getOwnPropertyDescriptor(target, property) {
+                if (Array.isArray(target) && property === 'length') {
+                    return Object.getOwnPropertyDescriptor(target, 'length');
+                }
                 const descriptor = Object.getOwnPropertyDescriptor(current(path) ?? original, property);
                 return descriptor ? { ...descriptor, configurable: true } : undefined;
             },
