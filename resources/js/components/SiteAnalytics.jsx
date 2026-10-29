@@ -78,8 +78,8 @@ export default function SiteAnalytics() {
                     const dest = new URL(destinationHref, window.location.href);
                     const pathname = window.location.pathname;
                     if (dest.origin === window.location.origin && dest.pathname === '/editoria'
-                        && (pathname === '/numbers' || pathname.startsWith('/explore/'))) {
-                        const key = pathname === '/numbers' ? 'numbers'
+                        && (pathname.startsWith('/numbers') || pathname.startsWith('/explore/'))) {
+                        const key = pathname.startsWith('/numbers') ? 'numbers'
                             : pathname.includes('/archetypes/mirror') ? 'archetype-mirror'
                             : pathname.includes('/archetypes') ? 'archetypes'
                             : pathname.includes('/emotions') ? 'emotions'
