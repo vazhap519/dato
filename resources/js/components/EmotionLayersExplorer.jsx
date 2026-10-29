@@ -4,7 +4,7 @@ import { liveExploreDocument } from '../lib/exploreCms.js';
 
 const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
-const bySlug = Object.fromEntries(atlas.emotions.map(e => [e.slug, e]));
+const bySlug = new Proxy({}, { get: (_target, slug) => atlas.emotions.find(item => item.slug === slug) });
 const examples = [
     { start: 'anger', nearby: ['hurt','fear','helplessness'], scene: 'Иногда злость возникает там, где мы почувствовали боль или потеряли влияние.' },
     { start: 'anxiety', nearby: ['fear','insecurity','confusion'], scene: 'Иногда тревога соседствует с неясностью, неуверенностью или конкретным страхом.' },
