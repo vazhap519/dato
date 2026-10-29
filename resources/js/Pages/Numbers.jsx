@@ -6,28 +6,12 @@ const digitsOnly = value => value.replace(/[^0-9]/g, '').slice(0, 12);
 export default function Numbers() {
     const { special = [], ordinary = [], catalogPage = 1, catalogPages = 10, selected = null, searched = null, settings = null } = usePage().props;
     const [value, setValue] = useState(selected?.number || searched || '');
-    const [timeMode, setTimeMode] = useState(false);
     const [clockFormat, setClockFormat] = useState('24');
     const [copied, setCopied] = useState(false);
     const [localTime, setLocalTime] = useState('');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-    useEffect(() => {
-        if (!timeMode) return undefined;
-        const update = () => {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const hour12 = String((now.getHours() % 12) || 12).padStart(2, '0');
-            setLocalTime(clockFormat === '12' ? hour12 + ':' + minutes + (now.getHours() >= 12 ? ' PM' : ' AM') : hours + ':' + minutes);
-            setValue((clockFormat === '12' ? hour12 : hours) + minutes);
-        };
-        update();
-        const timer = setInterval(update, 1000);
-        return () => clearInterval(timer);
-    }, [timeMode, clockFormat]);
 
     useEffect(() => {
         if (!value) {
@@ -57,16 +41,27 @@ export default function Numbers() {
     }, [value]);
 
     useEffect(() => {
-        if (timeMode) return undefined;
         const updateClock = () => {
             const now = new Date();
-            const hour = clockFormat === '12' ? String((now.getHours() % 12) || 12).padStart(2, '0') : String(now.getHours()).padStart(2, '0');
-            setLocalTime(hour + ':' + String(now.getMinutes()).padStart(2, '0') + (clockFormat === '12' ? (now.getHours() >= 12 ? ' PM' : ' AM') : ''));
+            const hour = clockFormat === '12'
+                ? String((now.getHours() % 12) || 12).padStart(2, '0')
+                : String(now.getHours()).padStart(2, '0');
+            setLocalTime(hour + ':' + String(now.getMinutes()).padStart(2, '0') +
+                (clockFormat === '12' ? (now.getHours() >= 12 ? ' PM' : ' AM') : ''));
         };
         updateClock();
         const timer = setInterval(updateClock, 1000);
         return () => clearInterval(timer);
-    }, [timeMode, clockFormat]);
+    }, [clockFormat]);
+
+    const selectCurrentTime = () => {
+        const now = new Date();
+        const hour = clockFormat === '12'
+            ? String((now.getHours() % 12) || 12).padStart(2, '0')
+            : String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        setValue(hour + minutes);
+    };
 
     const visibleGroups = result?.input === value ? result.groups : [];
     const uniqueGroups = visibleGroups.reduce((acc, group) => {
@@ -114,24 +109,24 @@ export default function Numbers() {
                                 <label htmlFor="number-search" className="sr-only">Введите число</label>
                                 <span aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d5ab4a] text-xl">⌕</span>
                                 <input id="number-search" inputMode="numeric" pattern="[0-9]*" value={value}
-                                    onChange={e => { setTimeMode(false); setValue(digitsOnly(e.target.value)); }}
+                                    onChange={e => setValue(digitsOnly(e.target.value))}
                                     placeholder="Введите число, например 1234567"
                                     className="w-full rounded-xl border border-[#b88f37]/35 bg-[#201c14] pl-12 pr-12 py-3.5 text-lg text-white placeholder:text-[#8e877a] focus:outline-none focus:ring-2 focus:ring-[#eac04f]" />
-                                {value && <button type="button" aria-label="Очистить поиск" onClick={() => { setTimeMode(false); setValue(''); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a9a293] hover:text-white">×</button>}
+                                {value && <button type="button" aria-label="Очистить поиск" onClick={() => setValue('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a9a293] hover:text-white">×</button>}
                             </div>
                         </div>
                         <aside className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start rounded-2xl border border-[#d9b65c]/20 bg-[#1d1a13] p-4 lg:sticky lg:top-6">
                             <p className="text-xs uppercase tracking-[0.14em] text-[#d5ab4a] mb-3">Числа на часах</p>
-                            <div className="text-3xl font-serif tabular-nums text-[#f0c453] mb-3">{localTime || '—:—'}</div>
+                            <button type="button" onClick={selectCurrentTime} aria-label="Подставить текущее время в поиск"
+                                title="Нажми, чтобы посмотреть толкование текущего времени"
+                                className="block text-left text-3xl font-serif tabular-nums text-[#f0c453] mb-3 hover:text-[#ffda73] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] rounded">
+                                {localTime || '—:—'} <span aria-hidden="true" className="text-base align-middle">↗</span>
+                            </button>
                             <div className="flex gap-2 mb-4">
                                 <button type="button" aria-pressed={clockFormat === '24'} onClick={() => setClockFormat('24')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '24' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>24 часа</button>
                                 <button type="button" aria-pressed={clockFormat === '12'} onClick={() => setClockFormat('12')} className={'flex-1 rounded-lg border py-2 text-xs ' + (clockFormat === '12' ? 'bg-[#f0c54e] text-[#19140b] border-[#f0c54e]' : 'border-[#b88f37]/30 text-[#d9c69f]')}>12 часов</button>
                             </div>
-                            <button type="button" onClick={() => setTimeMode(!timeMode)} aria-pressed={timeMode}
-                                className={'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors ' + (timeMode ? 'bg-[#f0c54e] text-[#19140b]' : 'border border-[#b88f37]/40 text-[#f0c453] hover:bg-white/5')}>
-                                {timeMode ? '● Время отслеживается' : 'Показать толкование времени'}
-                            </button>
-                            <p className="text-xs text-[#a9a293] mt-3 leading-5">Время определяется по устройству и обновляется автоматически. Для ручного ввода нажми на поле поиска.</p>
+                            <p className="text-xs text-[#a9a293] mt-2 leading-5">Нажми на время, чтобы подставить его в поиск. Часы идут дальше, а выбранное толкование остаётся неизменным.</p>
                         </aside>
                         <div className="min-w-0 lg:col-start-1 lg:row-start-2 space-y-4">
                             {value && (
