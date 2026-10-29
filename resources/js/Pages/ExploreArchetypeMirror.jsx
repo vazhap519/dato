@@ -101,6 +101,7 @@ export default function ExploreArchetypeMirror() {
             <p className="text-xs uppercase tracking-[.2em] text-[#f0c453]">Интерактивное исследование</p>
             <h1 className="mt-3 font-serif text-4xl sm:text-5xl">Зеркало <span className="italic text-[#f0c453]">архетипов</span></h1>
             <p className="mt-5 max-w-3xl leading-7 text-[#c4b9a6]">20 жизненных ситуаций. Выбирай не самый правильный или красивый ответ, а тот, который ближе к твоей обычной первой реакции. Здесь нет плохих ответов.</p>
+            <p className="mt-3 max-w-3xl text-xs leading-6 text-[#a99d88]">После завершения ответы автоматически учитываются в общей статистике без сохранения отдельных анкет. <a href="/privacy" className="underline text-[#e4c88c] hover:text-white">Как используются данные</a>.</p>
             {archetypes.length === 0 ? <p className="mt-10 text-[#f0c453]">Исследование временно недоступно: архетипы не опубликованы.</p> : !showResults ? <section className="mt-10 rounded-3xl border border-[#a78a51]/50 bg-[#211d15] p-5 sm:p-9">
                 <div className="flex items-center justify-between gap-4 text-xs text-[#e5bc62]">
                     <span>Ситуация {step + 1} из {QUESTIONS.length}</span><span>{answered} ответов из {QUESTIONS.length}</span>
