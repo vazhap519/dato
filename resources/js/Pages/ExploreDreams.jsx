@@ -119,6 +119,7 @@ export default function ExploreDreams() {
                                 </div>
                                 <p className="mt-5 text-sm leading-7 text-[#bcae97]">Не нужно отвечать на всё. Иногда достаточно заметить один момент, который действительно отозвался.</p>
                             </div>
+                            <div className="mt-6"><ExplorePracticeInvitation tool="dreams" compact /></div>
                             <div className="mt-6 flex flex-wrap gap-3">
                                 <button type="button" onClick={()=>setStage(1)} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">← Вернуться</button>
                                 <button type="button" onClick={reset} className="rounded-xl border border-[#9b7845] px-5 py-3 text-sm text-[#f0c453]">Другой сон</button>
