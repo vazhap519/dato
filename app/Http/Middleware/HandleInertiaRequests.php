@@ -179,6 +179,7 @@ class HandleInertiaRequests extends Middleware
 
                     return [
                         'site_name' => $settings->site_name,
+                        'numbers_light_theme_enabled' => (bool) $settings->numbers_light_theme_enabled,
                         'favicon' => $settings->favicon_url,
                         'apple_icon' => $settings->apple_icon_url,
                         'og_default' => $settings->og_default_url,
