@@ -45,7 +45,6 @@ export default function ExplorePersonalityMirror(){
    <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
    <nav aria-label="Навигация по странице" className="flex flex-wrap gap-4 text-sm">
     <a href="#mirror" className="text-[#e4c88c] hover:text-white">Моя карта</a>
-    <a href="#dimensions" className="text-[#e4c88c] hover:text-white">Шесть граней</a>
     <a href="#question" className="text-[#e4c88c] hover:text-white">Вопрос дня</a>
     <a href="#dilemmas" className="text-[#e4c88c] hover:text-white">Дилеммы</a>
     <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
@@ -67,20 +66,29 @@ export default function ExplorePersonalityMirror(){
       <span className="material-symbols-outlined text-[76px] leading-none text-[#f0c453]" aria-hidden="true">self_improvement</span>
       <p className={kicker+" mt-5"}>Не тест на правильность</p>
       <h2 className="mt-3 font-serif text-3xl">Не узнать, кем ты обязан быть. Увидеть, как выбираешь.</h2>
-      <div className="mt-7 grid grid-cols-2 gap-3">{[[24,'вопроса'],[6,'граней опыта'],[12,'жизненных дилемм'],[30,'вопросов дня']].map(([value,title])=><div key={title} className="rounded-xl border border-[#755d38]/70 bg-[#17140f] p-4"><p className="font-serif text-3xl text-[#f0c453]">{value}</p><p className="mt-1 text-xs leading-5 text-[#c0b19c]">{title}</p></div>)}</div>
+      <div className="mt-7 grid grid-cols-2 gap-3">{[[24,'вопроса'],[6,'тем выбора'],[12,'жизненных дилемм'],[30,'вопросов дня']].map(([value,title])=><div key={title} className="rounded-xl border border-[#755d38]/70 bg-[#17140f] p-4"><p className="font-serif text-3xl text-[#f0c453]">{value}</p><p className="mt-1 text-xs leading-5 text-[#c0b19c]">{title}</p></div>)}</div>
       <p className="mt-5 text-xs leading-6 text-[#ae9e86]">Без регистрации, личного журнала и сохранения выбранных ответов.</p>
     </div>
    </section>
    <section id="mirror" className="mt-20 scroll-mt-6">
     <p className={kicker}>Зеркало реакций</p>
-    <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Шесть граней <span className="italic text-[#f0c453]">выбора</span></h2>
-    <p className="mt-4 max-w-3xl leading-7 text-[#c4b9a6]">24 утверждения, по четыре на каждую тему. Выбирай, насколько часто ты узнаёшь себя в описании. Нет хороших и плохих ответов, а итог не является научным психологическим тестом.</p>
+    <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Как ты обычно <span className="italic text-[#f0c453]">поступаешь?</span></h2>
+    <p className="mt-4 max-w-3xl leading-7 text-[#c4b9a6]">Ответь на 24 вопроса о привычных решениях. Вопросы разделены на шесть понятных тем: например, как ты начинаешь новое дело или говоришь «нет». После каждой четвёрки ответов перейдёшь к следующей теме. В конце увидишь, какие способы действия оказались тебе ближе. Правильных ответов нет.</p>
     <div className="mt-7 overflow-hidden rounded-3xl border border-[#a0804a]/70 bg-[#211d15]">
       {!showResults ? <>
        <div className="border-b border-[#81653f]/60 bg-[#332718] p-5 sm:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-3"><p className={kicker}>Грань {section+1} из {axes.length}</p><p className="text-sm text-[#e5bc62]">{answered} / {questions.length} ответов</p></div>
+        <div className="flex flex-wrap items-center justify-between gap-3"><p className={kicker}>Тема {section+1} из {axes.length}</p><p className="text-sm text-[#e5bc62]">{answered} / {questions.length} ответов</p></div>
         <h3 className="mt-3 font-serif text-3xl">{currentAxis.title}</h3>
         <p className="mt-3 text-sm leading-7 text-[#c5b39c]">{currentAxis.description}</p>
+        <div className="mt-5 rounded-xl border border-[#8b6b3d]/70 bg-[#1c1812] p-4 sm:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#f0c453]">Какие способы мы сравниваем?</p>
+          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+            <p className="text-sm leading-6 text-[#eee0ca]">{currentAxis.left}</p>
+            <span className="text-[#f0c453]" aria-hidden="true">↔</span>
+            <p className="text-right text-sm leading-6 text-[#eee0ca]">{currentAxis.right}</p>
+          </div>
+          <p className="mt-3 text-xs leading-6 text-[#b8aa92]">Сейчас будут четыре вопроса об этой теме. Ответы покажут, какой способ тебе ближе в привычных ситуациях. Ни один вариант не лучше другого.</p>
+        </div>
         <div className="mt-6 grid grid-cols-6 gap-2">{axes.map((a,i)=><div key={a.slug} className={'h-1.5 rounded-full '+(i<=section?'bg-[#f0c453]':'bg-[#6d5434]')} />)}</div>
        </div>
        <div className="grid gap-4 p-4 sm:p-8">
@@ -100,13 +108,14 @@ export default function ExplorePersonalityMirror(){
        </div>
       </> : <>
         <div className="border-b border-[#806638]/60 bg-[#342718] p-6 sm:p-9">
-          <p className={kicker}>Твоя карта сегодняшних ответов</p>
-          <h3 className="mt-3 font-serif text-3xl sm:text-4xl">Как проявились разные способы выбора?</h3>
-          <p className="mt-4 text-sm leading-7 text-[#c8b9a0]">Значения показаны для этих 24 ответов, не измеряют черты личности и не подтверждают никакой диагноз. Левый и правый полюса равно допустимы — это разные подходы.</p>
+          <p className={kicker}>Итог 24 вопросов по шести темам</p>
+          <h3 className="mt-3 font-serif text-3xl sm:text-4xl">Какие способы действия тебе ближе?</h3>
+          <p className="mt-4 text-sm leading-7 text-[#c8b9a0]">Каждая строка ниже — результат четырёх вопросов по одной теме, которую ты только что прошёл. Полоска показывает, к какому из двух способов чаще склонялись твои ответы. Это не психологический диагноз и не постоянная характеристика личности: в другой ситуации ты можешь поступить иначе.</p>
         </div>
         <div className="grid gap-5 p-5 sm:p-9">
          {scores.map(axis=><article key={axis.slug} className="rounded-2xl border border-[#84683f]/70 bg-[#17140f] p-5 sm:p-7">
-           <div className="flex flex-wrap items-center justify-between gap-2"><h4 className="font-serif text-2xl">{axis.title}</h4><span className="text-xs text-[#d8b66c]">По ответам этой анкеты</span></div>
+           <div className="flex flex-wrap items-center justify-between gap-2"><h4 className="font-serif text-2xl">{axis.title}</h4><span className="text-xs text-[#d8b66c]">4 вопроса по этой теме</span></div>
+           <p className="mt-3 text-sm leading-7 text-[#bbac94]">{axis.description}</p>
            <div className="mt-5 flex justify-between gap-4 text-xs leading-5 text-[#c9b99f]"><span>{axis.left}</span><span className="text-right">{axis.right}</span></div>
            <div className="relative mt-3 h-3 rounded-full bg-[#3c3021]">
              <span className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#806636] to-[#e9bd63]" style={{width:axis.value+'%'}} />
@@ -122,20 +131,6 @@ export default function ExplorePersonalityMirror(){
         </div>
         <p className="px-5 pb-7 text-xs leading-6 text-[#a99d88] sm:px-9">При переходе со страницы ответы исчезнут. Сервер не получает выбранные варианты и не хранит персональную карту.</p>
       </>}
-    </div>
-   </section>
-
-   <section id="dimensions" className="mt-20 scroll-mt-6">
-    <p className={kicker}>Шесть направлений внимания</p>
-    <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Из чего состоит <span className="italic text-[#f0c453]">карта?</span></h2>
-    <p className="mt-4 max-w-3xl leading-7 text-[#c4b9a6]">Каждая грань — спектр возможных способов действий, а не категория человека. В разных обстоятельствах твои ответы могут меняться.</p>
-    <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {axes.map((axis,i)=><article key={axis.slug} className={panel}>
-       <p className="font-serif text-3xl text-[#f0c453]">{String(i+1).padStart(2,'0')}</p>
-       <h3 className="mt-4 font-serif text-2xl">{axis.title}</h3>
-       <p className="mt-3 text-sm leading-7 text-[#c4b9a6]">{axis.description}</p>
-       <div className="mt-5 flex flex-wrap gap-2"><span className="rounded-full border border-[#7c633f] px-3 py-2 text-xs text-[#cbb995]">{axis.left}</span><span className="rounded-full border border-[#7c633f] px-3 py-2 text-xs text-[#cbb995]">{axis.right}</span></div>
-      </article>)}
     </div>
    </section>
 
