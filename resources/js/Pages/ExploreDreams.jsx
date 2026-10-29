@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import data from '../../data/dream-atlas.json';
+import dataBase from '../../data/dream-atlas.json'
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const data = liveExploreDocument('dream-atlas', dataBase);
 
 const S = data.symbols;
 const G = data.groups;
