@@ -11,6 +11,7 @@ import EmotionPracticeLibrary from '../components/EmotionPracticeLibrary';
 
 const groups = atlas.groups;
 const emotions = atlas.emotions;
+const featuredSlugs = ['anxiety','anger','joy','sadness','fear','calm','hurt','shame','gratitude','envy','interest','inspiration'];
 const kicker = 'text-xs font-semibold uppercase tracking-[.2em] text-[#f0c453]';
 const blocks = [
     { title: 'Эмоциональный компас', subtitle: 'Что я чувствую прямо сейчас?', icon: 'explore', href: '#compass' },
@@ -28,7 +29,9 @@ export default function ExploreEmotions() {
         (group === 'all' || item.group === group) &&
         [item.name,item.subtitle,item.definition].join(' ').toLocaleLowerCase('ru').includes(query.trim().toLocaleLowerCase('ru'))
     ),[query,group]);
-    const cards = showAll || group !== 'all' || query.trim() ? visible : visible.slice(0,12);
+    const cards = showAll || group !== 'all' || query.trim()
+        ? visible
+        : featuredSlugs.map(slug => visible.find(item => item.slug === slug)).filter(Boolean);
     const pickGroup = value => {setGroup(value);setShowAll(false);};
     const goToEmotion = slug => router.visit('/explore/emotions/' + encodeURIComponent(slug));
 
