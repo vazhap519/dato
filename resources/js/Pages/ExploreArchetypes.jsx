@@ -52,7 +52,7 @@ export default function ExploreArchetypes() {
                     <p className={kicker}>Пространство самопознания</p>
                     <h1 className="mt-4 font-serif text-5xl leading-tight sm:text-6xl">Язык <span className="italic text-[#f0c453]">архетипов</span></h1>
                     <p className="mt-6 max-w-2xl text-lg leading-8 text-[#d6c9b4]">Внутри нас звучат разные голоса: один хочет защитить, другой — исследовать, третий — всё упорядочить. Замечая их, мы получаем возможность выбирать, а не только реагировать.</p>
-                    <p className="mt-4 max-w-2xl leading-7 text-[#a99d88]">Это язык для наблюдения, а не ярлык личности. Здесь можно возвращаться к новым ситуациям и узнавать знакомые реакции без необходимости вести записи.</p>
+                    <p className="mt-4 max-w-2xl leading-7 text-[#a99d88]">Это язык для наблюдения, а не ярлык личности. Возвращайся к новым ситуациям, узнавай свои привычные реакции и исследуй, как они меняются в разных обстоятельствах.</p>
                     <div className="mt-7 flex flex-wrap items-center gap-3">
                         <a href="#daily" className="rounded-xl bg-[#f0c453] px-6 py-3 font-semibold text-[#21180b] transition hover:bg-[#ffda7b]">Начать с сегодняшней ситуации →</a>
                         <Link href="/explore/archetypes/mirror" className="rounded-xl border border-[#b08b49]/70 px-6 py-3 font-semibold text-[#f0c453] transition hover:bg-[#302518]">Полная карта · 20 вопросов</Link>
