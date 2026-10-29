@@ -29,7 +29,7 @@ export function ExplorePracticeInvitation({ tool, compact = false }) {
         <p className="text-xs font-semibold uppercase tracking-[.17em] text-[#eac776]">Продолжение исследования</p>
         <h3 className="mt-3 font-serif text-2xl text-[#fff1d9] sm:text-3xl">Хочешь исследовать себя глубже?</h3>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#c9b9a2]">В бесплатном трёхдневном практикуме «Познай СЕБЯ» мы работаем с вниманием, привычными ролями и осознанным выбором. Без обязательств — решать тебе.</p>
-        <Link href="/editoria" data-analytics={'Исследование · Практикум · ' + tool} onClick={() => exploreMilestone('explore_practice', tool)} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#f0c453] px-6 py-3 text-sm font-semibold text-[#21180b] transition hover:bg-[#ffda81] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f0c453]">
+        <Link href="/editoria" data-explore-milestone="1" data-analytics={'Исследование · Практикум · ' + tool} onClick={() => exploreMilestone('explore_practice', tool)} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#f0c453] px-6 py-3 text-sm font-semibold text-[#21180b] transition hover:bg-[#ffda81] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f0c453]">
             Узнать о практикуме <span aria-hidden="true">→</span>
         </Link>
     </aside>;
