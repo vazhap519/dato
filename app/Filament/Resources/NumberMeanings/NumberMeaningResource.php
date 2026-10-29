@@ -23,8 +23,8 @@ class NumberMeaningResource extends Resource {
     protected static ?string $navigationLabel = 'Язык чисел';
     protected static ?string $modelLabel = 'значение числа';
     protected static ?string $pluralModelLabel = 'значения чисел';
-    protected static string | \UnitEnum | null $navigationGroup = 'Продукты и услуги';
-    protected static ?int $navigationSort = 55;
+    protected static string | \UnitEnum | null $navigationGroup = 'Самопознание';
+    protected static ?int $navigationSort = 21;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-sparkles';
     public static function form(Schema $schema): Schema {
         return $schema->components([
