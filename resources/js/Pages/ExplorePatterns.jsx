@@ -25,7 +25,9 @@ export default function ExplorePatterns() {
  const listed=expanded||category!=='all'||query.trim()?filtered:filtered.slice(0,9);
  const picked=patterns.find(p=>p.slug===chosen);
  const result=outcomes.find(o=>o.slug===outcome);
- const daily=patterns[Math.floor(Date.now()/86400000)%patterns.length];
+ const now=new Date();
+ const day=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000);
+ const daily=patterns[day%patterns.length];
  const reset=()=>{setStep(0);setChosen('');setOutcome('');};
  return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
   <Head title="Язык повторений — замечай привычные сценарии — Arutyun"><meta name="description" content="18 повторяющихся сценариев и интерактивная карта реакции, последствия и нового выбора. Без предсказаний, регистрации и личного журнала."/></Head>
