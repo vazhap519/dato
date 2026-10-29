@@ -160,6 +160,7 @@ export default function ExploreArchetypeMirror() {
                 <div className="mt-7 rounded-2xl border border-[#876b3b]/60 p-6">
                     <h3 className="font-serif text-2xl">Что делать с результатом?</h3>
                     <p className="mt-3 leading-7 text-[#c4b9a6]">Выбери одну из трёх часто проявляющихся ролей. В ближайшие сутки замечай, когда она включается, что ты чувствуешь перед действием и есть ли у тебя другой выбор.</p>
+                    <div className="mt-6"><ExplorePracticeInvitation tool="archetype-mirror" compact /></div>
                     <div className="mt-6 flex flex-wrap gap-3">
                         <button type="button" onClick={() => window.print()} className={button}>Сохранить как PDF / печать</button>
                         <button type="button" onClick={restart} className={button}>Пройти заново</button>
