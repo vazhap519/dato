@@ -110,6 +110,23 @@ Route::get('/explore/emotions/{slug}', function (string $slug) {
 
     return Inertia::render('ExploreEmotionDetail', ['emotionSlug' => $slug]);
 })->where('slug', '[a-z0-9-]+')->name('explore.emotions.detail');
+// Self-discovery explorations without personal data storage.
+Route::get('/explore/dreams', fn () => Inertia::render('ExploreDreams'))->name('explore.dreams');
+Route::get('/explore/dreams/{slug}', function (string $slug) {
+    $atlas = json_decode((string) file_get_contents(resource_path('data/dream-atlas.json')), true);
+    abort_unless(in_array($slug, array_column($atlas['symbols'] ?? [], 'slug'), true), 404);
+    return Inertia::render('ExploreDreamSymbol', ['dreamSymbol' => $slug]);
+})->where('slug', '[a-z0-9-]+')->name('explore.dreams.detail');
+
+Route::get('/explore/patterns', fn () => Inertia::render('ExplorePatterns'))->name('explore.patterns');
+Route::get('/explore/patterns/{slug}', function (string $slug) {
+    $atlas = json_decode((string) file_get_contents(resource_path('data/pattern-atlas.json')), true);
+    abort_unless(in_array($slug, array_column($atlas['patterns'] ?? [], 'slug'), true), 404);
+    return Inertia::render('ExplorePatternDetail', ['patternSlug' => $slug]);
+})->where('slug', '[a-z0-9-]+')->name('explore.patterns.detail');
+
+Route::get('/explore/mirror', fn () => Inertia::render('ExplorePersonalityMirror'))->name('explore.mirror');
+
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
 Route::get('/numbers/lookup/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'lookup'])
     ->where('number', '[0-9]{1,12}')->middleware('throttle:120,1')->name('numbers.lookup');
