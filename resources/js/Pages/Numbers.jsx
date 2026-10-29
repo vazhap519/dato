@@ -89,7 +89,7 @@ export default function Numbers() {
             <Head title={selected ? selected.number + ' — ' + selected.title + ' | Язык чисел' : 'Язык чисел — символы для самопознания'}><meta name="description" content="Авторские символические интерпретации чисел, вопросы к себе и практики внимания. Без предсказаний." /></Head>
             <header className="relative z-40 border-b border-[#b99347]/25">
                 <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
-                    <Link href="/" className="flex items-center gap-3" aria-label="На главную"><span className="sr-only">{settings?.site_name || "На главную"}</span>{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Логотип сайта"} className="h-10 w-auto max-w-[180px] object-contain" /> : <span className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</span>}</Link>
+                    <Link href="/" className="flex items-center gap-3" aria-label="На главную"><span className="sr-only">{settings?.site_name || "На главную"}</span>{settings?.logo ? <img src={settings.logo} alt={settings?.site_name || "Логотип сайта"} className="h-10 w-auto max-w-[110px] sm:max-w-[180px] object-contain" /> : <span className="text-[#f4c74c] italic text-2xl font-serif tracking-wide">Arutyun</span>}</Link>
                     <ExploreSectionNavigation items={[
                         { label: 'Поиск', href: '#number-search', icon: 'search' },
                         { label: 'Часы', href: '#number-clock', icon: 'schedule' },
