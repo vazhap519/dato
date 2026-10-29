@@ -123,7 +123,7 @@ export default function Numbers() {
                                     </button>
                                 ))}
                             </div>
-                            <p className="text-xs text-[#a9a293] mt-2 leading-5">Нажми на нужный формат времени — число сразу появится в поиске. Толкование не меняется при смене минуты.</p>
+                            <p className="text-xs text-[#a9a293] mt-2 leading-5">Нажми на нужный формат времени — число сразу появится в поиске.</p>
                         </aside>
                         <div className="min-w-0 lg:col-start-1 lg:row-start-2 space-y-4">
                             {value && (
