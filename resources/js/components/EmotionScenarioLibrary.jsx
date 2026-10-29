@@ -7,7 +7,7 @@ import { liveExploreDocument } from '../lib/exploreCms.js';
 const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 const scenarioData = liveExploreDocument('emotion-situations', scenarioDataBase);
 
-const bySlug = Object.fromEntries(atlas.emotions.map(item => [item.slug,item]));
+const bySlug = new Proxy({}, { get: (_target, slug) => atlas.emotions.find(item => item.slug === slug) });
 const categories = [{ id: 'all', title: 'Все темы' }, ...scenarioData.categories];
 export default function EmotionScenarioLibrary() {
     const [category,setCategory] = useState('all');
