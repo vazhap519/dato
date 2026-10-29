@@ -1,7 +1,9 @@
 import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import data from '../../data/pattern-atlas.json';
+import dataBase from '../../data/pattern-atlas.json';
+import { liveExploreDocument } from '../lib/exploreCms.js';
 
+const data = liveExploreDocument('pattern-atlas', dataBase);
 const kicker='text-xs font-semibold uppercase tracking-[.18em] text-[#f0c453]';
 const panel='rounded-3xl border border-[#84683f]/70 bg-[#211d15] p-6 sm:p-8';
 export default function ExplorePatternDetail(){
