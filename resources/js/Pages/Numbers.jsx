@@ -171,9 +171,9 @@ export default function Numbers() {
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {special.map(item => (
                                     <Link key={item.number} href={'/numbers/' + item.number} data-analytics={'Числа · особое ' + item.number}
-                                        className="group rounded-2xl border border-[#d3aa4a]/35 bg-gradient-to-br from-[#292216] to-[#1d1a14] px-4 py-6 hover:border-[#f0c453]/80 hover:-translate-y-1 transition-all">
-                                        <div className="text-3xl md:text-4xl text-[#f0c453] font-serif mb-2">{item.number}</div>
-                                        <div className="text-sm text-[#bcb2a0]">{item.title}</div>
+                                        className="number-special-card group rounded-2xl border border-[#d3aa4a]/35 bg-gradient-to-br from-[#292216] to-[#1d1a14] px-4 py-6 hover:border-[#f0c453]/80 hover:-translate-y-1 transition-all">
+                                        <div className="number-special-card__number text-3xl md:text-4xl text-[#f0c453] font-serif mb-2">{item.number}</div>
+                                        <div className="number-special-card__title text-sm text-[#bcb2a0]">{item.title}</div>
                                     </Link>
                                 ))}
                             </div>
