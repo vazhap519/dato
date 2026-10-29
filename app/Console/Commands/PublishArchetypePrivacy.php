@@ -32,9 +32,9 @@ class PublishArchetypePrivacy extends Command
                 return self::SUCCESS;
             }
 
-            // Do not overwrite privacy edits made independently after version 3.0.
-            if ($doc->version !== '3.0') {
-                $this->error('Редакция политики уже отличается от 3.0: '.$doc->version.'. Не изменяем автоматически.');
+            // Only modify the known current edition; preserve any independently updated policy.
+            if ($doc->version !== '1.0') {
+                $this->error('Редакция политики не 1.0: '.$doc->version.'. Не изменяем автоматически.');
                 return self::FAILURE;
             }
 
@@ -45,8 +45,8 @@ class PublishArchetypePrivacy extends Command
             }
 
             $updated = str_replace($anchor, $notice."\n\n".$anchor, $doc->content);
-            $updated = preg_replace('/^Редакция 3\\.0.*$/mu',
-                'Редакция 3.1 · '.now()->format('d.m.Y'), $updated, 1, $changed);
+            $updated = preg_replace('/^Редакция 1\\.0.*$/mu',
+                'Редакция 1.1 · '.now()->format('d.m.Y'), $updated, 1, $changed);
             if ($changed !== 1 || ! str_contains($updated, $notice)) {
                 $this->error('Не удалось подготовить обновление. Политика не изменена.');
                 return self::FAILURE;
@@ -60,10 +60,10 @@ class PublishArchetypePrivacy extends Command
                 'archived_at' => now(),
             ]);
             $doc->content = $updated;
-            $doc->version = '3.1';
+            $doc->version = '1.1';
             $doc->effective_at = now()->startOfDay();
             $doc->save();
-            $this->info('Опубликована политика конфиденциальности 3.1 с уведомлением об автоматической статистике.');
+            $this->info('Опубликована политика конфиденциальности 1.1 с уведомлением об автоматической статистике.');
             return self::SUCCESS;
         });
 
