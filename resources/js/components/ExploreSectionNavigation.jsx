@@ -83,12 +83,12 @@ export default function ExploreSectionNavigation({ items = [], label = 'Разд
     };
 
     return <div ref={menuRef} className="relative ml-auto shrink-0">
-        <nav className="hidden items-center gap-4 lg:flex xl:gap-5" aria-label="Навигация по разделам страницы">
+        <nav className="hidden items-center gap-4 xl:flex xl:gap-5" aria-label="Навигация по разделам страницы">
             {mainItems.map(item => renderItem(item))}
             {catalogItem && renderItem(catalogItem)}
         </nav>
 
-        <div className="lg:hidden">
+        <div className="xl:hidden">
             <button type="button" aria-label={open ? 'Закрыть меню разделов' : 'Открыть меню разделов'}
                 aria-expanded={open} aria-controls={menuId}
                 onClick={() => setOpen(value => !value)}
