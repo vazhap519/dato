@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import atlas from '../../data/emotion-atlas.json';
+import atlasBase from '../../data/emotion-atlas.json'
+import { liveExploreDocument } from '../lib/exploreCms.js';
+
+const atlas = liveExploreDocument('emotion-atlas', atlasBase);
 
 const profiles = [
     { id: 'low-hard', energy: 'low', tone: 'hard', slugs: ['sadness', 'loneliness', 'helplessness', 'disappointment', 'longing', 'despair'] },
