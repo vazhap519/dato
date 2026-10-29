@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import mirrorDefinitionBase from '../../data/archetype-mirror-questions.json'
 import { liveExploreDocument } from '../lib/exploreCms.js';
+import { useExploreJourney, ExplorePracticeInvitation } from '../components/ExploreJourney.jsx';
 
 const mirrorDefinition = liveExploreDocument('archetype-mirror-questions', mirrorDefinitionBase);
 
@@ -38,6 +39,7 @@ export default function ExploreArchetypeMirror() {
     }, [answers]);
     const answered = answers.filter(v => v !== null).length;
     const complete = answered === QUESTIONS.length;
+    useExploreJourney('archetype-mirror', answered > 0, showResults);
     const scores = useMemo(() => {
         const totals = Object.fromEntries(archetypes.map(a => [a.slug, 0]));
         answers.forEach((answer, i) => {
