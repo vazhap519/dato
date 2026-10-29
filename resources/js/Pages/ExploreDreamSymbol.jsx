@@ -5,7 +5,7 @@ import { liveExploreDocument } from '../lib/exploreCms.js';
 
 const data = liveExploreDocument('dream-atlas', dataBase);
 
-const symbolMap=Object.fromEntries(data.symbols.map(x=>[x.slug,x]));
+const symbolMap=new Proxy({}, { get: (_target, slug) => data.symbols.find(x => x.slug === slug) });
 const kicker='text-xs font-semibold uppercase tracking-[.17em] text-[#f0c453]';
 const panel='rounded-2xl border border-[#806638]/65 bg-[#211d15] p-5 sm:p-7';
 
