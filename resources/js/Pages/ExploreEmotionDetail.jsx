@@ -27,7 +27,7 @@ export default function ExploreEmotionDetail() {
         catch { setCopied(false); }
     };
 
-    return <div className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
+    return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
         <Head title={emotion.name+' — Язык эмоций — Arutyun'}>
             <meta name="description" content={emotion.definition} />
         </Head>
