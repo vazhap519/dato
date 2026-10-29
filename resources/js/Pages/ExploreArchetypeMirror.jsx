@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import mirrorDefinition from '../../data/archetype-mirror-questions.json';
+import { saveJournalEntry } from '../lib/archetypeJournal';
 
 const QUESTIONS = mirrorDefinition.questions;
 const MIRROR_VERSION = mirrorDefinition.version;
@@ -21,6 +22,7 @@ export default function ExploreArchetypeMirror() {
     const [step, setStep] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [shareStatus, setShareStatus] = useState('idle');
+    const [journalStatus, setJournalStatus] = useState('idle');
     const [submissionId, setSubmissionId] = useState(() => {
         try {
             const existing = sessionStorage.getItem(RECEIPT_KEY);
@@ -52,6 +54,7 @@ export default function ExploreArchetypeMirror() {
         setStep(0);
         setShowResults(false);
         setShareStatus('idle');
+        setJournalStatus('idle');
         const id = crypto.randomUUID();
         setSubmissionId(id);
         try { sessionStorage.setItem(RECEIPT_KEY, id); } catch {}
@@ -83,6 +86,13 @@ export default function ExploreArchetypeMirror() {
     const finish = () => {
         if (!complete) return;
         setShowResults(true);
+        const saved = saveJournalEntry({
+            id: 'mirror:' + submissionId,
+            kind: 'mirror',
+            surveyVersion: MIRROR_VERSION,
+            topRoles: scores.slice(0, 3).map(item => ({ slug: item.slug, title: item.title, score: item.score })),
+        });
+        setJournalStatus(saved.ok ? 'saved' : 'error');
         void submitAnonymousStats();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -142,6 +152,8 @@ export default function ExploreArchetypeMirror() {
                      shareStatus === 'sent' ? 'Ответы учтены в общей статистике без сохранения отдельной анкеты.' :
                      shareStatus === 'error' ? <>Не удалось отправить статистику. Твоя карта при этом сохранена в браузере. <button type="button" onClick={() => void submitAnonymousStats()} className="underline text-[#f0c453]">Повторить отправку</button></> : ''}
                 </p>}
+                {journalStatus === 'saved' && <p className="mt-4 text-sm text-[#c1e0b1]">Краткая карта также сохранена в журнале этого браузера. <Link href="/explore/archetypes/journal" className="underline text-[#f0c453]">Посмотреть журнал →</Link></p>}
+                {journalStatus === 'error' && <p className="mt-4 text-sm text-[#f4a99b]">Не удалось сохранить карту в журнале браузера. Серверная статистика работает отдельно.</p>}
                 <div className="mt-7 grid gap-4 md:grid-cols-3">
                     {scores.slice(0,3).map((item,index) => <article key={item.slug} className="rounded-2xl border border-[#876b3b]/60 bg-[#211d15] p-5">
                         <p className="text-xs uppercase tracking-widest text-[#f0c453]">{index === 0 ? 'Чаще всего' : 'Также проявляется'}</p>
@@ -158,7 +170,8 @@ export default function ExploreArchetypeMirror() {
                     <div className="mt-6 flex flex-wrap gap-3">
                         <button type="button" onClick={() => window.print()} className={button}>Сохранить как PDF / печать</button>
                         <button type="button" onClick={restart} className={button}>Пройти заново</button>
-                        <Link href="/explore/archetypes" className={button}>Исследовать все роли →</Link>
+                        <Link href="/explore/archetypes" className={button}>Исследовать ситуации →</Link>
+                        <Link href="/explore/archetypes/journal" className={button}>Мой журнал →</Link>
                     </div>
                 </div>
             </section>}
