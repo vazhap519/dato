@@ -1,428 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import mirrorDefinition from '../../data/archetype-mirror-questions.json';
 
-const QUESTIONS = [
-  {
-    "text": "Когда планы внезапно рушатся, ты чаще…",
-    "options": [
-      {
-        "label": "Составляю новый план и проверяю риски",
-        "slug": "controller"
-      },
-      {
-        "label": "Наблюдаю за реакцией, прежде чем действовать",
-        "slug": "observer"
-      },
-      {
-        "label": "Ищу неожиданную возможность",
-        "slug": "seeker"
-      },
-      {
-        "label": "Стараюсь успокоить остальных",
-        "slug": "rescuer"
-      }
-    ]
-  },
-  {
-    "text": "Близкий человек делится проблемой. Первая реакция?",
-    "options": [
-      {
-        "label": "Предлагаю конкретную помощь",
-        "slug": "rescuer"
-      },
-      {
-        "label": "Внимательно слушаю без советов",
-        "slug": "observer"
-      },
-      {
-        "label": "Ищу причину происходящего",
-        "slug": "seeker"
-      },
-      {
-        "label": "Пытаюсь оградить его от угрозы",
-        "slug": "protector"
-      }
-    ]
-  },
-  {
-    "text": "Тебя несправедливо критикуют. Что ближе?",
-    "options": [
-      {
-        "label": "Разбираю каждую неточность",
-        "slug": "critic"
-      },
-      {
-        "label": "Защищаю свои границы",
-        "slug": "protector"
-      },
-      {
-        "label": "Пытаюсь понять мотив собеседника",
-        "slug": "observer"
-      },
-      {
-        "label": "Ухожу, чтобы восстановить свободу",
-        "slug": "wanderer"
-      }
-    ]
-  },
-  {
-    "text": "Перед тобой совершенно новая задача.",
-    "options": [
-      {
-        "label": "Экспериментирую и создаю решение",
-        "slug": "creator"
-      },
-      {
-        "label": "Изучаю неизвестное с интересом",
-        "slug": "seeker"
-      },
-      {
-        "label": "Выстраиваю порядок действий",
-        "slug": "controller"
-      },
-      {
-        "label": "Сначала присматриваюсь к ситуации",
-        "slug": "observer"
-      }
-    ]
-  },
-  {
-    "text": "В группе возникает конфликт.",
-    "options": [
-      {
-        "label": "Пытаюсь всех примирить",
-        "slug": "rescuer"
-      },
-      {
-        "label": "Устанавливаю понятные правила",
-        "slug": "controller"
-      },
-      {
-        "label": "Защищаю того, кого задели",
-        "slug": "protector"
-      },
-      {
-        "label": "Замечаю, что стоит за словами участников",
-        "slug": "observer"
-      }
-    ]
-  },
-  {
-    "text": "Ты чувствуешь внутреннюю усталость.",
-    "options": [
-      {
-        "label": "Ищу пространство и смену обстановки",
-        "slug": "wanderer"
-      },
-      {
-        "label": "Останавливаюсь и прислушиваюсь к себе",
-        "slug": "observer"
-      },
-      {
-        "label": "Проверяю, что делаю недостаточно хорошо",
-        "slug": "critic"
-      },
-      {
-        "label": "Пытаюсь закончить все обязательства",
-        "slug": "controller"
-      }
-    ]
-  },
-  {
-    "text": "Кто-то нарушает твою договорённость.",
-    "options": [
-      {
-        "label": "Проясняю границы и последствия",
-        "slug": "protector"
-      },
-      {
-        "label": "Проверяю детали и ищу ошибки",
-        "slug": "critic"
-      },
-      {
-        "label": "Выясняю, что случилось на самом деле",
-        "slug": "observer"
-      },
-      {
-        "label": "Пытаюсь сохранить отношения",
-        "slug": "rescuer"
-      }
-    ]
-  },
-  {
-    "text": "Впереди неопределённое будущее.",
-    "options": [
-      {
-        "label": "Ищу новые ответы и смыслы",
-        "slug": "seeker"
-      },
-      {
-        "label": "Планирую несколько сценариев",
-        "slug": "controller"
-      },
-      {
-        "label": "Доверяю наблюдению за настоящим",
-        "slug": "observer"
-      },
-      {
-        "label": "Вижу возможность начать с чистого листа",
-        "slug": "wanderer"
-      }
-    ]
-  },
-  {
-    "text": "Тебе предлагают руководить проектом.",
-    "options": [
-      {
-        "label": "Организую людей и процессы",
-        "slug": "controller"
-      },
-      {
-        "label": "Предлагаю необычную концепцию",
-        "slug": "creator"
-      },
-      {
-        "label": "Слежу за качеством и слабостями",
-        "slug": "critic"
-      },
-      {
-        "label": "Забочусь, чтобы никто не остался без поддержки",
-        "slug": "rescuer"
-      }
-    ]
-  },
-  {
-    "text": "Ты замечаешь чужую несправедливость.",
-    "options": [
-      {
-        "label": "Вступаюсь за человека",
-        "slug": "protector"
-      },
-      {
-        "label": "Стараюсь практически помочь",
-        "slug": "rescuer"
-      },
-      {
-        "label": "Анализирую корень проблемы",
-        "slug": "critic"
-      },
-      {
-        "label": "Ищу новый способ изменить систему",
-        "slug": "creator"
-      }
-    ]
-  },
-  {
-    "text": "Остаётся свободный вечер.",
-    "options": [
-      {
-        "label": "Отправляюсь туда, где ещё не был",
-        "slug": "wanderer"
-      },
-      {
-        "label": "Создаю что-то своё",
-        "slug": "creator"
-      },
-      {
-        "label": "Размышляю над важным вопросом",
-        "slug": "seeker"
-      },
-      {
-        "label": "Провожу время с тем, кому нужна поддержка",
-        "slug": "rescuer"
-      }
-    ]
-  },
-  {
-    "text": "Друг принимает решение, с которым ты не согласен.",
-    "options": [
-      {
-        "label": "Указываю на возможные ошибки",
-        "slug": "critic"
-      },
-      {
-        "label": "Принимаю его право выбирать",
-        "slug": "observer"
-      },
-      {
-        "label": "Предлагаю безопасную альтернативу",
-        "slug": "protector"
-      },
-      {
-        "label": "Пытаюсь направить его к лучшему исходу",
-        "slug": "controller"
-      }
-    ]
-  },
-  {
-    "text": "Тебе поручили дело без инструкций.",
-    "options": [
-      {
-        "label": "Составляю систему с нуля",
-        "slug": "controller"
-      },
-      {
-        "label": "Пробую разные творческие подходы",
-        "slug": "creator"
-      },
-      {
-        "label": "Исследую, как это устроено",
-        "slug": "seeker"
-      },
-      {
-        "label": "Действую самостоятельно, без рамок",
-        "slug": "wanderer"
-      }
-    ]
-  },
-  {
-    "text": "После неудачи ты чаще…",
-    "options": [
-      {
-        "label": "Подробно разбираю свои ошибки",
-        "slug": "critic"
-      },
-      {
-        "label": "Ищу другой путь",
-        "slug": "wanderer"
-      },
-      {
-        "label": "Смотрю на чувства и мысли со стороны",
-        "slug": "observer"
-      },
-      {
-        "label": "Стараюсь не допустить повторения",
-        "slug": "controller"
-      }
-    ]
-  },
-  {
-    "text": "Кто-то просит о помощи, когда у тебя мало сил.",
-    "options": [
-      {
-        "label": "Всё равно стараюсь помочь",
-        "slug": "rescuer"
-      },
-      {
-        "label": "Обозначаю свои границы",
-        "slug": "protector"
-      },
-      {
-        "label": "Проверяю, действительно ли помощь необходима",
-        "slug": "critic"
-      },
-      {
-        "label": "Ищу способ помочь без привычных усилий",
-        "slug": "creator"
-      }
-    ]
-  },
-  {
-    "text": "В незнакомой компании ты…",
-    "options": [
-      {
-        "label": "Сначала наблюдаю за людьми",
-        "slug": "observer"
-      },
-      {
-        "label": "Задаю вопросы и знакомлюсь",
-        "slug": "seeker"
-      },
-      {
-        "label": "Помогаю кому-то почувствовать себя своим",
-        "slug": "rescuer"
-      },
-      {
-        "label": "Держусь независимо и свободно",
-        "slug": "wanderer"
-      }
-    ]
-  },
-  {
-    "text": "Если идея кажется несовершенной…",
-    "options": [
-      {
-        "label": "Замечаю слабые места и исправляю",
-        "slug": "critic"
-      },
-      {
-        "label": "Делаю первый творческий прототип",
-        "slug": "creator"
-      },
-      {
-        "label": "Продумываю процесс до деталей",
-        "slug": "controller"
-      },
-      {
-        "label": "Проверяю идею на практике",
-        "slug": "seeker"
-      }
-    ]
-  },
-  {
-    "text": "Когда близким грозит перемена…",
-    "options": [
-      {
-        "label": "Создаю ощущение безопасности",
-        "slug": "protector"
-      },
-      {
-        "label": "Организую подготовку",
-        "slug": "controller"
-      },
-      {
-        "label": "Поддерживаю эмоционально",
-        "slug": "rescuer"
-      },
-      {
-        "label": "Помогаю увидеть новые возможности",
-        "slug": "seeker"
-      }
-    ]
-  },
-  {
-    "text": "Тебе нужно принять важное решение.",
-    "options": [
-      {
-        "label": "Слушаю себя и наблюдаю за импульсами",
-        "slug": "observer"
-      },
-      {
-        "label": "Собираю информацию и исследую",
-        "slug": "seeker"
-      },
-      {
-        "label": "Сравниваю слабые стороны вариантов",
-        "slug": "critic"
-      },
-      {
-        "label": "Выбираю путь, где больше свободы",
-        "slug": "wanderer"
-      }
-    ]
-  },
-  {
-    "text": "Что чаще всего даёт тебе ощущение живости?",
-    "options": [
-      {
-        "label": "Создавать то, чего раньше не было",
-        "slug": "creator"
-      },
-      {
-        "label": "Открывать неизвестное",
-        "slug": "seeker"
-      },
-      {
-        "label": "Защищать то, что дорого",
-        "slug": "protector"
-      },
-      {
-        "label": "Помогать людям становиться сильнее",
-        "slug": "rescuer"
-      }
-    ]
-  }
-];
+const QUESTIONS = mirrorDefinition.questions;
+const MIRROR_VERSION = mirrorDefinition.version;
+const RECEIPT_KEY = 'arutyun-archetype-mirror-receipt-' + MIRROR_VERSION;
 const STORAGE_KEY = 'arutyun-archetype-mirror-v1';
 const readSaved = () => {
     try {
@@ -438,6 +20,17 @@ export default function ExploreArchetypeMirror() {
     const [answers, setAnswers] = useState(readSaved);
     const [step, setStep] = useState(0);
     const [showResults, setShowResults] = useState(false);
+    const [shareConsent, setShareConsent] = useState(false);
+    const [shareStatus, setShareStatus] = useState('idle');
+    const [submissionId, setSubmissionId] = useState(() => {
+        try {
+            const existing = sessionStorage.getItem(RECEIPT_KEY);
+            if (existing && /^[0-9a-f-]{36}$/i.test(existing)) return existing;
+            const id = crypto.randomUUID();
+            sessionStorage.setItem(RECEIPT_KEY, id);
+            return id;
+        } catch { return crypto.randomUUID(); }
+    });
     useEffect(() => {
         try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ answers })); } catch {}
     }, [answers]);
@@ -455,10 +48,49 @@ export default function ExploreArchetypeMirror() {
             .sort((a,b) => b.score - a.score || a.id - b.id);
     }, [answers, archetypes]);
     const choose = index => setAnswers(prev => prev.map((v,i) => i === step ? index : v));
-    const restart = () => { setAnswers(Array(QUESTIONS.length).fill(null)); setStep(0); setShowResults(false); };
-    const finish = () => { if (complete) { setShowResults(true); window.scrollTo({ top: 0, behavior: 'smooth' }); } };
+    const restart = () => {
+        setAnswers(Array(QUESTIONS.length).fill(null));
+        setStep(0);
+        setShowResults(false);
+        setShareConsent(false);
+        setShareStatus('idle');
+        const id = crypto.randomUUID();
+        setSubmissionId(id);
+        try { sessionStorage.setItem(RECEIPT_KEY, id); } catch {}
+    };
+    const shareAnonymousStats = async () => {
+        if (!shareConsent || !complete || shareStatus === 'sending' || shareStatus === 'sent') return;
+        setShareStatus('sending');
+        try {
+            const response = await fetch('/explore/archetypes/mirror/statistics', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                },
+                body: JSON.stringify({
+                    version: MIRROR_VERSION,
+                    submission_id: submissionId,
+                    consent: true,
+                    answers,
+                }),
+            });
+            if (!response.ok) throw new Error('Не удалось сохранить статистику');
+            setShareStatus('sent');
+        } catch {
+            setShareStatus('error');
+        }
+    };
+    const finish = () => {
+        if (!complete) return;
+        setShowResults(true);
+        if (shareConsent) void shareAnonymousStats();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
     const button = 'rounded-xl border border-[#a78a51]/50 px-5 py-3 text-sm transition hover:border-[#f0c453] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]';
-    return <div className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
+    return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
         <Head title="Зеркало архетипов — Arutyun">
             <meta name="description" content="20 жизненных ситуаций, чтобы исследовать свои привычные реакции и увидеть персональную карту архетипов." />
         </Head>
@@ -492,6 +124,10 @@ export default function ExploreArchetypeMirror() {
                     {step < QUESTIONS.length-1 ? <button type="button" disabled={answers[step] === null} onClick={() => setStep(v => v+1)} className="rounded-xl bg-[#f0c453] px-6 py-3 text-sm font-semibold text-[#21180b] disabled:cursor-not-allowed disabled:opacity-40">Далее →</button>
                     : <button type="button" disabled={!complete} onClick={finish} className="rounded-xl bg-[#f0c453] px-6 py-3 text-sm font-semibold text-[#21180b] disabled:cursor-not-allowed disabled:opacity-40">Увидеть мою карту →</button>}
                 </div>
+                {step === QUESTIONS.length-1 && <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-[#816a43]/40 bg-[#17140f] p-4 text-sm leading-6 text-[#c4b9a6]">
+                    <input type="checkbox" checked={shareConsent} onChange={e => setShareConsent(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-[#f0c453]" />
+                    <span>Хочу добровольно добавить мои ответы в общую обезличенную статистику. Сервер посчитает частоту выбранных вариантов и архетипов, но не сохранит мою анкету, имя или Telegram ID. Без моего согласия ответы не передаются.</span>
+                </label>}
                 {step === QUESTIONS.length-1 && !complete && <p className="mt-4 text-sm text-[#c4b9a6]">Чтобы увидеть карту, ответь на все вопросы. Ты можешь вернуться к предыдущим ситуациям.</p>}
             </section> : <section className="mt-10">
                 <div className="rounded-3xl border border-[#a78a51]/50 bg-[#211d15] p-5 sm:p-9">
@@ -506,6 +142,11 @@ export default function ExploreArchetypeMirror() {
                     </div>
                     <p className="mt-6 text-xs leading-6 text-[#a99d88]">Низкое число не означает отсутствие роли. В этом наборе ситуаций одни реакции могли встречаться чаще других. Карта служит поводом для размышления, а не сравнением с другими людьми.</p>
                 </div>
+                {shareConsent && <p className="mt-4 text-sm text-[#c4b9a6]" role="status">
+                    {shareStatus === 'sending' ? 'Добавляем выбранные варианты в общую статистику…' :
+                     shareStatus === 'sent' ? 'Спасибо! Ваши выборы учтены в общей статистике без сохранения отдельной анкеты.' :
+                     shareStatus === 'error' ? <>Не удалось отправить статистику. Твоя карта при этом сохранена в браузере. <button type="button" onClick={() => void shareAnonymousStats()} className="underline text-[#f0c453]">Повторить отправку</button></> : ''}
+                </p>}
                 <div className="mt-7 grid gap-4 md:grid-cols-3">
                     {scores.slice(0,3).map((item,index) => <article key={item.slug} className="rounded-2xl border border-[#876b3b]/60 bg-[#211d15] p-5">
                         <p className="text-xs uppercase tracking-widest text-[#f0c453]">{index === 0 ? 'Чаще всего' : 'Также проявляется'}</p>
@@ -526,7 +167,7 @@ export default function ExploreArchetypeMirror() {
                     </div>
                 </div>
             </section>}
-            <p className="mt-10 text-center text-xs leading-6 text-[#a99d88]">Ответы хранятся только в этой вкладке браузера в течение сессии. На сервер результаты не отправляются.</p>
+            <p className="mt-10 text-center text-xs leading-6 text-[#a99d88]">Ответы сохраняются в этой вкладке браузера. Только при твоём отдельном разрешении после завершения исследования они отправляются для подсчёта общей статистики. Отдельные анкеты и личные данные в статистической базе не хранятся.</p>
         </main>
     </div>;
 }
