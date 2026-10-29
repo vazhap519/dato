@@ -225,7 +225,7 @@ export default function Numbers() {
                     <div className="numbers-cta rounded-2xl border border-[#d9b65c]/15 bg-white/[0.025] p-7">
                         <h2 className="text-xl font-semibold mb-3">Не ищи готового ответа. Замечай себя.</h2>
                         <p className="text-[#aaa393] leading-7 mb-6">На бесплатном трёхдневном практикуме «Познай СЕБЯ» мы исследуем внимание, привычные роли и внутренний выбор.</p>
-                        <Link href="/editoria" onClick={() => exploreMilestone('explore_practice', 'numbers')} data-analytics="Числа · перейти к практикуму" className="numbers-cta-button inline-flex bg-[#f0c54e] text-[#17130c] font-semibold px-6 py-3 rounded-xl hover:bg-[#ffda73] transition-colors">Узнать о практикуме →</Link>
+                        <Link href="/editoria" data-explore-milestone="1" onClick={() => exploreMilestone('explore_practice', 'numbers')} data-analytics="Числа · перейти к практикуму" className="numbers-cta-button inline-flex bg-[#f0c54e] text-[#17130c] font-semibold px-6 py-3 rounded-xl hover:bg-[#ffda73] transition-colors">Узнать о практикуме →</Link>
                     </div>
                     <p className="mt-9 text-xs text-[#8f887a] leading-6">Толкования — авторские символические размышления, а не научные факты, предсказания или сообщения от сверхъестественных сил. Совпадения чисел могут возникать случайно.</p>
                 </section>
