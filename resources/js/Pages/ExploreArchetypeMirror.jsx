@@ -20,7 +20,6 @@ export default function ExploreArchetypeMirror() {
     const [answers, setAnswers] = useState(readSaved);
     const [step, setStep] = useState(0);
     const [showResults, setShowResults] = useState(false);
-    const [shareConsent, setShareConsent] = useState(false);
     const [shareStatus, setShareStatus] = useState('idle');
     const [submissionId, setSubmissionId] = useState(() => {
         try {
@@ -52,14 +51,13 @@ export default function ExploreArchetypeMirror() {
         setAnswers(Array(QUESTIONS.length).fill(null));
         setStep(0);
         setShowResults(false);
-        setShareConsent(false);
         setShareStatus('idle');
         const id = crypto.randomUUID();
         setSubmissionId(id);
         try { sessionStorage.setItem(RECEIPT_KEY, id); } catch {}
     };
-    const shareAnonymousStats = async () => {
-        if (!shareConsent || !complete || shareStatus === 'sending' || shareStatus === 'sent') return;
+    const submitAnonymousStats = async () => {
+        if (!complete || shareStatus === 'sending' || shareStatus === 'sent') return;
         setShareStatus('sending');
         try {
             const response = await fetch('/explore/archetypes/mirror/statistics', {
@@ -73,7 +71,6 @@ export default function ExploreArchetypeMirror() {
                 body: JSON.stringify({
                     version: MIRROR_VERSION,
                     submission_id: submissionId,
-                    consent: true,
                     answers,
                 }),
             });
@@ -86,7 +83,7 @@ export default function ExploreArchetypeMirror() {
     const finish = () => {
         if (!complete) return;
         setShowResults(true);
-        if (shareConsent) void shareAnonymousStats();
+        void submitAnonymousStats();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     const button = 'rounded-xl border border-[#a78a51]/50 px-5 py-3 text-sm transition hover:border-[#f0c453] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]';
@@ -124,10 +121,7 @@ export default function ExploreArchetypeMirror() {
                     {step < QUESTIONS.length-1 ? <button type="button" disabled={answers[step] === null} onClick={() => setStep(v => v+1)} className="rounded-xl bg-[#f0c453] px-6 py-3 text-sm font-semibold text-[#21180b] disabled:cursor-not-allowed disabled:opacity-40">Далее →</button>
                     : <button type="button" disabled={!complete} onClick={finish} className="rounded-xl bg-[#f0c453] px-6 py-3 text-sm font-semibold text-[#21180b] disabled:cursor-not-allowed disabled:opacity-40">Увидеть мою карту →</button>}
                 </div>
-                {step === QUESTIONS.length-1 && <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-[#816a43]/40 bg-[#17140f] p-4 text-sm leading-6 text-[#c4b9a6]">
-                    <input type="checkbox" checked={shareConsent} onChange={e => setShareConsent(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-[#f0c453]" />
-                    <span>Хочу добровольно добавить мои ответы в общую обезличенную статистику. Сервер посчитает частоту выбранных вариантов и архетипов, но не сохранит мою анкету, имя или Telegram ID. Без моего согласия ответы не передаются.</span>
-                </label>}
+
                 {step === QUESTIONS.length-1 && !complete && <p className="mt-4 text-sm text-[#c4b9a6]">Чтобы увидеть карту, ответь на все вопросы. Ты можешь вернуться к предыдущим ситуациям.</p>}
             </section> : <section className="mt-10">
                 <div className="rounded-3xl border border-[#a78a51]/50 bg-[#211d15] p-5 sm:p-9">
@@ -142,10 +136,10 @@ export default function ExploreArchetypeMirror() {
                     </div>
                     <p className="mt-6 text-xs leading-6 text-[#a99d88]">Низкое число не означает отсутствие роли. В этом наборе ситуаций одни реакции могли встречаться чаще других. Карта служит поводом для размышления, а не сравнением с другими людьми.</p>
                 </div>
-                {shareConsent && <p className="mt-4 text-sm text-[#c4b9a6]" role="status">
+                {shareStatus !== 'idle' && <p className="mt-4 text-sm text-[#c4b9a6]" role="status">
                     {shareStatus === 'sending' ? 'Добавляем выбранные варианты в общую статистику…' :
-                     shareStatus === 'sent' ? 'Спасибо! Ваши выборы учтены в общей статистике без сохранения отдельной анкеты.' :
-                     shareStatus === 'error' ? <>Не удалось отправить статистику. Твоя карта при этом сохранена в браузере. <button type="button" onClick={() => void shareAnonymousStats()} className="underline text-[#f0c453]">Повторить отправку</button></> : ''}
+                     shareStatus === 'sent' ? 'Ответы учтены в общей статистике без сохранения отдельной анкеты.' :
+                     shareStatus === 'error' ? <>Не удалось отправить статистику. Твоя карта при этом сохранена в браузере. <button type="button" onClick={() => void submitAnonymousStats()} className="underline text-[#f0c453]">Повторить отправку</button></> : ''}
                 </p>}
                 <div className="mt-7 grid gap-4 md:grid-cols-3">
                     {scores.slice(0,3).map((item,index) => <article key={item.slug} className="rounded-2xl border border-[#876b3b]/60 bg-[#211d15] p-5">
@@ -167,7 +161,7 @@ export default function ExploreArchetypeMirror() {
                     </div>
                 </div>
             </section>}
-            <p className="mt-10 text-center text-xs leading-6 text-[#a99d88]">Ответы сохраняются в этой вкладке браузера. Только при твоём отдельном разрешении после завершения исследования они отправляются для подсчёта общей статистики. Отдельные анкеты и личные данные в статистической базе не хранятся.</p>
+            <p className="mt-10 text-center text-xs leading-6 text-[#a99d88]">При завершении исследования ответы автоматически учитываются в общей статистике. Сервер хранит только суммарные показатели, а не отдельные анкеты или Telegram ID. Подробнее — в <a href="/privacy" className="underline text-[#e4c88c] hover:text-white">политике конфиденциальности</a>.</p>
         </main>
     </div>;
 }
