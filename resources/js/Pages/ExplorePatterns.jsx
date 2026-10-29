@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import dataBase from '../../data/pattern-atlas.json';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
+import { useExploreJourney, ExplorePracticeInvitation } from '../components/ExploreJourney.jsx';
 import { liveExploreDocument } from '../lib/exploreCms.js';
 
 const data = liveExploreDocument('pattern-atlas', dataBase);
@@ -18,6 +19,7 @@ export default function ExplorePatterns() {
  const [chosen,setChosen]=useState('');
  const [outcome,setOutcome]=useState('');
  const [step,setStep]=useState(0);
+ useExploreJourney('patterns', step > 0, step === 2);
  const filtered=useMemo(()=>patterns.filter(p=>(category==='all'||p.category===category)&&[p.title,p.pattern,p.scene].join(' ').toLowerCase().includes(query.toLowerCase().trim())),[category,query]);
  const listed=expanded||category!=='all'||query.trim()?filtered:filtered.slice(0,9);
  const picked=patterns.find(p=>p.slug===chosen);
