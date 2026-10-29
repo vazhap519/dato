@@ -45,7 +45,9 @@ class PublishArchetypePrivacy extends Command
             }
 
             $updated = str_replace($anchor, $notice."\n\n".$anchor, $doc->content);
-            $updated = preg_replace('/^Редакция 1\\.0.*$/mu',
+            // Change only the visible edition heading. The DB version is authoritative:
+            // an older manually edited heading may still say 3.0 even when the DB says 1.0.
+            $updated = preg_replace('/^[ \t]*Редакция[ \t]+[0-9]+(?:[.][0-9]+)*[^\n]*$/mu',
                 'Редакция 1.1 · '.now()->format('d.m.Y'), $updated, 1, $changed);
             if ($changed !== 1 || ! str_contains($updated, $notice)) {
                 $this->error('Не удалось подготовить обновление. Политика не изменена.');
