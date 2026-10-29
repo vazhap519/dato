@@ -228,6 +228,42 @@ class SiteAnalytics extends Page
         }, 'analytics-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 
+    public function getExploreFunnel(): array
+    {
+        $tools = [
+            'numbers' => 'Язык чисел',
+            'emotions' => 'Язык эмоций',
+            'archetypes' => 'Язык архетипов',
+            'archetype-mirror' => 'Зеркало архетипов',
+            'dreams' => 'Язык снов',
+            'patterns' => 'Язык повторений',
+            'personality-mirror' => 'Зеркало личности',
+        ];
+        $rows = [];
+        foreach ($tools as $key => $title) {
+            $base = $this->events()->where('element', $key);
+            $counts = [];
+            foreach (['explore_start', 'explore_complete', 'explore_practice'] as $event) {
+                $counts[$event] = (clone $base)->where('event', $event)->distinct()->count('session_id');
+            }
+            $rows[] = [
+                'title' => $title,
+                'started' => $counts['explore_start'],
+                'completed' => $counts['explore_complete'],
+                'practice' => $counts['explore_practice'],
+                'completion_rate' => $counts['explore_start']
+                    ? round($counts['explore_complete'] / $counts['explore_start'] * 100, 1) : 0,
+            ];
+        }
+        $views = $this->events()
+            ->where('event', 'page_view')
+            ->where(function ($query) {
+                $query->where('path', '/explore')->orWhere('path', '/numbers')
+                    ->orWhere('path', 'like', '/explore/%');
+            })->distinct()->count('session_id');
+        return ['views' => $views, 'tools' => $rows];
+    }
+
     public function getEditoriaDetails(): array
     {
         $base = $this->events()->where('path', '/editoria');
