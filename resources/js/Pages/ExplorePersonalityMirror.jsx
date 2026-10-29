@@ -43,7 +43,7 @@ export default function ExplorePersonalityMirror(){
    <meta name="description" content="24 вопроса о привычных реакциях, шесть осей наблюдения, вопрос дня и 12 жизненных дилемм. Без диагнозов, типов личности и хранения ответов."/>
   </Head>
   <header className="relative z-40 border-b border-[#b99347]/25"><div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
-   <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
+   <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt="Arutyun" className="h-10 max-w-[110px] sm:max-w-[160px] object-contain"/>:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
    <ExploreSectionNavigation items={[
                     { label: 'Моя карта', href: '#mirror', icon: 'account_tree' },
                     { label: 'Вопрос дня', href: '#question', icon: 'help_outline' },
