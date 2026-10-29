@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import data from '../../data/dream-atlas.json';
+import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
 
 const S = data.symbols;
 const G = data.groups;
@@ -30,16 +31,16 @@ export default function ExploreDreams() {
         <Head title="Язык снов — исследуй образы и личные ассоциации — Arutyun">
             <meta name="description" content="24 образа сновидений, вопросы о чувствах и памяти, образ дня и индивидуальный инструмент осмысления снов без предсказаний." />
         </Head>
-        <header className="border-b border-[#b99347]/25">
-            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+        <header className="relative z-40 border-b border-[#b99347]/25">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
                 <Link href="/" aria-label="На главную">{settings?.logo?<img src={settings.logo} alt={settings?.site_name||'Arutyun'} className="h-10 max-w-[160px] object-contain" />:<span className="font-serif text-2xl italic text-[#f0c453]">Arutyun</span>}</Link>
-                <nav className="flex flex-wrap items-center gap-4 text-sm" aria-label="Навигация по странице">
-                    <a href="#explorer" className="text-[#e4c88c] hover:text-white">Исследовать сон</a>
-                    <a href="#symbols" className="text-[#e4c88c] hover:text-white">Образы</a>
-                    <a href="#today" className="text-[#e4c88c] hover:text-white">Образ дня</a>
-                    <a href="#how" className="text-[#e4c88c] hover:text-white">Как работать</a>
-                    <Link href="/explore" className="text-[#b9a98e] hover:text-white">Все направления →</Link>
-                </nav>
+                <ExploreSectionNavigation items={[
+                    { label: 'Исследовать сон', href: '#explorer', icon: 'bedtime' },
+                    { label: 'Образы', href: '#symbols', icon: 'auto_stories' },
+                    { label: 'Образ дня', href: '#today', icon: 'wb_twilight' },
+                    { label: 'Как работать со сном', href: '#how', icon: 'self_improvement' },
+                    { label: 'Все направления', href: '/explore', icon: 'apps', catalog: true },
+                ]} />
             </div>
         </header>
         <main className="mx-auto max-w-6xl px-5 pb-20 pt-12 sm:pt-16">
