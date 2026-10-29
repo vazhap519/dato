@@ -102,6 +102,12 @@ class ExploreContentItemResource extends Resource
                 || ($record->document === 'archetype-situations'
                     && $record->group_key === 'categories' && $name === 'value');
 
+            // Stable technical lists are shown by their owning logic and are
+            // not text fields; allowing changes here would break references.
+            if ($locked && is_array($value)) {
+                continue;
+            }
+
             if (is_array($value)) {
                 if (array_is_list($value) && $value === []) {
                     continue;
