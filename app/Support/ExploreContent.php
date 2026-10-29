@@ -59,12 +59,12 @@ final class ExploreContent
     {
         $slug = self::pageSlug($request);
         if ($slug === null) {
-            return ['exploreCopy' => [], 'exploreDocuments' => []];
+            return ['copy' => [], 'documents' => []];
         }
 
         try {
             if (! Schema::hasTable('explore_content_pages')) {
-                return ['exploreCopy' => [], 'exploreDocuments' => []];
+                return ['copy' => [], 'documents' => []];
             }
 
             $pages = ExploreContentPage::query()
@@ -91,12 +91,12 @@ final class ExploreContent
                 }
             }
 
-            return ['exploreCopy' => $copy, 'exploreDocuments' => $documents];
+            return ['copy' => $copy, 'documents' => $documents];
         } catch (Throwable $exception) {
             // A not-yet-applied CMS migration must never take the public site down.
             report($exception);
 
-            return ['exploreCopy' => [], 'exploreDocuments' => []];
+            return ['copy' => [], 'documents' => []];
         }
     }
 
