@@ -57,6 +57,18 @@ Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveCo
 Route::put('/live/api/sessions/{session}/buttons/{button}', [App\Http\Controllers\LiveController::class, 'updateButton']);
 Route::post('/live/api/sessions/{session}/buttons/{button}/remove', [App\Http\Controllers\LiveController::class, 'deleteButton']);
 Route::post('/analytics/event', [\App\Http\Controllers\SiteAnalyticsController::class, 'store'])->middleware('throttle:120,1');
+Route::get('/explore', function () {
+    return Inertia::render('Explore', [
+        'tools' => \App\Models\SelfDiscoveryTool::query()
+            ->where('is_published', true)
+            ->whereNotNull('url')
+            ->where('url', '!=', '')
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get(['id','slug','title','subtitle','description','icon','url']),
+    ]);
+})->name('explore.index');
+Route::get('/explore/emotions', fn () => Inertia::render('ExploreEmotions'))->name('explore.emotions');
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
 Route::get('/numbers/lookup/{number}', [\App\Http\Controllers\NumberMeaningController::class, 'lookup'])
     ->where('number', '[0-9]{1,12}')->middleware('throttle:120,1')->name('numbers.lookup');
