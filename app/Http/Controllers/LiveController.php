@@ -39,13 +39,12 @@ class LiveController extends Controller {
     }
 
     public function index(Request $request) {
-        $canManage = $this->admin($request);
+        // /live is a public preview even for administrators: unpublished drafts
+        // are managed in Filament, never added to the viewer's tab list.
         $sessions = LiveSession::with('series:id,title')
-            ->when(! $canManage, fn ($query) => $query->where('is_published', true))
+            ->where('is_published', true)
             ->orderBy('sort_order')->orderByDesc('live_series_id')->orderBy('day_number')->get();
-        $visible = $sessions->where('is_published', true);
-        $active = $visible->firstWhere('status', 'live') ?? $visible->firstWhere('status', 'scheduled')
-            ?? $visible->first() ?? ($canManage ? $sessions->first() : null);
+        $active = $sessions->firstWhere('status', 'live') ?? $sessions->firstWhere('status', 'scheduled') ?? $sessions->first();
         return Inertia::render('Live', [
             'sessions' => $sessions->map(fn ($s) => [
                 'id' => $s->id, 'day' => $s->day_number, 'title' => $s->title,
