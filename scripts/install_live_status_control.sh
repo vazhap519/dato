@@ -37,7 +37,7 @@ for file in "${FILES[@]}"; do mkdir -p "$(dirname "$file")"; cp -a "$BACKUP/stag
 echo "Проверка PHP и разграничения доступа..."
 php -l app/Http/Controllers/LiveController.php
 php -l routes/web.php
-php -r '\$s = file_get_contents("app/Http/Controllers/LiveController.php"); if (strpos(\$s, "abort_unless(\$this->admin(\$request), 403)") === false) { fwrite(STDERR, "Access guard missing\n"); exit(1); }'
+php -r '$s = file_get_contents("app/Http/Controllers/LiveController.php"); if (strpos($s, "abort_unless($this->admin($request), 403)") === false) { fwrite(STDERR, "Access guard missing\\n"); exit(1); }'
 echo "Проверка надписи и элемента управления..."
 node - <<'JS'
 const fs = require('fs');
