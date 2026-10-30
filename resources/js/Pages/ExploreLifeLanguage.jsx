@@ -146,8 +146,12 @@ export default function ExploreLifeLanguage() {
                     <p className="mt-3 text-base leading-8 text-[#d7c7ae]">{active.scene}</p>
                     <div className="mt-6 grid gap-3 md:grid-cols-3">{active.options.map((o)=><button key={o.id} type="button" aria-pressed={picked===o.id} onClick={()=>setPicked(o.id)} className={optionStyle(picked===o.id)}>{o.label}</button>)}</div>
                     {response&&<div aria-live="polite" className="mt-7 grid gap-5 rounded-2xl border border-[#d9b46d]/60 bg-[#35281a] p-5 sm:p-7 lg:grid-cols-[1fr_.8fr]">
-                        <div><p className={kicker}>Разбор выбранного ответа</p><h4 className="mt-3 font-serif text-2xl text-[#ffe2a3]">{response.focus}</h4><p className="mt-3 leading-8 text-[#e5d4ba]">{response.reflection}</p></div>
-                        <div className="rounded-xl bg-[#1a1611]/65 p-5"><p className={kicker}>Вопрос и следующий шаг</p><p className="mt-3 leading-7 text-[#f0d69c]">{active.question}</p><p className="mt-4 text-sm leading-7 text-[#d9c9b2]">{active.practice}</p></div>
+                        <div><p className={kicker}>Разбор выбранного ответа</p><h4 className="mt-3 font-serif text-2xl text-[#ffe2a3]">{response.focus}</h4><p className="mt-3 leading-8 text-[#e5d4ba]">{response.reflection}</p>
+                            {response.deep?.consequence && <div className="mt-5 rounded-xl border border-[#a78655]/55 bg-[#241c13] p-4"><p className={kicker}>Возможные последствия и ограничения</p><p className="mt-3 leading-7 text-[#ecdbc2]">{response.deep.consequence}</p></div>}
+                        </div>
+                        <div className="rounded-xl bg-[#1a1611]/65 p-5"><p className={kicker}>Вопрос и следующий шаг</p><p className="mt-3 leading-7 text-[#f0d69c]">{active.question}</p>
+                            {response.deep?.step ? <><p className={kicker+' mt-5'}>Для этого конкретного ответа</p><p className="mt-2 leading-7 text-[#e7d2b2]">{response.deep.step}</p></> : <p className="mt-4 text-sm leading-7 text-[#d9c9b2]">{active.practice}</p>}
+                        </div>
                     </div>}
                     <button type="button" onClick={()=>{setSelected(null);setPicked(null);}} className="mt-6 text-sm font-semibold text-[#e3bf76] hover:underline">Закрыть разбор</button>
                 </article>}
