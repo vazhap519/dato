@@ -25,9 +25,7 @@ function RelationshipLab() {
  <div className={small+' mt-6'}><Caption>Сцена</Caption><p className="mt-3 text-lg leading-8">{s.line}</p></div>
  <div className="mt-5 grid gap-3 md:grid-cols-3">{s.phrases.map((x,i)=><Chip key={i} label={x} picked={response===i} onClick={()=>setResponse(i)}/>)}</div>
  {response!==null&&<Result title={['Обвинение','Молчание','Прямая просьба'][response]}><p>{s.read[response]}</p><p className={gold}>{s.question}</p></Result>}
- <div className="mt-9"><Caption>Второй инструмент — что именно я хочу сказать?</Caption><p className="mt-3 leading-7 text-[#c9baa3]">Выбери цель разговора. Формулировка меняется в зависимости от задачи.</p>
- <PillTabs items={['Быть услышанным','Обозначить границу','Попросить поддержку']} value={method} setValue={setMethod}/>
- <Result title={['Прояснить услышанное','Показать предел','Сделать просьбу конкретной'][method]}><p>{['«Мне важно, чтобы ты услышал мою мысль до конца. Как ты понял то, что я сказал?»','«Когда разговор переходит на оскорбления, я его прекращаю. Вернусь, когда мы сможем говорить спокойно».','«Мне нужна поддержка сегодня. Можешь послушать меня десять минут, не предлагая решения?»'][method]}</p><p>Попробуй заметить: эта фраза сообщает о твоём опыте или требует от другого угадать твои чувства?</p></Result></div></section>;
+ </section>;
 }
 
 function BodyLab() {
@@ -127,7 +125,9 @@ function AttentionLab(){
  <Result title={rest?'Сначала проверь потребность в восстановлении':distractions[source].cause}><p>{rest?'Отдых не является «отвлечением», которое нужно обязательно победить. Усталость может снижать способность фокусироваться.':distractions[source].fix}</p><p className={gold}>Ориентир: {['слушать собеседника и проверять, что услышал','закончить одну понятную часть задачи','позволить себе отдых без параллельной работы','заметить окружающие звуки, движение или свет'][task]}.</p></Result></section>;
 }
 
+function RelationshipCombined(){return <><RelationshipLab/><div className="mt-8"><RelationshipDepth/></div></>;}
+
 export default function ExploreDeepExperience({slug}){
- const C={relationships:RelationshipDepth,body:BodyDepth,choice:ChoiceDepth,beliefs:BeliefLab,values:ValuesLab,fears:FearLab,time:TimeLab,conflicts:ConflictsLab,attention:AttentionLab}[slug];
+ const C={relationships:RelationshipCombined,body:BodyDepth,choice:ChoiceDepth,beliefs:BeliefLab,values:ValuesLab,fears:FearLab,time:TimeLab,conflicts:ConflictsLab,attention:AttentionLab}[slug];
  return C?<C/>:null;
 }
