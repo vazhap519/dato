@@ -24,7 +24,12 @@ final class ExploreContent
         'dreams' => 'Язык снов',
         'patterns' => 'Язык повторений',
         'mirror' => 'Зеркало личности',
-        'shared' => 'Общие элементы шести направлений',
+        'relationships' => 'Язык отношений',
+        'body' => 'Язык тела',
+        'choice' => 'Язык выбора',
+        'beliefs' => 'Язык убеждений',
+        'values' => 'Язык ценностей',
+        'shared' => 'Общие элементы направлений самопознания',
     ];
 
     public const DOCUMENTS = [
@@ -37,6 +42,11 @@ final class ExploreContent
         'dream-atlas' => 'dreams',
         'pattern-atlas' => 'patterns',
         'personality-mirror' => 'mirror',
+        'relationships-atlas' => 'relationships',
+        'body-atlas' => 'body',
+        'choice-atlas' => 'choice',
+        'beliefs-atlas' => 'beliefs',
+        'values-atlas' => 'values',
     ];
 
     public static function pageSlug(Request $request): ?string
@@ -46,7 +56,7 @@ final class ExploreContent
         if (str_starts_with($name, 'numbers.')) {
             return 'numbers';
         }
-        foreach (['emotions', 'archetypes', 'dreams', 'patterns', 'mirror'] as $slug) {
+        foreach (['emotions', 'archetypes', 'dreams', 'patterns', 'mirror', 'relationships', 'body', 'choice', 'beliefs', 'values'] as $slug) {
             if (str_starts_with($name, 'explore.'.$slug)) {
                 return $slug;
             }
