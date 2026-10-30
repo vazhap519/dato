@@ -40,22 +40,51 @@ const kicker='text-xs font-semibold uppercase tracking-[.18em] text-[#f0c453]';
 const article='rounded-2xl border border-[#80673e]/70 bg-[#211c15] p-5 sm:p-7';
 const optionStyle=active=>'rounded-xl border p-4 text-left text-sm leading-6 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] '+(active?'border-[#f0c453] bg-[#45311c] text-[#fff1d8]':'border-[#81673c] bg-[#18150f] text-[#dbceb8] hover:border-[#e7c47a]');
 
+function SituationAnalysis({ active, picked, setPicked, close }) {
+    const response=active.options.find(o=>o.id===picked);
+    return <article className="overflow-hidden rounded-3xl border border-[#a4834c] bg-[#231d15] p-5 sm:p-8">
+        <div className="flex items-start justify-between gap-3">
+            <div><p className={kicker}>Три способа отреагировать</p><h3 className="mt-3 font-serif text-3xl">{active.title}</h3></div>
+            <button type="button" onClick={close} aria-label="Закрыть разбор" className="shrink-0 rounded-full border border-[#ab894f] bg-[#332718] p-2.5 text-[#f5d793] transition hover:bg-[#574022] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <p className="mt-3 text-base leading-8 text-[#d7c7ae]">{active.scene}</p>
+        <div className="mt-6 grid gap-3 md:grid-cols-3">{active.options.map(o=><button key={o.id} type="button" aria-pressed={picked===o.id} onClick={()=>setPicked(o.id)} className={optionStyle(picked===o.id)}>{o.label}</button>)}</div>
+        {response&&<div aria-live="polite" className="mt-7 grid gap-5 rounded-2xl border border-[#d9b46d]/60 bg-[#35281a] p-5 sm:p-7 lg:grid-cols-[1fr_.8fr]">
+            <div><p className={kicker}>Разбор выбранного ответа</p><h4 className="mt-3 font-serif text-2xl text-[#ffe2a3]">{response.focus}</h4><p className="mt-3 leading-8 text-[#e5d4ba]">{response.reflection}</p>
+                {response.deep?.consequence&&<div className="mt-5 rounded-xl border border-[#a78655]/55 bg-[#241c13] p-4"><p className={kicker}>Возможные последствия и ограничения</p><p className="mt-3 leading-7 text-[#ecdbc2]">{response.deep.consequence}</p></div>}
+            </div>
+            <div className="rounded-xl bg-[#1a1611]/65 p-5"><p className={kicker}>Вопрос и следующий шаг</p><p className="mt-3 leading-7 text-[#f0d69c]">{active.question}</p>
+                {response.deep?.step?<><p className={kicker+' mt-5'}>Для этого конкретного ответа</p><p className="mt-2 leading-7 text-[#e7d2b2]">{response.deep.step}</p></>:<p className="mt-4 text-sm leading-7 text-[#d9c9b2]">{active.practice}</p>}
+            </div>
+        </div>}
+        <button type="button" onClick={close} className="mt-6 rounded-xl border border-[#a78655] px-5 py-2.5 text-sm font-semibold text-[#f3d393] transition hover:bg-[#40301b]">Закрыть разбор</button>
+    </article>;
+}
+
 export default function ExploreLifeLanguage() {
     const {languageSlug,settings={},coverImage=null}=usePage().props;
     const data=atlas[languageSlug]||atlas.relationships;
     const [openedChapter,setOpenedChapter]=useState(0);
     const [selected,setSelected]=useState(null);
     const [picked,setPicked]=useState(null);
-    const [query,setQuery]=useState('');
     const [visibleAll,setVisibleAll]=useState(false);
     const [started,setStarted]=useState(false);
     useExploreJourney(languageSlug,started,picked!==null);
-    useEffect(()=>{setOpenedChapter(0);setSelected(null);setPicked(null);setQuery('');setVisibleAll(false);setStarted(false);},[languageSlug]);
+    useEffect(()=>{setOpenedChapter(0);setSelected(null);setPicked(null);setVisibleAll(false);setStarted(false);},[languageSlug]);
     const items=data.situations;
-    const matched=items.filter(item=>[item.title,item.scene,item.question].join(' ').toLowerCase().includes(query.trim().toLowerCase()));
-    const shown=visibleAll||query?matched:matched.slice(0,6);
+    const shown=visibleAll?items:items.slice(0,6);
     const active=items.find(item=>item.id===selected);
-    const response=active?.options.find(o=>o.id===picked);
+    useEffect(()=>{
+        if (!active) return;
+        const previous=document.body.style.overflow;
+        const media=window.matchMedia('(max-width: 767px)');
+        const sync=()=>{document.body.style.overflow=media.matches?'hidden':previous;};
+        sync();
+        media.addEventListener('change',sync);
+        const keydown=e=>{if(e.key==='Escape'){setSelected(null);setPicked(null);}};
+        document.addEventListener('keydown',keydown);
+        return ()=>{document.body.style.overflow=previous;media.removeEventListener('change',sync);document.removeEventListener('keydown',keydown);};
+    },[active]);
     const editorial=data.editorial;
 
     return <div data-no-analytics className="min-h-screen bg-[#14120d] text-[#f8f2e7]">
@@ -112,11 +141,11 @@ export default function ExploreLifeLanguage() {
                     <nav aria-label="Темы исследования" className="grid content-start gap-3">
                         {editorial.chapters.map((c,i)=><button key={i} type="button" onClick={()=>setOpenedChapter(i)} aria-pressed={openedChapter===i}
                           className={'flex items-center justify-between gap-4 rounded-2xl border p-5 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] '+(openedChapter===i?'border-[#f0c453] bg-[#35281b]':'border-[#755d3b] bg-[#211c15] hover:border-[#c2a36a]')}>
-                            <span><span className="mr-3 text-xs text-[#e9c479]">0{i+1}</span><span className="font-serif text-xl">{c[0]}</span></span><span aria-hidden="true" className="text-[#f0c453]">→</span>
+                            <span><span className="mr-3 text-xs text-[#e9c479]">{i+1}</span><span className="font-serif text-xl">{c[0]}</span></span><span aria-hidden="true" className="text-[#f0c453]">→</span>
                         </button>)}
                     </nav>
                     <article className={article+' flex min-h-[320px] flex-col justify-between'} aria-live="polite">
-                        <div><p className={kicker}>Исследование · 0{openedChapter+1} / 04</p><h3 className="mt-4 font-serif text-3xl text-[#f0d592]">{editorial.chapters[openedChapter][0]}</h3><p className="mt-6 text-lg leading-9 text-[#dfd0ba]">{editorial.chapters[openedChapter][1]}</p></div>
+                        <div><p className={kicker}>Исследование · {openedChapter+1} / 4</p><h3 className="mt-4 font-serif text-3xl text-[#f0d592]">{editorial.chapters[openedChapter][0]}</h3><p className="mt-6 text-lg leading-9 text-[#dfd0ba]">{editorial.chapters[openedChapter][1]}</p></div>
                         <div className="mt-8 rounded-xl border-l-2 border-[#f0c453] bg-[#2d2418] p-5"><p className="text-xs font-semibold uppercase tracking-wider text-[#eac777]">Вопрос для размышления</p><p className="mt-2 text-base leading-7 text-[#f7e9d3]">{editorial.chapters[openedChapter][2]}</p></div>
                     </article>
                 </div>
@@ -126,35 +155,20 @@ export default function ExploreLifeLanguage() {
                 <p className={kicker}>Сцены из повседневности</p>
                 <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{data.libraryTitle}</h2>
                 <p className="mt-4 max-w-3xl leading-7 text-[#c7b9a3]">Это не ещё один тест. Выбирай жизненный пример, сравнивай три реакции и читай отдельный разбор каждой. Разные реакции могут быть понятными, но приводить к разным последствиям.</p>
-                <div className="mt-6 flex flex-wrap gap-3">
-                    <label className="sr-only" htmlFor="explore-example-search">Поиск ситуации</label>
-                    <input id="explore-example-search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти ситуацию…" className="min-h-12 min-w-0 flex-1 rounded-xl border border-[#866c43] bg-[#211b14] px-4 py-3 text-[#f8ead6] outline-none placeholder:text-[#a6967c] focus:border-[#f0c453]"/>
-                    <button type="button" onClick={()=>{setQuery('');setVisibleAll(false);setSelected(null);setPicked(null);}} className="rounded-xl border border-[#866c43] px-5 py-3 text-sm text-[#eac477]">Сбросить</button>
-                </div>
                 <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {shown.map((item)=><button key={item.id} type="button" aria-pressed={selected===item.id} onClick={()=>{setSelected(item.id);setPicked(null);setStarted(true);}}
-                      className={'rounded-2xl border p-5 text-left transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] '+(selected===item.id?'border-[#f0c453] bg-[#392b1c]':'border-[#80663f] bg-[#211c15] hover:border-[#e1ba70]')}>
+                      className={'group rounded-2xl border p-5 text-left transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] '+(selected===item.id?'border-[#f0c453] bg-[#392b1c]':'border-[#80663f] bg-[#211c15] hover:border-[#e1ba70]')}>
                         <span className="font-serif text-xl text-[#f8e8cc]">{item.title}</span><span className="mt-3 block text-sm leading-7 text-[#baaa93]">{item.scene}</span>
-                        <span className="mt-4 block text-xs font-semibold text-[#f0c453]">Разобрать три реакции →</span>
+                        <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#e1b65e] bg-gradient-to-r from-[#ebbf69] to-[#f8d993] px-4 py-2.5 text-sm font-bold text-[#24180d] shadow-[0_4px_18px_rgba(215,157,56,.16)] transition group-hover:shadow-[0_4px_22px_rgba(215,157,56,.35)]">Разобрать ситуацию <span aria-hidden="true">↗</span></span>
                     </button>)}
                 </div>
-                {shown.length===0&&<p className="mt-5 text-sm text-[#c6b69e]">Ничего не нашлось. Попробуй другое слово.</p>}
-                {!query&&matched.length>6&&<button type="button" onClick={()=>setVisibleAll(v=>!v)} className="mt-6 rounded-xl border border-[#957747] px-5 py-3 text-sm text-[#f0c453]">{visibleAll?'Свернуть примеры':'Показать все '+items.length+' ситуаций'}</button>}
-                {active&&<article className="mt-8 overflow-hidden rounded-3xl border border-[#a4834c] bg-[#231d15] p-5 sm:p-8">
-                    <p className={kicker}>Три способа отреагировать</p>
-                    <h3 className="mt-3 font-serif text-3xl">{active.title}</h3>
-                    <p className="mt-3 text-base leading-8 text-[#d7c7ae]">{active.scene}</p>
-                    <div className="mt-6 grid gap-3 md:grid-cols-3">{active.options.map((o)=><button key={o.id} type="button" aria-pressed={picked===o.id} onClick={()=>setPicked(o.id)} className={optionStyle(picked===o.id)}>{o.label}</button>)}</div>
-                    {response&&<div aria-live="polite" className="mt-7 grid gap-5 rounded-2xl border border-[#d9b46d]/60 bg-[#35281a] p-5 sm:p-7 lg:grid-cols-[1fr_.8fr]">
-                        <div><p className={kicker}>Разбор выбранного ответа</p><h4 className="mt-3 font-serif text-2xl text-[#ffe2a3]">{response.focus}</h4><p className="mt-3 leading-8 text-[#e5d4ba]">{response.reflection}</p>
-                            {response.deep?.consequence && <div className="mt-5 rounded-xl border border-[#a78655]/55 bg-[#241c13] p-4"><p className={kicker}>Возможные последствия и ограничения</p><p className="mt-3 leading-7 text-[#ecdbc2]">{response.deep.consequence}</p></div>}
-                        </div>
-                        <div className="rounded-xl bg-[#1a1611]/65 p-5"><p className={kicker}>Вопрос и следующий шаг</p><p className="mt-3 leading-7 text-[#f0d69c]">{active.question}</p>
-                            {response.deep?.step ? <><p className={kicker+' mt-5'}>Для этого конкретного ответа</p><p className="mt-2 leading-7 text-[#e7d2b2]">{response.deep.step}</p></> : <p className="mt-4 text-sm leading-7 text-[#d9c9b2]">{active.practice}</p>}
-                        </div>
-                    </div>}
-                    <button type="button" onClick={()=>{setSelected(null);setPicked(null);}} className="mt-6 text-sm font-semibold text-[#e3bf76] hover:underline">Закрыть разбор</button>
-                </article>}
+                {items.length>6&&<button type="button" onClick={()=>setVisibleAll(v=>!v)} className="mt-6 rounded-xl border border-[#957747] px-5 py-3 text-sm text-[#f0c453] transition hover:bg-[#30271a]">{visibleAll?'Свернуть примеры':'Показать все '+items.length+' ситуаций'}</button>}
+                {active&&<div className="mt-8 hidden md:block"><SituationAnalysis active={active} picked={picked} setPicked={setPicked} close={()=>{setSelected(null);setPicked(null);}}/></div>}
+                {active&&<div className="fixed inset-0 z-[1000] flex items-center justify-center bg-[#090806]/90 p-2 backdrop-blur-sm md:hidden" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget){setSelected(null);setPicked(null);}}}>
+                    <div role="dialog" aria-modal="true" aria-label={'Разбор ситуации: '+active.title} className="max-h-[calc(100dvh-16px)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-3xl shadow-2xl" tabIndex={-1}>
+                        <SituationAnalysis active={active} picked={picked} setPicked={setPicked} close={()=>{setSelected(null);setPicked(null);}}/>
+                    </div>
+                </div>}
             </section>
 
             <section className="mt-16 rounded-2xl border border-[#80663d]/60 bg-[#211c15] p-6 sm:p-8">
