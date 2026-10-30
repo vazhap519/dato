@@ -39,12 +39,18 @@ class LiveController extends Controller {
     }
 
     public function index(Request $request) {
-        $sessions = LiveSession::with('series:id,title')->orderByDesc('live_series_id')->orderBy('day_number')->get();
-        $active = $sessions->firstWhere('status', 'live') ?? $sessions->firstWhere('status', 'scheduled') ?? $sessions->first();
+        $canManage = $this->admin($request);
+        $sessions = LiveSession::with('series:id,title')
+            ->when(! $canManage, fn ($query) => $query->where('is_published', true))
+            ->orderBy('sort_order')->orderByDesc('live_series_id')->orderBy('day_number')->get();
+        $visible = $sessions->where('is_published', true);
+        $active = $visible->firstWhere('status', 'live') ?? $visible->firstWhere('status', 'scheduled')
+            ?? $visible->first() ?? ($canManage ? $sessions->first() : null);
         return Inertia::render('Live', [
             'sessions' => $sessions->map(fn ($s) => [
                 'id' => $s->id, 'day' => $s->day_number, 'title' => $s->title,
                 'series' => $s->series?->title, 'status' => $s->status,
+                'tab_label' => $s->tab_label, 'is_published' => $s->is_published,
             ]),
             'initialSessionId' => $active?->id,
             'canModerate' => $this->moderator($request),
@@ -55,10 +61,14 @@ class LiveController extends Controller {
     }
 
     public function session(Request $request, LiveSession $session) {
+        abort_if(! $session->is_published && ! $this->moderator($request), 404);
         // Ended broadcasts never expose pinned messages, even before legacy cleanup.
         return response()->json([
             'id' => $session->id, 'title' => $session->title, 'description' => $session->description,
             'status' => $session->status, 'chat_enabled' => $session->chat_enabled,
+            'is_published' => $session->is_published, 'show_video' => $session->show_video,
+            'show_chat' => $session->show_chat, 'chat_title' => $session->chat_title,
+            'video_placeholder' => $session->video_placeholder, 'chat_empty_text' => $session->chat_empty_text,
             'youtube_id' => $this->youtubeId($session->youtube_url),
             'action_buttons' => LiveActionButton::query()->where('live_session_id', $session->id)
                 ->when(! $this->allowed($request, 'buttons'), fn ($query) => $query->where('is_visible', true))
@@ -120,6 +130,7 @@ class LiveController extends Controller {
     }
 
     public function presence(Request $request, LiveSession $session) {
+        abort_if(! $session->is_published && ! $this->moderator($request), 404);
         $token = hash_hmac('sha256', $request->session()->getId(), config('app.key'));
         DB::table('live_presence')->upsert([[
             'live_session_id' => $session->id,
@@ -132,6 +143,7 @@ class LiveController extends Controller {
     }
 
     public function hostSend(Request $request, LiveSession $session) {
+        abort_if(! $session->is_published && ! $this->moderator($request), 404);
         abort_unless($this->allowed($request, 'host'), 403);
         abort_unless($session->status === 'live', 403, 'Эфир завершён или ещё не начался.');
         $data = $request->validate(['body' => ['required', 'string', 'max:500']]);
@@ -210,6 +222,7 @@ class LiveController extends Controller {
     }
 
     public function messages(Request $request, LiveSession $session) {
+        abort_if(! $session->is_published && ! $this->moderator($request), 404);
         if ($session->status === 'ended') return response()->json([]);
         $moderator = $this->moderator($request);
         $query = $session->messages();
@@ -262,6 +275,7 @@ class LiveController extends Controller {
     }
 
     public function send(Request $request, LiveSession $session) {
+        abort_if(! $session->is_published && ! $this->moderator($request), 404);
         $moderator = $this->liveModerator($request);
         if (! $moderator) $this->assertIpAllowed($request);
         $guest = LiveGuest::find($request->session()->get('live_guest_id'));
