@@ -25,7 +25,7 @@ export default function ExploreInvitation() {
             <Link href="/explore" data-analytics="Главная · Исследуй себя" className="relative mt-9 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#f0c453] px-8 py-3 font-bold text-[#22190e] transition hover:bg-[#ffda81] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f0c453]">
                 Исследовать себя <span aria-hidden="true" className="material-symbols-outlined text-xl">arrow_forward</span>
             </Link>
-            <p className="relative mt-4 text-xs text-[#ae9e87]">6 направлений · Без регистрации</p>
+            <p className="relative mt-4 text-xs text-[#ae9e87]">11 направлений · Без регистрации</p>
         </div>
     </section>;
 }
