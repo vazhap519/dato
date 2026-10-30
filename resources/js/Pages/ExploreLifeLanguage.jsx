@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation.jsx';
 import ExploreDeepExperience from '../components/ExploreDeepExperience.jsx';
@@ -69,6 +69,8 @@ export default function ExploreLifeLanguage() {
     const [picked,setPicked]=useState(null);
     const [visibleAll,setVisibleAll]=useState(false);
     const [started,setStarted]=useState(false);
+    const dialogRef=useRef(null);
+    const triggerRef=useRef(null);
     useExploreJourney(languageSlug,started,picked!==null);
     useEffect(()=>{setOpenedChapter(0);setSelected(null);setPicked(null);setVisibleAll(false);setStarted(false);},[languageSlug]);
     const items=data.situations;
@@ -80,10 +82,11 @@ export default function ExploreLifeLanguage() {
         const media=window.matchMedia('(max-width: 767px)');
         const sync=()=>{document.body.style.overflow=media.matches?'hidden':previous;};
         sync();
+        if(media.matches) dialogRef.current?.focus();
         media.addEventListener('change',sync);
         const keydown=e=>{if(e.key==='Escape'){setSelected(null);setPicked(null);}};
         document.addEventListener('keydown',keydown);
-        return ()=>{document.body.style.overflow=previous;media.removeEventListener('change',sync);document.removeEventListener('keydown',keydown);};
+        return ()=>{document.body.style.overflow=previous;media.removeEventListener('change',sync);document.removeEventListener('keydown',keydown);if(media.matches) triggerRef.current?.focus();};
     },[active]);
     const editorial=data.editorial;
 
@@ -156,7 +159,7 @@ export default function ExploreLifeLanguage() {
                 <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{data.libraryTitle}</h2>
                 <p className="mt-4 max-w-3xl leading-7 text-[#c7b9a3]">Это не ещё один тест. Выбирай жизненный пример, сравнивай три реакции и читай отдельный разбор каждой. Разные реакции могут быть понятными, но приводить к разным последствиям.</p>
                 <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {shown.map((item)=><button key={item.id} type="button" aria-pressed={selected===item.id} onClick={()=>{setSelected(item.id);setPicked(null);setStarted(true);}}
+                    {shown.map((item)=><button key={item.id} type="button" aria-pressed={selected===item.id} onClick={e=>{triggerRef.current=e.currentTarget;setSelected(item.id);setPicked(null);setStarted(true);}}
                       className={'group rounded-2xl border p-5 text-left transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] '+(selected===item.id?'border-[#f0c453] bg-[#392b1c]':'border-[#80663f] bg-[#211c15] hover:border-[#e1ba70]')}>
                         <span className="font-serif text-xl text-[#f8e8cc]">{item.title}</span><span className="mt-3 block text-sm leading-7 text-[#baaa93]">{item.scene}</span>
                         <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#e1b65e] bg-gradient-to-r from-[#ebbf69] to-[#f8d993] px-4 py-2.5 text-sm font-bold text-[#24180d] shadow-[0_4px_18px_rgba(215,157,56,.16)] transition group-hover:shadow-[0_4px_22px_rgba(215,157,56,.35)]">Разобрать ситуацию <span aria-hidden="true">↗</span></span>
@@ -165,7 +168,7 @@ export default function ExploreLifeLanguage() {
                 {items.length>6&&<button type="button" onClick={()=>setVisibleAll(v=>!v)} className="mt-6 rounded-xl border border-[#957747] px-5 py-3 text-sm text-[#f0c453] transition hover:bg-[#30271a]">{visibleAll?'Свернуть примеры':'Показать все '+items.length+' ситуаций'}</button>}
                 {active&&<div className="mt-8 hidden md:block"><SituationAnalysis active={active} picked={picked} setPicked={setPicked} close={()=>{setSelected(null);setPicked(null);}}/></div>}
                 {active&&<div className="fixed inset-0 z-[1000] flex items-center justify-center bg-[#090806]/90 p-2 backdrop-blur-sm md:hidden" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget){setSelected(null);setPicked(null);}}}>
-                    <div role="dialog" aria-modal="true" aria-label={'Разбор ситуации: '+active.title} className="max-h-[calc(100dvh-16px)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-3xl shadow-2xl" tabIndex={-1}>
+                    <div ref={dialogRef} role="dialog" aria-modal="true" aria-label={'Разбор ситуации: '+active.title} className="max-h-[calc(100dvh-16px)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-3xl shadow-2xl" tabIndex={-1}>
                         <SituationAnalysis active={active} picked={picked} setPicked={setPicked} close={()=>{setSelected(null);setPicked(null);}}/>
                     </div>
                 </div>}
