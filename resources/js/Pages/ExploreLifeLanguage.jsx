@@ -41,7 +41,7 @@ const optionClass = selected => 'min-h-16 w-full rounded-xl border p-4 text-left
     (selected ? 'border-[#f0c453] bg-[#42301c] text-[#fff1d7]' : 'border-[#806638]/70 bg-[#191610] text-[#e0d0ba] hover:border-[#dcb868] hover:bg-[#292219]');
 
 export default function ExploreLifeLanguage() {
-    const { languageSlug, settings = {} } = usePage().props;
+    const { languageSlug, settings = {}, coverImage = null } = usePage().props;
     const data = libraries[languageSlug] || libraries.relationships;
     const theme = themes[languageSlug] || themes.relationships;
     const [selectedId, setSelectedId] = useState('');
@@ -107,8 +107,12 @@ export default function ExploreLifeLanguage() {
                         <a href="#library" className="rounded-xl border border-[#98784b] px-6 py-3 text-sm text-[#f0c453] transition hover:border-[#f0c453]">Посмотреть ситуации</a>
                     </div>
                 </div>
-                <div className={'relative overflow-hidden rounded-3xl border border-[#9f7b45]/70 bg-gradient-to-br p-7 sm:p-9 ' + theme.gradient}>
-                    <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-64 w-64 rounded-full border-[26px] border-[#f0c453]/10" />
+                <div className={'relative isolate overflow-hidden rounded-3xl border border-[#9f7b45]/70 bg-gradient-to-br p-7 sm:p-9 ' + theme.gradient}>
+                    {coverImage && <>
+                        <img src={coverImage} alt="" aria-hidden="true" decoding="async" className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover object-center" />
+                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#17130e]/60 via-[#17130e]/80 to-[#17130e]/95" />
+                    </>}
+                    {!coverImage && <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-64 w-64 rounded-full border-[26px] border-[#f0c453]/10" />}
                     <div aria-hidden="true" className="pointer-events-none absolute bottom-6 right-5 h-40 w-40 rounded-full border border-[#f0c453]/20" />
                     <span aria-hidden="true" className="material-symbols-outlined relative text-[78px] leading-none text-[#f0c453]">{theme.symbol}</span>
                     <p className={kicker + ' relative mt-6'}>Не оценка личности, а наблюдение</p>
