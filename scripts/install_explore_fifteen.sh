@@ -32,6 +32,7 @@ FILES=(
   "database/seeders/ExploreNewLanguagesSeeder.php"
   "scripts/explore-copy-config.cjs"
   "scripts/verify-explore-cms.cjs"
+  "scripts/verify_explore_three_depth.cjs"
   "app/Console/Commands/RemapExploreCopy.php"
 )
 mkdir -p "$BACKUP/original" "$BACKUP/staged"
@@ -85,6 +86,7 @@ done
 echo "Проверяем редактор и справочники..."
 node scripts/generate-explore-copy-manifest.cjs
 node scripts/verify-explore-cms.cjs
+node scripts/verify_explore_three_depth.cjs
 echo "Собираем новый frontend..."
 NODE_OPTIONS="--max-old-space-size=768" npm run build
 test -s public/build/manifest.json
