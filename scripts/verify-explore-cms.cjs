@@ -40,11 +40,22 @@ const docs = [
     'emotion-atlas','emotion-practices','emotion-situations',
     'archetype-guides','archetype-situations','archetype-mirror-questions',
     'dream-atlas','pattern-atlas','personality-mirror',
+    'relationships-atlas','body-atlas','choice-atlas','beliefs-atlas','values-atlas',
 ];
 for (const key of docs) {
     const data = JSON.parse(fs.readFileSync('resources/data/' + key + '.json', 'utf8'));
     if (!data.version || Object.keys(data).length < 2) {
         throw new Error('Неверный справочник: ' + key);
+    }
+    if (['relationships-atlas','body-atlas','choice-atlas','beliefs-atlas','values-atlas'].includes(key)) {
+        if (data.situations?.length !== 10 || !Array.isArray(data.feature?.fields)) {
+            throw new Error('Некорректные интерактивные материалы: ' + key);
+        }
+        for (const scenario of data.situations) {
+            if (scenario.options?.length !== 3 || !scenario.reflection || !scenario.question || !scenario.practice) {
+                throw new Error('Неполная ситуация в ' + key + ': ' + scenario.id);
+            }
+        }
     }
 }
 console.log('ПРОВЕРКА CMS ПРОЙДЕНА:', total, 'редактируемых фраз,', docs.length, 'справочников.');
