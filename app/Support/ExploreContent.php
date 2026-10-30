@@ -29,6 +29,10 @@ final class ExploreContent
         'choice' => 'Язык выбора',
         'beliefs' => 'Язык убеждений',
         'values' => 'Язык ценностей',
+        'fears' => 'Язык страхов',
+        'time' => 'Язык времени',
+        'conflicts' => 'Язык внутренних конфликтов',
+        'attention' => 'Язык внимания',
         'shared' => 'Общие элементы направлений самопознания',
     ];
 
@@ -47,6 +51,10 @@ final class ExploreContent
         'choice-atlas' => 'choice',
         'beliefs-atlas' => 'beliefs',
         'values-atlas' => 'values',
+        'fears-atlas' => 'fears',
+        'time-atlas' => 'time',
+        'conflicts-atlas' => 'conflicts',
+        'attention-atlas' => 'attention',
     ];
 
     public static function pageSlug(Request $request): ?string
@@ -56,7 +64,7 @@ final class ExploreContent
         if (str_starts_with($name, 'numbers.')) {
             return 'numbers';
         }
-        foreach (['emotions', 'archetypes', 'dreams', 'patterns', 'mirror', 'relationships', 'body', 'choice', 'beliefs', 'values'] as $slug) {
+        foreach (['emotions', 'archetypes', 'dreams', 'patterns', 'mirror', 'relationships', 'body', 'choice', 'beliefs', 'values', 'fears', 'time', 'conflicts', 'attention'] as $slug) {
             if (str_starts_with($name, 'explore.'.$slug)) {
                 return $slug;
             }
