@@ -48,6 +48,7 @@ class LiveController extends Controller {
             ]),
             'initialSessionId' => $active?->id,
             'canModerate' => $this->moderator($request),
+            'canManageStatus' => $this->admin($request),
             'moderatorPermissions' => $this->permissions($request),
             'isLiveModerator' => $this->liveModerator($request) !== null && !$this->admin($request),
         ]);
@@ -143,6 +144,22 @@ class LiveController extends Controller {
             'is_host' => true,
         ]);
         return response()->json($message->only(['id','author_name','body','is_host','created_at']), 201);
+    }
+
+    public function updateStatus(Request $request, LiveSession $session) {
+        // Only Filament administrators can start or finish a broadcast.
+        // Moderator chat permissions do not grant access to this operation.
+        abort_unless($this->admin($request), 403);
+        $data = $request->validate([
+            'status' => ['required', 'in:scheduled,live,ended'],
+        ]);
+        DB::transaction(function () use ($session, $data) {
+            $locked = LiveSession::query()->lockForUpdate()->findOrFail($session->id);
+            if ($locked->status !== $data['status']) {
+                $locked->update(['status' => $data['status']]);
+            }
+        });
+        return response()->json(['status' => $session->fresh()->status]);
     }
 
     public function chatControl(Request $request, LiveSession $session) {
