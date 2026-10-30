@@ -13,6 +13,7 @@ FILES=(
   "resources/js/components/ExploreConnections.jsx"
   "resources/js/components/ExploreDeepExperience.jsx"
   "resources/js/components/ExploreThreeDepth.jsx"
+  "resources/js/components/ExploreSixDepth.jsx"
   "resources/js/components/ExploreLifeWorkbench.jsx"
   "resources/js/components/ExploreJourney.jsx"
   "resources/js/components/ExploreInvitation.jsx"
