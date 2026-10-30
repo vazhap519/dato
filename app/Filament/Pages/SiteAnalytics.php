@@ -238,6 +238,11 @@ class SiteAnalytics extends Page
             'dreams' => 'Язык снов',
             'patterns' => 'Язык повторений',
             'personality-mirror' => 'Зеркало личности',
+            'relationships' => 'Язык отношений',
+            'body' => 'Язык тела',
+            'choice' => 'Язык выбора',
+            'beliefs' => 'Язык убеждений',
+            'values' => 'Язык ценностей',
         ];
         $rows = [];
         foreach ($tools as $key => $title) {
