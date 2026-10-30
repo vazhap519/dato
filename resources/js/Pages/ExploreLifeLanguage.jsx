@@ -109,8 +109,8 @@ export default function ExploreLifeLanguage() {
                 </div>
                 <div className={'relative isolate overflow-hidden rounded-3xl border border-[#9f7b45]/70 bg-gradient-to-br p-7 sm:p-9 ' + theme.gradient}>
                     {coverImage && <>
-                        <img src={coverImage} alt="" aria-hidden="true" decoding="async" className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover object-center" />
-                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#17130e]/60 via-[#17130e]/80 to-[#17130e]/95" />
+                        <img src={coverImage} alt="" aria-hidden="true" decoding="async" className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center" />
+                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[#17130e]/60 via-[#17130e]/80 to-[#17130e]/95" />
                     </>}
                     {!coverImage && <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-64 w-64 rounded-full border-[26px] border-[#f0c453]/10" />}
                     <div aria-hidden="true" className="pointer-events-none absolute bottom-6 right-5 h-40 w-40 rounded-full border border-[#f0c453]/20" />
