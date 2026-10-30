@@ -12,7 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -64,7 +64,7 @@ class LiveSessionResource extends Resource {
             TextColumn::make('day_number')->label('День')->sortable(),
             TextColumn::make('title')->label('Эфир')->searchable(),
             TextColumn::make('status')->label('Статус')->badge(),
-            IconColumn::make('is_published')->label('На сайте')->boolean(),
+            ToggleColumn::make('is_published')->label('Показывать на сайте'),
             TextColumn::make('sort_order')->label('Порядок')->sortable(),
             TextColumn::make('created_at')->label('Создан')->dateTime('d.m.Y'),
         ])->recordActions([\Filament\Actions\EditAction::make()]);
