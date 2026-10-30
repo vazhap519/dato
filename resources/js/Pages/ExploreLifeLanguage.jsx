@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation.jsx';
+import ExploreLifeWorkbench from '../components/ExploreLifeWorkbench.jsx';
 import { ExplorePracticeInvitation, useExploreJourney } from '../components/ExploreJourney.jsx';
 import { liveExploreDocument } from '../lib/exploreCms.js';
 import relationshipsBase from '../../data/relationships-atlas.json';
@@ -75,6 +76,7 @@ export default function ExploreLifeLanguage() {
                 </Link>
                 <ExploreSectionNavigation items={[
                     { label: data.exerciseTitle, href: '#experience', icon: theme.icon },
+                    { label: 'Личная практика', href: '#workbench', icon: 'edit_note' },
                     { label: 'Библиотека ситуаций', href: '#library', icon: 'menu_book' },
                     { label: 'Эксперимент дня', href: '#daily', icon: 'lightbulb' },
                     { label: 'Все направления', href: '/explore', icon: 'apps', catalog: true },
@@ -173,6 +175,8 @@ export default function ExploreLifeLanguage() {
                     </div>
                 </div>
             </section>
+
+            <ExploreLifeWorkbench slug={languageSlug} feature={data.feature} />
 
             <section id="library" className="mt-20 scroll-mt-8">
                 <p className={kicker}>Исследовать в своём темпе</p>
