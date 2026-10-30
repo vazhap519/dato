@@ -8,6 +8,11 @@ const VISUALS = {
     archetypes: { theme: 'archetypes', eyebrow: 'Роли и внутренние образы', icon: 'theater_comedy', palette: 'from-[#493323] via-[#292019] to-[#1a1714]' },
     patterns: { theme: 'patterns', eyebrow: 'Сценарии и привычки', icon: 'repeat', palette: 'from-[#214039] via-[#172b27] to-[#131c19]' },
     mirror: { theme: 'mirror', eyebrow: 'Путь к себе', icon: 'self_improvement', palette: 'from-[#3b2c4b] via-[#292033] to-[#19161e]' },
+    relationships: { theme: 'relationships', eyebrow: 'Близость и границы', icon: 'diversity_3', palette: 'from-[#482c34] via-[#2d2229] to-[#17140f]' },
+    body: { theme: 'body', eyebrow: 'Ощущения и забота', icon: 'self_improvement', palette: 'from-[#234338] via-[#1d2c27] to-[#17140f]' },
+    choice: { theme: 'choice', eyebrow: 'Решения и свобода', icon: 'alt_route', palette: 'from-[#493a28] via-[#25231e] to-[#17140f]' },
+    beliefs: { theme: 'beliefs', eyebrow: 'Мысли и проверки', icon: 'psychology_alt', palette: 'from-[#39314e] via-[#292338] to-[#17140f]' },
+    values: { theme: 'values', eyebrow: 'Смысл и приоритеты', icon: 'explore', palette: 'from-[#423922] via-[#26261e] to-[#17140f]' },
 };
 
 function visualFor(tool) {
@@ -20,6 +25,9 @@ function visualFor(tool) {
     if (url.includes('/archetypes')) return VISUALS.archetypes;
     if (url.includes('/patterns')) return VISUALS.patterns;
     if (url.includes('/mirror')) return VISUALS.mirror;
+    for (const key of ['relationships', 'body', 'choice', 'beliefs', 'values']) {
+        if (url.includes('/' + key)) return VISUALS[key];
+    }
     return { theme: 'other', eyebrow: 'Исследование себя', icon: tool.icon || 'auto_awesome', palette: 'from-[#382e1f] via-[#211c14] to-[#16130e]' };
 }
 
@@ -66,6 +74,11 @@ function Artwork({ theme, icon }) {
             <span className="material-symbols-outlined absolute left-1/2 bottom-[7%] -translate-x-1/2 text-[145px] text-[#d6c5dc]/45">person</span>
             <div className="absolute left-1/2 top-[6%] h-[215px] w-[150px] -translate-x-1/2 rounded-t-[75px] rounded-b-[20px] border border-[#ffe1a6]/25" />
         </>}
+        {['relationships', 'body', 'choice', 'beliefs', 'values'].includes(theme) && <>
+            <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f0c453]/20" />
+            <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f0c453]/30" />
+            <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[88px] text-[#f0c453]/85">{VISUALS[theme].icon}</span>
+        </>}
         {theme === 'other' && <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[105px] text-[#e7c579]/55">{icon}</span>}
         <div className="absolute inset-0 bg-gradient-to-t from-[#12100d]/35 via-transparent to-transparent" />
     </div>;
@@ -76,7 +89,7 @@ export default function Explore() {
 
     return <div className="min-h-screen bg-[#14120d] text-[#f8f4e9]">
         <Head title="Исследуй себя — Arutyun">
-            <meta name="description" content="Шесть направлений самопознания: числа, эмоции, сны, архетипы, повторения и зеркало личности." />
+            <meta name="description" content="Интерактивное пространство самопознания: эмоции, отношения, сны, выбор, ценности, убеждения, числа, тело и привычные сценарии." />
         </Head>
 
         <header className="border-b border-[#b99347]/25">
@@ -96,7 +109,7 @@ export default function Explore() {
                 <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#cfc2ad] sm:text-lg">
                     Числа, эмоции, сны и привычные события могут стать поводом остановиться и внимательнее посмотреть на себя. Здесь нет предсказаний или готовых диагнозов.
                 </p>
-                <p className="mt-6 text-xs uppercase tracking-[.18em] text-[#e8ca84]">Шесть направлений · Один путь к себе</p>
+                <p className="mt-6 text-xs uppercase tracking-[.18em] text-[#e8ca84]">Выбери направление · Один путь к себе</p>
             </section>
 
             <section aria-label="Направления самопознания" className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
