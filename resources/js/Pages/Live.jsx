@@ -132,6 +132,7 @@ export default function Live() {
     };
     const changeStatus = async nextStatus => {
         setStatusError("");
+        setError("");
         if (!session || !canManageStatus || changingStatus || nextStatus === session.status) return;
         if (nextStatus === "ended" && !window.confirm("Завершить эфир? Все сообщения этого эфира будут удалены без возможности восстановления.")) return;
         if (session.status === "ended" && nextStatus === "live" && !window.confirm("Снова открыть завершённый эфир? Чат начнётся пустым.")) return;
