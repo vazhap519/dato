@@ -38,6 +38,18 @@ RateLimiter::for('live-join', function (\Illuminate\Http\Request $request) {
     ];
 });
 
+// Separate rate-limit buckets: chat polling must never lock the host's status control.
+RateLimiter::for('live-message-read', function (\Illuminate\Http\Request $request) {
+    $session = $request->route('session');
+    $sessionId = $session instanceof \App\Models\LiveSession ? $session->getKey() : (string) $session;
+    $identity = $request->user()?->getAuthIdentifier() ?: $request->session()->getId();
+    return Limit::perMinute(240)->by('read:'.$sessionId.':'.hash('sha256', (string) $identity));
+});
+RateLimiter::for('live-status-change', function (\Illuminate\Http\Request $request) {
+    $identity = $request->user()?->getAuthIdentifier() ?: $request->session()->getId();
+    return Limit::perMinute(15)->by('status:'.hash('sha256', (string) $identity));
+});
+
 // Each live session belongs to one practice day; messages are isolated by session.
 Route::get('/moderator/{token}', [\App\Http\Controllers\LiveModeratorAuthController::class, 'show'])->name('live.moderator.show')->middleware('throttle:30,1');
 Route::post('/moderator/{token}', [\App\Http\Controllers\LiveModeratorAuthController::class, 'login'])->name('live.moderator.login')->middleware('throttle:10,1');
@@ -46,12 +58,12 @@ Route::get('/live', [\App\Http\Controllers\LiveController::class, 'index'])->nam
 Route::get('/live/guest', [\App\Http\Controllers\LiveController::class, 'guest']);
 Route::post('/live/join', [\App\Http\Controllers\LiveController::class, 'join'])->middleware('throttle:live-join');
 Route::get('/live/api/sessions/{session}', [\App\Http\Controllers\LiveController::class, 'session']);
-Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:120,1');
+Route::get('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'messages'])->middleware('throttle:live-message-read');
 Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\LiveController::class, 'send'])->middleware('throttle:live-chat');
 Route::post('/live/api/sessions/{session}/presence', [\App\Http\Controllers\LiveController::class, 'presence'])->middleware('throttle:12,1');
 Route::post('/live/api/sessions/{session}/host-message', [\App\Http\Controllers\LiveController::class, 'hostSend'])->middleware('throttle:30,1');
 Route::post('/live/api/sessions/{session}/chat-control', [\App\Http\Controllers\LiveController::class, 'chatControl']);
-Route::post('/live/api/sessions/{session}/status', [\App\Http\Controllers\LiveController::class, 'updateStatus'])->middleware('throttle:15,1');
+Route::post('/live/api/sessions/{session}/status', [\App\Http\Controllers\LiveController::class, 'updateStatus'])->middleware('throttle:live-status-change');
 Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Http\Controllers\LiveController::class, 'moderate']);
 
 Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton']);
