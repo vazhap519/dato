@@ -38,7 +38,7 @@ export default function ExplorePatternDetail(){
       <section className="mt-12">
         <p className={kicker}>Три точки внимания</p>
         <h2 className="mt-3 font-serif text-3xl">Вопросы к себе</h2>
-        <div className="mt-6 grid gap-3 md:grid-cols-3">{pattern.questions.map((q,i)=><div key={i} className={panel}><p className="font-serif text-3xl text-[#f0c453]">0{i+1}</p><p className="mt-4 leading-7 text-[#e0d1ba]">{q}</p></div>)}</div>
+        <div className="mt-6 grid gap-3 md:grid-cols-3">{pattern.questions.map((q,i)=><div key={i} className={panel}><p className="font-serif text-3xl text-[#f0c453]">{i+1}</p><p className="mt-4 leading-7 text-[#e0d1ba]">{q}</p></div>)}</div>
       </section>
       <section className="mt-12 rounded-3xl border border-[#ad8a4c]/70 bg-[#2d2318] p-6 sm:p-9">
         <p className={kicker}>Маленький альтернативный шаг</p>
