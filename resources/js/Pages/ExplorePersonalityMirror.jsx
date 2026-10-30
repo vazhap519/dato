@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import dataBase from '../../data/personality-mirror.json';
 import ExploreSectionNavigation from '../components/ExploreSectionNavigation';
@@ -24,6 +24,15 @@ export default function ExplorePersonalityMirror(){
  const {settings={}}=usePage().props;
  const [answers,setAnswers]=useState({});
  const [section,setSection]=useState(0);
+ const questionsTopRef=useRef(null);
+ const previousSectionRef=useRef(0);
+ useEffect(()=>{
+   if(section===previousSectionRef.current)return;
+   previousSectionRef.current=section;
+   const target=questionsTopRef.current;
+   if(!target)return;
+   target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+ },[section]);
  const [showResults,setShowResults]=useState(false);
  const [selectedDilemma,setSelectedDilemma]=useState(null);
  const [dilemmaChoice,setDilemmaChoice]=useState(null);
@@ -97,7 +106,7 @@ export default function ExplorePersonalityMirror(){
         </div>
         <div className="mt-6 grid grid-cols-6 gap-2">{axes.map((a,i)=><div key={a.slug} className={'h-1.5 rounded-full '+(i<=section?'bg-[#f0c453]':'bg-[#6d5434]')} />)}</div>
        </div>
-       <div className="grid gap-4 p-4 sm:p-8">
+       <div ref={questionsTopRef} className="grid scroll-mt-5 gap-4 p-4 sm:p-8">
         {currentQuestions.map((q,i)=><fieldset key={q.id} className="rounded-2xl border border-[#765f3b]/70 bg-[#18150f] p-4 sm:p-6">
           <legend className="sr-only">{q.statement}</legend>
           <p className="font-serif text-lg leading-7">{i+1}. {q.statement}</p>
