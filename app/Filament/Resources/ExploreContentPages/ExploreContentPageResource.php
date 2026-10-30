@@ -21,7 +21,7 @@ class ExploreContentPageResource extends Resource
     protected static ?string $model = ExploreContentPage::class;
     protected static ?string $modelLabel = 'страница самопознания';
     protected static ?string $pluralModelLabel = 'редактирование страниц самопознания';
-    protected static ?string $navigationLabel = 'Тексты шести страниц';
+    protected static ?string $navigationLabel = 'Тексты страниц';
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-pencil-square';
     protected static string|\UnitEnum|null $navigationGroup = 'Самопознание';
     protected static ?int $navigationSort = 11;
@@ -42,6 +42,11 @@ class ExploreContentPageResource extends Resource
                     FileUpload::make('copy.card_image_archetypes')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык архетипов'),
                     FileUpload::make('copy.card_image_patterns')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык повторений'),
                     FileUpload::make('copy.card_image_mirror')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Зеркало личности'),
+                    FileUpload::make('copy.card_image_relationships')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык отношений'),
+                    FileUpload::make('copy.card_image_body')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык тела'),
+                    FileUpload::make('copy.card_image_choice')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык выбора'),
+                    FileUpload::make('copy.card_image_beliefs')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык убеждений'),
+                    FileUpload::make('copy.card_image_values')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык ценностей'),
                 ])
                 ->visible(fn (?ExploreContentPage $record): bool => $record?->slug === 'shared')
                 ->columns(2)
