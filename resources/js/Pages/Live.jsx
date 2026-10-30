@@ -41,6 +41,7 @@ export default function Live() {
     const [error, setError] = useState("");
     const [sending, setSending] = useState(false);
     const [changingStatus, setChangingStatus] = useState(false);
+    const [statusError, setStatusError] = useState("");
     const [openMenu, setOpenMenu] = useState(null);
     const [online, setOnline] = useState(null);
     const [editingButton, setEditingButton] = useState(null);
@@ -81,7 +82,7 @@ export default function Live() {
             finally { busy = false; }
         };
         refresh();
-        const interval = setInterval(refresh, 1000);
+        const interval = setInterval(refresh, 2500);
         const onFocus = () => refresh();
         window.addEventListener("focus", onFocus);
         return () => { mounted = false; clearInterval(interval); window.removeEventListener("focus", onFocus); };
@@ -130,11 +131,12 @@ export default function Live() {
         } catch (e) { setError(e.message); }
     };
     const changeStatus = async nextStatus => {
+        setStatusError("");
         if (!session || !canManageStatus || changingStatus || nextStatus === session.status) return;
         if (nextStatus === "ended" && !window.confirm("Завершить эфир? Все сообщения этого эфира будут удалены без возможности восстановления.")) return;
         if (session.status === "ended" && nextStatus === "live" && !window.confirm("Снова открыть завершённый эфир? Чат начнётся пустым.")) return;
         setChangingStatus(true);
-        setError("");
+        setStatusError("");
         try {
             await api(`/live/api/sessions/${sessionId}/status`, {
                 method: "POST", body: JSON.stringify({ status: nextStatus }),
@@ -146,7 +148,7 @@ export default function Live() {
             setSession(details);
             setMessages(chat);
             if (nextStatus === "ended") setDraft("");
-        } catch (e) { setError(e.message); }
+        } catch (e) { setStatusError(e.message); }
         finally { setChangingStatus(false); }
     };
 
@@ -231,6 +233,7 @@ export default function Live() {
                                                 <option value="ended">Завершён</option>
                                             </select>
                                         </label>}
+                                        {statusError && <p role="alert" className="w-full text-right text-xs text-red-300">{statusError}</p>}
                                     </div>
                                 </div>
                                 <div className="aspect-video bg-black">
