@@ -105,11 +105,8 @@ export default function Explore() {
                     return <Link key={tool.id} href={tool.url} className="group flex min-w-0 flex-col overflow-hidden rounded-[26px] border border-[#8e713f]/50 bg-[#211c16] transition-all duration-300 hover:-translate-y-1 hover:border-[#e9c575]/80 hover:shadow-[0_22px_55px_rgba(0,0,0,.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]">
                         <div className={`relative h-48 overflow-hidden border-b border-[#b99347]/20 bg-gradient-to-br ${visual.palette} sm:h-52`}>
                             {cardImages[visual.theme] ? <>
-                                <img src={cardImages[visual.theme]} alt="" aria-hidden="true" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-xl" />
-                                <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-[1.035]">
-                                    <img src={cardImages[visual.theme]} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain" />
-                                </div>
-                                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#14100e]/55 via-[#14100e]/10 to-black/10" />
+                                <img src={cardImages[visual.theme]} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
+                                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#14100e]/60 via-[#14100e]/15 to-black/10" />
                             </> : <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"><Artwork theme={visual.theme} icon={visual.icon} /></div>}
                             <span className="absolute bottom-4 left-5 rounded-full border border-[#e8cb88]/35 bg-[#17130e]/75 px-3 py-1.5 text-[10px] uppercase tracking-[.15em] text-[#f4d998] backdrop-blur-md">{visual.eyebrow}</span>
                             <span aria-hidden="true" className="material-symbols-outlined absolute right-5 bottom-4 text-[25px] text-[#f4d998]">{tool.icon || visual.icon}</span>
