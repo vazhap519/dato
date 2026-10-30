@@ -45,7 +45,7 @@ export default function ExploreDreamSymbol(){
         <p className={kicker}>Вопросы без готового ответа</p>
         <h2 className="mt-3 font-serif text-3xl">Три точки внимания</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
-          {symbol.questions.map((q,i)=><div key={i} className={panel}><p className="font-serif text-3xl text-[#f0c453]">{String(i+1).padStart(2,'0')}</p><p className="mt-4 leading-7 text-[#e0d4c1]">{q}</p></div>)}
+          {symbol.questions.map((q,i)=><div key={i} className={panel}><p className="font-serif text-3xl text-[#f0c453]">{String(i+1)}</p><p className="mt-4 leading-7 text-[#e0d4c1]">{q}</p></div>)}
         </div>
       </section>
       <section className="mt-12 grid gap-4 md:grid-cols-2">
