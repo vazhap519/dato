@@ -9,6 +9,7 @@ FILES=(
   "resources/js/Pages/ExploreLifeLanguage.jsx"
   "resources/js/Pages/Explore.jsx"
   "resources/js/components/ExploreJourney.jsx"
+  "resources/js/components/ExploreLifeWorkbench.jsx"
   "resources/js/components/ExploreInvitation.jsx"
   "resources/data/relationships-atlas.json"
   "resources/data/body-atlas.json"
@@ -21,6 +22,7 @@ FILES=(
   "app/Filament/Pages/SiteAnalytics.php"
   "database/seeders/ExploreNewLanguagesSeeder.php"
   "scripts/explore-copy-config.cjs"
+  "scripts/verify-explore-cms.cjs"
   "app/Console/Commands/RemapExploreCopy.php"
 )
 mkdir -p "$BACKUP/original" "$BACKUP/staged"
