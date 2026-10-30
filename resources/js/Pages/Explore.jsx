@@ -103,7 +103,7 @@ export default function Explore() {
                 {tools.map(tool => {
                     const visual = visualFor(tool);
                     return <Link key={tool.id} href={tool.url} className="group flex min-w-0 flex-col overflow-hidden rounded-[26px] border border-[#8e713f]/50 bg-[#211c16] transition-all duration-300 hover:-translate-y-1 hover:border-[#e9c575]/80 hover:shadow-[0_22px_55px_rgba(0,0,0,.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]">
-                        <div className={`relative h-56 overflow-hidden border-b border-[#b99347]/20 bg-gradient-to-br ${visual.palette} sm:h-64 xl:h-72`}>
+                        <div className={`relative h-48 overflow-hidden border-b border-[#b99347]/20 bg-gradient-to-br ${visual.palette} sm:h-52`}>
                             {cardImages[visual.theme] ? <>
                                 <img src={cardImages[visual.theme]} alt="" aria-hidden="true" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-xl" />
                                 <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-[1.035]">
