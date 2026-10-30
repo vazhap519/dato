@@ -221,6 +221,11 @@ final class ExploreContent
                     $edited = $lookup[$group][$key] ?? null;
                     if (is_array($value) && is_array($edited)) {
                         $value = self::mergeEditable($value, $edited);
+                    } elseif (is_string($value) && is_array($edited)
+                        && $key !== 'type' && is_string($edited['value'] ?? null)) {
+                        // Flat CMS entries, e.g. workbench.title / workbench.intro.
+                        // Keep technical discriminators immutable.
+                        $value = $edited['value'];
                     }
                 }
                 unset($value);
