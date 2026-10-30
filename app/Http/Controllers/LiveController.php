@@ -54,6 +54,7 @@ class LiveController extends Controller {
     }
 
     public function session(Request $request, LiveSession $session) {
+        // Ended broadcasts never expose pinned messages, even before legacy cleanup.
         return response()->json([
             'id' => $session->id, 'title' => $session->title, 'description' => $session->description,
             'status' => $session->status, 'chat_enabled' => $session->chat_enabled,
@@ -62,7 +63,7 @@ class LiveController extends Controller {
                 ->when(! $this->allowed($request, 'buttons'), fn ($query) => $query->where('is_visible', true))
                 ->orderBy('sort_order')->orderBy('id')
                 ->get(['id', 'label', 'url', 'style', 'is_visible', 'sort_order']),
-            'pinned_message' => $session->pinned_message_id ? LiveMessage::query()
+            'pinned_message' => $session->status !== 'ended' && $session->pinned_message_id ? LiveMessage::query()
                 ->whereKey($session->pinned_message_id)->where('is_hidden', false)
                 ->first(['id','author_name','body','is_host','is_highlighted']) : null,
         ]);
@@ -131,6 +132,7 @@ class LiveController extends Controller {
 
     public function hostSend(Request $request, LiveSession $session) {
         abort_unless($this->allowed($request, 'host'), 403);
+        abort_unless($session->status === 'live', 403, 'Эфир завершён или ещё не начался.');
         $data = $request->validate(['body' => ['required', 'string', 'max:500']]);
         $body = trim(strip_tags($data['body']));
         abort_if($body === '', 422, 'Введите текст сообщения.');
@@ -191,6 +193,7 @@ class LiveController extends Controller {
     }
 
     public function messages(Request $request, LiveSession $session) {
+        if ($session->status === 'ended') return response()->json([]);
         $moderator = $this->moderator($request);
         $query = $session->messages();
         if (! $moderator) $query->where('is_hidden', false);
