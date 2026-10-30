@@ -21,6 +21,7 @@ const files = {
     'resources/js/Pages/ExplorePatternDetail.jsx': 'patterns',
     'resources/js/Pages/ExplorePersonalityMirror.jsx': 'mirror',
     'resources/js/Pages/ExploreLifeLanguage.jsx': 'shared',
+    'resources/js/components/ExploreLifeWorkbench.jsx': 'shared',
     'resources/js/components/ExploreSectionNavigation.jsx': 'shared',
 };
 
