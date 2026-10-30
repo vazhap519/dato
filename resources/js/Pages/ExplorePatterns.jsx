@@ -101,19 +101,19 @@ export default function ExplorePatterns() {
           </div>
           <div className="mt-5 grid gap-3 md:grid-cols-2">
             <div className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5">
-              <p className={kicker}>01 · Исходная ситуация</p>
+              <p className={kicker}>1 · Исходная ситуация</p>
               <p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{picked.scene}</p>
             </div>
             <div className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5">
-              <p className={kicker}>02 · Что можно заметить</p>
+              <p className={kicker}>2 · Что можно заметить</p>
               <p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{result.insight}</p>
             </div>
             <div className="rounded-xl border border-[#78603a]/70 bg-[#17140f] p-5">
-              <p className={kicker}>03 · Следующий шаг для этого исхода</p>
+              <p className={kicker}>3 · Следующий шаг для этого исхода</p>
               <p className="mt-3 text-sm leading-7 text-[#e2d4c0]">{result.next}</p>
             </div>
             <div className="rounded-xl border border-[#a17f48]/70 bg-[#231d14] p-5">
-              <p className={kicker}>04 · Вопрос к выбранному итогу</p>
+              <p className={kicker}>4 · Вопрос к выбранному итогу</p>
               <p className="mt-3 font-serif text-lg leading-8 text-[#f0dfc2]">{result.question}</p>
             </div>
           </div>
