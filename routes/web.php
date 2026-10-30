@@ -60,7 +60,7 @@ Route::post('/analytics/event', [\App\Http\Controllers\SiteAnalyticsController::
 Route::get('/explore', function () {
     $copy = \App\Models\ExploreContentPage::query()->where('slug', 'shared')->value('copy') ?? [];
     $images = [];
-    foreach (['numbers', 'emotions', 'dreams', 'archetypes', 'patterns', 'mirror', 'relationships', 'body', 'choice', 'beliefs', 'values'] as $slug) {
+    foreach (['numbers', 'emotions', 'dreams', 'archetypes', 'patterns', 'mirror', 'relationships', 'body', 'choice', 'beliefs', 'values', 'fears', 'time', 'conflicts', 'attention'] as $slug) {
         $path = $copy['card_image_'.$slug] ?? null;
         if (is_string($path) && str_starts_with($path, 'explore/cards/')
             && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
@@ -137,7 +137,7 @@ Route::get('/explore/patterns/{slug}', function (string $slug) {
 
 Route::get('/explore/mirror', fn () => Inertia::render('ExplorePersonalityMirror'))->name('explore.mirror');
 
-// Five additional self-discovery languages, each with its own full exercise atlas.
+// Nine additional self-discovery languages, each with its own full exercise atlas.
 // Restrict the slug to published routes; never accept arbitrary file names.
 foreach (['relationships', 'body', 'choice', 'beliefs', 'values'] as $languageSlug) {
     Route::get('/explore/'.$languageSlug, fn () => Inertia::render('ExploreLifeLanguage', [
