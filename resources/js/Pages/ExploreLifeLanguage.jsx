@@ -9,6 +9,10 @@ import bodyBase from '../../data/body-atlas.json';
 import choiceBase from '../../data/choice-atlas.json';
 import beliefsBase from '../../data/beliefs-atlas.json';
 import valuesBase from '../../data/values-atlas.json';
+import fearsBase from '../../data/fears-atlas.json';
+import timeBase from '../../data/time-atlas.json';
+import conflictsBase from '../../data/conflicts-atlas.json';
+import attentionBase from '../../data/attention-atlas.json';
 
 const libraries = {
     relationships: liveExploreDocument('relationships-atlas', relationshipsBase),
@@ -16,6 +20,10 @@ const libraries = {
     choice: liveExploreDocument('choice-atlas', choiceBase),
     beliefs: liveExploreDocument('beliefs-atlas', beliefsBase),
     values: liveExploreDocument('values-atlas', valuesBase),
+    fears: liveExploreDocument('fears-atlas', fearsBase),
+    time: liveExploreDocument('time-atlas', timeBase),
+    conflicts: liveExploreDocument('conflicts-atlas', conflictsBase),
+    attention: liveExploreDocument('attention-atlas', attentionBase),
 };
 const themes = {
     relationships: { icon: 'diversity_3', light: '#f0c453', gradient: 'from-[#482c34] via-[#2d2229] to-[#17140f]', symbol: 'favorite' },
@@ -23,6 +31,10 @@ const themes = {
     choice: { icon: 'alt_route', light: '#f0c453', gradient: 'from-[#493a28] via-[#25231e] to-[#17140f]', symbol: 'alt_route' },
     beliefs: { icon: 'psychology_alt', light: '#c5b7f0', gradient: 'from-[#39314e] via-[#292338] to-[#17140f]', symbol: 'psychology' },
     values: { icon: 'explore', light: '#eac87e', gradient: 'from-[#423922] via-[#26261e] to-[#17140f]', symbol: 'explore' },
+    fears: { icon: 'shield', light: '#dcb0a9', gradient: 'from-[#442527] via-[#291d24] to-[#17140f]', symbol: 'shield' },
+    time: { icon: 'schedule', light: '#abc6e1', gradient: 'from-[#24394a] via-[#1d2834] to-[#17140f]', symbol: 'hourglass_top' },
+    conflicts: { icon: 'balance', light: '#e4c087', gradient: 'from-[#483828] via-[#282526] to-[#17140f]', symbol: 'balance' },
+    attention: { icon: 'visibility', light: '#b9d4ac', gradient: 'from-[#273f34] via-[#1d2a24] to-[#17140f]', symbol: 'visibility' },
 };
 const kicker = 'text-xs font-semibold uppercase tracking-[.19em] text-[#f0c453]';
 const optionClass = selected => 'min-h-16 w-full rounded-xl border p-4 text-left text-sm leading-6 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] ' +
