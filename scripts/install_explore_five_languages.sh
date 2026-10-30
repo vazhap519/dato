@@ -8,6 +8,7 @@ BACKUP="/root/backups/explore-five-languages-$(date +%Y%m%d-%H%M%S)"
 FILES=(
   "resources/js/Pages/ExploreLifeLanguage.jsx"
   "resources/js/Pages/Explore.jsx"
+  "resources/js/components/ExploreJourney.jsx"
   "resources/js/components/ExploreInvitation.jsx"
   "resources/data/relationships-atlas.json"
   "resources/data/body-atlas.json"
