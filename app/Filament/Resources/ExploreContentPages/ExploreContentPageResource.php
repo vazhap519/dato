@@ -55,6 +55,24 @@ class ExploreContentPageResource extends Resource
                 ->visible(fn (?ExploreContentPage $record): bool => $record?->slug === 'shared')
                 ->columns(2)
                 ->columnSpanFull(),
+            Section::make('Обложка страницы направления')
+                ->description('Отдельная обложка внутри страницы — в правом верхнем блоке рядом с описанием. Рекомендуемый размер от 1200 × 900 пикселей. Если удалить изображение, останется текущая декоративная композиция. Обложки карточек общего каталога настраиваются выше, в «Общих элементах».')
+                ->schema([
+                    FileUpload::make('copy.cover_image')
+                        ->label('Изображение обложки страницы')
+                        ->image()
+                        ->imageEditor()
+                        ->disk('public')
+                        ->directory('explore/covers')
+                        ->visibility('public')
+                        ->maxSize(5120)
+                        ->imagePreviewHeight('200'),
+                ])
+                ->visible(fn (?ExploreContentPage $record): bool => in_array($record?->slug, [
+                    'relationships', 'body', 'choice', 'beliefs', 'values',
+                    'fears', 'time', 'conflicts', 'attention',
+                ], true))
+                ->columnSpanFull(),
             Section::make('Тексты и блоки')
                 ->description('Здесь редактируются заголовки, описания, кнопки и другие фразы страницы. Открывайте блоки по очереди. Тексты самих эмоций, снов, сценариев и вопросов находятся рядом: «Материалы и вопросы». После сохранения достаточно обновить страницу сайта.')
                 ->schema(fn (?ExploreContentPage $record): array => static::fieldsForPage($record?->slug))
