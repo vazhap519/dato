@@ -3,6 +3,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import SiteAnalytics from './components/SiteAnalytics.jsx'
+import ExploreConnections from './components/ExploreConnections.jsx'
 import { setExploreCms } from './lib/exploreCms.js'
 
 function applyPageTheme(page) {
@@ -42,6 +43,6 @@ createInertiaApp({
             applyPageTheme(event.detail.page);
             setExploreCms(event.detail.page);
         });
-        createRoot(el).render(<><App {...props} /><ScrollToTop /><SiteAnalytics /></>);
+        createRoot(el).render(<><App {...props} /><ExploreConnections /><ScrollToTop /><SiteAnalytics /></>);
     },
 })
