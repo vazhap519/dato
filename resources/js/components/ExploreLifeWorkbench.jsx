@@ -62,27 +62,27 @@ export default function ExploreLifeWorkbench({ slug, feature }) {
                 </div>}
             </>}
 
-            {(feature.type === 'body-scan' || feature.type === 'values') && <>
+            {(feature.type === 'body-scan' || feature.type === 'values' || feature.type === 'attention-map') && <>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {feature.fields.map((label, index) => <button key={index} type="button"
-                        aria-pressed={selections.includes(index)} onClick={() => toggle(index, feature.type === 'values' ? 3 : Infinity)}
+                        aria-pressed={selections.includes(index)} onClick={() => toggle(index, feature.type === 'values' || feature.type === 'attention-map' ? 3 : Infinity)}
                         className={'min-h-16 rounded-xl border p-4 text-left text-sm leading-6 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453] ' +
                             (selections.includes(index) ? 'border-[#f0c453] bg-[#46321e] text-[#ffe9bb]' : 'border-[#78613e] bg-[#18150f] text-[#e1d1b7] hover:border-[#d5b368]')}>
                         <span className="mr-3 text-[#f0c453]">{selections.includes(index) ? '✓' : '○'}</span>{label}
                     </button>)}
                 </div>
-                <p className="mt-4 text-xs leading-6 text-[#bcae98]">{feature.type === 'values' ? 'Выбери не больше трёх ценностей.' : 'Можно отметить одно или несколько ощущений, а можно ничего не выбирать.'}</p>
+                <p className="mt-4 text-xs leading-6 text-[#bcae98]">{feature.type === 'values' ? 'Выбери не больше трёх ценностей.' : feature.type === 'attention-map' ? 'Отметь до трёх источников отвлечения. Нет правильных ответов.' : 'Можно отметить одно или несколько ощущений, а можно ничего не выбирать.'}</p>
                 {selections.length > 0 && <div className={cardStyle + ' mt-5'}>
                     <p className="text-xs font-semibold uppercase tracking-wider text-[#f0c453]">Твоя отметка</p>
                     <p className="mt-3 text-lg leading-8 text-[#f4e1c3]">{selections.map(index => feature.fields[index]).join(' · ')}</p>
                     <p className="mt-3 text-sm leading-7 text-[#c4b49a]">{feature.template}</p>
-                    <label className="mt-4 block text-sm text-[#e9c983]">{feature.type === 'values' ? 'Один маленький поступок' : 'Что я замечаю в контексте?'}
+                    <label className="mt-4 block text-sm text-[#e9c983]">{feature.type === 'values' ? 'Один маленький поступок' : feature.type === 'attention-map' ? 'Как я хочу вернуть внимание?' : 'Что я замечаю в контексте?'}
                         <textarea rows={3} value={entries.note || ''} onChange={e => update('note', e.target.value)} maxLength={1200}
                             placeholder="Запиши своё наблюдение…" className={fieldStyle} />
                     </label>
                 </div>}
             </>}
-            {feature.type !== 'values' && feature.type !== 'body-scan' && <p className="mt-6 text-sm leading-7 text-[#e6c88b]">{feature.template}</p>}
+            {feature.type !== 'values' && feature.type !== 'body-scan' && feature.type !== 'attention-map' && <p className="mt-6 text-sm leading-7 text-[#e6c88b]">{feature.template}</p>}
             <div className="mt-7 border-t border-[#79613c]/60 pt-5">
                 <button type="button" onClick={() => setExpanded(value => !value)} className="inline-flex items-center gap-2 text-sm font-semibold text-[#f0c453] hover:underline" aria-expanded={expanded}>
                     {expanded ? 'Скрыть подсказку' : 'Как бережно использовать эту практику?'} <span aria-hidden="true">{expanded ? '−' : '+'}</span>
