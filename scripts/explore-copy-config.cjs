@@ -24,6 +24,7 @@ const files = {
     'resources/js/components/ExploreLifeWorkbench.jsx': 'shared',
     'resources/js/components/ExploreDeepExperience.jsx': 'shared',
     'resources/js/components/ExploreThreeDepth.jsx': 'shared',
+    'resources/js/components/ExploreSixDepth.jsx': 'shared',
     'resources/js/components/ExploreConnections.jsx': 'shared',
     'resources/js/components/ExploreSectionNavigation.jsx': 'shared',
 };
