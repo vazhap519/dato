@@ -47,6 +47,10 @@ class ExploreContentPageResource extends Resource
                     FileUpload::make('copy.card_image_choice')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык выбора'),
                     FileUpload::make('copy.card_image_beliefs')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык убеждений'),
                     FileUpload::make('copy.card_image_values')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык ценностей'),
+                    FileUpload::make('copy.card_image_fears')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык страхов'),
+                    FileUpload::make('copy.card_image_time')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык времени'),
+                    FileUpload::make('copy.card_image_conflicts')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык внутренних конфликтов'),
+                    FileUpload::make('copy.card_image_attention')->image()->imageEditor()->disk('public')->directory('explore/cards')->visibility('public')->maxSize(5120)->imagePreviewHeight('140')->label('Язык внимания'),
                 ])
                 ->visible(fn (?ExploreContentPage $record): bool => $record?->slug === 'shared')
                 ->columns(2)
