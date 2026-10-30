@@ -205,18 +205,18 @@ export default function Live() {
                     <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[.25em] text-[#f5c542]">Прямые эфиры · Arutyun</p>
                     <h1 className="mb-3 text-center text-3xl font-bold sm:text-5xl">Практикум «Познай СЕБЯ»</h1>
                     <p className="mb-8 text-center text-white/60">Смотри эфир и общайся с участниками прямо здесь.</p>
-                    {sessions.length > 0 ? (
+                    {sessions.length > 1 ? (
                         <div className="mb-7 flex flex-wrap justify-center gap-2">
                             {sessions.map(item => (
                                 <button key={item.id} onClick={() => setSessionId(item.id)}
                                     className={`rounded-xl border px-4 py-3 text-sm transition ${sessionId === item.id ? "border-[#f5c542] bg-[#f5c542]/15 text-[#f5c542]" : "border-white/15 bg-white/5 hover:border-[#f5c542]/50"}`}>
-                                    День {item.day} · {item.title}
+                                    {item.tab_label || `День ${item.day} · ${item.title}`}{canManageStatus && !item.is_published ? ' · Скрыт' : ''}
                                 </button>
                             ))}
                         </div>
-                    ) : <p className="rounded-2xl border border-white/10 p-12 text-center text-white/70">Эфиры пока не опубликованы. Скоро увидимся!</p>}
+                    ) : sessions.length === 0 ? <p className="rounded-2xl border border-white/10 p-12 text-center text-white/70">Эфиры пока не опубликованы. Скоро увидимся!</p> : null}
                     {sessionId && (
-                        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(310px,370px)]">
+                        <div className={`grid items-start gap-5 ${session?.show_chat !== false ? "lg:grid-cols-[minmax(0,1fr)_minmax(310px,370px)]" : "lg:grid-cols-1"}`}>
                             <section className="overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17]">
                                 <div className="flex flex-wrap items-center justify-between gap-2 p-5">
                                     <h2 className="text-xl font-bold">{session?.title || "Прямой эфир"}</h2>
@@ -237,19 +237,19 @@ export default function Live() {
                                         {statusError && <p role="alert" className="w-full text-right text-xs text-red-300">{statusError}</p>}
                                     </div>
                                 </div>
-                                <div className="aspect-video bg-black">
+                                {session?.show_video !== false && <div className="aspect-video bg-black">
                                     {session?.youtube_id ? (
                                         <iframe title="Трансляция практикума" className="h-full w-full"
                                             src={`https://www.youtube-nocookie.com/embed/${session.youtube_id}?rel=0`}
                                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
-                                    ) : <div className="flex h-full items-center justify-center px-6 text-center text-white/50">Видео появится здесь перед началом эфира</div>}
-                                </div>
+                                    ) : <div className="flex h-full items-center justify-center px-6 text-center text-white/50">{session?.video_placeholder || "Видео появится здесь перед началом эфира"}</div>}
+                                </div>}
                                 {session?.description && <p className="p-5 text-sm leading-7 text-white/70">{session.description}</p>}
                                 <LiveActionButtons sessionId={sessionId} buttons={session?.action_buttons || []} canModerate={can('buttons')} api={api} onRefresh={async () => setSession(await api("/live/api/sessions/" + sessionId))} />
                             </section>
-                            <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
+                            {session?.show_chat !== false && <section className="flex min-h-[440px] flex-col overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17] lg:h-[600px]">
                                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 p-4">
-                                    <div className="font-semibold">Чат участников <span className="ml-2 text-xs font-normal text-white/50">{online === null ? "" : `● ${online} онлайн`}</span></div>
+                                    <div className="font-semibold">{session?.chat_title || "Чат участников"} <span className="ml-2 text-xs font-normal text-white/50">{online === null ? "" : `● ${online} онлайн`}</span></div>
                                     {can('chat') && <button type="button" onClick={toggleChat} className={`rounded-lg border px-3 py-1.5 text-xs font-semibold ${session?.chat_enabled ? "border-red-400/40 text-red-300 hover:bg-red-400/10" : "border-[#f5c542]/50 text-[#f5c542] hover:bg-[#f5c542]/10"}`}>{session?.chat_enabled ? "Закрыть чат" : "Открыть чат"}</button>}
                                 </div>
                                 {session?.pinned_message && <div className="border-b border-[#f5c542]/25 bg-[#f5c542]/10 px-4 py-3 text-sm">
@@ -257,7 +257,7 @@ export default function Live() {
                                     <p className="whitespace-pre-wrap break-words text-white/90">{session.pinned_message.body}</p>
                                 </div>}
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
-                                    {messages.length === 0 && <p className="text-sm text-white/50">{session?.status === "ended" ? "Эфир завершён." : "Пока нет сообщений. Начни разговор!"}</p>}
+                                    {messages.length === 0 && <p className="text-sm text-white/50">{session?.status === "ended" ? "Эфир завершён." : session?.chat_empty_text || "Пока нет сообщений. Начни разговор!"}</p>}
                                     {messages.map(msg => (
                                         <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_host ? "relative rounded-xl border border-[#f5c542]/70 bg-[#f5c542]/15 p-3 shadow-sm" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : msg.author_name?.endsWith(" · Модератор") ? "relative rounded-xl border border-[#f5c542] bg-transparent p-3" : "relative"}>
                                             <div className={`mb-1 text-xs font-bold ${!msg.is_host && msg.author_name?.endsWith(" · Модератор") ? "text-[#f5c542]" : "text-[#f5c542]"}`}>{msg.is_host ? "✦ " : ""}{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
@@ -297,7 +297,7 @@ export default function Live() {
                                     )}
                                     {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
                                 </div>
-                            </section>
+                            </section>}
                         </div>
                     )}
                 </div>
