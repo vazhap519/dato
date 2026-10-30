@@ -13,6 +13,10 @@ const VISUALS = {
     choice: { theme: 'choice', eyebrow: 'Решения и свобода', icon: 'alt_route', palette: 'from-[#493a28] via-[#25231e] to-[#17140f]' },
     beliefs: { theme: 'beliefs', eyebrow: 'Мысли и проверки', icon: 'psychology_alt', palette: 'from-[#39314e] via-[#292338] to-[#17140f]' },
     values: { theme: 'values', eyebrow: 'Смысл и приоритеты', icon: 'explore', palette: 'from-[#423922] via-[#26261e] to-[#17140f]' },
+    fears: { theme: 'fears', eyebrow: 'Опасность и предположения', icon: 'shield', palette: 'from-[#442527] via-[#291d24] to-[#17140f]' },
+    time: { theme: 'time', eyebrow: 'Прошлое и настоящее', icon: 'schedule', palette: 'from-[#24394a] via-[#1d2834] to-[#17140f]' },
+    conflicts: { theme: 'conflicts', eyebrow: 'Две стороны выбора', icon: 'balance', palette: 'from-[#483828] via-[#282526] to-[#17140f]' },
+    attention: { theme: 'attention', eyebrow: 'Фокус и возвращение', icon: 'visibility', palette: 'from-[#273f34] via-[#1d2a24] to-[#17140f]' },
 };
 
 function visualFor(tool) {
@@ -25,7 +29,7 @@ function visualFor(tool) {
     if (url.includes('/archetypes')) return VISUALS.archetypes;
     if (url.includes('/patterns')) return VISUALS.patterns;
     if (url.includes('/mirror')) return VISUALS.mirror;
-    for (const key of ['relationships', 'body', 'choice', 'beliefs', 'values']) {
+    for (const key of ['relationships', 'body', 'choice', 'beliefs', 'values', 'fears', 'time', 'conflicts', 'attention']) {
         if (url.includes('/' + key)) return VISUALS[key];
     }
     return { theme: 'other', eyebrow: 'Исследование себя', icon: tool.icon || 'auto_awesome', palette: 'from-[#382e1f] via-[#211c14] to-[#16130e]' };
@@ -74,7 +78,7 @@ function Artwork({ theme, icon }) {
             <span className="material-symbols-outlined absolute left-1/2 bottom-[7%] -translate-x-1/2 text-[145px] text-[#d6c5dc]/45">person</span>
             <div className="absolute left-1/2 top-[6%] h-[215px] w-[150px] -translate-x-1/2 rounded-t-[75px] rounded-b-[20px] border border-[#ffe1a6]/25" />
         </>}
-        {['relationships', 'body', 'choice', 'beliefs', 'values'].includes(theme) && <>
+        {['relationships', 'body', 'choice', 'beliefs', 'values', 'fears', 'time', 'conflicts', 'attention'].includes(theme) && <>
             <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f0c453]/20" />
             <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f0c453]/30" />
             <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[88px] text-[#f0c453]/85">{VISUALS[theme].icon}</span>
