@@ -89,7 +89,7 @@ export default function Explore() {
             </div>
         </header>
 
-        <main className="mx-auto max-w-7xl px-5 pb-16 pt-14 sm:pb-24 sm:pt-20">
+        <main className="mx-auto max-w-[1400px] px-5 pb-16 pt-14 sm:px-7 sm:pb-24 sm:pt-20">
             <section className="mx-auto max-w-3xl text-center">
                 <p className="text-xs font-semibold uppercase tracking-[.24em] text-[#e2b84e]">Пространство самопознания</p>
                 <h1 className="mt-5 font-serif text-5xl leading-tight sm:text-6xl lg:text-7xl">Исследуй <span className="italic text-[#f0c453]">себя</span></h1>
@@ -99,25 +99,26 @@ export default function Explore() {
                 <p className="mt-6 text-xs uppercase tracking-[.18em] text-[#e8ca84]">Шесть направлений · Один путь к себе</p>
             </section>
 
-            <section aria-label="Направления самопознания" className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <section aria-label="Направления самопознания" className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
                 {tools.map(tool => {
                     const visual = visualFor(tool);
                     return <Link key={tool.id} href={tool.url} className="group flex min-w-0 flex-col overflow-hidden rounded-[26px] border border-[#8e713f]/50 bg-[#211c16] transition-all duration-300 hover:-translate-y-1 hover:border-[#e9c575]/80 hover:shadow-[0_22px_55px_rgba(0,0,0,.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#f0c453]">
-                        <div className={`relative h-48 overflow-hidden border-b border-[#b99347]/20 bg-gradient-to-br ${visual.palette} sm:h-52`}>
-                            <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
-                                {cardImages[visual.theme]
-                                    ? <img src={cardImages[visual.theme]} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover object-center" />
-                                    : <Artwork theme={visual.theme} icon={visual.icon} />}
-                            </div>
-                            {cardImages[visual.theme] && <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#100e0b]/70 via-transparent to-black/10" />}
-                            <span className="absolute bottom-4 left-5 rounded-full border border-[#e8cb88]/25 bg-[#17130e]/55 px-3 py-1.5 text-[10px] uppercase tracking-[.15em] text-[#f4d998] backdrop-blur-sm">{visual.eyebrow}</span>
+                        <div className={`relative h-56 overflow-hidden border-b border-[#b99347]/20 bg-gradient-to-br ${visual.palette} sm:h-64 xl:h-72`}>
+                            {cardImages[visual.theme] ? <>
+                                <img src={cardImages[visual.theme]} alt="" aria-hidden="true" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-xl" />
+                                <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-[1.035]">
+                                    <img src={cardImages[visual.theme]} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain" />
+                                </div>
+                                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#14100e]/55 via-[#14100e]/10 to-black/10" />
+                            </> : <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"><Artwork theme={visual.theme} icon={visual.icon} /></div>}
+                            <span className="absolute bottom-4 left-5 rounded-full border border-[#e8cb88]/35 bg-[#17130e]/75 px-3 py-1.5 text-[10px] uppercase tracking-[.15em] text-[#f4d998] backdrop-blur-md">{visual.eyebrow}</span>
                             <span aria-hidden="true" className="material-symbols-outlined absolute right-5 bottom-4 text-[25px] text-[#f4d998]">{tool.icon || visual.icon}</span>
                         </div>
                         <div className="flex flex-1 flex-col items-center px-6 pb-7 pt-7 text-center sm:px-8">
                             <h2 className="font-serif text-2xl leading-tight text-[#fff4dd] sm:text-[28px]">{tool.title}</h2>
                             {tool.subtitle && <p className="mt-3 text-sm font-medium text-[#efc867]">{tool.subtitle}</p>}
                             {tool.description && <p className="mt-4 max-w-xs text-sm leading-7 text-[#cabdaa]">{tool.description}</p>}
-                            <span className="mt-auto inline-flex items-center justify-center gap-2 pt-7 text-sm font-semibold text-[#f0c453] transition group-hover:gap-3 group-hover:text-[#ffe2a0]">Исследовать <span aria-hidden="true">→</span></span>
+                            <span className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#b28b46]/65 bg-[#2b2317] px-6 py-2.5 text-sm font-semibold text-[#f0c453] shadow-[inset_0_1px_0_rgba(255,224,150,.06)] transition-all duration-300 group-hover:gap-3 group-hover:border-[#f0c453] group-hover:bg-[#3b2b16] group-hover:text-[#ffe2a0] group-hover:shadow-[0_0_22px_rgba(240,196,83,.15)]">Исследовать <span aria-hidden="true">→</span></span>
                         </div>
                     </Link>;
                 })}
