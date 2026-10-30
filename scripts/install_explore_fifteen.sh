@@ -95,11 +95,23 @@ php artisan db:seed --class=ExploreContentSeeder --force
 echo "Добавляем девять новых направлений, если их ещё нет..."
 php artisan db:seed --class=ExploreNewLanguagesSeeder --force
 echo "Проверяем маршруты Laravel..."
-php artisan route:list --path=explore --except-vendor > "$BACKUP/explore-routes.txt"
-for slug in fears time conflicts attention; do
-  grep -q "explore/$slug" "$BACKUP/explore-routes.txt"
-done
 php artisan optimize:clear
+php artisan route:list --path=explore --json > "$BACKUP/explore-routes.json"
+python3 - "$BACKUP/explore-routes.json" <<'PY'
+import json
+import sys
+with open(sys.argv[1], encoding='utf-8') as source:
+    routes = json.load(source)
+expected = {
+    "relationships", "body", "choice", "beliefs", "values",
+    "fears", "time", "conflicts", "attention",
+}
+actual = {item.get("uri", "").strip("/") for item in routes}
+missing = sorted("explore/" + slug for slug in expected if "explore/" + slug not in actual)
+if missing:
+    sys.exit("Отсутствуют маршруты: " + ", ".join(missing))
+print("Проверка успешна: все девять новых маршрутов зарегистрированы.")
+PY
 trap - ERR
 echo "Готово: 15 направлений, 4 новые страницы и переходы между всеми темами."
 echo "Каталог: https://arutyun.me/explore"
