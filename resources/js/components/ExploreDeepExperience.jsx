@@ -21,7 +21,7 @@ function RelationshipLab() {
   {title:'Нарушают договорённость',line:'Человек в третий раз опаздывает, хотя вы обсуждали время.',phrases:['«Ты всегда всё портишь»','Ничего не сказать и ждать в следующий раз','«Я жду 15 минут. После этого ухожу. Давай договоримся заранее»'],read:['Обобщение уводит от повторяющегося конкретного действия и его последствий.','Молчание сохраняет неопределённость: человек не знает твоего правила.','Граница описывает твои действия и делает последствия понятными, без угроз и унижения.'],question:'Какая договорённость зависит именно от твоих действий?'}
  ];
  const s=situations[moment];
- return <section className={panel}><Intro count="01" title="Мастерская диалога" subtitle="Попробуй три разных способа ответить в одной ситуации. Каждый приводит к другой динамике разговора — без оценки «хороший» или «плохой человек»."/>
+ return <section className={panel}><Intro count="1" title="Мастерская диалога" subtitle="Попробуй три разных способа ответить в одной ситуации. Каждый приводит к другой динамике разговора — без оценки «хороший» или «плохой человек»."/>
  <PillTabs items={situations.map(x=>x.title)} value={moment} setValue={i=>{setMoment(i);setResponse(null);}}/>
  <div className={small+' mt-6'}><Caption>Сцена</Caption><p className="mt-3 text-lg leading-8">{s.line}</p></div>
  <div className="mt-5 grid gap-3 md:grid-cols-3">{s.phrases.map((x,i)=><Chip key={i} label={x} picked={response===i} onClick={()=>setResponse(i)}/>)}</div>
