@@ -62,7 +62,7 @@ JS
 echo "Добавляем новые настройки в базу (без удаления существующих данных)..."
 php artisan migrate --force
 echo "Проверяем новые поля..."
-php artisan tinker --execute='foreach (["is_published","sort_order","tab_label","chat_title","video_placeholder","chat_empty_text","show_video","show_chat"] as $c) { if (!\\Illuminate\\Support\\Facades\\Schema::hasColumn("live_sessions",$c)) { throw new \\RuntimeException("Missing column: ".$c); } } echo "PASS: all live-session columns";'
+php artisan tinker --execute='foreach (["is_published","sort_order","tab_label","chat_title","video_placeholder","chat_empty_text","show_video","show_chat"] as $c) { if (!\Illuminate\Support\Facades\Schema::hasColumn("live_sessions",$c)) { throw new \RuntimeException("Missing column: ".$c); } } echo "PASS: all live-session columns";'
 php artisan optimize:clear
 trap - ERR
 echo "ГОТОВО: настройки публикации и оформления эфиров установлены."
