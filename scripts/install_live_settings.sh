@@ -37,7 +37,18 @@ rollback() {
  exit "$rc"
 }
 trap rollback ERR
-for file in "${FILES[@]}"; do mkdir -p "$(dirname "$file")"; cp -a "$BACKUP/staged/$file" "$file"; done
+# First add columns while the existing PHP/controllers are still running.
+# This avoids a window where a new controller queries columns that do not yet exist.
+MIGRATION="database/migrations/2026_10_30_000002_add_live_publication_controls.php"
+mkdir -p "$(dirname "$MIGRATION")"
+cp -a "$BACKUP/staged/$MIGRATION" "$MIGRATION"
+php -l "$MIGRATION"
+echo "Сначала безопасно добавляем столбцы в базу..."
+php artisan migrate --path="$MIGRATION" --force
+for file in "${FILES[@]}"; do
+ mkdir -p "$(dirname "$file")"
+ cp -a "$BACKUP/staged/$file" "$file"
+done
 echo "Проверяем форму и JSX..."
 php -l app/Models/LiveSession.php
 php -l app/Http/Controllers/LiveController.php
@@ -59,8 +70,6 @@ const fs=require('fs'),m=JSON.parse(fs.readFileSync('public/build/manifest.json'
 if(!m['resources/js/Pages/Live.jsx']?.file)throw Error('Missing Live page chunk');
 console.log('PASS: Live page compiled');
 JS
-echo "Добавляем новые настройки в базу (без удаления существующих данных)..."
-php artisan migrate --force
 echo "Проверяем новые поля..."
 php artisan tinker --execute='foreach (["is_published","sort_order","tab_label","chat_title","video_placeholder","chat_empty_text","show_video","show_chat"] as $c) { if (!\Illuminate\Support\Facades\Schema::hasColumn("live_sessions",$c)) { throw new \RuntimeException("Missing column: ".$c); } } echo "PASS: all live-session columns";'
 php artisan optimize:clear
