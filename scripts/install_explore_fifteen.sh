@@ -40,6 +40,7 @@ FILES=(
   "scripts/verify-explore-cms.cjs"
   "scripts/verify_explore_three_depth.cjs"
   "scripts/verify_explore_six_depth.cjs"
+  "scripts/verify_explore_mobile_ui.cjs"
   "app/Console/Commands/RemapExploreCopy.php"
 )
 mkdir -p "$BACKUP/original" "$BACKUP/staged"
@@ -95,6 +96,7 @@ node scripts/generate-explore-copy-manifest.cjs
 node scripts/verify-explore-cms.cjs
 node scripts/verify_explore_three_depth.cjs
 node scripts/verify_explore_six_depth.cjs
+node scripts/verify_explore_mobile_ui.cjs
 echo "Собираем новый frontend..."
 NODE_OPTIONS="--max-old-space-size=768" npm run build
 test -s public/build/manifest.json
