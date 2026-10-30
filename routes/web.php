@@ -140,9 +140,21 @@ Route::get('/explore/mirror', fn () => Inertia::render('ExplorePersonalityMirror
 // Nine additional self-discovery languages, each with its own full exercise atlas.
 // Restrict the slug to published routes; never accept arbitrary file names.
 foreach (['relationships', 'body', 'choice', 'beliefs', 'values'] as $languageSlug) {
-    Route::get('/explore/'.$languageSlug, fn () => Inertia::render('ExploreLifeLanguage', [
-        'languageSlug' => $languageSlug,
-    ]))->name('explore.'.$languageSlug);
+    Route::get('/explore/'.$languageSlug, function () use ($languageSlug) {
+        $path = \App\Models\ExploreContentPage::query()
+            ->where('slug', $languageSlug)
+            ->value('copy')['cover_image'] ?? null;
+        $cover = null;
+        if (is_string($path) && str_starts_with($path, 'explore/covers/')
+            && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            $cover = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+        }
+
+        return Inertia::render('ExploreLifeLanguage', [
+            'languageSlug' => $languageSlug,
+            'coverImage' => $cover,
+        ]);
+    })->name('explore.'.$languageSlug);
 }
 
 Route::get('/numbers', [\App\Http\Controllers\NumberMeaningController::class, 'index'])->name('numbers.index');
