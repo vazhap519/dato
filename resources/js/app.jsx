@@ -27,9 +27,12 @@ try {
 }
 
 createInertiaApp({
-    resolve: name => {
-        const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true })
-        return pages[`./Pages/${name}.jsx`]
+    resolve: async name => {
+        const pages = import.meta.glob('./Pages/**/*.jsx');
+        const loadPage = pages[`./Pages/${name}.jsx`];
+        if (!loadPage) throw new Error(`Страница Inertia не найдена: ${name}`);
+        const module = await loadPage();
+        return module.default;
     },
     setup({ el, App, props }) {
         applyPageTheme(props.initialPage);
