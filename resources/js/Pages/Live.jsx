@@ -219,7 +219,7 @@ export default function Live() {
                                     <p className="whitespace-pre-wrap break-words text-white/90">{session.pinned_message.body}</p>
                                 </div>}
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
-                                    {messages.length === 0 && <p className="text-sm text-white/50">Пока нет сообщений. Начни разговор!</p>}
+                                    {messages.length === 0 && <p className="text-sm text-white/50">{session?.status === "ended" ? "Эфир завершён. Чат очищен." : "Пока нет сообщений. Начни разговор!"}</p>}
                                     {messages.map(msg => (
                                         <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_host ? "relative rounded-xl border border-[#f5c542]/70 bg-[#f5c542]/15 p-3 shadow-sm" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : msg.author_name?.endsWith(" · Модератор") ? "relative rounded-xl border border-[#f5c542] bg-transparent p-3" : "relative"}>
                                             <div className={`mb-1 text-xs font-bold ${!msg.is_host && msg.author_name?.endsWith(" · Модератор") ? "text-[#f5c542]" : "text-[#f5c542]"}`}>{msg.is_host ? "✦ " : ""}{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
@@ -250,10 +250,10 @@ export default function Live() {
                                     ) : (
                                         <form onSubmit={send} className="flex gap-2">
                                             <input value={draft} onChange={e => setDraft(e.target.value)} maxLength={500}
-                                                disabled={!can('host') && (session?.status !== "live" || !session?.chat_enabled)}
+                                                disabled={session?.status !== "live" || (!can('host') && !session?.chat_enabled)}
                                                 placeholder={can('host') ? "Сообщение от Давид · Ведущий" : session?.status === "live" && session?.chat_enabled ? `Сообщение от ${guest}` : "Чат сейчас закрыт"}
                                                 className="min-w-0 flex-1 rounded-xl border border-white/20 bg-black/25 px-3 py-3 text-sm outline-none focus:border-[#f5c542]" />
-                                            <button disabled={sending || !draft.trim() || (!can('host') && (session?.status !== "live" || !session?.chat_enabled))}
+                                            <button disabled={sending || !draft.trim() || session?.status !== "live" || (!can('host') && !session?.chat_enabled)}
                                                 className="rounded-xl bg-[#f5c542] px-4 font-bold text-[#17140e] disabled:opacity-40">➤</button>
                                         </form>
                                     )}
