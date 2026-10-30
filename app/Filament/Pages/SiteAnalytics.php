@@ -243,6 +243,10 @@ class SiteAnalytics extends Page
             'choice' => 'Язык выбора',
             'beliefs' => 'Язык убеждений',
             'values' => 'Язык ценностей',
+            'fears' => 'Язык страхов',
+            'time' => 'Язык времени',
+            'conflicts' => 'Язык внутренних конфликтов',
+            'attention' => 'Язык внимания',
         ];
         $rows = [];
         foreach ($tools as $key => $title) {
