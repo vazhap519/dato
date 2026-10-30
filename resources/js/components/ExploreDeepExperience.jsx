@@ -13,7 +13,7 @@ function Result({ title, children }) { return <div aria-live="polite" className=
 function PillTabs({ items, value, setValue }) { return <div className="mt-6 flex flex-wrap gap-2">{items.map((item,i)=><Chip key={i} label={item} picked={value===i} onClick={()=>setValue(i)}/>)}</div>; }
 
 function RelationshipLab() {
- const [moment,setMoment]=useState(0),[response,setResponse]=useState(null),[method,setMethod]=useState(0);
+ const [moment,setMoment]=useState(0),[response,setResponse]=useState(null);
  const situations=[
   {title:'Тебя не слышат',line:'Ты пытаешься объяснить важное, собеседник перебивает.',phrases:['«Ты никогда меня не слушаешь!»','Замолчать и отдалиться','«Мне важно закончить мысль. Можно я договорю?»'],read:['Обвинение через «никогда» переносит разговор с одного поступка на личность. Собеседник может начать защищаться вместо слушания.','Пауза снизит напряжение, но человек не узнает, что именно было важно. Молчание не заменяет договорённость.','Конкретная просьба про текущий разговор оставляет шанс услышать друг друга. Она не гарантирует согласия.'],question:'Как назвать конкретный эпизод без оценки всей личности?'},
   {title:'Тебе отказали',line:'Близкий не может выполнить твою просьбу.',phrases:['«Значит, тебе на меня плевать»','«Ничего не надо, справлюсь сам»','«Мне жаль. Есть ли другое время или вариант?»'],read:['Отказ на одну просьбу превращается в вывод о чувствах другого — это пока предположение.','Отстранение может скрывать обиду, но не делает потребность понятнее.','Уточнение допускает реальные ограничения другого и помогает найти альтернативу.'],question:'Что означает сам отказ — и что я к нему додумал?'},
@@ -26,28 +26,6 @@ function RelationshipLab() {
  <div className="mt-5 grid gap-3 md:grid-cols-3">{s.phrases.map((x,i)=><Chip key={i} label={x} picked={response===i} onClick={()=>setResponse(i)}/>)}</div>
  {response!==null&&<Result title={['Обвинение','Молчание','Прямая просьба'][response]}><p>{s.read[response]}</p><p className={gold}>{s.question}</p></Result>}
  </section>;
-}
-
-function BodyLab() {
- const parts=['Голова','Челюсть','Грудная клетка','Плечи и шея','Живот','Спина','Руки','Ноги'];
- const [part,setPart]=useState(null),[quality,setQuality]=useState(0),[trend,setTrend]=useState(0);
- return <section className={panel}><Intro count="01" title="Атлас ощущений" subtitle="Исследуй не «что это значит», а где, как и когда возникает ощущение. Само по себе оно не позволяет определить медицинскую или психологическую причину."/>
- <div className="mt-7 grid gap-6 lg:grid-cols-[.8fr_1.2fr]">
- <div className={small+' relative flex min-h-[350px] items-center justify-center'}><svg viewBox="0 0 180 300" className="h-[300px] max-w-full" aria-hidden="true"><circle cx="90" cy="37" r="29" fill="#6e5637" stroke="#e2b969" strokeWidth="2"/><path d="M68 68 Q48 78 42 108 L20 177 39 185 62 124 64 205 58 284 82 284 90 216 98 284 122 284 116 205 118 124 141 185 160 177 138 108 Q132 78 112 68 Z" fill="#483829" stroke="#d6aa61" strokeWidth="2"/><path d="M90 68v143" stroke="#caa56c" strokeDasharray="4 6" opacity=".6"/></svg><span className="absolute bottom-4 left-4 text-xs text-[#c8b496]">Схема для ориентира, не диагностика</span></div>
- <div><Caption>1. Где заметнее?</Caption><div className="mt-3 grid grid-cols-2 gap-2">{parts.map((x,i)=><Chip key={i} label={x} picked={part===i} onClick={()=>setPart(i)}/>)}</div><Caption>2. Как ощущается?</Caption><PillTabs items={['Напряжение','Тепло / покой','Дискомфорт','Усталость']} value={quality} setValue={setQuality}/><Caption>3. Как меняется?</Caption><PillTabs items={['Только заметил','Усиливается','Слабеет','Повторяется']} value={trend} setValue={setTrend}/></div></div>
- {part!==null&&<Result title={parts[part]+' · '+['напряжение','тепло или покой','дискомфорт','усталость'][quality]}><p>Ты отметил: <strong>{parts[part].toLowerCase()}</strong>; динамика: {['ощущение замечено недавно','ощущение усиливается','ощущение ослабевает','ощущение повторяется'][trend]}.</p><p>{quality===1?'Приятное состояние тоже можно просто заметить, не пытаясь удержать навсегда.':'Обрати внимание на время появления, нагрузку, сон, движение и сопутствующие симптомы. По этим данным нельзя поставить диагноз.'}</p><p className={gold}>{trend===1?'Если симптом новый, необычный или нарастает, важно обратиться за медицинской оценкой.':'Можно проверить, изменится ли ощущение после комфортной паузы, без болезненных движений.'}</p></Result>}
- <p className="mt-6 text-sm leading-7 text-[#d4b47c]">Сильная или внезапная боль, боль в груди, одышка и внезапная слабость требуют своевременной медицинской помощи. Самонаблюдение не заменяет обследование.</p></section>;
-}
-
-function ChoiceLab(){
- const [priority,setPriority]=useState(0),[risk,setRisk]=useState(0),[reversible,setReversible]=useState(0);
- const criteria=['Сохранить устойчивость','Получить опыт и развитие','Сберечь отношения','Сохранить свободу'];
- const scenarios=[['Проверять маленьким шагом','Подготовить переход','Оценить обязательства','Оставить запасной план'],['Провести пробный проект','Узнать реальные требования','Согласовать ожидания','Проверить альтернативу']];
- return <section className={panel}><Intro count="01" title="Лаборатория выбора" subtitle="Вместо ответа за человека — инструмент сравнения. Меняя критерии, риск и обратимость, ты увидишь, почему один совет не подходит всем."/>
- <Caption>Что важнее в этом решении?</Caption><div className="mt-4 grid gap-2 sm:grid-cols-2">{criteria.map((v,i)=><Chip key={i} label={v} picked={priority===i} onClick={()=>setPriority(i)}/>)}</div>
- <div className="mt-7 grid gap-6 md:grid-cols-2"><div><Caption>Цена ошибки</Caption><PillTabs items={['Небольшая','Значительная']} value={risk} setValue={setRisk}/></div><div><Caption>Можно ли отменить?</Caption><PillTabs items={['Да, почти полностью','Трудно или невозможно']} value={reversible} setValue={setReversible}/></div></div>
- <div className="mt-7 grid gap-4 md:grid-cols-2"><div className={small}><Caption>Путь А: действовать сейчас</Caption><p className="mt-3 text-lg">Быстрее получаешь обратную связь, но принимаешь риск ошибки.</p><p className="mt-4 text-sm text-[#e6ca8a]">Проверка: {scenarios[0][priority]}.</p></div><div className={small}><Caption>Путь Б: подготовиться</Caption><p className="mt-3 text-lg">Собираешь сведения и ресурсы, но тратишь время и можешь отложить возможность.</p><p className="mt-4 text-sm text-[#e6ca8a]">Проверка: {scenarios[1][priority]}.</p></div></div>
- <Result title={risk===1||reversible===1?'Сначала уменьшить неопределённость':'Начать с небольшого эксперимента'}><p>{risk===1||reversible===1?'Цена ошибки или необратимость высока. Полезно проверить факты, ресурсы, сроки и последствия прежде чем делать ставку.':'Решение обратимо, а цена ошибки невелика. Пробный шаг может дать больше информации, чем бесконечное обдумывание.'}</p><p className={gold}>Критерий: {criteria[priority]}. Это ориентир для оценки, не автоматическое решение.</p></Result></section>;
 }
 
 function BeliefLab(){
