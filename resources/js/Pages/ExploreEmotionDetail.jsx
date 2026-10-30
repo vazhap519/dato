@@ -131,7 +131,7 @@ export default function ExploreEmotionDetail() {
                 <div className={panel}>
                     <p className={kicker}>Вопросы к себе</p>
                     <h2 className="mt-2 font-serif text-3xl">Три точки внимания</h2>
-                    <ol className="mt-6 space-y-6">{emotion.questions.map((question,i)=><li key={i} className="flex gap-4 leading-7 text-[#e2d2bc]"><span className="font-serif text-3xl text-[#f0c453]">{String(i+1).padStart(2,'0')}</span><span>{question}</span></li>)}</ol>
+                    <ol className="mt-6 space-y-6">{emotion.questions.map((question,i)=><li key={i} className="flex gap-4 leading-7 text-[#e2d2bc]"><span className="font-serif text-3xl text-[#f0c453]">{String(i+1)}</span><span>{question}</span></li>)}</ol>
                 </div>
                 <div className={panel}>
                     <p className={kicker}>Небольшая практика</p>
