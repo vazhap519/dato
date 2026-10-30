@@ -74,8 +74,11 @@ export default function LegalDocument() {
         if (pdfLoading) return;
         setPdfLoading(true);
         try {
-            const pdfModule = await import("pdfmake/build/pdfmake");
-            const fontModule = await import("pdfmake/build/vfs_fonts");
+            // Fetch PDF engine and its fonts only after the visitor clicks "Скачать PDF".
+            const [pdfModule, fontModule] = await Promise.all([
+                import("pdfmake/build/pdfmake"),
+                import("pdfmake/build/vfs_fonts"),
+            ]);
             const pdf = pdfModule.default || pdfModule;
             const fonts = fontModule.default || fontModule;
             pdf.vfs = fonts.pdfMake?.vfs || fonts.vfs || fonts;
