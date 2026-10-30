@@ -51,6 +51,7 @@ Route::post('/live/api/sessions/{session}/messages', [\App\Http\Controllers\Live
 Route::post('/live/api/sessions/{session}/presence', [\App\Http\Controllers\LiveController::class, 'presence'])->middleware('throttle:12,1');
 Route::post('/live/api/sessions/{session}/host-message', [\App\Http\Controllers\LiveController::class, 'hostSend'])->middleware('throttle:30,1');
 Route::post('/live/api/sessions/{session}/chat-control', [\App\Http\Controllers\LiveController::class, 'chatControl']);
+Route::post('/live/api/sessions/{session}/status', [\App\Http\Controllers\LiveController::class, 'updateStatus'])->middleware('throttle:15,1');
 Route::post('/live/api/sessions/{session}/messages/{message}/moderate', [\App\Http\Controllers\LiveController::class, 'moderate']);
 
 Route::post('/live/api/sessions/{session}/buttons', [App\Http\Controllers\LiveController::class, 'createButton']);
