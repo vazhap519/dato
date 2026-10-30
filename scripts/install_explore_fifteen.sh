@@ -11,6 +11,7 @@ FILES=(
   "resources/js/Pages/Explore.jsx"
   "resources/js/Pages/ExploreLifeLanguage.jsx"
   "resources/js/components/ExploreConnections.jsx"
+  "resources/js/components/ExploreDeepExperience.jsx"
   "resources/js/components/ExploreLifeWorkbench.jsx"
   "resources/js/components/ExploreJourney.jsx"
   "resources/js/components/ExploreInvitation.jsx"
@@ -113,7 +114,7 @@ if missing:
 print("Проверка успешна: все девять новых маршрутов зарегистрированы.")
 PY
 trap - ERR
-echo "Готово: 15 направлений, 4 новые страницы и переходы между всеми темами."
+echo "Готово: девять уникальных интерактивных направлений и тематические переходы между всеми 15 страницами."
 echo "Каталог: https://arutyun.me/explore"
 echo "Админка: https://arutyun.me/gods"
 echo "Резервная копия: $BACKUP"
