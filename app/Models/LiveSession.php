@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LiveSession extends Model {
-    protected $fillable = ['live_series_id','day_number','title','description','youtube_url','status','chat_enabled','pinned_message_id'];
-    protected $casts = ['chat_enabled' => 'boolean'];
+    protected $fillable = ['live_series_id','day_number','title','description','youtube_url','status','chat_enabled','pinned_message_id','is_published','sort_order','tab_label','chat_title','video_placeholder','chat_empty_text','show_video','show_chat'];
+    protected $casts = ['chat_enabled' => 'boolean', 'is_published' => 'boolean', 'show_video' => 'boolean', 'show_chat' => 'boolean', 'sort_order' => 'integer'];
 
     protected static function booted(): void {
         // Clear only this session's chat when the host marks the broadcast as ended.
