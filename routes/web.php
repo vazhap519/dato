@@ -139,7 +139,7 @@ Route::get('/explore/mirror', fn () => Inertia::render('ExplorePersonalityMirror
 
 // Nine additional self-discovery languages, each with its own full exercise atlas.
 // Restrict the slug to published routes; never accept arbitrary file names.
-foreach (['relationships', 'body', 'choice', 'beliefs', 'values'] as $languageSlug) {
+foreach (['relationships', 'body', 'choice', 'beliefs', 'values', 'fears', 'time', 'conflicts', 'attention'] as $languageSlug) {
     Route::get('/explore/'.$languageSlug, function () use ($languageSlug) {
         $path = \App\Models\ExploreContentPage::query()
             ->where('slug', $languageSlug)
