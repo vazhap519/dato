@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { RelationshipDepth, BodyDepth, ChoiceDepth } from './ExploreThreeDepth.jsx';
 
 const panel = 'rounded-3xl border border-[#957444]/65 bg-[#211c15] p-5 sm:p-8';
 const small = 'rounded-2xl border border-[#80653e]/65 bg-[#19160f] p-4 sm:p-5';
@@ -127,6 +128,6 @@ function AttentionLab(){
 }
 
 export default function ExploreDeepExperience({slug}){
- const C={relationships:RelationshipLab,body:BodyLab,choice:ChoiceLab,beliefs:BeliefLab,values:ValuesLab,fears:FearLab,time:TimeLab,conflicts:ConflictsLab,attention:AttentionLab}[slug];
+ const C={relationships:RelationshipDepth,body:BodyDepth,choice:ChoiceDepth,beliefs:BeliefLab,values:ValuesLab,fears:FearLab,time:TimeLab,conflicts:ConflictsLab,attention:AttentionLab}[slug];
  return C?<C/>:null;
 }
