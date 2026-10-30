@@ -30,7 +30,7 @@ async function api(url, options = {}) {
 }
 
 export default function Live() {
-    const { sessions = [], initialSessionId, canModerate = false, moderatorPermissions = [], isLiveModerator = false } = usePage().props;
+    const { sessions = [], initialSessionId, canModerate = false, moderatorPermissions = [], isLiveModerator = false, canManageStatus = false } = usePage().props;
     const can = permission => moderatorPermissions.includes(permission);
     const [sessionId, setSessionId] = useState(initialSessionId || null);
     const [session, setSession] = useState(null);
@@ -40,6 +40,7 @@ export default function Live() {
     const [draft, setDraft] = useState("");
     const [error, setError] = useState("");
     const [sending, setSending] = useState(false);
+    const [changingStatus, setChangingStatus] = useState(false);
     const [openMenu, setOpenMenu] = useState(null);
     const [online, setOnline] = useState(null);
     const [editingButton, setEditingButton] = useState(null);
@@ -128,6 +129,27 @@ export default function Live() {
             setEditingButton(null);
         } catch (e) { setError(e.message); }
     };
+    const changeStatus = async nextStatus => {
+        if (!session || !canManageStatus || changingStatus || nextStatus === session.status) return;
+        if (nextStatus === "ended" && !window.confirm("Завершить эфир? Все сообщения этого эфира будут удалены без возможности восстановления.")) return;
+        if (session.status === "ended" && nextStatus === "live" && !window.confirm("Снова открыть завершённый эфир? Чат начнётся пустым.")) return;
+        setChangingStatus(true);
+        setError("");
+        try {
+            await api(`/live/api/sessions/${sessionId}/status`, {
+                method: "POST", body: JSON.stringify({ status: nextStatus }),
+            });
+            const [details, chat] = await Promise.all([
+                api(`/live/api/sessions/${sessionId}`),
+                api(`/live/api/sessions/${sessionId}/messages`),
+            ]);
+            setSession(details);
+            setMessages(chat);
+            if (nextStatus === "ended") setDraft("");
+        } catch (e) { setError(e.message); }
+        finally { setChangingStatus(false); }
+    };
+
     const toggleChat = async () => {
         if (!session) return;
         setError("");
@@ -195,9 +217,21 @@ export default function Live() {
                             <section className="overflow-hidden rounded-2xl border border-[#f5c542]/20 bg-[#221e17]">
                                 <div className="flex flex-wrap items-center justify-between gap-2 p-5">
                                     <h2 className="text-xl font-bold">{session?.title || "Прямой эфир"}</h2>
-                                    <span className="rounded-full border border-[#f5c542]/30 px-3 py-1 text-xs text-[#f5c542]">
-                                        {session?.status === "live" ? "● В эфире" : session?.status === "ended" ? "Эфир завершён" : "Скоро начнём"}
-                                    </span>
+                                    <div className="flex flex-wrap items-center justify-end gap-2">
+                                        <span className="rounded-full border border-[#f5c542]/30 px-3 py-1 text-xs text-[#f5c542]">
+                                            {session?.status === "live" ? "● В эфире" : session?.status === "ended" ? "Эфир завершён" : "Скоро начнём"}
+                                        </span>
+                                        {canManageStatus && session && <label className="inline-flex items-center gap-2 rounded-xl border border-[#f5c542]/50 bg-[#302719] px-3 py-2 text-xs font-semibold text-[#f5c542]">
+                                            <span>Статус эфира</span>
+                                            <select aria-label="Изменить статус эфира" value={session.status} disabled={changingStatus}
+                                                onChange={event => changeStatus(event.target.value)}
+                                                className="max-w-[155px] cursor-pointer rounded-lg border border-[#f5c542]/50 bg-[#17140e] px-2 py-1.5 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#f5c542] disabled:opacity-50">
+                                                <option value="scheduled">Запланирован</option>
+                                                <option value="live">В эфире</option>
+                                                <option value="ended">Завершён</option>
+                                            </select>
+                                        </label>}
+                                    </div>
                                 </div>
                                 <div className="aspect-video bg-black">
                                     {session?.youtube_id ? (
@@ -219,7 +253,7 @@ export default function Live() {
                                     <p className="whitespace-pre-wrap break-words text-white/90">{session.pinned_message.body}</p>
                                 </div>}
                                 <div ref={chatScrollRef} onScroll={event => { const el = event.currentTarget; shouldStickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100; }} className="flex-1 space-y-4 overflow-y-auto p-4 lg:min-h-0" style={{ maxHeight: 390 }}>
-                                    {messages.length === 0 && <p className="text-sm text-white/50">{session?.status === "ended" ? "Эфир завершён. Чат очищен." : "Пока нет сообщений. Начни разговор!"}</p>}
+                                    {messages.length === 0 && <p className="text-sm text-white/50">{session?.status === "ended" ? "Эфир завершён." : "Пока нет сообщений. Начни разговор!"}</p>}
                                     {messages.map(msg => (
                                         <div key={msg.id} className={msg.is_hidden ? "relative rounded-lg border border-red-400/20 bg-red-400/5 p-2 opacity-60" : msg.is_host ? "relative rounded-xl border border-[#f5c542]/70 bg-[#f5c542]/15 p-3 shadow-sm" : msg.is_highlighted ? "relative rounded-lg border border-[#f5c542]/60 bg-[#f5c542]/10 p-2" : msg.author_name?.endsWith(" · Модератор") ? "relative rounded-xl border border-[#f5c542] bg-transparent p-3" : "relative"}>
                                             <div className={`mb-1 text-xs font-bold ${!msg.is_host && msg.author_name?.endsWith(" · Модератор") ? "text-[#f5c542]" : "text-[#f5c542]"}`}>{msg.is_host ? "✦ " : ""}{msg.author_name}{msg.is_host ? " · Ведущий" : ""}</div>
