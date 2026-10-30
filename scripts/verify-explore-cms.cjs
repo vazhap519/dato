@@ -52,9 +52,16 @@ for (const key of docs) {
         if (data.situations?.length !== 10 || !Array.isArray(data.feature?.fields)) {
             throw new Error('Некорректные интерактивные материалы: ' + key);
         }
+        if (data.editorial?.chapters?.length !== 4 || !data.editorial?.headline || !data.editorial?.lead) {
+            throw new Error('Неполный тематический путеводитель: ' + key);
+        }
         for (const scenario of data.situations) {
             if (scenario.options?.length !== 3 || !scenario.reflection || !scenario.question || !scenario.practice) {
                 throw new Error('Неполная ситуация в ' + key + ': ' + scenario.id);
+            }
+            if (scenario.options.some(option => !option.reflection || !option.focus)
+                || new Set(scenario.options.map(option => option.reflection)).size !== 3) {
+                throw new Error('Не хватает самостоятельных разборов трёх ответов: ' + scenario.id);
             }
         }
     }
